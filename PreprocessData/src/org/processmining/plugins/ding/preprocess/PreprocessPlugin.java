@@ -31,14 +31,13 @@ import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.log.utils.XUtils;
-import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 
 
 @Plugin(
 		name = "Label Event Log",
 		parameterLabels = {"Event log"}, 
-		returnLabels = { "Petrinet"},
-		returnTypes = {Petrinet.class}, 
+		returnLabels = { "Laleled Log"},
+		returnTypes = {XLog.class}, 
 		userAccessible = true,
 		help = "add additional label information into the event log "
 		)
@@ -52,7 +51,7 @@ public class PreprocessPlugin {
 	 * @param log : event log
 	 * @return labeled event log 
 	 */
-	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Assign Label Randomly on Event Log",  requiredParameterLabels = { 0})
 	public XLog assignRandomLabel(UIPluginContext context, XLog log) {
 		// how to achieve it ?? 
@@ -104,14 +103,14 @@ public class PreprocessPlugin {
 			// in Milliseconds format
 			long throughput_time = end_time.getTime() - start_time.getTime();
 			
-			XAttributeDiscrete attr = factory.createAttributeDiscrete("throughputime", throughput_time, null); 
+			XAttributeDiscrete attr = factory.createAttributeDiscrete(Configuration.TP_TIME, throughput_time, null); 
 			trace.getAttributes().put(attr.getKey(), attr);
 		}	
 		return  log;
 	}
 	
-	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
-	@PluginVariant(variantLabel = "Assign Throughputtime on Event Log",  requiredParameterLabels = { 0})
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Assign Label w.r.t. Throughputtime",  requiredParameterLabels = { 0})
 	public XLog assignLabel(UIPluginContext context, XLog log) {
 		XLog label_log = (XLog)log.clone();
 		
@@ -130,8 +129,8 @@ public class PreprocessPlugin {
 		double sum = 0.0; int count = 0;
 		for (XTrace trace : label_log) {
 			// if it has throughputtime attribute, then we put them into a list 
-			if(trace.getAttributes().containsKey("throughputime")) {
-				XAttributeDiscrete attr = (XAttributeDiscrete) trace.getAttributes().get("throughputime");
+			if(trace.getAttributes().containsKey(Configuration.TP_TIME)) {
+				XAttributeDiscrete attr = (XAttributeDiscrete) trace.getAttributes().get(Configuration.TP_TIME);
 				// time_list.add(attr.getKey());
 				time_list.add(attr.getValue());
 				sum += attr.getValue();
@@ -141,22 +140,19 @@ public class PreprocessPlugin {
 		// find the mean value and split it into two sets// how to make sure that they have the same traverse order??
 		double mean = sum/count;
 		for (XTrace trace : label_log) {
-			if(trace.getAttributes().containsKey("throughputime")) {
-				XAttributeDiscrete attr = (XAttributeDiscrete) trace.getAttributes().get("throughputime");
+			if(trace.getAttributes().containsKey(Configuration.TP_TIME)) {
+				XAttributeDiscrete attr = (XAttributeDiscrete) trace.getAttributes().get(Configuration.TP_TIME);
 				if(attr.getValue() > mean) {
 					// label it into one class 
-					XAttributeBoolean nattr = factory.createAttributeBoolean(Configuration.LABEL_NAME, true, null);
+					XAttributeBoolean nattr = factory.createAttributeBoolean(Configuration.LABEL_NAME, false, null);
 				    trace.getAttributes().put(nattr.getKey(), nattr);
 				}else {
 					// label it into another class
-					XAttributeBoolean nattr = factory.createAttributeBoolean(Configuration.LABEL_NAME, false, null);
+					XAttributeBoolean nattr = factory.createAttributeBoolean(Configuration.LABEL_NAME, true, null);
 				    trace.getAttributes().put(nattr.getKey(), nattr);
 				}
 			}		
 		}
 		return  label_log;
 	}
-	
-	// after we get the label_log, how to invoke inductive miner to create model??? 
-	
 }

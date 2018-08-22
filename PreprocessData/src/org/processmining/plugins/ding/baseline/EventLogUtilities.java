@@ -57,7 +57,8 @@ public class EventLogUtilities {
 		Map<XEventClass, Transition> map = new HashMap<XEventClass, Transition>();
 		Collection<Transition> transitions = net.getTransitions();
 		XEventClasses classes = null;
-		if(log.getClassifiers().contains(classifier)) 
+		
+		if(classifier != null && log.getClassifiers().contains(classifier)) 
 			classes = XLogInfoFactory.createLogInfo(log).getEventClasses(classifier);
 		else
 			classes = XLogInfoFactory.createLogInfo(log).getNameClasses();

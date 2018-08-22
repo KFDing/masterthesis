@@ -3,6 +3,8 @@ package org.processmining.plugins.ding.baseline;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.swing.JOptionPane;
+
 import org.deckfour.uitopia.api.event.TaskListener.InteractionResult;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XLog;
@@ -15,12 +17,13 @@ import org.processmining.framework.packages.PackageManager.Canceller;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.modelrepair.plugins.Uma_RepairModel_Plugin;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.InductiveMiner.efficienttree.EfficientTree;
 import org.processmining.plugins.InductiveMiner.efficienttree.EfficientTreeReduce.ReductionFailedException;
 import org.processmining.plugins.InductiveMiner.efficienttree.UnknownTreeNodeException;
 import org.processmining.plugins.ding.preprocess.Configuration;
-import org.processmining.plugins.ding.preprocess.PreprocessPlugin;
 import org.processmining.plugins.inductiveminer2.logs.IMLog;
 import org.processmining.plugins.inductiveminer2.mining.MiningParameters;
 import org.processmining.plugins.inductiveminer2.plugins.InductiveMinerDialog;
@@ -37,12 +40,11 @@ import org.processmining.plugins.inductiveminer2.plugins.InductiveMinerPlugin;
 public class BuildBaselineModel {
 		
 	// first not consider if the event log is labeled, or not
-	@Plugin(name = "Build Petri net Model with Inductive Miner", level = PluginLevel.Regular, returnLabels = {"Petri net" }, returnTypes = {
-			Petrinet.class}, parameterLabels = { "Log" }, userAccessible = true)
+	@Plugin(name = "Build Petri net Model with Inductive Miner", level = PluginLevel.Regular, returnLabels = {"Petri net", "Initial Marking" }, returnTypes = {
+			Petrinet.class, Marking.class}, parameterLabels = { "Log" }, userAccessible = true)
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "generate a petri net",  requiredParameterLabels = { 0})
-	public Petrinet buildModel(UIPluginContext context, XLog log) throws UnknownTreeNodeException, ReductionFailedException {
-		
+	@PluginVariant(variantLabel = "Generate a petri net",  requiredParameterLabels = { 0})
+	public Object[] buildModel(UIPluginContext context, XLog log) throws UnknownTreeNodeException, ReductionFailedException {
 		
 		InductiveMinerDialog dialog = new InductiveMinerDialog(log);
 		InteractionResult result = context.showWizard("Mine using Inductive Miner", true, true, dialog);
@@ -51,7 +53,6 @@ public class BuildBaselineModel {
 			context.getFutureResult(0).cancel(false);
 			return null;
 		}
-
 		MiningParameters parameters = dialog.getMiningParameters();
 		IMLog xlog = parameters.getIMLog(log);
 
@@ -68,7 +69,7 @@ public class BuildBaselineModel {
 			connections =  context.getConnectionManager().getConnections(BaselineConnection.class, context, log);
 			for (BaselineConnection connection : connections) {
 				if ( connection.getObjectWithRole(BaselineConnection.TYPE).equals(BaselineConnection.BASELINE_PN)
-						&&connection.getObjectWithRole(BaselineConnection.LOG).equals(log)
+						&& connection.getObjectWithRole(BaselineConnection.LOG).equals(log)
 						&& ((MiningParameters)connection.getObjectWithRole(BaselineConnection.MINING_PARAMETERS)).equals(parameters) 
 						) {
 					return connection.getObjectWithRole(BaselineConnection.RESULT);
@@ -85,35 +86,40 @@ public class BuildBaselineModel {
 		
 		// we need to create a connection which put parameters into it 
 		context.addConnection( new BaselineConnection(log, parameters, anet.getNet()));
-		return anet.getNet();
+		return new Object[] {anet.getNet(), anet.getInitialMarking()};
 	}
 	
 	// we could some controls to see it if we use the labeled log, or whole log
-	@Plugin(name = "Build Petri net Model with Inductive Miner", level = PluginLevel.Regular, returnLabels = {"Accepting Petri net" }, returnTypes = {
-			AcceptingPetriNet.class}, parameterLabels = { "Log" }, userAccessible = true)
+	@Plugin(name = "Build Petri net Model with Inductive Miner", level = PluginLevel.Regular, returnLabels = {"Petri net"," Initial Marking" }, 
+			returnTypes = {Petrinet.class, Marking.class}, parameterLabels = { "Log" }, userAccessible = true)
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "generate a petri net only based on the postive value",  requiredParameterLabels = { 0})
-	public AcceptingPetriNet buildPosModel(UIPluginContext context, XLog log) throws UnknownTreeNodeException, ReductionFailedException {
+	@PluginVariant(variantLabel = "Generate a petri net only based on the postive value",  requiredParameterLabels = { 0})
+	public Object[] buildPosModel(UIPluginContext context, XLog log) throws UnknownTreeNodeException, ReductionFailedException {
+		// here we need to create a new log, so we can keep the original ones untouched
+		XLog pos_log = (XLog) log.clone();
 		
-		// preprocess log 
-		PreprocessPlugin preprocess = new PreprocessPlugin(); 
-		// should we change to another ?? 
-		XLog label_log = preprocess.assignLabel(context, log);
 		boolean only_pos = true;
+		int neg_count = 0, pos_count=0;
 		if(only_pos) {
-			Iterator liter = label_log.iterator();
+			Iterator liter = pos_log.iterator();
 			while(liter.hasNext()) {
 				XTrace trace = (XTrace) liter.next();
 				if(trace.getAttributes().containsKey(Configuration.LABEL_NAME)) {
 					XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.LABEL_NAME);
-					if(!attr.getValue()) 
+					if(!attr.getValue()) {
 						liter.remove();
+						neg_count++;
+					}else
+						pos_count++;
 				}
 			}
+			// output one dialog to say how many pos and neg traces they have
+			JOptionPane.showConfirmDialog(null,
+				    "The positive example has " + pos_count + ", negative has "+ neg_count,
+				    "Inane information",
+				    JOptionPane.INFORMATION_MESSAGE);
 		}
-		
-		InductiveMinerPlugin miner = new InductiveMinerPlugin();
-		return miner.mineGuiAcceptingPetriNet(context, label_log);
+		return buildModel(context, pos_log);
 	}
 	
 	@Plugin(name = "Generate efficient tree with Inductive Miner", level = PluginLevel.Regular, returnLabels = {
@@ -123,13 +129,10 @@ public class BuildBaselineModel {
 	@PluginVariant(variantLabel = "Generate a Process Tree only based on the postive value",  requiredParameterLabels = { 0})
 	public EfficientTree buildPosProcessTree(UIPluginContext context, XLog log) {
 		
-		// preprocess log 
-		PreprocessPlugin preprocess = new PreprocessPlugin(); 
-		// should we change to another ?? 
-		XLog label_log = preprocess.assignLabel(context, log);
+		XLog pos_log = (XLog) log.clone();
 		boolean only_pos = true;
 		if(only_pos) {
-			Iterator liter = label_log.iterator();
+			Iterator liter = pos_log.iterator();
 			while(liter.hasNext()) {
 				XTrace trace = (XTrace) liter.next();
 				if(trace.getAttributes().containsKey(Configuration.LABEL_NAME)) {
@@ -141,7 +144,37 @@ public class BuildBaselineModel {
 		}
 		
 		InductiveMinerPlugin miner = new InductiveMinerPlugin();
-		return miner.mineGuiProcessTree(context, label_log);
+		return miner.mineGuiProcessTree(context, pos_log);
 	}
 	
+	
+	/**
+	 * build baseline from repaired model and later on KPI driven process
+	 */
+	@Plugin(name = "Build Petrinet Model after Repair", level = PluginLevel.Regular, returnLabels = {"Petri net"," Initial Marking" }, 
+			returnTypes = {Petrinet.class, Marking.class}, parameterLabels = { "Log" , "Original Petrinet"}, userAccessible = true)
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "repair a petri net on event log",  requiredParameterLabels = { 0 ,1})
+	public Object[] buildRepairModel(UIPluginContext context, XLog log, Petrinet net){
+		Uma_RepairModel_Plugin modelRepairPlugin=new Uma_RepairModel_Plugin();
+		Object[] result = modelRepairPlugin.repairModel(context, log, net);
+		
+		// it has some exceptions, so I need to debug them ...
+		return new Object[]{result[0], result[1]};
+	}
+	
+	/**
+	 * and later on KPI driven process
+	 */
+	@Plugin(name = "Build Petrinet KPI Model after Repair", level = PluginLevel.Regular, returnLabels = {"Petri net"," Initial Marking" }, 
+			returnTypes = {Petrinet.class, Marking.class}, parameterLabels = { "Log" ,"Original Petrinet"}, userAccessible = true)
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "repair a petri net on event log with KPI",  requiredParameterLabels = { 0,1})
+	public Object[] buildKPIRepairModel(UIPluginContext context, XLog log, Petrinet net){
+		
+		
+		Uma_RepairModel_Plugin modelRepairPlugin=new Uma_RepairModel_Plugin();
+		Object[] result = modelRepairPlugin.repairModel(context, log, net);
+		return new Object[]{result[0], result[1]};
+	}
 }

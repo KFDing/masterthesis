@@ -16,6 +16,7 @@ import org.processmining.models.graphbased.directed.petrinet.elements.Arc;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetFactory;
+import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.ding.preprocess.Configuration;
 public class NetUtilities {
 	
@@ -122,7 +123,7 @@ public class NetUtilities {
 		}
 	}
 	
-	public static boolean fitPN(Petrinet net, List<XEventClass> trace, Map<XEventClass, Transition> maps) {
+	public static boolean fitPN(Petrinet net, Marking marking,List<XEventClass> trace, Map<XEventClass, Transition> maps) {
 		
 		initPNToken(net);
     	Transition transition = null;
@@ -155,6 +156,7 @@ public class NetUtilities {
 				// for each transition, check the preset places of it the tokens number is greater than one?? 
 					if(isTokenMissing(p,net))
 						return false;
+					
 				}
 			}
 			
@@ -224,6 +226,7 @@ public class NetUtilities {
 			
 		}
 		// after we traverse all the silent transition, still no answer it mean it is false
+		p.getAttributeMap().put(Configuration.TOKEN, (int)p.getAttributeMap().get(Configuration.TOKEN)-1);
 		return false;
 	}
 
