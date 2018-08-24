@@ -155,4 +155,37 @@ public class PreprocessPlugin {
 		}
 		return  label_log;
 	}
+	
+	/**
+	 * After we randomly assign labels on the traces, we need to have control on it. 
+	 * <1> overlap or not overlap
+	 * <2> pos and neg distribution
+	 * <3> fit and unfit traces... If we know the traces is fit or not fit, by label or by programs??
+	 *   ---- By label,
+	 *   == after we generate event log, we assign one attribute to it if they are fit or not
+	 *   == We could control the parameters in a dialog
+	 *   ---- no overlap:: 
+	 *   0.3:0.7 pos:neg, different variants [ variant has A. same frequence B. different frequence] 
+	 *   in fit(0.3:0.7) and unfit (0.3:0.7)
+	 *   ---- overlap:: 0.3 and 0.7 
+	 *   0.3:0.7, pos:neg, same variant, and according to the distribution. 
+	 * How to achieve them?? 
+	 *   4 parameter to assign labels for fit and unfit specially 
+	 */
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Assign Label w.r.t. Throughputtime",  requiredParameterLabels = { 0})
+	public XLog assignControlledLabel(UIPluginContext context, XLog log, LabelParameters parameters) {
+		// for each variant and we could have the number of each variant
+		// if variant fit 
+		//   overlap_rate x, no overlap (1-x) ;; pos_rate y : (1-y) 
+		//   we get all traces in such variant, and then
+		
+		// overlap for each variant, only yes or no.. 
+		// overlap_rate for event log??? We say uniform distribution of variant.
+		// overlap_rate for event log, 100 variants, we choose x100 of them to decide them neg and pos exist both. 
+		// [neg and pos] could use the same control in the same
+		// pos and neg for whole 
+		
+		return null;
+	}
 }
