@@ -183,8 +183,9 @@ public class PreprocessPlugin {
 		// overlap for each variant, only yes or no.. 
 		// overlap_rate for event log??? We say uniform distribution of variant.
 		// overlap_rate for event log, 100 variants, we choose x100 of them to decide them neg and pos exist both. 
+		//   ---- pos and neg distribution keep the default like them.
 		// [neg and pos] could use the same control in the same
-		// pos and neg for whole 
+		// pos and neg for the whole event log, 100 variants, 100y variant for positive control  
 		
 		return null;
 	}
