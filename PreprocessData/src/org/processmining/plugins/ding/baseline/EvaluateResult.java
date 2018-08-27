@@ -121,14 +121,6 @@ public class EvaluateResult {
 			
 		}
 		return confusion_matrix;
-		// here we should create the html file, somehow to show the result?? 
-		/*
-		String result = "";
-		for(int i=0;i < Configuration.CONFUSION_MATRIX_SIZE;i++){
-			result += confusion_matrix[i];
-		}
-		return "Confusion matrix result is : " + result ;
-		*/
 	}
 	
 }

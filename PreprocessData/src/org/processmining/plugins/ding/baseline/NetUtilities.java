@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.deckfour.xes.classification.XEventClass;
+import org.deckfour.xes.model.XLog;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
@@ -230,4 +231,12 @@ public class NetUtilities {
 		return false;
 	}
 
+	/**
+	 * check if they fit and add fit or not fit label to log file
+	 * @param log
+	 * @param net
+	 */
+	public static void checkAndAssignLabel(XLog log, Petrinet net) {
+		
+	}
 }

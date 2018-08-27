@@ -17,6 +17,7 @@ package org.processmining.plugins.ding.preprocess;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import org.deckfour.xes.factory.XFactory;
@@ -31,6 +32,7 @@ import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.log.utils.XUtils;
+import org.processmining.plugins.ding.baseline.EventLogUtilities;
 
 
 @Plugin(
@@ -156,6 +158,7 @@ public class PreprocessPlugin {
 		return  label_log;
 	}
 	
+	
 	/**
 	 * After we randomly assign labels on the traces, we need to have control on it. 
 	 * <1> overlap or not overlap
@@ -173,20 +176,110 @@ public class PreprocessPlugin {
 	 *   4 parameter to assign labels for fit and unfit specially 
 	 */
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "Assign Label w.r.t. Throughputtime",  requiredParameterLabels = { 0})
-	public XLog assignControlledLabel(UIPluginContext context, XLog log, LabelParameters parameters) {
-		// for each variant and we could have the number of each variant
-		// if variant fit 
-		//   overlap_rate x, no overlap (1-x) ;; pos_rate y : (1-y) 
-		//   we get all traces in such variant, and then
+	@PluginVariant(variantLabel = "Assign Controlled Label",  requiredParameterLabels = { 0})
+	public XLog assignControlledLabel(UIPluginContext context, XLog log) {
 		
-		// overlap for each variant, only yes or no.. 
-		// overlap_rate for event log??? We say uniform distribution of variant.
-		// overlap_rate for event log, 100 variants, we choose x100 of them to decide them neg and pos exist both. 
-		//   ---- pos and neg distribution keep the default like them.
-		// [neg and pos] could use the same control in the same
-		// pos and neg for the whole event log, 100 variants, 100y variant for positive control  
+		XFactory factory = XFactoryRegistry.instance().currentDefault();
+		XLog label_log = (XLog)log.clone();
+		// how to decide the throughputtime of each trace?? 
+		label_log.getGlobalTraceAttributes().add(factory.createAttributeBoolean(Configuration.LABEL_NAME, false, null));
+		// we need to create a dislogue for setting parameters
+		LabelParameters parameters = new LabelParameters();
+		parameters.setFit_overlap_rate(0);
+		parameters.setFit_pos_rate(1.0);
+		parameters.setUnfit_overlap_rate(1.0);
+		parameters.setUnfit_pos_rate(1.0);
 		
-		return null;
+		
+		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(label_log); // for all variants 
+		// fit and not fit for variants 
+		// assignLabel to fit and not fit for also the variants.
+		List<TraceVariant> fit_variants = new ArrayList<TraceVariant>();
+		List<TraceVariant> unfit_variants = new ArrayList<TraceVariant>();
+	
+		for(TraceVariant var : variants) {
+			var.setFitLabel(new Random().nextBoolean());
+			if(var.getFitLabel())
+				fit_variants.add(var);
+			else
+				unfit_variants.add(var);
+		}
+		assignVariantListLabel(fit_variants, parameters.getFit_overlap_rate(), parameters.getFit_pos_rate());
+		// for unfit variants
+		assignVariantListLabel(unfit_variants, parameters.getUnfit_overlap_rate(), parameters.getUnfit_pos_rate());
+		
+		return label_log;
+	}
+	
+	private void assignVariantListLabel(List<TraceVariant> variants, double overlap_rate, double pos_rate ) {
+		// for fit variants
+		// overlap 0.3: get total num of variants + random index + number w.r.t. to 0.3; greater than 0.3 
+		List<Integer> nolidx_list = sample(variants.size(), 1 - overlap_rate);
+		// we have odidx_list, and also we have nolidx_list, 
+		// they should then decide to assign different prob to pos and neg
+		List<Integer> nolpos_list = sample(nolidx_list.size(), pos_rate);
+	
+		for(int idx : nolidx_list) {
+			TraceVariant variant = variants.get(nolidx_list.get(idx));
+			// assign pos to nooverlap variant
+			if(nolpos_list.contains(idx)) {
+				assignVariantLabel(variant, Configuration.LABEL_NAME, true);
+			}else {
+				// assign neg to nooverlap variants
+				assignVariantLabel(variant, Configuration.LABEL_NAME, false);
+			}
+		}
+		// then overlap
+		// if could happen that all olidx_list is empty, so what to do then??? 
+		List<Integer> olidx_list = new ArrayList<Integer>();
+		for(int i=0;i<variants.size();i++)
+			if(!nolidx_list.contains(i))
+				olidx_list.add(i);
+		
+		for(int idx : olidx_list) {
+			TraceVariant variant = variants.get(olidx_list.get(idx));
+			// overlap variant, we need to assign both but according to different threshold
+			assignVariantLabel(variant, Configuration.LABEL_NAME, pos_rate);
+		}
+		
+	}
+	
+	private void assignVariantLabel(TraceVariant variant, String attr_name, boolean is_pos) {
+		// for each trace in the variant, we create an attribution with name of attr_name, value isPos
+		XFactory factory = XFactoryRegistry.instance().currentDefault();
+		for (XTrace trace : variant.getTrace_list()) {
+		    XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, is_pos, null);
+		    trace.getAttributes().put(attr.getKey(), attr);
+		}	
+	}
+	
+	private void assignVariantLabel(TraceVariant variant, String attr_name, double prob) {
+		List<Integer> posidx_list = sample(variant.getCount(), prob);
+		XFactory factory = XFactoryRegistry.instance().currentDefault();
+		for (int idx =0; idx < variant.getCount(); idx++) {
+			XTrace trace = variant.getTrace_list().get(idx);
+			if(posidx_list.contains(idx)) {
+				XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, true, null);
+			    trace.getAttributes().put(attr.getKey(), attr);
+			}else {
+				XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, false, null);
+			    trace.getAttributes().put(attr.getKey(), attr);
+			}
+		}
+	}
+	
+	// one function to generate a sublist of index w.r.t. probability
+	private List<Integer> sample(int bound, double prob){
+		ArrayList<Integer> idx_list = new ArrayList<>();
+		Random random = new Random();
+		int index, num = ((int) prob*bound);
+		while(num>0) {
+			num--;
+			index = random.nextInt(bound);
+			if(random.nextDouble()< prob && !idx_list.contains(index)) 
+				idx_list.add(index);
+			
+		}
+		return idx_list;
 	}
 }

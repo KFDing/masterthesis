@@ -21,6 +21,7 @@ import org.deckfour.xes.out.XesXmlSerializer;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
+import org.processmining.plugins.ding.preprocess.TraceVariant;
 
 /**
  * This class includes the basic information about Event log 
@@ -90,6 +91,42 @@ public class EventLogUtilities {
 		logSerializer.serialize(log, out);
 		out.close();
 	}
+	/**
+	 * here we summary the log information, including variant and then show it in a visualizer
+	 * how should we use it?? If randomness is uncontrolled, but we need to control it.. 
+	 * @param log
+	 * @return variants information, a new class to contain it ..
+	 */
+	public static List<TraceVariant> getTraceVariants( XLog log) {
+		
+		List<TraceVariant> variants = new ArrayList<TraceVariant>();
+		XEventClass eventClass = null;
+		XLogInfo info = XLogInfoFactory.createLogInfo(log);
 	
+		// this step I need to get it from index from log
+		for (int idx = 0; idx < log.size(); idx++) {
+				XTrace trace = log.get(idx);
+				
+				List<XEventClass> toTraceClass = new ArrayList<XEventClass>();
+				for (XEvent toEvent : trace) {
+					eventClass = info.getEventClasses().getClassOf(toEvent);
+					toTraceClass.add(eventClass);	
+				}
+				
+				int i = 0;
+				for(; i< variants.size();i++) {
+					// how to add the new variant into list
+					if((variants.get(i).getTraceVariant()).equals(toTraceClass)) {
+						variants.get(i).addTrace(trace, idx);
+						break;
+					}
+				}
+				if (i==variants.size()) {
+					// not found in it, then we need to add it into the list
+					variants.add(new TraceVariant(toTraceClass,trace, idx));
+				}	
+			}
+		return variants;
+	} 
 	
 }
