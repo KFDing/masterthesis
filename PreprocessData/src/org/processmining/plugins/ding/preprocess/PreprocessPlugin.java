@@ -18,8 +18,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import org.deckfour.xes.classification.XEventClass;
+import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.model.XAttributeBoolean;
@@ -31,22 +34,28 @@ import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.framework.util.ui.wizard.ListWizard;
+import org.processmining.framework.util.ui.wizard.ProMWizardDisplay;
 import org.processmining.log.utils.XUtils;
-import org.processmining.plugins.ding.baseline.EventLogUtilities;
+import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
+import org.processmining.models.semantics.petrinet.Marking;
+import org.processmining.plugins.ding.ui.LabelParameterStep;
+import org.processmining.plugins.ding.util.EventLogUtilities;
+import org.processmining.plugins.ding.util.NetUtilities;
+import org.processmining.plugins.ding.util.SamplingUtilities;
 
 
 @Plugin(
 		name = "Label Event Log",
-		parameterLabels = {"Event log"}, 
+		parameterLabels = {"Event log", "Petrinet"}, 
 		returnLabels = { "Laleled Log"},
 		returnTypes = {XLog.class}, 
 		userAccessible = true,
 		help = "add additional label information into the event log "
 		)
 
-public class PreprocessPlugin {
-	
-    
+public class PreprocessPlugin { 
 	/**
 	 * This plugin assign label information randomly to event log to each trace and generate new event log 
 	 * @param context  : nothing but to create the connection use...however, later use it 
@@ -72,7 +81,7 @@ public class PreprocessPlugin {
 			 // get next next boolean value 
 		    boolean value = randomno.nextBoolean();
 		    
-		    XAttributeBoolean attr = factory.createAttributeBoolean(Configuration.LABEL_NAME, value, null);
+		    XAttributeBoolean attr = factory.createAttributeBoolean(Configuration.POS_LABEL, value, null);
 		    trace.getAttributes().put(attr.getKey(), attr);
 		}	
 		return  label_log;
@@ -146,11 +155,11 @@ public class PreprocessPlugin {
 				XAttributeDiscrete attr = (XAttributeDiscrete) trace.getAttributes().get(Configuration.TP_TIME);
 				if(attr.getValue() > mean) {
 					// label it into one class 
-					XAttributeBoolean nattr = factory.createAttributeBoolean(Configuration.LABEL_NAME, false, null);
+					XAttributeBoolean nattr = factory.createAttributeBoolean(Configuration.POS_LABEL, false, null);
 				    trace.getAttributes().put(nattr.getKey(), nattr);
 				}else {
 					// label it into another class
-					XAttributeBoolean nattr = factory.createAttributeBoolean(Configuration.LABEL_NAME, true, null);
+					XAttributeBoolean nattr = factory.createAttributeBoolean(Configuration.POS_LABEL, true, null);
 				    trace.getAttributes().put(nattr.getKey(), nattr);
 				}
 			}		
@@ -182,14 +191,15 @@ public class PreprocessPlugin {
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
 		XLog label_log = (XLog)log.clone();
 		// how to decide the throughputtime of each trace?? 
-		label_log.getGlobalTraceAttributes().add(factory.createAttributeBoolean(Configuration.LABEL_NAME, false, null));
+		label_log.getGlobalTraceAttributes().add(factory.createAttributeBoolean(Configuration.POS_LABEL, false, null));
 		// we need to create a dislogue for setting parameters
 		LabelParameters parameters = new LabelParameters();
-		parameters.setFit_overlap_rate(0);
-		parameters.setFit_pos_rate(1.0);
-		parameters.setUnfit_overlap_rate(1.0);
-		parameters.setUnfit_pos_rate(1.0);
+		LabelParameterStep lp_step = new LabelParameterStep(parameters);
 		
+		ListWizard<LabelParameters> wizard = new ListWizard<LabelParameters>(lp_step);
+		parameters = ProMWizardDisplay.show(context, wizard, parameters);
+		//System.out.println(parameters.getFit_overlap_rate());
+    	//System.out.println(parameters.getFit_pos_rate());
 		
 		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(label_log); // for all variants 
 		// fit and not fit for variants 
@@ -203,10 +213,12 @@ public class PreprocessPlugin {
 				fit_variants.add(var);
 			else
 				unfit_variants.add(var);
-		}
-		assignVariantListLabel(fit_variants, parameters.getFit_overlap_rate(), parameters.getFit_pos_rate());
-		// for unfit variants
-		assignVariantListLabel(unfit_variants, parameters.getUnfit_overlap_rate(), parameters.getUnfit_pos_rate());
+		} // variants size ==0, we don't need to do it??? 
+		if(fit_variants.size()>0) 
+			assignVariantListLabel(fit_variants, parameters.getFit_overlap_rate(), parameters.getFit_pos_rate());
+		// for unfit variants // if variants.size == 0, we don't need to do it
+		if(unfit_variants.size()>0)
+			assignVariantListLabel(unfit_variants, parameters.getUnfit_overlap_rate(), parameters.getUnfit_pos_rate());
 		
 		return label_log;
 	}
@@ -214,19 +226,19 @@ public class PreprocessPlugin {
 	private void assignVariantListLabel(List<TraceVariant> variants, double overlap_rate, double pos_rate ) {
 		// for fit variants
 		// overlap 0.3: get total num of variants + random index + number w.r.t. to 0.3; greater than 0.3 
-		List<Integer> nolidx_list = sample(variants.size(), 1 - overlap_rate);
+		List<Integer> nolidx_list = SamplingUtilities.sample(variants.size(), 1 - overlap_rate);
 		// we have odidx_list, and also we have nolidx_list, 
 		// they should then decide to assign different prob to pos and neg
-		List<Integer> nolpos_list = sample(nolidx_list.size(), pos_rate);
+		List<Integer> nolpos_list = SamplingUtilities.sample(nolidx_list.size(), pos_rate);
 	
-		for(int idx : nolidx_list) {
+		for(int idx=0; idx<nolidx_list.size(); idx++) {
 			TraceVariant variant = variants.get(nolidx_list.get(idx));
 			// assign pos to nooverlap variant
 			if(nolpos_list.contains(idx)) {
-				assignVariantLabel(variant, Configuration.LABEL_NAME, true);
+				assignVariantLabel(variant, Configuration.POS_LABEL, true);
 			}else {
 				// assign neg to nooverlap variants
-				assignVariantLabel(variant, Configuration.LABEL_NAME, false);
+				assignVariantLabel(variant, Configuration.POS_LABEL, false);
 			}
 		}
 		// then overlap
@@ -236,25 +248,26 @@ public class PreprocessPlugin {
 			if(!nolidx_list.contains(i))
 				olidx_list.add(i);
 		
-		for(int idx : olidx_list) {
+		for(int idx=0; idx< olidx_list.size();idx++) {
 			TraceVariant variant = variants.get(olidx_list.get(idx));
 			// overlap variant, we need to assign both but according to different threshold
-			assignVariantLabel(variant, Configuration.LABEL_NAME, pos_rate);
+			assignVariantLabel(variant, Configuration.POS_LABEL, pos_rate);
 		}
 		
 	}
 	
-	private void assignVariantLabel(TraceVariant variant, String attr_name, boolean is_pos) {
+	private void assignVariantLabel(TraceVariant variant, String attr_name, boolean is_true) {
 		// for each trace in the variant, we create an attribution with name of attr_name, value isPos
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
 		for (XTrace trace : variant.getTrace_list()) {
-		    XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, is_pos, null);
+		    XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, is_true, null);
 		    trace.getAttributes().put(attr.getKey(), attr);
 		}	
 	}
 	
 	private void assignVariantLabel(TraceVariant variant, String attr_name, double prob) {
-		List<Integer> posidx_list = sample(variant.getCount(), prob);
+		List<Integer> posidx_list = SamplingUtilities.sample(variant.getCount(), prob);
+		
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
 		for (int idx =0; idx < variant.getCount(); idx++) {
 			XTrace trace = variant.getTrace_list().get(idx);
@@ -268,18 +281,50 @@ public class PreprocessPlugin {
 		}
 	}
 	
-	// one function to generate a sublist of index w.r.t. probability
-	private List<Integer> sample(int bound, double prob){
-		ArrayList<Integer> idx_list = new ArrayList<>();
-		Random random = new Random();
-		int index, num = ((int) prob*bound);
-		while(num>0) {
-			num--;
-			index = random.nextInt(bound);
-			if(random.nextDouble()< prob && !idx_list.contains(index)) 
-				idx_list.add(index);
-			
+	// here we need a Plugin to assign fit and not fit label to event log, we need the input Petrinet and Log
+	// marking is also needed, but we don't write it down.
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Assign Fit Label to Log",  requiredParameterLabels = { 0,1})
+	public XLog assignFitLabel(UIPluginContext context, XLog log, Petrinet net) {
+		// we could get the variants from log summary and then assign them to it. 
+		// should we add one step to choose the classifier??? Anyway, it's troubling.
+		Marking marking =null;
+		XEventClassifier classifier = null;
+		
+		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(log);
+		Map<XEventClass, Transition> maps = EventLogUtilities.getEventTransitionMap(log, net , classifier);
+		
+		for(TraceVariant variant: variants) {
+			if(NetUtilities.fitPN(net, marking, variant.getTraceVariant(), maps))
+				assignVariantLabel(variant, Configuration.FIT_LABEL, true);
+			else
+				assignVariantLabel(variant, Configuration.FIT_LABEL, false);	
 		}
-		return idx_list;
+		return log;
+	}
+	
+	/**
+	 * One more plugin to assign label to specific log variants 
+	 * -- to show summary, variants and its number 
+	 * -- also the attributes when its traces have, then also show summary
+	 * -- given the label, choose to assign it to specific variants 
+	 * -- only for situation, not overlap ones. 
+	 * -- generate the labeled log
+	 */
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Assign Label to Variant",  requiredParameterLabels = { 0})
+	public XLog assignFitLabel(UIPluginContext context, XLog log) {
+		// get variants with summary
+		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(log);
+		for(TraceVariant var: variants) {
+			System.out.println("trace_num: " + var.getCount());
+			var.setSummary();
+			List<Integer> tmp = var.getSummary();
+			System.out.println("fit: " + var.getFitLabel());
+			System.out.println("pos_num: "+tmp.get(Configuration.POS_IDX));
+			System.out.println("neg_num: " + tmp.get(Configuration.NEG_IDX));
+		}
+		// if we update the view, how should we do it ??? Or actually we could do it in trace
+		return log;
 	}
 }

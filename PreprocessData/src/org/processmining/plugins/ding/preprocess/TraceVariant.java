@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.deckfour.xes.classification.XEventClass;
+import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XTrace;
 
 public class TraceVariant {
@@ -16,6 +17,8 @@ public class TraceVariant {
 	private List<Integer> idx_list;
 	private List<XTrace> trace_list;
 	
+	private List<Integer> summary;
+	
 	
 	public List<XTrace> getTrace_list() {
 		return trace_list;
@@ -23,12 +26,6 @@ public class TraceVariant {
 
 	public void setTrace_list(List<XTrace> trace_list) {
 		this.trace_list = trace_list;
-	}
-	
-	public TraceVariant(){
-		count = 0;
-		variant =  new ArrayList<XEventClass>();
-		idx_list = new ArrayList<Integer>();
 	}
 	
 	public TraceVariant(List<XEventClass>  variant, XTrace trace, int idx){
@@ -83,5 +80,31 @@ public class TraceVariant {
 	
 	public boolean getFitLabel() {
 		return isFit;
+	}
+	public List<Integer> getSummary(){
+		return summary;
+	}
+	
+	public void setSummary() {
+		summary = new ArrayList<Integer>();
+		
+		if(summary.size()<1) {
+			summary.add(Configuration.POS_IDX,0);
+			summary.add(Configuration.NEG_IDX,0);
+		}
+		
+		for(XTrace trace : trace_list) {
+			XAttributeBoolean pos_attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+			if(pos_attr != null) {
+				if(pos_attr.getValue())
+					summary.set(Configuration.POS_IDX, summary.get(Configuration.POS_IDX) +1);
+				else
+					summary.set(Configuration.NEG_IDX, summary.get(Configuration.NEG_IDX) +1);
+			}
+		}
+	}
+	// we accept some parameters and change it, this could be labelparameters , with fit and with pos and then others 
+	public void changeSummary() {
+		
 	}
 }

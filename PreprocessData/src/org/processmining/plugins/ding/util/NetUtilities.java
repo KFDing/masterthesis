@@ -1,4 +1,4 @@
-package org.processmining.plugins.ding.baseline;
+package org.processmining.plugins.ding.util;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -124,7 +124,7 @@ public class NetUtilities {
 		}
 	}
 	
-	public static boolean fitPN(Petrinet net, Marking marking,List<XEventClass> trace, Map<XEventClass, Transition> maps) {
+	public static boolean fitPN(Petrinet net, Marking marking, List<XEventClass> trace, Map<XEventClass, Transition> maps) {
 		
 		initPNToken(net);
     	Transition transition = null;

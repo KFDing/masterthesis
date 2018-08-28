@@ -1,4 +1,4 @@
-package org.processmining.plugins.ding.baseline;
+package org.processmining.plugins.ding.util;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -109,7 +109,8 @@ public class EventLogUtilities {
 				
 				List<XEventClass> toTraceClass = new ArrayList<XEventClass>();
 				for (XEvent toEvent : trace) {
-					eventClass = info.getEventClasses().getClassOf(toEvent);
+					// eventClass = info.getEventClasses().getClassOf(toEvent);
+					eventClass = info.getNameClasses().getClassOf(toEvent);
 					toTraceClass.add(eventClass);	
 				}
 				
@@ -118,6 +119,7 @@ public class EventLogUtilities {
 					// how to add the new variant into list
 					if((variants.get(i).getTraceVariant()).equals(toTraceClass)) {
 						variants.get(i).addTrace(trace, idx);
+						// it should add also information on the trace
 						break;
 					}
 				}
@@ -129,4 +131,9 @@ public class EventLogUtilities {
 		return variants;
 	} 
 	
+	// it get the list of variants in the log and show the information of this variants
+	public static List getVariantSummary(XLog log){
+		
+		return null;
+	}
 }

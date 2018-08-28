@@ -1,7 +1,15 @@
 package org.processmining.plugins.ding.preprocess;
 
 public class Configuration {
-	public static String LABEL_NAME = "pos_outcome";
+	public static final String FIT_LABEL = "fit";
+
+	public static final int FIT_IDX = 1;
+
+	public static final int POS_IDX = 0;
+
+	public static final int NEG_IDX = 1;
+
+	public static String POS_LABEL = "pos_outcome";
 	
 	public static String TP_TIME = "throughputime";
 	public static String TOKEN = "token";

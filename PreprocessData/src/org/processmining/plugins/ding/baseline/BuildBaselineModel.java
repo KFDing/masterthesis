@@ -104,8 +104,8 @@ public class BuildBaselineModel {
 			Iterator liter = pos_log.iterator();
 			while(liter.hasNext()) {
 				XTrace trace = (XTrace) liter.next();
-				if(trace.getAttributes().containsKey(Configuration.LABEL_NAME)) {
-					XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.LABEL_NAME);
+				if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
+					XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
 					if(!attr.getValue()) {
 						liter.remove();
 						neg_count++;
@@ -135,8 +135,8 @@ public class BuildBaselineModel {
 			Iterator liter = pos_log.iterator();
 			while(liter.hasNext()) {
 				XTrace trace = (XTrace) liter.next();
-				if(trace.getAttributes().containsKey(Configuration.LABEL_NAME)) {
-					XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.LABEL_NAME);
+				if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
+					XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
 					if(!attr.getValue()) 
 						liter.remove();
 				}
