@@ -41,6 +41,8 @@ import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.ding.ui.LabelParameterStep;
+import org.processmining.plugins.ding.ui.VariantControlStep;
+import org.processmining.plugins.ding.util.Configuration;
 import org.processmining.plugins.ding.util.EventLogUtilities;
 import org.processmining.plugins.ding.util.NetUtilities;
 import org.processmining.plugins.ding.util.SamplingUtilities;
@@ -312,19 +314,21 @@ public class PreprocessPlugin {
 	 * -- generate the labeled log
 	 */
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "Assign Label to Variant",  requiredParameterLabels = { 0})
+	@PluginVariant(variantLabel = "Assign Label to Specific Variant",  requiredParameterLabels = { 0})
 	public XLog assignFitLabel(UIPluginContext context, XLog log) {
 		// get variants with summary
-		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(log);
-		for(TraceVariant var: variants) {
-			System.out.println("trace_num: " + var.getCount());
-			var.setSummary();
-			List<Integer> tmp = var.getSummary();
-			System.out.println("fit: " + var.getFitLabel());
-			System.out.println("pos_num: "+tmp.get(Configuration.POS_IDX));
-			System.out.println("neg_num: " + tmp.get(Configuration.NEG_IDX));
-		}
+		XLog label_log = (XLog) log.clone();
+		// so here we just set one interactive parameter setting window
+		// after the process, we get labeled_log ??? No, here are the variants changed
+		// but it refers to data in log, so change variant changed the log
+		VariantControlStep c_step = new VariantControlStep(label_log);
+		
+		ListWizard<XLog> wizard = new ListWizard<XLog>(c_step);
+		// it doesn't retun value, just the change on variants, then actually, I could get it here.
+		
 		// if we update the view, how should we do it ??? Or actually we could do it in trace
-		return log;
+				
+		return  ProMWizardDisplay.show(context, wizard, label_log);
+		
 	}
 }

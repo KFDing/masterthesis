@@ -6,6 +6,7 @@ import java.util.List;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XTrace;
+import org.processmining.plugins.ding.util.Configuration;
 
 public class TraceVariant {
 	private int count ; 
@@ -28,8 +29,15 @@ public class TraceVariant {
 		this.trace_list = trace_list;
 	}
 	
+	public TraceVariant() {
+		count = 0;
+		idx_list = new ArrayList<Integer>();
+		trace_list = new ArrayList<XTrace>();
+	}
+	
 	public TraceVariant(List<XEventClass>  variant, XTrace trace, int idx){
 		this.variant = variant;
+		count = 0;
 		idx_list = new ArrayList<Integer>();
 		trace_list = new ArrayList<XTrace>();
 		addTrace(trace, idx);
@@ -82,6 +90,8 @@ public class TraceVariant {
 		return isFit;
 	}
 	public List<Integer> getSummary(){
+		if(summary == null)
+			setSummary();
 		return summary;
 	}
 	
@@ -103,8 +113,10 @@ public class TraceVariant {
 			}
 		}
 	}
-	// we accept some parameters and change it, this could be labelparameters , with fit and with pos and then others 
-	public void changeSummary() {
+	// we accept some parameters and change it, this could be label parameters , with fit and with pos and then others 
+	// we can't really set if it is fit or not, or we can set it ??? 
+	public void changeSummary(double pos_prob) {
+		// choose the trace and assign variant label, that's all
 		
 	}
 }

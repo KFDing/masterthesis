@@ -16,7 +16,7 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.semantics.petrinet.Marking;
-import org.processmining.plugins.ding.preprocess.Configuration;
+import org.processmining.plugins.ding.util.Configuration;
 import org.processmining.plugins.ding.util.EventLogUtilities;
 import org.processmining.plugins.ding.util.NetUtilities;
 import org.processmining.processtree.ProcessTree;

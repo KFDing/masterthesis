@@ -11,7 +11,7 @@ import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
-import org.processmining.plugins.ding.preprocess.Configuration;
+import org.processmining.plugins.ding.util.Configuration;
 
 @Plugin(name = "Confusion Matrix Result overview", parameterLabels = { "Confusion Matrix" }, returnLabels = { "JPanel" }, returnTypes = { JPanel.class })
 @Visualizer
