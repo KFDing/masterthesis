@@ -1,6 +1,5 @@
 package org.processmining.plugins.ding.ui;
 
-import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,25 +12,22 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.deckfour.xes.info.XLogInfo;
-import org.deckfour.xes.info.XLogInfoFactory;
-import org.deckfour.xes.model.XLog;
 import org.processmining.framework.util.ui.widgets.ProMSplitPane;
 import org.processmining.framework.util.ui.widgets.traceview.masterdetail.TransparentSplitPane;
 import org.processmining.plugins.ding.preprocess.TraceVariant;
 
-public class VariantControlView extends JPanel {
+public class VariantWholeView extends JPanel {
 	private static final long serialVersionUID = 2073714666502722213L;
 	
 	private final VariantsViewMaster masterView;
-	private final VariantChangeView detailView;
+	private final VariantViewChange detailView;
 	
 	private int select_idx = 0;
 	
-	public VariantControlView(List<TraceVariant> variants, XLog log) {
-		XLogInfo info = XLogInfoFactory.createLogInfo(log);
+	public VariantWholeView(List<TraceVariant> variants, XLogInfo info) {
 		
 		masterView = new VariantsViewMaster(variants, info);
-		detailView = new VariantChangeView(variants.get(select_idx));
+		detailView = new VariantViewChange(variants.get(select_idx));
 		
 		// here to add the listSelectionListener
 		JList list = masterView.getListPanel().getList();
@@ -44,8 +40,11 @@ public class VariantControlView extends JPanel {
 		            	
 		            } else {
 		            	//Selection, update the other detailView
+		            	
 		            	select_idx = list.getSelectedIndex();
+		            	
 		            	detailView.update(variants.get(select_idx));
+		    
 		            }
 		        }
 			}
@@ -65,7 +64,7 @@ public class VariantControlView extends JPanel {
         variants.add(new TraceVariant());
         //Add contents to the window.
         // XLogInfo info = XLogInfoImpl.create(log);
-        frame.add(new VariantControlView(variants, null));
+        frame.add(new VariantWholeView(variants, null));
  
         //Display the window.
         frame.pack();
@@ -90,31 +89,25 @@ class MasterDetailView extends JPanel {
 	private static final long serialVersionUID = -289071473358339232L;
 
 	private final VariantsViewMaster masterView;
-	private final VariantChangeView detailView;
+	private final VariantViewChange detailView;
 	private final TransparentSplitPane splitPane;
 
-	private boolean doUpdates = true;
-
-	public MasterDetailView(final VariantsViewMaster masterView, final VariantChangeView detailView) {
+	public MasterDetailView(final VariantsViewMaster masterView, final VariantViewChange detailView) {
 		super();
 		setBackground(null);
 		setForeground(null);
 		setOpaque(false);
-		setLayout(new BorderLayout());
+		// setLayout(new BorderLayout());
 		
 		this.masterView = masterView;
 		this.detailView = detailView;
 
-		// to get the selected index and pass to the detailView
-		
-		detailView.update(masterView.getSelectVariant());
-		
 		splitPane = createSplitPane();
 		splitPane.setLeftComponent(masterView);
 		splitPane.setRightComponent(detailView);
 		splitPane.setResizeWeight(1.0d);
 		splitPane.setOneTouchExpandable(true);
-		add(splitPane, BorderLayout.CENTER);
+		add(splitPane);
 	}
 
 	protected TransparentSplitPane createSplitPane() {
@@ -125,7 +118,7 @@ class MasterDetailView extends JPanel {
 		return masterView;
 	}
 
-	public  VariantChangeView getDetailView() {
+	public  VariantViewChange getDetailView() {
 		return detailView;
 	}
 
@@ -133,13 +126,6 @@ class MasterDetailView extends JPanel {
 		return splitPane;
 	}
 
-	public void disableDetailUpdates() {
-		doUpdates = false;
-	}
-
-	public void enableDetailUpdates() {
-		doUpdates = true;
-	}
 	
 }
 

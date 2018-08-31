@@ -2,6 +2,7 @@ package org.processmining.plugins.ding.baseline;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -22,8 +23,10 @@ import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.InductiveMiner.efficienttree.EfficientTree;
 import org.processmining.plugins.InductiveMiner.efficienttree.EfficientTreeReduce.ReductionFailedException;
-import org.processmining.plugins.ding.util.Configuration;
 import org.processmining.plugins.InductiveMiner.efficienttree.UnknownTreeNodeException;
+import org.processmining.plugins.ding.preprocess.TraceVariant;
+import org.processmining.plugins.ding.util.Configuration;
+import org.processmining.plugins.ding.util.EventLogUtilities;
 import org.processmining.plugins.inductiveminer2.logs.IMLog;
 import org.processmining.plugins.inductiveminer2.mining.MiningParameters;
 import org.processmining.plugins.inductiveminer2.plugins.InductiveMinerDialog;
@@ -45,6 +48,18 @@ public class BuildBaselineModel {
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Generate a petri net",  requiredParameterLabels = { 0})
 	public Object[] buildModel(UIPluginContext context, XLog log) throws UnknownTreeNodeException, ReductionFailedException {
+		if(log.size()<1) {
+			JOptionPane.showConfirmDialog(null,
+				    "The event log is empty, can't do discovery",
+				    "Inane information",
+				    JOptionPane.INFORMATION_MESSAGE);
+			context.getFutureResult(0).cancel(false);
+			return null; 
+		}else
+			JOptionPane.showMessageDialog(null,
+				    "The event log has "+ log.size() + "traces to generate model",
+				    "Inane information",
+				    JOptionPane.INFORMATION_MESSAGE);
 		
 		InductiveMinerDialog dialog = new InductiveMinerDialog(log);
 		InteractionResult result = context.showWizard("Mine using Inductive Miner", true, true, dialog);
@@ -122,6 +137,25 @@ public class BuildBaselineModel {
 		return buildModel(context, pos_log);
 	}
 	
+	// we could some controls to see it if we use the labeled log, or whole log
+		@Plugin(name = "Build Petri net Model with Inductive Miner", level = PluginLevel.Regular, returnLabels = {"Petri net"," Initial Marking" }, 
+				returnTypes = {Petrinet.class, Marking.class}, parameterLabels = { "Log" }, userAccessible = true)
+		@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+		@PluginVariant(variantLabel = "Generate Model based on the complement",  requiredParameterLabels = { 0})
+		public Object[] buildPosComplementModel(UIPluginContext context, XLog log) throws UnknownTreeNodeException, ReductionFailedException {
+			// here we need to create a new log, so we can keep the original ones untouched
+			XLog pos_log = (XLog) log.clone();
+			//  complement means we need to get the variants and summary of them
+			//  if summary of them is ?:0, we accept it else, not!!! 
+			List<TraceVariant> variants = EventLogUtilities.getTraceVariants(pos_log);
+			for(TraceVariant var: variants) {
+				// if they have overlap  var.getSummary().get(Configuration.POS_IDX) < 1 ||
+				if( var.getSummary().get(Configuration.NEG_IDX) > 0)
+					EventLogUtilities.deleteVariantFromLog(var, pos_log);
+			}
+			return buildModel(context, pos_log);
+		}
+		
 	@Plugin(name = "Generate efficient tree with Inductive Miner", level = PluginLevel.Regular, returnLabels = {
 	"Efficient Tree" }, returnTypes = {	EfficientTree.class },   parameterLabels = { "Log" }, userAccessible = false)
 	// we could some controls to see it if we use the labeled log, or whole log

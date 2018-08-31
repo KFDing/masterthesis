@@ -15,19 +15,22 @@ package org.processmining.plugins.ding.preprocess;
  */
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
+import org.deckfour.uitopia.api.event.TaskListener.InteractionResult;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
+import org.deckfour.xes.info.XLogInfo;
+import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XAttributeDiscrete;
-import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.contexts.uitopia.UIPluginContext;
@@ -36,16 +39,14 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.framework.util.ui.wizard.ListWizard;
 import org.processmining.framework.util.ui.wizard.ProMWizardDisplay;
-import org.processmining.log.utils.XUtils;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.ding.ui.LabelParameterStep;
-import org.processmining.plugins.ding.ui.VariantControlStep;
+import org.processmining.plugins.ding.ui.VariantWholeView;
 import org.processmining.plugins.ding.util.Configuration;
 import org.processmining.plugins.ding.util.EventLogUtilities;
 import org.processmining.plugins.ding.util.NetUtilities;
-import org.processmining.plugins.ding.util.SamplingUtilities;
 
 
 @Plugin(
@@ -88,39 +89,7 @@ public class PreprocessPlugin {
 		}	
 		return  label_log;
 	}
-	/**
-	 * THis plugin is to add throughtime as one attribute in trace and then assign label into it
-	 * @param context
-	 * @param log
-	 * @return labeled_log
-	 */
-	public XLog assignThroughTimeAttribute(XLog log) {
-		XFactory factory = XFactoryRegistry.instance().currentDefault();
-		for (XTrace trace : log) {
-			// timestamp from one event> .. Literal 
-			Date start_time = null, end_time = null, current_time;  
-			XEvent event;
-			Iterator titer = trace.iterator();
-			if(titer.hasNext()) {
-				event =  (XEvent) titer.next();
-				start_time = end_time =  XUtils.getTimestamp(event);
-			}
-			while (titer.hasNext()) {
-				event =  (XEvent) titer.next();
-				current_time= XUtils.getTimestamp(event);
-				 if(current_time.before(start_time))
-					 start_time = current_time;
-				 if(current_time.after(end_time))
-					 end_time = current_time;
-			}
-			// in Milliseconds format
-			long throughput_time = end_time.getTime() - start_time.getTime();
-			
-			XAttributeDiscrete attr = factory.createAttributeDiscrete(Configuration.TP_TIME, throughput_time, null); 
-			trace.getAttributes().put(attr.getKey(), attr);
-		}	
-		return  log;
-	}
+	
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Assign Label w.r.t. Throughputtime",  requiredParameterLabels = { 0})
@@ -131,7 +100,7 @@ public class PreprocessPlugin {
 		// how to decide the throughputtime of each trace?? 
 		label_log.getGlobalTraceAttributes().add(factory.createAttributeBoolean("label", false, null));
 		
-		assignThroughTimeAttribute(label_log);
+		EventLogUtilities.assignThroughTimeAttribute(label_log);
 
 		// if the throughputtime is over the percentage of 70%, then we assign above it wrong..
 		// double percentage = 0.7;
@@ -210,78 +179,21 @@ public class PreprocessPlugin {
 		List<TraceVariant> unfit_variants = new ArrayList<TraceVariant>();
 	
 		for(TraceVariant var : variants) {
-			var.setFitLabel(new Random().nextBoolean());
-			if(var.getFitLabel())
+			if(var.getFitLabel()==null || var.getFitLabel())
 				fit_variants.add(var);
-			else
+			else // if(var.getFitLabel() == false)
 				unfit_variants.add(var);
 		} // variants size ==0, we don't need to do it??? 
 		if(fit_variants.size()>0) 
-			assignVariantListLabel(fit_variants, parameters.getFit_overlap_rate(), parameters.getFit_pos_rate());
+			EventLogUtilities.assignVariantListLabel(fit_variants, parameters.getFit_overlap_rate(), parameters.getFit_pos_rate());
 		// for unfit variants // if variants.size == 0, we don't need to do it
 		if(unfit_variants.size()>0)
-			assignVariantListLabel(unfit_variants, parameters.getUnfit_overlap_rate(), parameters.getUnfit_pos_rate());
+			EventLogUtilities.assignVariantListLabel(unfit_variants, parameters.getUnfit_overlap_rate(), parameters.getUnfit_pos_rate());
 		
 		return label_log;
 	}
 	
-	private void assignVariantListLabel(List<TraceVariant> variants, double overlap_rate, double pos_rate ) {
-		// for fit variants
-		// overlap 0.3: get total num of variants + random index + number w.r.t. to 0.3; greater than 0.3 
-		List<Integer> nolidx_list = SamplingUtilities.sample(variants.size(), 1 - overlap_rate);
-		// we have odidx_list, and also we have nolidx_list, 
-		// they should then decide to assign different prob to pos and neg
-		List<Integer> nolpos_list = SamplingUtilities.sample(nolidx_list.size(), pos_rate);
 	
-		for(int idx=0; idx<nolidx_list.size(); idx++) {
-			TraceVariant variant = variants.get(nolidx_list.get(idx));
-			// assign pos to nooverlap variant
-			if(nolpos_list.contains(idx)) {
-				assignVariantLabel(variant, Configuration.POS_LABEL, true);
-			}else {
-				// assign neg to nooverlap variants
-				assignVariantLabel(variant, Configuration.POS_LABEL, false);
-			}
-		}
-		// then overlap
-		// if could happen that all olidx_list is empty, so what to do then??? 
-		List<Integer> olidx_list = new ArrayList<Integer>();
-		for(int i=0;i<variants.size();i++)
-			if(!nolidx_list.contains(i))
-				olidx_list.add(i);
-		
-		for(int idx=0; idx< olidx_list.size();idx++) {
-			TraceVariant variant = variants.get(olidx_list.get(idx));
-			// overlap variant, we need to assign both but according to different threshold
-			assignVariantLabel(variant, Configuration.POS_LABEL, pos_rate);
-		}
-		
-	}
-	
-	private void assignVariantLabel(TraceVariant variant, String attr_name, boolean is_true) {
-		// for each trace in the variant, we create an attribution with name of attr_name, value isPos
-		XFactory factory = XFactoryRegistry.instance().currentDefault();
-		for (XTrace trace : variant.getTrace_list()) {
-		    XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, is_true, null);
-		    trace.getAttributes().put(attr.getKey(), attr);
-		}	
-	}
-	
-	private void assignVariantLabel(TraceVariant variant, String attr_name, double prob) {
-		List<Integer> posidx_list = SamplingUtilities.sample(variant.getCount(), prob);
-		
-		XFactory factory = XFactoryRegistry.instance().currentDefault();
-		for (int idx =0; idx < variant.getCount(); idx++) {
-			XTrace trace = variant.getTrace_list().get(idx);
-			if(posidx_list.contains(idx)) {
-				XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, true, null);
-			    trace.getAttributes().put(attr.getKey(), attr);
-			}else {
-				XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, false, null);
-			    trace.getAttributes().put(attr.getKey(), attr);
-			}
-		}
-	}
 	
 	// here we need a Plugin to assign fit and not fit label to event log, we need the input Petrinet and Log
 	// marking is also needed, but we don't write it down.
@@ -298,9 +210,9 @@ public class PreprocessPlugin {
 		
 		for(TraceVariant variant: variants) {
 			if(NetUtilities.fitPN(net, marking, variant.getTraceVariant(), maps))
-				assignVariantLabel(variant, Configuration.FIT_LABEL, true);
+				EventLogUtilities.assignVariantLabel(variant, Configuration.FIT_LABEL, true);
 			else
-				assignVariantLabel(variant, Configuration.FIT_LABEL, false);	
+				EventLogUtilities.assignVariantLabel(variant, Configuration.FIT_LABEL, false);	
 		}
 		return log;
 	}
@@ -315,20 +227,91 @@ public class PreprocessPlugin {
 	 */
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Assign Label to Specific Variant",  requiredParameterLabels = { 0})
-	public XLog assignFitLabel(UIPluginContext context, XLog log) {
+	public XLog assignSpecificLabel(UIPluginContext context, XLog log) {
 		// get variants with summary
+		XFactory factory = XFactoryRegistry.instance().currentDefault();
 		XLog label_log = (XLog) log.clone();
+		XLogInfo info = XLogInfoFactory.createLogInfo(label_log);
+		
+		label_log.getGlobalTraceAttributes().add(factory.createAttributeBoolean(Configuration.POS_LABEL, false, null));
+		label_log.getGlobalTraceAttributes().add(factory.createAttributeBoolean(Configuration.FIT_LABEL, false, null));
 		// so here we just set one interactive parameter setting window
 		// after the process, we get labeled_log ??? No, here are the variants changed
 		// but it refers to data in log, so change variant changed the log
-		VariantControlStep c_step = new VariantControlStep(label_log);
-		
-		ListWizard<XLog> wizard = new ListWizard<XLog>(c_step);
+		// VariantControlStep c_step = new VariantControlStep(label_log);
+
+		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(label_log);
+		VariantWholeView view =  new VariantWholeView(variants, info);
+		InteractionResult result = context.showWizard("Setting Variant", true, true, view);
+		if (result != InteractionResult.FINISHED) {
+	    		return null;
+		}
+		return label_log;
+		// ListWizard<XLog> wizard = new ListWizard<XLog>(c_step);
 		// it doesn't retun value, just the change on variants, then actually, I could get it here.
-		
+		// return  ProMWizardDisplay.show(context, wizard, label_log);
 		// if we update the view, how should we do it ??? Or actually we could do it in trace
 				
-		return  ProMWizardDisplay.show(context, wizard, label_log);
-		
 	}
+	
+	/**
+	 * create a plugin to group data w.r.t. given criteria
+	 * like extract traces with pos, or neg
+	 * get the complement of variant only with pure pos or neg
+	 */
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Extract Pos Data from Log",  requiredParameterLabels = { 0})
+	public XLog extractPosData(UIPluginContext context, XLog log) {
+		// but we need to set parameters for it.. Then we can use it
+		// -- create an interface to choose the data only from positive 
+		// or from the complement of positive
+		// extract it but we could do it before create the model
+		XLog pos_log = (XLog) log.clone();
+		
+		boolean only_pos = true;
+		int neg_count = 0, pos_count=0;
+		if(only_pos) {
+			Iterator liter = pos_log.iterator();
+			while(liter.hasNext()) {
+				XTrace trace = (XTrace) liter.next();
+				if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
+					XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+					if(!attr.getValue()) {
+						liter.remove();
+						neg_count++;
+					}else
+						pos_count++;
+				}
+			}
+			JOptionPane.showMessageDialog(null,
+				    "The event log has "+ pos_count + " positive traces and "+ neg_count + " negative traces",
+				    "Inane information",
+				    JOptionPane.INFORMATION_MESSAGE);
+		}
+		return pos_log;
+	}
+		
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Extract Pos Complement Data from Log",  requiredParameterLabels = { 0})
+	public XLog extractPosComplementData(UIPluginContext context, XLog log) {
+		// but we need to set parameters for it.. Then we can use it
+		// -- create an interface to choose the data only from positive 
+		// or from the complement of positive
+		// extract it but we could do it before create the model
+		XLog pos_log = (XLog) log.clone();
+		//  complement means we need to get the variants and summary of them
+		//  if summary of them is ?:0, we accept it else, not!!! 
+		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(pos_log);
+		for(TraceVariant var: variants) {
+			// if they have overlap  var.getSummary().get(Configuration.POS_IDX) < 1 ||
+			if( var.getSummary().get(Configuration.NEG_IDX) > 0)
+				EventLogUtilities.deleteVariantFromLog(var, pos_log);
+		}
+		JOptionPane.showMessageDialog(null,
+			    "The event log has "+ pos_log.size() + " traces in positive complement",
+			    "Inane information",
+			    JOptionPane.INFORMATION_MESSAGE);
+		return pos_log;
+	}
+	
 }

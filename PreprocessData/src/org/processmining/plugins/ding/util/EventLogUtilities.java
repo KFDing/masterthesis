@@ -4,20 +4,27 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.factory.XFactory;
+import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.info.XLogInfoFactory;
+import org.deckfour.xes.model.XAttributeBoolean;
+import org.deckfour.xes.model.XAttributeDiscrete;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.deckfour.xes.out.XSerializer;
 import org.deckfour.xes.out.XesXmlSerializer;
+import org.processmining.log.utils.XUtils;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
@@ -131,9 +138,111 @@ public class EventLogUtilities {
 		return variants;
 	} 
 	
-	// it get the list of variants in the log and show the information of this variants
-	public static List getVariantSummary(XLog log){
-		
-		return null;
+	
+	public static void assignVariantLabel(TraceVariant variant, String attr_name, Boolean is_true) {
+		// for each trace in the variant, we create an attribution with name of attr_name, value isPos
+		XFactory factory = XFactoryRegistry.instance().currentDefault();
+		for (XTrace trace : variant.getTrace_list()) {
+		    XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, is_true, null);
+		    trace.getAttributes().put(attr.getKey(), attr);
+		}	
 	}
+	
+	public static void  assignVariantLabel(TraceVariant variant, String attr_name, double prob) {
+		//System.out.println(variant.getCount());
+		//System.out.println("prob in assign " + prob);
+		List<Integer> posidx_list = SamplingUtilities.sample(variant.getCount(), prob);
+		//System.out.println(posidx_list);
+		
+		XFactory factory = XFactoryRegistry.instance().currentDefault();
+		for (int idx =0; idx < variant.getCount(); idx++) {
+			XTrace trace = variant.getTrace_list().get(idx);
+			if(posidx_list.contains(idx)) {
+				XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, true, null);
+			    trace.getAttributes().put(attr.getKey(), attr);
+			}else {
+				XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, false, null);
+			    trace.getAttributes().put(attr.getKey(), attr);
+			}
+		}
+	}
+	
+	/**
+	 * THis plugin is to add throughtime as one attribute in trace and then assign label into it
+	 * @param context
+	 * @param log
+	 * @return labeled_log
+	 */
+	public static XLog assignThroughTimeAttribute(XLog log) {
+		XFactory factory = XFactoryRegistry.instance().currentDefault();
+		for (XTrace trace : log) {
+			// timestamp from one event> .. Literal 
+			Date start_time = null, end_time = null, current_time;  
+			XEvent event;
+			Iterator titer = trace.iterator();
+			if(titer.hasNext()) {
+				event =  (XEvent) titer.next();
+				start_time = end_time =  XUtils.getTimestamp(event);
+			}
+			while (titer.hasNext()) {
+				event =  (XEvent) titer.next();
+				current_time= XUtils.getTimestamp(event);
+				 if(current_time.before(start_time))
+					 start_time = current_time;
+				 if(current_time.after(end_time))
+					 end_time = current_time;
+			}
+			// in Milliseconds format
+			long throughput_time = end_time.getTime() - start_time.getTime();
+			
+			XAttributeDiscrete attr = factory.createAttributeDiscrete(Configuration.TP_TIME, throughput_time, null); 
+			trace.getAttributes().put(attr.getKey(), attr);
+		}	
+		return  log;
+	}
+	
+	public static void assignVariantListLabel(List<TraceVariant> variants, double overlap_rate, double pos_rate ) {
+		// for fit variants
+		// overlap 0.3: get total num of variants + random index + number w.r.t. to 0.3; greater than 0.3 
+		List<Integer> nolidx_list = SamplingUtilities.sample(variants.size(), 1 - overlap_rate);
+		// we have odidx_list, and also we have nolidx_list, 
+		// they should then decide to assign different prob to pos and neg
+		List<Integer> nolpos_list = SamplingUtilities.sample(nolidx_list.size(), pos_rate);
+	
+		for(int idx=0; idx<nolidx_list.size(); idx++) {
+			TraceVariant variant = variants.get(nolidx_list.get(idx));
+			// assign pos to nooverlap variant
+			if(nolpos_list.contains(idx)) {
+				EventLogUtilities.assignVariantLabel(variant, Configuration.POS_LABEL, true);
+			}else {
+				// assign neg to nooverlap variants
+				EventLogUtilities.assignVariantLabel(variant, Configuration.POS_LABEL, false);
+			}
+		}
+		// then overlap
+		// if could happen that all olidx_list is empty, so what to do then??? 
+		List<Integer> olidx_list = new ArrayList<Integer>();
+		for(int i=0;i<variants.size();i++)
+			if(!nolidx_list.contains(i))
+				olidx_list.add(i);
+		
+		for(int idx=0; idx< olidx_list.size();idx++) {
+			TraceVariant variant = variants.get(olidx_list.get(idx));
+			// overlap variant, we need to assign both but according to different threshold
+			EventLogUtilities.assignVariantLabel(variant, Configuration.POS_LABEL, pos_rate);
+		}
+		
+	}
+
+	public static void deleteVariantFromLog(TraceVariant var, XLog log) {
+		// delete var from log, now don't sure about the effect if we only delete tracelist
+		Iterator liter = var.getTrace_list().iterator();
+		while(liter.hasNext()) {
+			XTrace trace = (XTrace) liter.next();
+			log.remove(trace);
+			liter.remove();
+		}
+		// how about the traceVariant ??? 
+	}
+
 }

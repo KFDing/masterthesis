@@ -133,8 +133,17 @@ public class NetUtilities {
     	Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postset = null;
     	// set a token at first place... Na, we need to check it from another code
     	// this doesn't include the token stuff. Maybe we should include it.
-    	Place splace = NetUtilities.getStartPlace(net);
-    	splace.getAttributeMap().put(Configuration.TOKEN, 1);
+    	if(marking == null) {
+    		Place splace = NetUtilities.getStartPlace(net);
+    		splace.getAttributeMap().put(Configuration.TOKEN, 1);
+    	}else {
+    		// we use initial marking and get the places. 
+    		Iterator<Place> titer = marking.iterator();
+    		while(titer.hasNext()) {
+    			Place splace = titer.next();
+    			splace.getAttributeMap().put(Configuration.TOKEN, 1);
+    		}
+    	}
     	// boolean fit = true;
 		// first transition if it connects the initial place
     	for(XEventClass eventClass : trace) {
@@ -181,7 +190,7 @@ public class NetUtilities {
 	}
 	// if not token missing, so I could trace back and generate token before and consume later by this place.
 	public static boolean isTokenMissing(Place p, Petrinet net) {
-		
+		int loop_count = 0;
     	Arc arc= null;
 		// if trace back to the silent transition.
 		Collection<PetrinetNode> silentNodes = findSilentNodes(p, net);
@@ -203,8 +212,15 @@ public class NetUtilities {
 					int tnum = (Integer)sp.getAttributeMap().get(Configuration.TOKEN);
 					
 					if(tnum == 0 ) {
-						// go back to check the place before and see if works
-						return isTokenMissing(sp, net); 
+						// go back to check the place before and see if works .. when to stop for checking this one?? 
+						// if there is a loop, and then we check if we go back to this place again,if it goes back 
+						// then return false
+						loop_count ++;
+						if(loop_count < 100)
+							return isTokenMissing(sp, net); 
+						else
+							System.out.println("Go back to check silent token, Stop loop");
+							return false;
 					}
 					
 					if(tnum == 1 ) {

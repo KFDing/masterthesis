@@ -1,6 +1,5 @@
 package org.processmining.plugins.ding.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -11,6 +10,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,21 +23,27 @@ import javax.swing.event.ChangeListener;
 
 import org.processmining.plugins.ding.preprocess.TraceVariant;
 import org.processmining.plugins.ding.util.Configuration;
+import org.processmining.plugins.ding.util.EventLogUtilities;
 
 import com.fluxicon.slickerbox.ui.SlickerSliderUI;
 
 import info.clearthought.layout.TableLayout;
 
-public class VariantChangeView extends JPanel {
+public class VariantViewChange extends JPanel {
 	
-	public VariantChangeView(TraceVariant traceVariant) {
-		this.setLayout(new BorderLayout());
-		this.add(createChangePanel(traceVariant), BorderLayout.CENTER);
+	double prob = 0;
+	String fit_choice;
+	private JPanel summary_panel ;
+	JPanel c_panel;
+	public VariantViewChange(TraceVariant traceVariant) {
+		traceVariant.setSummary();
+		this.add(createChangePanel(traceVariant));
 		// this.setSize(600,600);
 	}
  
 	private JPanel createChangePanel(TraceVariant traceVariant) {
-		JPanel c_panel =  new JPanel();
+		summary_panel = new JPanel();
+		c_panel =  new JPanel();
 		TitledBorder title = BorderFactory.createTitledBorder("Show and Change Variant");
 		title.setTitleJustification(TitledBorder.CENTER);
 		c_panel.setBorder(title);
@@ -46,7 +52,7 @@ public class VariantChangeView extends JPanel {
 		NumberFormat num_format = NumberFormat.getNumberInstance();
 		// here to create a panel to show the summary information
 
-		JPanel summary_panel = new JPanel();
+		
 		TitledBorder title2 = BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.black), "Summary of Variant");
 		title2.setTitleJustification(TitledBorder.LEFT);
@@ -54,38 +60,70 @@ public class VariantChangeView extends JPanel {
 		
 		double size[][] = { 
 				{ TableLayout.FILL, 0.05, TableLayout.FILL, 0.05 } 
-				,{ 0.25,0.25, 0.25,0.25} };
+				,{TableLayout.FILL,TableLayout.FILL,TableLayout.FILL,TableLayout.FILL,TableLayout.FILL, 0.1 } };
 		summary_panel.setLayout(new TableLayout(size));
 		// summary_panel.setSize(400,400);
 		summary_panel.setOpaque(false);
 		
 		JLabel fit_label = new JLabel("Fit: ");
 		JFormattedTextField fit_value =  new JFormattedTextField();
-		fit_value.setValue(traceVariant.getFitLabel());
-		summary_panel.add(fit_label, "0,0");
-		summary_panel.add(fit_value, "2,0");
+		if(traceVariant.getFitLabel() !=null)
+			fit_value.setValue(traceVariant.getFitLabel());
+		else
+			fit_value.setValue("UNKNOWN");
+		summary_panel.add(fit_label, "0,0" , 0);
+		summary_panel.add(fit_value, "2,0" , 1);
 		
 		JLabel tnum_label = new JLabel("Trace Num: ");
 		JFormattedTextField tnum_value =  new JFormattedTextField(num_format);
 		tnum_value.setValue(traceVariant.getCount());
-		summary_panel.add(tnum_label, "0,1");
-		summary_panel.add(tnum_value, "2,1");
+		summary_panel.add(tnum_label, "0,1" , 2);
+		summary_panel.add(tnum_value, "2,1",  3);
 		
-		JLabel pnum_label = new JLabel("Trace Num: ");
+		JLabel pnum_label = new JLabel("Pos Num: ");
 		JFormattedTextField pnum_value =  new JFormattedTextField(num_format);
 		pnum_value.setValue(traceVariant.getSummary().get(Configuration.POS_IDX));
-		summary_panel.add(pnum_label, "0,2");
-		summary_panel.add(pnum_value, "2,2");
+		summary_panel.add(pnum_label, "0,2",4);
+		summary_panel.add(pnum_value, "2,2",5);
 		
-		JLabel nnum_label = new JLabel("Trace Num: ");
+		
+		JLabel nnum_label = new JLabel("Neg Num: ");
 		JFormattedTextField nnum_value =  new JFormattedTextField(num_format);
 		nnum_value.setValue(traceVariant.getSummary().get(Configuration.NEG_IDX));
-		summary_panel.add(nnum_label, "0,3");
-		summary_panel.add(nnum_value, "2,3");
+		summary_panel.add(nnum_label, "0,3", 6);
+		summary_panel.add(nnum_value, "2,3", 7);
 		
+		JLabel unum_label = new JLabel("Unknown Num: ");
+		JFormattedTextField unum_value =  new JFormattedTextField(num_format);
+		unum_value.setValue(traceVariant.getSummary().get(Configuration.UNKNOWN_IDX));
+		summary_panel.add(unum_label, "0,4", 8);
+		summary_panel.add(unum_value, "2,4", 9);
 		
 		// here to create a JPanel to change labels of the variant
 		// set for pos and neg distribution
+		
+		// here we choose if it is fit or not fit 
+		JLabel fit_choice_label = new JLabel("Choose Fit: ");
+		JComboBox fit_box = new JComboBox<>(Configuration.FIT_CHOICES);
+		fit_box.setSelectedItem(0); // the last one is chosen
+		fit_choice = Configuration.FIT_UNKNOWN;
+		fit_box.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JComboBox cb = (JComboBox)e.getSource();
+		        fit_choice = (String)cb.getSelectedItem();
+			}
+		});
+		
+		JPanel fitChoosePane = new JPanel();
+		fitChoosePane.setLayout(new BoxLayout(fitChoosePane, BoxLayout.LINE_AXIS));
+		fitChoosePane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+		fitChoosePane.add(Box.createHorizontalGlue());
+		fitChoosePane.add(fit_choice_label);
+		fitChoosePane.add(Box.createRigidArea(new Dimension(5, 0)));
+		fitChoosePane.add(fit_box);
+        
+		
 		JLabel fp_label = new JLabel("Positive Rate: ");
 		final JTextField fp_value = new JTextField(1);
 		//Lay out the buttons from left to right.
@@ -105,8 +143,8 @@ public class VariantChangeView extends JPanel {
 				// TODO Auto-generated method stub
 				if (e.getSource() == fp_slider) {
 					// updateThresholdSlider();
-					double value = fp_slider.getValue();
-					fp_value.setText(" "+ value);
+					prob = fp_slider.getValue();
+					fp_value.setText(" "+ prob);
 					// paras.setFit_pos_rate(value/100);
 				}	
 			}
@@ -125,7 +163,13 @@ public class VariantChangeView extends JPanel {
 				// submit all the changed parameters 
 				JOptionPane.showMessageDialog(buttonPane, "get value" + fp_value.getText(), "show the parameter", JOptionPane.INFORMATION_MESSAGE);
 				// change the label of variant
-				// repaint again the summary view of variant
+				// should I change all of again, or just some values?? The values are in the summary of variant. 
+				// I could put it separately, but now just make it work, at first
+				// also to add the fit label assign. Now we just consider the two attributes
+				// System.out.println("prob value is "+prob);
+				EventLogUtilities.assignVariantLabel(traceVariant, Configuration.POS_LABEL, prob/100.0);
+				// repaint again the summary view of variant // here we are actually in the view of graph, so no use..
+				updateSummaryPanel(traceVariant);
 			}          
 	    });
 		        	
@@ -136,9 +180,8 @@ public class VariantChangeView extends JPanel {
 				// submit all the changed parameters 
 				fp_slider.setValue(0);
 				fp_value.setText(" "+ fp_slider.getValue());
-				JOptionPane.showMessageDialog(buttonPane, "reset value" + fp_value.getText(), "reset the parameter", JOptionPane.INFORMATION_MESSAGE);
-				// change the label of variant
-				// repaint again the summary view of variant
+				// JOptionPane.showMessageDialog(buttonPane, "reset value" + fp_value.getText(), "reset the parameter", JOptionPane.INFORMATION_MESSAGE);
+				
 			}          
 	    });
 		
@@ -150,6 +193,8 @@ public class VariantChangeView extends JPanel {
 		fp_slider.setOpaque(false);
 		
 		c_panel.add(summary_panel);
+		c_panel.add(Box.createRigidArea(new Dimension(0,10)));
+		c_panel.add(fitChoosePane);
 		c_panel.add(Box.createRigidArea(new Dimension(0,10)));
 		c_panel.add(valuePane);
 		c_panel.add(Box.createRigidArea(new Dimension(0,10)));
@@ -164,9 +209,22 @@ public class VariantChangeView extends JPanel {
 	public void update(TraceVariant traceVariant) {
 		// update the current view w.r.t the selectVariant
 		// remove one Panel and generate another panel???
+		traceVariant.setSummary();
 		this.removeAll();
-		this.add(createChangePanel(traceVariant), BorderLayout.CENTER);
+		this.updateUI();
+		this.add(createChangePanel(traceVariant));
+		this.updateUI();
 		
+	}
+	// only update the value in summaryPanel, maybe we could use it as a listener?? 
+	private void updateSummaryPanel(TraceVariant traceVariant) {
+		traceVariant.setFitLabel(fit_choice);
+		traceVariant.changeSummary();
+		((JFormattedTextField)summary_panel.getComponent(1)).setValue(fit_choice);
+		((JFormattedTextField)summary_panel.getComponent(3)).setValue(traceVariant.getCount());
+		((JFormattedTextField)summary_panel.getComponent(5)).setValue(traceVariant.getSummary().get(Configuration.POS_IDX));
+		((JFormattedTextField)summary_panel.getComponent(7)).setValue(traceVariant.getSummary().get(Configuration.NEG_IDX));
+		((JFormattedTextField)summary_panel.getComponent(9)).setValue(traceVariant.getSummary().get(Configuration.UNKNOWN_IDX));
 	}
 
 }

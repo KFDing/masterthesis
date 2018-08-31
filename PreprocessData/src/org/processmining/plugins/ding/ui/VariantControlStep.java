@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+import org.deckfour.xes.info.XLogInfo;
+import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.plugins.ding.preprocess.TraceVariant;
@@ -11,15 +13,16 @@ import org.processmining.plugins.ding.util.EventLogUtilities;
 
 public class VariantControlStep implements ProMWizardStep<XLog>{
 
-	private VariantControlView controlPanel; 
+	private VariantWholeView controlPanel; 
 	
 	public VariantControlStep(XLog log) {
 		// parameters = new FilteringParameters();
 		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(log);
-		this.controlPanel = new VariantControlView(variants, log);
+		XLogInfo info = XLogInfoFactory.createLogInfo(log);
+		this.controlPanel = new VariantWholeView(variants, info);
 	}
 	
-	public VariantControlView getFilteringPanel() {
+	public VariantWholeView getFilteringPanel() {
 		return controlPanel;
 	} 
 	

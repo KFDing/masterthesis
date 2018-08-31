@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+import org.deckfour.xes.info.XLogInfo;
+import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
@@ -22,7 +24,8 @@ public class VariantViewPlugin {
 	@PluginVariant(requiredParameterLabels = { 0, 1 })
 	@UITopiaVariant(pack = "Preprocess", affiliation = UITopiaVariant.EHV, author = "kefang", email = "@kefang")
 	public JComponent visualise(final PluginContext context, List<TraceVariant> variants, XLog log) {
-		return new VariantControlView( variants, log); //PluginContext context, 
+		XLogInfo info = XLogInfoFactory.createLogInfo(log);
+		return new VariantWholeView( variants, info); //PluginContext context, 
 	}
 
 }

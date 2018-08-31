@@ -26,17 +26,17 @@ public class VariantsViewMaster extends JPanel {
 		list_panel = new ListPanel(variants);
 		
 		infoTableModel = new DefaultTableModel(new String[] { "Name", "Value" }, 0);
-		/*
+		
 		infoTableModel.addRow(new String[] { "Traces", " "+info.getNumberOfTraces()});
 		infoTableModel.addRow(new String[] { "Events", " "+info.getNumberOfEvents()});
 		infoTableModel.addRow(new String[] { "Event Classes", " "+info.getEventClasses().size() });
 		infoTableModel.addRow(new String[] { "Variants", " " +  variants.size()});
-		*/
+		/*
 		infoTableModel.addRow(new String[] { "Traces", "0"});
 		infoTableModel.addRow(new String[] { "Events", "0"});
 		infoTableModel.addRow(new String[] { "Event Classes", "0"});
 		infoTableModel.addRow(new String[] { "Variants", "" +  variants.size()});
-		
+		*/
 		logInfoTable = new ProMTableWithoutPanel(infoTableModel);
 		logInfoTable.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));
 		logInfoTable.setBackground(Color.WHITE);

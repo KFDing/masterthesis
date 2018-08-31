@@ -104,7 +104,7 @@ public class LabelParameterUI extends JPanel{
 		
 		JLabel ufp_label = new JLabel("Positive Rate: ");
 		JSlider ufp_slider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
-		ufo_slider.setUI(new SlickerSliderUI(fp_slider));
+		ufp_slider.setUI(new SlickerSliderUI(ufp_slider));
 		JTextField ufp_value = new JTextField();
 		
 		ufp_slider.setValue(0);

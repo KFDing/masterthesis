@@ -7,10 +7,12 @@ import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.plugins.ding.util.Configuration;
+import org.processmining.plugins.ding.util.EventLogUtilities;
 
 public class TraceVariant {
 	private int count ; 
-	private boolean isFit ;
+	private Boolean isFit  ; // it is only the attribute if traceVaraint,
+	// if we want to use it, we can assign the idx to it and then get the value for it 
 	private List<XEventClass> variant; 
 	// here we need to record the log index in this variants.
 	// later, we could do the label assign on this variant.
@@ -18,7 +20,7 @@ public class TraceVariant {
 	private List<Integer> idx_list;
 	private List<XTrace> trace_list;
 	
-	private List<Integer> summary;
+	private List<Integer> summary = null;
 	
 	
 	public List<XTrace> getTrace_list() {
@@ -82,26 +84,59 @@ public class TraceVariant {
 		trace_list.add(trace);
 	}
 	
-	public void setFitLabel(boolean isFit) {
+	public void setFitLabel(Boolean isFit) {
 		this.isFit = isFit;
+		// here we need to assign all fit to trace list
+		EventLogUtilities.assignVariantLabel(this, Configuration.FIT_LABEL, isFit);
 	}
 	
-	public boolean getFitLabel() {
+	public void setFitLabel(String fit_choice) {
+		if(fit_choice.equals(Configuration.FIT_TRUE)) {
+			isFit = true;
+			setFitLabel(isFit);
+		}
+		else if(fit_choice.equals(Configuration.FIT_FALSE)) {
+			isFit = false;
+			setFitLabel(isFit);
+		}
+	}
+	public Boolean getFitLabel() {
 		return isFit;
 	}
 	public List<Integer> getSummary(){
-		if(summary == null)
+		if(summary == null )
 			setSummary();
 		return summary;
 	}
 	
 	public void setSummary() {
 		summary = new ArrayList<Integer>();
-		
+
 		if(summary.size()<1) {
 			summary.add(Configuration.POS_IDX,0);
 			summary.add(Configuration.NEG_IDX,0);
+			summary.add(Configuration.UNKNOWN_IDX,0);
 		}
+		// how could we assign three values to an unknown value??? // we could add one more row to it ?? 
+		// we don't need to use the tableLayout.. Nanan, a lot of changes 
+		for(XTrace trace : trace_list) {
+			XAttributeBoolean pos_attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+			if(pos_attr != null) {
+				if(pos_attr.getValue())
+					summary.set(Configuration.POS_IDX, summary.get(Configuration.POS_IDX) +1);
+				else
+					summary.set(Configuration.NEG_IDX, summary.get(Configuration.NEG_IDX) +1);
+			}else {
+				summary.set(Configuration.UNKNOWN_IDX, summary.get(Configuration.UNKNOWN_IDX) +1);
+			}
+		}
+	}
+	// we accept some parameters and change it, this could be label parameters , with fit and with pos and then others 
+	// we can't really set if it is fit or not, or we can set it ??? 
+	public void changeSummary() {
+		// choose the trace and assign variant label, that's all
+		for(int idx=0;idx<summary.size();idx++)
+			summary.set(idx, 0);
 		
 		for(XTrace trace : trace_list) {
 			XAttributeBoolean pos_attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
@@ -110,13 +145,9 @@ public class TraceVariant {
 					summary.set(Configuration.POS_IDX, summary.get(Configuration.POS_IDX) +1);
 				else
 					summary.set(Configuration.NEG_IDX, summary.get(Configuration.NEG_IDX) +1);
+			}else {
+				summary.set(Configuration.UNKNOWN_IDX, summary.get(Configuration.UNKNOWN_IDX) +1);
 			}
 		}
-	}
-	// we accept some parameters and change it, this could be label parameters , with fit and with pos and then others 
-	// we can't really set if it is fit or not, or we can set it ??? 
-	public void changeSummary(double pos_prob) {
-		// choose the trace and assign variant label, that's all
-		
 	}
 }

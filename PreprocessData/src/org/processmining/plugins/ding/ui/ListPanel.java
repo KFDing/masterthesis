@@ -84,7 +84,7 @@ public class ListPanel extends JPanel {
         
         JScrollPane listScrollPane = new JScrollPane(jlist);
         // add part to cell render, but later
-        listScrollPane.setPreferredSize(new Dimension(250, 80));
+        listScrollPane.setPreferredSize(new Dimension(500, 500));
         listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
         
         add(listScrollPane, BorderLayout.CENTER);
