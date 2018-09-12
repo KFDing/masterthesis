@@ -32,18 +32,34 @@ public class ETChecker {
 
 		PrefixAutomaton pA = new PrefixAutomaton(log, res, mapping);
 		
+		tree = pA.getTree();
+		
+		enrich( net, marking, mapping, res);
+		
 	}
 	
-	public void enrichRec(Petrinet net, Marking marking, TransEvClassMapping mapping, ETCResults res) throws Exception {
+	public void enrich(Petrinet net, Marking marking, TransEvClassMapping mapping, ETCResults res) {
 		PetrinetSemantics sem = PetrinetSemanticsFactory.regularPetrinetSemantics(Petrinet.class);
 		Collection<Transition> transAll = net.getTransitions();
 		sem.initialize(transAll, marking);
 		
+		try {
+			enrichRec( net,marking, mapping,tree.getRoot(),sem, res);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void enrichRec(Petrinet net, Marking marking, TransEvClassMapping mapping, PrefixAutomatonNode node, PetrinetSemantics sem, ETCResults res) throws Exception {
+		
 		//Get the enable transitions for the marking of the given node.
 		MarksTasks enableTasks = computeEnableTasks( net, marking, mapping, sem, res);
-		PrefixAutomatonNode node = tree.getRoot();
+		// = tree.getRoot();
 		
-		//For each child edge of Node 
+		//For each child edge of Node
+		//** node is one trace?? 
+		
 		for (PrefixAutomatonEdge edge :tree.getChildEdges(node)){
 			XEventClass task = edge.getEvent();
 			PrefixAutomatonNode childNode = tree.getOpposite(node, edge);
@@ -52,10 +68,20 @@ public class ETChecker {
 			//Check if the task is in the available tasks
 			if(ix == -1){
 				//NO FITNESS
+				//** how to get trace is has and assign label to it ?? So we could know that it not fit ??
+				//** 
 				childNode.setType(PrefixAutomatonNodeType.NON_FIT);
 				res.setNonFitStates(res.getNonFitStates()+1);
 				res.setnNonFitTraces(res.getnNonFitTraces()+childNode.getInstances());
 				
+			}else{
+				//Follow the extension of the automaton for the child
+				/**I leave the indeterminism undealt.. */
+				enrichRec(net,enableTasks.marks.get(ix),mapping,childNode, sem, res);
+				
+				//Remove this tasks from the available tasks
+				enableTasks.marks.remove(ix);
+				enableTasks.tasks.remove(ix);
 			}
 		}
 		

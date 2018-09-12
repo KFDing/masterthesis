@@ -28,27 +28,44 @@ import org.processmining.plugins.ding.util.EventLogUtilities;
 import com.fluxicon.slickerbox.ui.SlickerSliderUI;
 
 import info.clearthought.layout.TableLayout;
-
+/**
+ * this class shows the summary information about the each variant 
+ * -- accept the change parameters to control variant
+ * -- but how to change them then??? 
+ * we don't need to build a Panel each time, when we see different variant
+ * we only need to change the data, it shows and also pass parameters from it
+ * to achieve this, we need to ?? 
+ * ++ create an initial panel at the initialization of construct methods
+ * ++ update the values of it.. One thing is how to really get access into this panel
+ * ++ create all the variant into this class and initialize them into the construct methods
+ * ++ update methods can also use it,
+ * but for each variant, it need s to change the view data, but only for this.
+ * @author dkf
+ *
+ */
 public class VariantViewChange extends JPanel {
 	
-	double prob = 0;
+	static double prob = 0;
 	String fit_choice;
 	private JPanel summary_panel ;
-	JPanel c_panel;
+	JPanel buttonPane ;
+	
+	// JPanel c_panel;
 	public VariantViewChange(TraceVariant traceVariant) {
-		traceVariant.setSummary();
-		this.add(createChangePanel(traceVariant));
-		// this.setSize(600,600);
+		// traceVariant.setSummary();
+		// this.add(createChangePanel(traceVariant));
+		createChangePanel(traceVariant);
+		// then we need to updateData according to this traceVariant
 	}
  
-	private JPanel createChangePanel(TraceVariant traceVariant) {
+	private void createChangePanel(TraceVariant traceVariant) {
 		summary_panel = new JPanel();
-		c_panel =  new JPanel();
+
 		TitledBorder title = BorderFactory.createTitledBorder("Show and Change Variant");
 		title.setTitleJustification(TitledBorder.CENTER);
-		c_panel.setBorder(title);
+		this.setBorder(title);
 		
-		c_panel.setLayout(new BoxLayout(c_panel, BoxLayout.PAGE_AXIS));
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		NumberFormat num_format = NumberFormat.getNumberInstance();
 		// here to create a panel to show the summary information
 
@@ -67,10 +84,12 @@ public class VariantViewChange extends JPanel {
 		
 		JLabel fit_label = new JLabel("Fit: ");
 		JFormattedTextField fit_value =  new JFormattedTextField();
+		// for the whole trace 
 		if(traceVariant.getFitLabel() !=null)
 			fit_value.setValue(traceVariant.getFitLabel());
 		else
 			fit_value.setValue("UNKNOWN");
+		
 		summary_panel.add(fit_label, "0,0" , 0);
 		summary_panel.add(fit_value, "2,0" , 1);
 		
@@ -89,7 +108,7 @@ public class VariantViewChange extends JPanel {
 		
 		JLabel nnum_label = new JLabel("Neg Num: ");
 		JFormattedTextField nnum_value =  new JFormattedTextField(num_format);
-		nnum_value.setValue(traceVariant.getSummary().get(Configuration.NEG_IDX));
+		// nnum_value.setValue(traceVariant.getSummary().get(Configuration.NEG_IDX));
 		summary_panel.add(nnum_label, "0,3", 6);
 		summary_panel.add(nnum_value, "2,3", 7);
 		
@@ -152,12 +171,13 @@ public class VariantViewChange extends JPanel {
         
 		// add button to confirm the changes
 		//Lay out the buttons from left to right.
-        JPanel buttonPane = new JPanel();
+        buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
         buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
         
 		JButton submit_button=new JButton("Submit");    
 		submit_button.setBounds(100,100,140, 40);    
+		// but for submit value, we need to do it outside of the initial view
 		submit_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// submit all the changed parameters 
@@ -192,32 +212,35 @@ public class VariantViewChange extends JPanel {
         
 		fp_slider.setOpaque(false);
 		
-		c_panel.add(summary_panel);
-		c_panel.add(Box.createRigidArea(new Dimension(0,10)));
-		c_panel.add(fitChoosePane);
-		c_panel.add(Box.createRigidArea(new Dimension(0,10)));
-		c_panel.add(valuePane);
-		c_panel.add(Box.createRigidArea(new Dimension(0,10)));
-		c_panel.add(fp_slider);
-		c_panel.add(Box.createRigidArea(new Dimension(0,10)));
-		c_panel.add(buttonPane);
-		c_panel.add(Box.createRigidArea(new Dimension(0,10)));	
+		this.add(summary_panel);
+		this.add(Box.createRigidArea(new Dimension(0,10)));
+		this.add(fitChoosePane);
+		this.add(Box.createRigidArea(new Dimension(0,10)));
+		this.add(valuePane);
+		this.add(Box.createRigidArea(new Dimension(0,10)));
+		this.add(fp_slider);
+		this.add(Box.createRigidArea(new Dimension(0,10)));
+		this.add(buttonPane);
+		this.add(Box.createRigidArea(new Dimension(0,10)));	
 		
-		return c_panel;
 	}
 	
 	public void update(TraceVariant traceVariant) {
 		// update the current view w.r.t the selectVariant
 		// remove one Panel and generate another panel???
 		traceVariant.setSummary();
-		this.removeAll();
+		// this.removeAll();
+		updateSummaryPanel(traceVariant);
 		this.updateUI();
-		this.add(createChangePanel(traceVariant));
-		this.updateUI();
+		// this.add(createChangePanel(traceVariant));
+		// this.updateUI();
 		
 	}
+	
+	
 	// only update the value in summaryPanel, maybe we could use it as a listener?? 
 	private void updateSummaryPanel(TraceVariant traceVariant) {
+		
 		traceVariant.setFitLabel(fit_choice);
 		traceVariant.changeSummary();
 		((JFormattedTextField)summary_panel.getComponent(1)).setValue(fit_choice);
