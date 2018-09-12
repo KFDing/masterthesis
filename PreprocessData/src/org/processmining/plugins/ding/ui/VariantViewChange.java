@@ -49,8 +49,8 @@ public class VariantViewChange extends JPanel {
 	String fit_choice;
 	private JPanel summary_panel ;
 	JPanel buttonPane ;
+	JPanel control_panel;
 	
-	// JPanel c_panel;
 	public VariantViewChange(TraceVariant traceVariant) {
 		// traceVariant.setSummary();
 		// this.add(createChangePanel(traceVariant));
@@ -59,7 +59,7 @@ public class VariantViewChange extends JPanel {
 	}
  
 	private void createChangePanel(TraceVariant traceVariant) {
-		summary_panel = new JPanel();
+		
 
 		TitledBorder title = BorderFactory.createTitledBorder("Show and Change Variant");
 		title.setTitleJustification(TitledBorder.CENTER);
@@ -69,11 +69,14 @@ public class VariantViewChange extends JPanel {
 		NumberFormat num_format = NumberFormat.getNumberInstance();
 		// here to create a panel to show the summary information
 
-		
+		summary_panel = new JPanel();
 		TitledBorder title2 = BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.black), "Summary of Variant");
 		title2.setTitleJustification(TitledBorder.LEFT);
 		summary_panel.setBorder(title2);
+		summary_panel.setMinimumSize(new Dimension(250, 100));
+		summary_panel.setPreferredSize(new Dimension(250, 100));
+		
 		
 		double size[][] = { 
 				{ TableLayout.FILL, 0.05, TableLayout.FILL, 0.05 } 
@@ -120,6 +123,16 @@ public class VariantViewChange extends JPanel {
 		
 		// here to create a JPanel to change labels of the variant
 		// set for pos and neg distribution
+		
+		
+		control_panel = new JPanel();
+		control_panel.setLayout(new BoxLayout(control_panel, BoxLayout.PAGE_AXIS));
+        TitledBorder title3 = BorderFactory.createTitledBorder(
+				BorderFactory.createLineBorder(Color.black), "Control Variant Labels");
+		title3.setTitleJustification(TitledBorder.LEFT);
+		control_panel.setBorder(title3);
+		control_panel.setMinimumSize(new Dimension(250, 100));
+		control_panel.setPreferredSize(new Dimension(250, 100));
 		
 		// here we choose if it is fit or not fit 
 		JLabel fit_choice_label = new JLabel("Choose Fit: ");
@@ -174,6 +187,7 @@ public class VariantViewChange extends JPanel {
         buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
         buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
+       
         
 		JButton submit_button=new JButton("Submit");    
 		submit_button.setBounds(100,100,140, 40);    
@@ -210,18 +224,21 @@ public class VariantViewChange extends JPanel {
         buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
         buttonPane.add(submit_button);
         
+        control_panel.add(fitChoosePane);
+        control_panel.add(Box.createRigidArea(new Dimension(0,10)));
+        control_panel.add(valuePane);
+        control_panel.add(Box.createRigidArea(new Dimension(0,10)));
+        control_panel.add(fp_slider);
+        control_panel.add(Box.createRigidArea(new Dimension(0,10)));
+        control_panel.add(buttonPane);
+        control_panel.add(Box.createRigidArea(new Dimension(0,10)));	
+        
 		fp_slider.setOpaque(false);
 		
 		this.add(summary_panel);
 		this.add(Box.createRigidArea(new Dimension(0,10)));
-		this.add(fitChoosePane);
-		this.add(Box.createRigidArea(new Dimension(0,10)));
-		this.add(valuePane);
-		this.add(Box.createRigidArea(new Dimension(0,10)));
-		this.add(fp_slider);
-		this.add(Box.createRigidArea(new Dimension(0,10)));
-		this.add(buttonPane);
-		this.add(Box.createRigidArea(new Dimension(0,10)));	
+		this.add(control_panel);
+		this.add(Box.createRigidArea(new Dimension(0,200)));
 		
 	}
 	

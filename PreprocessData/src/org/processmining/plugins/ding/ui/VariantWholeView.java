@@ -98,7 +98,7 @@ class MasterDetailView extends JPanel {
 		setForeground(null);
 		setOpaque(false);
 		// setLayout(new BorderLayout());
-		
+		// I need to find out which causes the ScollableFrame, which is only needed in the left part, not the right part
 		this.masterView = masterView;
 		this.detailView = detailView;
 
