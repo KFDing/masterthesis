@@ -45,4 +45,14 @@ public class Configuration {
 	public static final String FIT_TRUE = "TRUE";
 	public static final String FIT_FALSE = "FALSE";
 	
+	public static final int MATRIX_EXISTING_IDX = 0;
+	public static final int MATRIX_POS_IDX = 1;
+	public static final int MATRIX_NEG_IDX = 2;
+
+	public static final String START_LABEL = "start";
+
+	public static final String END_LABEL = "end";
+	
+	
+	
 }
