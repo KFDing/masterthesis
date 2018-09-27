@@ -208,13 +208,21 @@ public class PN2DfgTransform {
 		return t.getLabel().contains("tau");
 	}
 	
-	private void setCardinality(Dfg dfg, int cardinality) {
+	private void setCardinality(Dfg dfg, long cardinality) {
 		for(long idx : dfg.getDirectlyFollowsEdges()) {
 			//there is no direct way to change it, so what we can do it to remove and then add them again
 			int sourceIdx = dfg.getDirectlyFollowsEdgeSourceIndex(idx);
 			int targetIdx = dfg.getDirectlyFollowsEdgeTargetIndex(idx);
 			
 			dfg.addDirectlyFollowsEdge(sourceIdx, targetIdx, cardinality);
+		}
+		
+		for(XEventClass startClass : dfg.getStartActivities()) {
+			dfg.addStartActivity(startClass, cardinality);
+		}
+		
+		for(XEventClass endClass : dfg.getEndActivities()) {
+			dfg.addStartActivity(endClass, cardinality);
 		}
 	}
 }

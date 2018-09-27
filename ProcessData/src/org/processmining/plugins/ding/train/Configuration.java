@@ -1,5 +1,6 @@
 package org.processmining.plugins.ding.train;
 
+import java.awt.Color;
 import java.awt.Font;
 
 public class Configuration {
@@ -45,14 +46,19 @@ public class Configuration {
 	public static final String FIT_TRUE = "TRUE";
 	public static final String FIT_FALSE = "FALSE";
 	
-	public static final int MATRIX_EXISTING_IDX = 0;
-	public static final int MATRIX_POS_IDX = 1;
-	public static final int MATRIX_NEG_IDX = 2;
+	public static final int MATRIX_KEY_COL_NUM = 2;
+	public static final int MATRIX_VALUE_COL_NUM = 3;
+	public static final int MATRIX_EXISTING_IDX = 3;
+	public static final int MATRIX_POS_IDX = 4;
+	public static final int MATRIX_NEG_IDX = 5;
 
 	public static final String START_LABEL = "start";
 
 	public static final String END_LABEL = "end";
 	
-	
-	
+	public enum ViewType {
+		Dfg, ProcessTree, PetriNet
+	};
+
+	public static Color COLOR_BG2 = new Color(120, 120, 120);
 }
