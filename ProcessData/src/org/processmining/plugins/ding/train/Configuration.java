@@ -55,6 +55,8 @@ public class Configuration {
 	public static final String START_LABEL = "start";
 
 	public static final String END_LABEL = "end";
+
+	public static final String DEFAULT_WEIGHT = "1.0";
 	
 	public enum ViewType {
 		Dfg, ProcessTree, PetriNet

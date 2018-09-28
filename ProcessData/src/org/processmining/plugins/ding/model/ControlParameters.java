@@ -20,11 +20,17 @@ import org.processmining.plugins.ding.train.Configuration.ViewType;
  */
 public class ControlParameters {
 
-	double existWeight ;
+	double existWeight;
 	double posWeight;
-	double negWeight;
-	ViewType type;
+	double negWeight ;
+	ViewType type ;
 	
+	public ControlParameters() {
+		existWeight =1.0 ;
+		posWeight = 1.0;
+		negWeight = 1.0;
+		type = ViewType.Dfg;
+	}
 	
 	public ViewType getType() {
 		return type;
@@ -56,6 +62,14 @@ public class ControlParameters {
 
 	public void setNegWeight(double negWeight) {
 		this.negWeight = negWeight;
+	}
+
+	public void resetValue() {
+		type = ViewType.Dfg;
+		existWeight = 1.0;
+		posWeight = 1.0;
+		negWeight = 1.0;
+		
 	};
 	
 }
