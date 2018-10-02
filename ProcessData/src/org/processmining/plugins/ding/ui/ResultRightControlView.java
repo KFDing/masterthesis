@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
@@ -46,8 +47,9 @@ public class ResultRightControlView extends JPanel {
 	
 	RelativeLayout rl;
 	JRadioButton dfgButton;
-
 	JRadioButton ptButton;
+	JRadioButton pnButton;
+	
 	JButton submit_button;
 	protected Color COLOR_BG = new Color(60, 60, 60);
 	protected Color COLOR_BG2 = new Color(120, 120, 120);
@@ -55,8 +57,8 @@ public class ResultRightControlView extends JPanel {
 	protected Font smallFont;
 	
 	// to initialze the panel 
-	public ResultRightControlView( final ControlParameters parameters) {
-		this.parameters = parameters;
+	public ResultRightControlView() {
+		parameters = new ControlParameters();
 		rl = new RelativeLayout(RelativeLayout.Y_AXIS);
 		rl.setFill( true );
 		this.setLayout(rl);
@@ -82,12 +84,24 @@ public class ResultRightControlView extends JPanel {
 			}
 		});
 		
+		pnButton = new JRadioButton("Show Petri net");
+		pnButton.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				// after we choose delete, we delete places and repaint the graph again
+				if(pnButton.isSelected()) {
+					parameters.setType(ViewType.PetriNet);
+				}
+			}
+		});
+		
 		ButtonGroup typeGroup = new ButtonGroup();
 		typeGroup.add(dfgButton);
 		typeGroup.add(ptButton);
+		typeGroup.add(pnButton);
 		
 		this.add(dfgButton, new Float(5));
 		this.add(ptButton, new Float(5));
+		this.add(pnButton, new Float(5));
 		
 	
 		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
@@ -103,11 +117,10 @@ public class ResultRightControlView extends JPanel {
 		existPanel.setLayout(new BoxLayout(existPanel, BoxLayout.Y_AXIS));
 		existPanel.setOpaque(false);
 		
-		existLabel = new JLabel();
+		existLabel = new JLabel("<html>Weight for<br/>Existing Model</html>", SwingConstants.CENTER);
 		existLabel.setOpaque(false);
 		existLabel.setForeground(COLOR_FG);
 		existLabel.setFont(this.smallFont);
-		existLabel.setText("Weight for Existing Model");
 		// here we add Label to south, but it shoudl be in JPanel called upperControlPanel, I think !! 
 		// weightPanel.add(rl.packVerticallyCentered(existLabel, 50, 20), BorderLayout.NORTH);
 		existPanel.add(existLabel);
@@ -118,15 +131,14 @@ public class ResultRightControlView extends JPanel {
 		existValueLabel.setFont(this.smallFont);
 		existValueLabel.setText(Configuration.DEFAULT_WEIGHT);
 		
-		existSlider = new JSlider(JSlider.VERTICAL, 0, 10, 0);
+		existSlider = new JSlider(JSlider.VERTICAL, 0, 20, 10);
 		existSlider.setUI(new SlickerSliderUI(existSlider));
-		existSlider.setValue(0);
 		existSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getSource() == existSlider) {
 					// updateThresholdSlider();
-					double existWeight = existSlider.getValue();
+					double existWeight = existSlider.getValue()/10.0;
 					existValueLabel.setText(" "+ existWeight);
 					parameters.setExistWeight(existWeight);
 				}	
@@ -144,11 +156,10 @@ public class ResultRightControlView extends JPanel {
 		posPanel.setLayout(new BoxLayout(posPanel, BoxLayout.Y_AXIS));
 		posPanel.setOpaque(false);
 		
-		posLabel = new JLabel();
+		posLabel = new JLabel("<html>Weight for<br/>Pos Examples</html>", SwingConstants.CENTER);
 		posLabel.setOpaque(false);
 		posLabel.setForeground(COLOR_FG);
 		posLabel.setFont(this.smallFont);
-		posLabel.setText("Weight for Existing Model");
 		// here we add Label to south, but it shoudl be in JPanel called upperControlPanel, I think !! 
 		posPanel.add(posLabel);
 		
@@ -158,15 +169,14 @@ public class ResultRightControlView extends JPanel {
 		posValueLabel.setFont(this.smallFont);
 		posValueLabel.setText(Configuration.DEFAULT_WEIGHT);
 		// I want to get the listener out of this method .. or to create the specific class for it 
-		posSlider = new JSlider(JSlider.VERTICAL, 0, 10, 0);
+		posSlider = new JSlider(JSlider.VERTICAL, 0, 20, 10);
 		posSlider.setUI(new SlickerSliderUI(posSlider));
-		posSlider.setValue(0);
 		posSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getSource() == posSlider) {
 					// updateThresholdSlider();
-					double posWeight = posSlider.getValue();
+					double posWeight = posSlider.getValue()/10.0;
 					posValueLabel.setText(" "+ posWeight);
 					parameters.setPosWeight(posWeight);
 				}	
@@ -183,11 +193,10 @@ public class ResultRightControlView extends JPanel {
 		negPanel.setLayout(new BoxLayout(negPanel, BoxLayout.Y_AXIS));
 		negPanel.setOpaque(false);
 		
-		negLabel = new JLabel();
+		negLabel = new JLabel("<html>Weight for<br/>Neg Examples</html>", SwingConstants.CENTER);
 		negLabel.setOpaque(false);
 		negLabel.setForeground(COLOR_FG);
 		negLabel.setFont(this.smallFont);
-		negLabel.setText("Weight for Existing Model");
 		// rl.centerHorizontally(negLabel);
 		// here we add Label to south, but it shoudl be in JPanel called upperControlPanel, I think !! 
 		// weightPanel.add(rl.packVerticallyCentered(negLabel, 50, 20), BorderLayout.NORTH);
@@ -200,15 +209,14 @@ public class ResultRightControlView extends JPanel {
 		negValueLabel.setFont(this.smallFont);
 		negValueLabel.setText(Configuration.DEFAULT_WEIGHT);
 		
-		negSlider = new JSlider(JSlider.VERTICAL, 0, 10, 0);
+		negSlider = new JSlider(JSlider.VERTICAL, 0, 20, 10);
 		negSlider.setUI(new SlickerSliderUI(negSlider));
-		negSlider.setValue(0);
 		negSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getSource() == negSlider) {
 					// updateThresholdSlider();
-					double negWeight = negSlider.getValue();
+					double negWeight = negSlider.getValue()/10.0;
 					negValueLabel.setText(" "+ negWeight);
 					parameters.setNegWeight(negWeight);
 				}	

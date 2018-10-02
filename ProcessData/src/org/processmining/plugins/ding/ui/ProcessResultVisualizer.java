@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.processmining.contexts.uitopia.UIPluginContext;
@@ -13,11 +14,17 @@ import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
-import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.IMd;
+import org.processmining.plugins.InductiveMiner.dfgOnly.DfgMiningParameters;
+import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.IMdProcessTree;
+import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.dialogs.IMdMiningDialog;
 import org.processmining.plugins.ding.model.ControlParameters;
 import org.processmining.plugins.ding.train.Configuration.ViewType;
 import org.processmining.plugins.ding.train.DfMatrix;
 import org.processmining.processtree.ProcessTree;
+import org.processmining.processtree.conversion.ProcessTree2Petrinet;
+import org.processmining.processtree.conversion.ProcessTree2Petrinet.InvalidProcessTreeException;
+import org.processmining.processtree.conversion.ProcessTree2Petrinet.NotYetImplementedException;
+import org.processmining.processtree.conversion.ProcessTree2Petrinet.PetrinetWithMarkings;
 
 /**
  * this class is built as a visualizer for process tree to display, but it can also display the dfg;
@@ -55,36 +62,46 @@ class ResultMainView extends JPanel{
 	ControlParameters parameters;
 	UIPluginContext context;
 	
-	public ResultMainView(UIPluginContext context, final DfMatrix dfMatrix) {
+	DfMatrix dfMatrix;
+	Dfg dfg = null;
+	ProcessTree pTree = null;
+	@SuppressWarnings("deprecation")
+	PetrinetWithMarkings net = null;
+	boolean updateAll = true;
+	
+	public ResultMainView(UIPluginContext context, final DfMatrix matrix) {
 		this.context = context;
+		dfMatrix = matrix;
+		parameters =  new ControlParameters();
+		
 		rl = new RelativeLayout(RelativeLayout.X_AXIS);
 		rl.setFill( true );
 		this.setLayout(rl);
 		this.setBackground(new Color(240, 240, 240));
 		
-		parameters = new ControlParameters();
 		
 		leftView =  new ResultLeftView();
-		rightView =  new ResultRightControlView(parameters);
+		rightView =  new ResultRightControlView();
 		
-		// display the view from rightView
+		parameters.cloneValues(rightView.getParameters());
 		
 		dfMatrix.updateCardinality(0, parameters.getExistWeight());
 		dfMatrix.updateCardinality(1, parameters.getPosWeight());
 		dfMatrix.updateCardinality(2, parameters.getNegWeight());
 		
-		Dfg dfg = dfMatrix.buildDfs();
+		showDfg();
+		/*
+		dfg = dfMatrix.buildDfs();
 		leftView.drawResult(dfg);
 		leftView.setVisible(true);
-		
+		*/
 		JButton submitButton = rightView.getSubmitButton();
 		
 		submitButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						// we need to pass the parameters to MainView, in the mainView, 
 						// it controls to generate the new view
-						parameters =rightView.getParameters();
-						updateMainView(leftView, dfMatrix, parameters);
+						updateMainView(leftView, rightView.getParameters());
 					}          
 			    });
 		
@@ -92,27 +109,116 @@ class ResultMainView extends JPanel{
 		this.add(this.rightView, new Float(20));
 	} 
 	
-	public void updateMainView(ResultLeftView leftView, DfMatrix dfMatrix, ControlParameters parameters) {
-	
-		dfMatrix.updateCardinality(0, parameters.getExistWeight());
-		dfMatrix.updateCardinality(1, parameters.getPosWeight());
-		dfMatrix.updateCardinality(2, parameters.getNegWeight());
-		Dfg dfg =  dfMatrix.buildDfs();
+	public void updateMainView(ResultLeftView leftView, ControlParameters newParameters) {
+		// if there is only type changes, so we don't need to generate it again for the dfMatrix
+		// we just use the dfg, process tree and petri net 
+		// how to distinguish them?? I think I can add the weight to the DfMatrix, and compare it 
+		// with the new ones, if sth changes, so we need to generate them again? If not changes, then 
+		// we don't need to do it 
+		// if we need to create new Dfg ?? 
+		updateAll =  isWeightUpdated(parameters, newParameters);
+		if(updateAll) {
+			parameters.cloneValues(newParameters);
+			dfMatrix.updateCardinality(0, parameters.getExistWeight());
+			dfMatrix.updateCardinality(1, parameters.getPosWeight());
+			dfMatrix.updateCardinality(2, parameters.getNegWeight());
+
+		}
+		parameters.setType(newParameters.getType());
 		
 		if(parameters.getType() == ViewType.Dfg) {
-			leftView.drawResult(dfg);
-			leftView.updateUI();
+			showDfg();
+		}else if(parameters.getType() == ViewType.ProcessTree) {
+			showProcessTree();
+		}else if(parameters.getType() == ViewType.PetriNet) {
+			showPetriNet();
 		}
-		if(parameters.getType() == ViewType.ProcessTree) {
-			// change the Dfg to process tree;
-			IMd idm = new IMd();
-			// how to generate the new dialog for input??? 
-			ProcessTree pTree = idm.mineProcessTree(context, dfg);
 			
-			leftView.drawResult(pTree);
-			leftView.updateUI();
-		}
 	}
 	
+	
+	private boolean isWeightUpdated(ControlParameters para, ControlParameters newPara) {
+		if(para.getExistWeight() == newPara.getExistWeight() 
+				&& para.getPosWeight() == newPara.getPosWeight()
+				&& para.getNegWeight() == para.getNegWeight())
+			return false;
+		return true;
+	}
+
+	private void showDfg() {
+		if(updateAll)
+			dfg =  dfMatrix.buildDfs();
+		leftView.drawResult(dfg);
+		leftView.updateUI();
+	}
+	
+	private void showProcessTree() {
+		if(updateAll) {
+			dfg =  dfMatrix.buildDfs();
+			// I think I should change something about it, which could remember the result from before
+			// so I could put the Dfg, ProcessTree and Petri net in the class
+			DfgMiningParameters ptParas = getProcessTreParameters();
+			pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+		}else if(pTree == null){
+			DfgMiningParameters ptParas = getProcessTreParameters();
+			pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+		}
+		
+		leftView.drawResult(pTree);
+		leftView.updateUI();
+	}
+	
+	private void showPetriNet() {
+		if(updateAll) {
+			dfg =  dfMatrix.buildDfs();
+			// I think I should change something about it, which could remember the result from before
+			// so I could put the Dfg, ProcessTree and Petri net in the class
+			DfgMiningParameters ptParas = getProcessTreParameters();
+			pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+
+			try {
+				net = ProcessTree2Petrinet.convert(pTree, true);
+			} catch (NotYetImplementedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidProcessTreeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}else if(net == null) {
+			if(pTree == null) {
+				DfgMiningParameters ptParas = getProcessTreParameters();
+				pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+			}	
+			try {
+				net = ProcessTree2Petrinet.convert(pTree, true);
+			} catch (NotYetImplementedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidProcessTreeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				
+		}
+		// how to change pTree into the Petri net 
+		leftView.drawResult(context, net.petrinet);
+		leftView.updateUI();
+	}
+	private DfgMiningParameters getProcessTreParameters() {
+		   IMdMiningDialog dialog = new IMdMiningDialog();
+		   // it is a Jpanel, not a dialog, now I just want to get the pop up JPanel and read the input from it 
+		   // String parameters = JOptionPane.showInputDialog(this, "Set parameters fro IM", "Setting", JOptionPane.QUESTION_MESSAGE);
+		   JOptionPane.showMessageDialog( this,
+				   dialog,
+	               "Setting Miner Parameters for Dfg",
+	               JOptionPane.INFORMATION_MESSAGE);
+		   DfgMiningParameters parameters = dialog.getMiningParameters();
+	       System.out.println("Paras " + parameters.getNoiseThreshold());     
+	       
+	       return parameters;
+	   }
+
 	
 }

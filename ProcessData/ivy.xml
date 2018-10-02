@@ -13,8 +13,8 @@
     	<dependency org="prom" name="ProM-Plugins" rev="latest" changing="true" transitive="true" />
     	<dependency org="prom" name="Log" rev="latest" changing="true" transitive="true" />
        <dependency org="prom" name="GraphViz" rev="latest" changing="true" transitive="true" />
-       <dependency org="prom" name="InductiveMinerDeprecated" rev="latest" changing="true" transitive="true" />
-       <dependency org="prom" name="TransitionSystems" rev="latest" changing="true" transitive="true" />
+       <dependency org="prom" name="InductiveMinerDeprecated" rev="latest" changing="true" transitive="true" /> 
+     	<dependency org="prom" name="TransitionSystems" rev="latest" changing="true" transitive="true" />
        <dependency org="prom" name="ModelRepair" rev="latest" changing="true" transitive="true" />
        </dependencies>
 </ivy-module>

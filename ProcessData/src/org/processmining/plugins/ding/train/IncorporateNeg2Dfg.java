@@ -1,6 +1,7 @@
 package org.processmining.plugins.ding.train;
 
-import org.deckfour.xes.info.XLogInfoFactory;
+import java.util.Iterator;
+
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -11,7 +12,6 @@ import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
-import org.processmining.plugins.InductiveMiner.efficienttree.UnknownTreeNodeException;
 
 
 /**
@@ -27,7 +27,7 @@ public class IncorporateNeg2Dfg {
 			DfMatrix.class}, parameterLabels = { "Log" ,"Dfg"}, userAccessible = true)
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Incorporate Log with Labels into Dfg",  requiredParameterLabels = { 0, 1})
-	public DfMatrix buildModel(UIPluginContext context, XLog log, Dfg dfg) throws UnknownTreeNodeException {
+	public DfMatrix buildDfMatrixModel(UIPluginContext context, XLog log, Dfg dfg) {
 		// create the 3 matrix of directly follow relation
 		Object[] result = splitEventLog(log);
 		XLog pos_log = (XLog) result[0];
@@ -52,7 +52,60 @@ public class IncorporateNeg2Dfg {
 		return dfMatrix;
 	}
 	
-	
+	@Plugin(name = "Incorporate Log with Labels into Dfg", level = PluginLevel.Regular, returnLabels = {"New Dfg", "existing Dfg","Pos Dfg","Same effect" }, returnTypes = {
+			Dfg.class, Dfg.class, Dfg.class, Dfg.class}, parameterLabels = { "Log" ,"Dfg"}, userAccessible = true)
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Generate new Dfg",  requiredParameterLabels = { 0, 1})
+	public Object[] buildDfgModel(UIPluginContext context, XLog log, Dfg dfg) {
+		// create the 3 matrix of directly follow relation
+		Object[] result = splitEventLog(log);
+		XLog pos_log = (XLog) result[0];
+		XLog neg_log = (XLog) result[1];
+		// 
+		XLog2Dfg ld = new XLog2Dfg();
+		Dfg pos_dfg = ld.log2Dfg(context, pos_log);
+		Dfg neg_dfg = ld.log2Dfg(context, neg_log);
+		
+		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
+		DfMatrix dfMatrix = createDfMatrix(dfg, pos_dfg, neg_dfg);
+		
+		// now we need to adjust the complete the features it has. 
+		// 1. accept the threshold adjust on the result panel
+		
+		// 2. adjust the result w.r.t. different weight
+		
+		// 3. to have the process tree, that's the end. 
+		
+		// transform process tree into Petri net ?? No, we don't need it
+		
+		// how to make sure the structure to generate is right?? 
+		// test cases: 
+		// --  if we only have the structure of pos_dfg, existing dfg, and with all the effect of neg_dfg?? 
+		// --1.  same structure of existing ones, it means, that we need make pos and neg into 0
+		// --2.  same structure of pos_dfg, make existing and neg_dfg into 0
+		// --3.  pos and existing is reduce by the neg effect
+		
+		Dfg new_dfg = dfMatrix.buildDfs(); 
+		// Case 1. 
+		dfMatrix.updateCardinality(1, 1.0);
+		dfMatrix.updateCardinality(1, 0);
+		dfMatrix.updateCardinality(2, 0);
+		Dfg new_dfg1 = dfMatrix.buildDfs();
+		
+		// Case 2. pos_dfg
+		dfMatrix.updateCardinality(0, 0);
+		dfMatrix.updateCardinality(1, 1.0);
+		dfMatrix.updateCardinality(2, 0);
+		Dfg new_dfg2 = dfMatrix.buildDfs();
+		
+		// Case 3. 
+		dfMatrix.updateCardinality(0, 1.0);
+		dfMatrix.updateCardinality(1, 1.0);
+		dfMatrix.updateCardinality(2, 1.0);
+		Dfg new_dfg3 = dfMatrix.buildDfs();
+		
+		return new Object[] {new_dfg, new_dfg1, new_dfg2, new_dfg3};
+	}
 	
 	private DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg) {
 		
@@ -71,30 +124,29 @@ public class IncorporateNeg2Dfg {
 	public Object[] splitEventLog(XLog log){
 		XLog pos_log = (XLog) log.clone();
 		XLog neg_log = (XLog) log.clone();
-		pos_log.clear();
-		neg_log.clear();
 		
-		int neg_count = 0, pos_count=0;
-		// in this way it doesn't work, but where goes wrong..
-		for(int i =0; i< log.size(); i++) {
-			XTrace trace = (XTrace) log.get(i);
+		Iterator<XTrace> iterator = pos_log.iterator();
+		while (iterator.hasNext()) {
+			XTrace trace = iterator.next();
 			if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
 				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
 				if(!attr.getValue()) {
-					neg_log.add(trace);
-					neg_count++;
-				}else {
-					pos_log.add(trace);
-					pos_count++;
+					iterator.remove();
 				}
 			}
 		}
-		assert neg_count == XLogInfoFactory.createLogInfo(neg_log).getNumberOfTraces();
-		assert pos_count == XLogInfoFactory.createLogInfo(pos_log).getNumberOfTraces();
-		if(neg_count <1) {
-			System.out.println("there is no neg examples found in the event log");
-			neg_log = null;
+		
+		iterator =neg_log.iterator();
+		while (iterator.hasNext()) {
+			XTrace trace = iterator.next();
+			if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
+				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+				if(attr.getValue()) {
+					iterator.remove();
+				}
+			}
 		}
+		
 		return new Object[] {pos_log, neg_log};
 	}
 }

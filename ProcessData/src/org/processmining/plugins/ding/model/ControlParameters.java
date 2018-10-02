@@ -32,6 +32,13 @@ public class ControlParameters {
 		type = ViewType.Dfg;
 	}
 	
+	public void cloneValues(ControlParameters paras) {
+		existWeight =paras.getExistWeight();
+		posWeight = paras.getPosWeight();
+		negWeight = paras.getNegWeight();
+		type = paras.getType();
+	}
+	
 	public ViewType getType() {
 		return type;
 	}

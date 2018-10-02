@@ -2,7 +2,10 @@ package org.processmining.plugins.ding.ui;
 
 import javax.swing.JPanel;
 
+import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.jgraph.ProMJGraphVisualizer;
+import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.ding.util.GraphvizDirectlyFollowsGraph;
 import org.processmining.plugins.ding.util.GraphvizProcessTree;
@@ -48,7 +51,15 @@ public class ResultLeftView extends JPanel {
 		}
 	}
 	
-	public void drawResult(Petrinet net) {
+	public void drawResult(PluginContext context, Petrinet net) {
+		
+		this.removeAll();
+		ProMJGraphPanel pGraphPanel = ProMJGraphVisualizer.instance().visualizeGraph(context, net);
+		pGraphPanel.getGraph().setEditable(false);
+		pGraphPanel.setVisible(true);
+		pGraphPanel.validate();
+		
+		this.add(pGraphPanel, new Float(100));
 		
 	}
 	
