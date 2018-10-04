@@ -12,6 +12,7 @@ import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
+import org.processmining.plugins.ding.model.Configuration;
 
 
 /**
@@ -56,7 +57,7 @@ public class IncorporateNeg2Dfg {
 			Dfg.class, Dfg.class, Dfg.class, Dfg.class}, parameterLabels = { "Log" ,"Dfg"}, userAccessible = true)
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Generate new Dfg",  requiredParameterLabels = { 0, 1})
-	public Object[] buildDfgModel(UIPluginContext context, XLog log, Dfg dfg) {
+	public static Object[] buildDfgModel(UIPluginContext context, XLog log, Dfg dfg) {
 		// create the 3 matrix of directly follow relation
 		Object[] result = splitEventLog(log);
 		XLog pos_log = (XLog) result[0];
@@ -107,7 +108,7 @@ public class IncorporateNeg2Dfg {
 		return new Object[] {new_dfg, new_dfg1, new_dfg2, new_dfg3};
 	}
 	
-	private DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg) {
+	public static DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg) {
 		
 		
 		DfMatrix dfMatrix = new DfMatrix();
@@ -121,7 +122,7 @@ public class IncorporateNeg2Dfg {
 		return dfMatrix;
 	}
 
-	public Object[] splitEventLog(XLog log){
+	public static Object[] splitEventLog(XLog log){
 		XLog pos_log = (XLog) log.clone();
 		XLog neg_log = (XLog) log.clone();
 		

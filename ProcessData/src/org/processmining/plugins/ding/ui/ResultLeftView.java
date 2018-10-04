@@ -55,7 +55,7 @@ public class ResultLeftView extends JPanel {
 		
 		this.removeAll();
 		ProMJGraphPanel pGraphPanel = ProMJGraphVisualizer.instance().visualizeGraph(context, net);
-		pGraphPanel.getGraph().setEditable(false);
+		// pGraphPanel.getGraph().setEditable(false);
 		pGraphPanel.setVisible(true);
 		pGraphPanel.validate();
 		

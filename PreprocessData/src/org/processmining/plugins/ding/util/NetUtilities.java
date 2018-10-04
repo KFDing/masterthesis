@@ -148,9 +148,10 @@ public class NetUtilities {
 		// first transition if it connects the initial place
     	for(XEventClass eventClass : trace) {
 			// we need to create the map from the Petrinet to the event log.
-    		
-			transition = maps.get(eventClass);
-			
+    		if(maps.containsKey(eventClass))
+    			transition = maps.get(eventClass);
+    		else
+    			return false;
 			preset = net.getInEdges(transition);
 			// we need to see two transitions together???  
 			for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge : preset) {
@@ -215,12 +216,16 @@ public class NetUtilities {
 						// go back to check the place before and see if works .. when to stop for checking this one?? 
 						// if there is a loop, and then we check if we go back to this place again,if it goes back 
 						// then return false
+						// situation:: not stop:: in a loop but how to test if it is in a loop?? 
+						// and also, it depends on the the number of graph transition. 
+						// we test if the loop is already over the number of transitions;; if it is over, then we stop it 
 						loop_count ++;
-						if(loop_count < 100)
+						if(loop_count <= net.getTransitions().size())
 							return isTokenMissing(sp, net); 
-						else
+						else {
 							System.out.println("Go back to check silent token, Stop loop");
 							return false;
+						}
 					}
 					
 					if(tnum == 1 ) {

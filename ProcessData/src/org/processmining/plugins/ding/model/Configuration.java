@@ -1,4 +1,4 @@
-package org.processmining.plugins.ding.train;
+package org.processmining.plugins.ding.model;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -56,7 +56,11 @@ public class Configuration {
 
 	public static final String END_LABEL = "end";
 
-	public static final String DEFAULT_WEIGHT = "10";
+	public static final String DEFAULT_WEIGHT = "1.0";
+
+	public static final int WEIGHT_RANGE = 20;
+
+	public static final int WEIGHT_VALUE = 10;
 	
 	public enum ViewType {
 		Dfg, ProcessTree, PetriNet

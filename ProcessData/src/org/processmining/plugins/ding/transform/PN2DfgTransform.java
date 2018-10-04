@@ -32,15 +32,16 @@ import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.DfgImpl;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
 
-@Plugin(name = "Construct Dfg of a Petri Net", returnLabels = { "Transiton System","MyDfg", "Dfg from IMD" }, returnTypes = { ReachabilityGraph.class, Dfg.class, Dfg.class}, parameterLabels = { "XLog","Net", "Marking" })
+@Plugin(name = "Construct Dfg of a Petri Net", returnLabels = {"MyDfg", "Dfg from IMD" }, returnTypes = { Dfg.class, Dfg.class}, 
+      parameterLabels = { "XLog","Net", "Marking" })
 
 public class PN2DfgTransform {
-	Map<String, XEventClass> eventClassMap ;
+	static Map<String, XEventClass> eventClassMap ;
 	
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Transfrom PN to Dfg",  requiredParameterLabels = { 0 , 1, 2})
-	public Object[] transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
+	public Object[] transform(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
 		
 		double threshold = 0.2;
 		
@@ -48,9 +49,15 @@ public class PN2DfgTransform {
 		
 		XLog2Dfg ld = new XLog2Dfg();
 		Dfg logdfg = ld.log2Dfg( context, log);
-		logdfg.getDirectlyFollowsGraph();
 		
+		Dfg dfg = transformPN2Dfg(context, net, marking);
 		
+		setCardinality(dfg, num);
+		
+		return new Object[] {dfg, logdfg};
+	}
+	
+	public static Dfg transformPN2Dfg(UIPluginContext context,Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
 		TSGenerator tsGenerator = new TSGenerator();
 		Object[] result = tsGenerator.calculateTS(context, net, marking);
 		if(result == null) {
@@ -74,22 +81,17 @@ public class PN2DfgTransform {
 			if(!key.contains("tau")) {
 				XEventClass eventClass = new XEventClass(key, idx++); // or we need to assign them later.. whatever, only concrete events matter
 				eventClassMap.put(key, eventClass);
-				dfg.addActivity(eventClass); // here to add only the non- tau activity
+				// dfg.addActivity(eventClass); // here to add only the non- tau activity
 			}
 		}
 		addStartEnd(dfg, ts, startStates, acceptingStates);
 		
 		addDirectFollow(dfg, ts);
 		
-		setCardinality(dfg, num);
-		/* sth wrong with the deprecated codes that I need to check again, but now I should build the basic structure of incorporate neg info
-		IMd imd =  new IMd();
-		ProcessTree tree = imd.mineProcessTree(context, logdfg);
-		*/
-		
-		return new Object[] {ts,dfg, logdfg};
+		return dfg;
 	}
-	public void addStartEnd(Dfg dfg, ReachabilityGraph rg,StartStateSet startStates, AcceptStateSet acceptingStates) {
+	
+	public static void addStartEnd(Dfg dfg, ReachabilityGraph rg,StartStateSet startStates, AcceptStateSet acceptingStates) {
 		
 		for(Object sid: startStates) {
 			// then we need to get the 
@@ -124,7 +126,7 @@ public class PN2DfgTransform {
 		}
 	}
 	
-	public void addDirectFollow(Dfg dfg, ReachabilityGraph rg) {
+	public static void addDirectFollow(Dfg dfg, ReachabilityGraph rg) {
 		// look it from the root, I think,it is a root, then do breadth search,
 		// parent, and then check the children edges, one edge, one df relation
 		// from the startposition, 
@@ -172,7 +174,7 @@ public class PN2DfgTransform {
 	}
 
 	// hide the transform details into this function
-	private void addDf(Dfg dfg, Transition in_t, Transition out_t) {
+	private static void addDf(Dfg dfg, Transition in_t, Transition out_t) {
 		XEventClass source, target; 
 		source = eventClassMap.get(in_t.getLabel());
 		target = eventClassMap.get(out_t.getLabel());
@@ -180,7 +182,7 @@ public class PN2DfgTransform {
 	}
 	
 	
-	private Collection<Transition> getNonTauTransition(ReachabilityGraph rg, Transition tau, boolean b) {
+	private static Collection<Transition> getNonTauTransition(ReachabilityGraph rg, Transition tau, boolean b) {
 		
 		if(b) {
 			State state = tau.getSource();
@@ -204,11 +206,11 @@ public class PN2DfgTransform {
 			return post_ts;
 		}
 	}
-	private boolean isTau(Transition t) {
+	private static boolean isTau(Transition t) {
 		return t.getLabel().contains("tau");
 	}
 	
-	private void setCardinality(Dfg dfg, long cardinality) {
+	public static void setCardinality(Dfg dfg, long cardinality) {
 		for(long idx : dfg.getDirectlyFollowsEdges()) {
 			//there is no direct way to change it, so what we can do it to remove and then add them again
 			int sourceIdx = dfg.getDirectlyFollowsEdgeSourceIndex(idx);
@@ -222,7 +224,7 @@ public class PN2DfgTransform {
 		}
 		
 		for(XEventClass endClass : dfg.getEndActivities()) {
-			dfg.addStartActivity(endClass, cardinality);
+			dfg.addEndActivity(endClass, cardinality);
 		}
 	}
 }

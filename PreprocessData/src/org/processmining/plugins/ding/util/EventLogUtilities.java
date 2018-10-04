@@ -74,8 +74,8 @@ public class EventLogUtilities {
 		boolean match;
 		for (Transition transition : transitions) {
 			match = false;
-			for (XEventClass eventClass : classes.getClasses()) {
-				// here we need to create a mapping from event log to graphs
+			for (XEventClass eventClass : classes.getClasses()) { // transition.getLabel()
+				// here we need to create a mapping from event log to graphs 
 				if (eventClass.getId().equals(transition.getAttributeMap().get(AttributeMap.LABEL))) {
 					map.put(eventClass, transition);
 					match = true;
@@ -137,7 +137,51 @@ public class EventLogUtilities {
 			}
 		return variants;
 	} 
+	/**
+	 * create the labeled TraceVariants
+	 * @param log
+	 * @param classifier 
+	 * @return
+	 */
+	public static List<LabeledTraceVariant> getLabeledTraceVariants( XLog log, XEventClassifier classifier) {
+		
+		List<LabeledTraceVariant> variants = new ArrayList<LabeledTraceVariant>();
+		XEventClass eventClass = null;
+		XLogInfo info = XLogInfoFactory.createLogInfo(log);
 	
+		// this step I need to get it from index from log
+		for (int idx = 0; idx < log.size(); idx++) {
+				XTrace trace = log.get(idx);
+				boolean isPos = false;
+				
+				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+				if(attr == null || attr.getValue()) {
+					isPos = true;
+				}
+				
+				List<XEventClass> toTraceClass = new ArrayList<XEventClass>();
+				for (XEvent toEvent : trace) {
+					// eventClass = info.getEventClasses().getClassOf(toEvent);
+					eventClass = info.getNameClasses().getClassOf(toEvent);
+					toTraceClass.add(eventClass);	
+				}
+				
+				int i = 0;
+				for(; i< variants.size();i++) {
+					// how to add the new variant into list
+					if((variants.get(i).getTraceVariant()).equals(toTraceClass)) {
+						variants.get(i).addTrace(trace, idx, isPos);
+						// it should add also information on the trace
+						break;
+					}
+				}
+				if (i==variants.size()) {
+					// not found in it, then we need to add it into the list
+					variants.add(new LabeledTraceVariant(toTraceClass,trace, idx, isPos));
+				}	
+			}
+		return variants;
+	}
 	
 	public static void assignVariantLabel(TraceVariant variant, String attr_name, Boolean is_true) {
 		// for each trace in the variant, we create an attribution with name of attr_name, value isPos

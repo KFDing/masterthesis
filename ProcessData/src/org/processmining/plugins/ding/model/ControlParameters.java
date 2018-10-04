@@ -1,6 +1,6 @@
 package org.processmining.plugins.ding.model;
 
-import org.processmining.plugins.ding.train.Configuration.ViewType;
+import org.processmining.plugins.ding.model.Configuration.ViewType;
 
 /**
  * this class is used to create the control parameters, it includes:

@@ -1,14 +1,13 @@
 package org.processmining.plugins.ding.baseline;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.deckfour.uitopia.api.event.TaskListener.InteractionResult;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClassifier;
-import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XLog;
-import org.deckfour.xes.model.XTrace;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
@@ -21,14 +20,10 @@ import org.processmining.models.graphbased.directed.petrinet.elements.Transition
 import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.ding.util.Configuration;
 import org.processmining.plugins.ding.util.EventLogUtilities;
+import org.processmining.plugins.ding.util.LabeledTraceVariant;
 import org.processmining.plugins.ding.util.NetUtilities;
 import org.processmining.plugins.etconformance.ETCResults;
 import org.processmining.plugins.etconformance.ETCSettings;
-import org.processmining.processtree.ProcessTree;
-import org.processmining.processtree.conversion.ProcessTree2Petrinet;
-import org.processmining.processtree.conversion.ProcessTree2Petrinet.InvalidProcessTreeException;
-import org.processmining.processtree.conversion.ProcessTree2Petrinet.NotYetImplementedException;
-import org.processmining.processtree.conversion.ProcessTree2Petrinet.PetrinetWithMarkings;
 
 /**
  * This class includes the methods to evaluate the result by creating the confusion matrix. 
@@ -42,19 +37,6 @@ import org.processmining.processtree.conversion.ProcessTree2Petrinet.PetrinetWit
 @Plugin(name = "Naive Check Conformance of Petri net and event log", level = PluginLevel.Regular, returnLabels = {"Conformance Matrix" }, returnTypes = {
 		ArrayList.class}, parameterLabels = { "Labeled Log","Petri net", "Marking"}, userAccessible = true)
 public class EvaluateResult {
-	
-	// to check the conformance of process tress and event log
-	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "Process Tree Naive Conformance Checking",  requiredParameterLabels = { 0, 1})
-	public ArrayList<Integer> naiveCheckPT(UIPluginContext context, XLog log, ProcessTree tree) throws NotYetImplementedException, InvalidProcessTreeException {
-		// should we try to write code to check the replay of it ?? No, we just transform it into Petri net 
-		// and use the method above
-		
-		@SuppressWarnings("deprecation")
-		PetrinetWithMarkings net  = ProcessTree2Petrinet.convert(tree);
-		return naiveCheckPN(context, log, net.petrinet, net.initialMarking); // , net.initialMarking
-	}
-
 	
 	// the first one is to check conformance of Petri net and event log
 	/**
@@ -103,32 +85,32 @@ public class EvaluateResult {
 		// main problem is the mapping from event, how should we do ?? 
 		Map<XEventClass, Transition> maps = EventLogUtilities.getEventTransitionMap(log, net , classifier);
 		
-		for(XTrace trace: log) {
+		// should we separate the event log into different variants and check the variants fit or not fit?? 
+		/* 
+		 * to achieve it, we need to define one pos number and neg number for traceVariant, to store its distribution 
+		 * just extend the already existing methods 
+		*/
+		List<LabeledTraceVariant> variants = EventLogUtilities.getLabeledTraceVariants(log, classifier);
+		
+		for(LabeledTraceVariant variant: variants) {
 			
-			XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
-			// transfer trace into sequence of eventClasses
-			// there is no KPIs outcome from it, then we only get the allowed behavior
-			// but do we need to check if they fit??? Or in default they fit the model.. Should we check or not??
-			// -- if they fit the model, anyway, they don't have any information?? They should have information 
-			// on the positive and negative ones, it's a requirement.!! 
-			if(NetUtilities.fitPN(net, marking, EventLogUtilities.transferTrace(log, trace, classifier), maps)) {
+			if(NetUtilities.fitPN(net, marking, variant.getTraceVariant(), maps)) {
 				// with pos_outcome
-				if(attr !=null && attr.getValue()) {
-					confusion_matrix.set(Configuration.ALLOWED_POS_IDX, confusion_matrix.get(Configuration.ALLOWED_POS_IDX)+1);
-					// confusion_matrix[Configuration.ALLOWED_POS_IDX] ++;
-				}else {
-					confusion_matrix.set(Configuration.ALLOWED_NEG_IDX, confusion_matrix.get(Configuration.ALLOWED_NEG_IDX)+1);
+				
+				confusion_matrix.set(Configuration.ALLOWED_POS_IDX, confusion_matrix.get(Configuration.ALLOWED_POS_IDX)+ variant.getPosNum());
+				
+				confusion_matrix.set(Configuration.ALLOWED_NEG_IDX, confusion_matrix.get(Configuration.ALLOWED_NEG_IDX)+ variant.getNegNum());
 					// confusion_matrix[Configuration.ALLOWED_NEG_IDX] ++;
-				}
+				
 			}else {
 				// with pos_outcome
-				if(attr !=null && attr.getValue()) {
-					confusion_matrix.set(Configuration.NOT_ALLOWED_POS_IDX, confusion_matrix.get(Configuration.NOT_ALLOWED_POS_IDX)+1);
+				//if(attr !=null && attr.getValue()) {
+					confusion_matrix.set(Configuration.NOT_ALLOWED_POS_IDX, confusion_matrix.get(Configuration.NOT_ALLOWED_POS_IDX)+ variant.getPosNum());
 					// confusion_matrix[Configuration.NOT_ALLOWED_POS_IDX] ++;
-				}else {
-					confusion_matrix.set(Configuration.NOT_ALLOWED_NEG_IDX, confusion_matrix.get(Configuration.NOT_ALLOWED_NEG_IDX)+1);
+				//}else {
+					confusion_matrix.set(Configuration.NOT_ALLOWED_NEG_IDX, confusion_matrix.get(Configuration.NOT_ALLOWED_NEG_IDX)+variant.getNegNum());
 					// confusion_matrix[Configuration.NOT_ALLOWED_NEG_IDX] ++;
-				}
+				//}
 			}
 			
 		}

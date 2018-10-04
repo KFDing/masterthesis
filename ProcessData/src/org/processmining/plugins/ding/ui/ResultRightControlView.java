@@ -24,9 +24,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.processmining.plugins.ding.model.Configuration;
+import org.processmining.plugins.ding.model.Configuration.ViewType;
 import org.processmining.plugins.ding.model.ControlParameters;
-import org.processmining.plugins.ding.train.Configuration;
-import org.processmining.plugins.ding.train.Configuration.ViewType;
 
 import com.fluxicon.slickerbox.ui.SlickerSliderUI;
 public class ResultRightControlView extends JPanel {
@@ -131,14 +131,14 @@ public class ResultRightControlView extends JPanel {
 		existValueLabel.setFont(this.smallFont);
 		existValueLabel.setText(Configuration.DEFAULT_WEIGHT);
 		
-		existSlider = new JSlider(JSlider.VERTICAL, 0, 20, 10);
+		existSlider = new JSlider(JSlider.VERTICAL, 0, Configuration.WEIGHT_RANGE, Configuration.WEIGHT_VALUE);
 		existSlider.setUI(new SlickerSliderUI(existSlider));
 		existSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getSource() == existSlider) {
 					// updateThresholdSlider();
-					double existWeight = existSlider.getValue()/10.0;
+					double existWeight = 1.0*existSlider.getValue()/Configuration.WEIGHT_VALUE;
 					existValueLabel.setText(" "+ existWeight);
 					parameters.setExistWeight(existWeight);
 				}	
@@ -169,14 +169,14 @@ public class ResultRightControlView extends JPanel {
 		posValueLabel.setFont(this.smallFont);
 		posValueLabel.setText(Configuration.DEFAULT_WEIGHT);
 		// I want to get the listener out of this method .. or to create the specific class for it 
-		posSlider = new JSlider(JSlider.VERTICAL, 0, 20, 10);
+		posSlider = new JSlider(JSlider.VERTICAL, 0, Configuration.WEIGHT_RANGE, Configuration.WEIGHT_VALUE);
 		posSlider.setUI(new SlickerSliderUI(posSlider));
 		posSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getSource() == posSlider) {
 					// updateThresholdSlider();
-					double posWeight = posSlider.getValue()/10.0;
+					double posWeight = 1.0*posSlider.getValue()/Configuration.WEIGHT_VALUE;
 					posValueLabel.setText(" "+ posWeight);
 					parameters.setPosWeight(posWeight);
 				}	
@@ -209,14 +209,14 @@ public class ResultRightControlView extends JPanel {
 		negValueLabel.setFont(this.smallFont);
 		negValueLabel.setText(Configuration.DEFAULT_WEIGHT);
 		
-		negSlider = new JSlider(JSlider.VERTICAL, 0, 20, 10);
+		negSlider = new JSlider(JSlider.VERTICAL, 0, Configuration.WEIGHT_RANGE, Configuration.WEIGHT_VALUE);
 		negSlider.setUI(new SlickerSliderUI(negSlider));
 		negSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getSource() == negSlider) {
 					// updateThresholdSlider();
-					double negWeight = negSlider.getValue()/10.0;
+					double negWeight = 1.0*negSlider.getValue()/ Configuration.WEIGHT_VALUE;
 					negValueLabel.setText(" "+ negWeight);
 					parameters.setNegWeight(negWeight);
 				}	
@@ -249,9 +249,14 @@ public class ResultRightControlView extends JPanel {
 		reset_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// submit all the changed parameters 
-				existSlider.setValue(0);
-				posSlider.setValue(0);
-				negSlider.setValue(0);
+				existSlider.setValue(Configuration.WEIGHT_VALUE);
+				existValueLabel.setText(Configuration.DEFAULT_WEIGHT);
+				
+				posSlider.setValue(Configuration.WEIGHT_VALUE);
+				posValueLabel.setText(Configuration.DEFAULT_WEIGHT);
+				
+				negSlider.setValue(Configuration.WEIGHT_VALUE);
+				negValueLabel.setText(Configuration.DEFAULT_WEIGHT);
 				parameters.resetValue();
 			}          
 	    });

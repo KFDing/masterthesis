@@ -8,6 +8,7 @@ import java.util.Map;
 import org.deckfour.xes.classification.XEventClass;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.DfgImpl;
+import org.processmining.plugins.ding.model.Configuration;
 
 /**
  * this class is used to store the direct follow relation from existing, pos and neg dfg.

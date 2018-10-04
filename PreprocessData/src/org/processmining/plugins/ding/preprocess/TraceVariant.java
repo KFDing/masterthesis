@@ -10,17 +10,17 @@ import org.processmining.plugins.ding.util.Configuration;
 import org.processmining.plugins.ding.util.EventLogUtilities;
 
 public class TraceVariant {
-	private int count ; 
-	private Boolean isFit  ; // it is only the attribute if traceVaraint,
+	protected int count ; 
+	protected Boolean isFit  ; // it is only the attribute if traceVaraint,
 	// if we want to use it, we can assign the idx to it and then get the value for it 
-	private List<XEventClass> variant; 
+	protected List<XEventClass> variant; 
 	// here we need to record the log index in this variants.
 	// later, we could do the label assign on this variant.
 	// or should we add them actually the trace of them?? 
-	private List<Integer> idx_list;
-	private List<XTrace> trace_list;
+	protected List<Integer> idx_list;
+	protected List<XTrace> trace_list;
 	
-	private List<Integer> summary = null;
+	protected List<Integer> summary = null;
 	
 	
 	public List<XTrace> getTrace_list() {

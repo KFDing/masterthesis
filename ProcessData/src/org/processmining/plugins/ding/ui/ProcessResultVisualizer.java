@@ -9,16 +9,22 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
+import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.framework.providedobjects.ProvidedObjectDeletedException;
+import org.processmining.framework.providedobjects.ProvidedObjectID;
+import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.DfgMiningParameters;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.IMdProcessTree;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.dialogs.IMdMiningDialog;
+import org.processmining.plugins.ding.model.Configuration.ViewType;
 import org.processmining.plugins.ding.model.ControlParameters;
-import org.processmining.plugins.ding.train.Configuration.ViewType;
 import org.processmining.plugins.ding.train.DfMatrix;
 import org.processmining.processtree.ProcessTree;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet;
@@ -66,7 +72,11 @@ class ResultMainView extends JPanel{
 	Dfg dfg = null;
 	ProcessTree pTree = null;
 	@SuppressWarnings("deprecation")
-	PetrinetWithMarkings net = null;
+	AcceptingPetriNet anet = null;
+	ProvidedObjectID dfgId = null;
+	ProvidedObjectID pTreeId = null;
+	ProvidedObjectID netId = null;
+	ProvidedObjectID markingId = null;
 	boolean updateAll = true;
 	
 	public ResultMainView(UIPluginContext context, final DfMatrix matrix) {
@@ -90,6 +100,10 @@ class ResultMainView extends JPanel{
 		dfMatrix.updateCardinality(2, parameters.getNegWeight());
 		
 		showDfg();
+		if(dfgId == null) {
+			dfgId =context.getProvidedObjectManager().createProvidedObject("Generated Dfg", dfg, Dfg.class, context);
+		}
+		
 		/*
 		dfg = dfMatrix.buildDfs();
 		leftView.drawResult(dfg);
@@ -101,7 +115,13 @@ class ResultMainView extends JPanel{
 					public void actionPerformed(ActionEvent e) {
 						// we need to pass the parameters to MainView, in the mainView, 
 						// it controls to generate the new view
-						updateMainView(leftView, rightView.getParameters());
+						try {
+							
+							updateMainView(leftView, rightView.getParameters());
+						} catch (ProvidedObjectDeletedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}          
 			    });
 		
@@ -109,7 +129,7 @@ class ResultMainView extends JPanel{
 		this.add(this.rightView, new Float(20));
 	} 
 	
-	public void updateMainView(ResultLeftView leftView, ControlParameters newParameters) {
+	public void updateMainView(ResultLeftView leftView, ControlParameters newParameters) throws ProvidedObjectDeletedException{
 		// if there is only type changes, so we don't need to generate it again for the dfMatrix
 		// we just use the dfg, process tree and petri net 
 		// how to distinguish them?? I think I can add the weight to the DfMatrix, and compare it 
@@ -128,10 +148,28 @@ class ResultMainView extends JPanel{
 		
 		if(parameters.getType() == ViewType.Dfg) {
 			showDfg();
+			// if we show them here, we add dfg into the global context to let them show out
+			if(dfgId != null)
+				context.getProvidedObjectManager().changeProvidedObjectObject(dfgId, dfg);
 		}else if(parameters.getType() == ViewType.ProcessTree) {
 			showProcessTree();
+			if(pTreeId == null) {
+				pTreeId =context.getProvidedObjectManager().createProvidedObject("Generated Process Tree", pTree, ProcessTree.class, context);
+			}else {
+				context.getProvidedObjectManager().changeProvidedObjectObject(pTreeId, pTree);
+			}
+			// add process tree into result, but we need to keep there only one process tree there
 		}else if(parameters.getType() == ViewType.PetriNet) {
 			showPetriNet();
+			// if we add new, we need to delete the old petri net 
+			if(netId == null) {
+				netId =context.getProvidedObjectManager().createProvidedObject("Generated Petri net", anet.getNet(), Petrinet.class, context);
+				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking", anet.getInitialMarking(), Marking.class, context);
+				
+			}else {
+				context.getProvidedObjectManager().changeProvidedObjectObject(netId, anet.getNet());
+				context.getProvidedObjectManager().changeProvidedObjectObject(markingId, anet.getInitialMarking());
+			}
 		}
 			
 	}
@@ -145,9 +183,10 @@ class ResultMainView extends JPanel{
 		return true;
 	}
 
-	private void showDfg() {
-		if(updateAll)
-			dfg =  dfMatrix.buildDfs();
+	private void showDfg()  {
+		if( updateAll) {
+			dfg =  dfMatrix.buildDfs();	
+		}
 		leftView.drawResult(dfg);
 		leftView.updateUI();
 	}
@@ -168,7 +207,9 @@ class ResultMainView extends JPanel{
 		leftView.updateUI();
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void showPetriNet() {
+		
 		if(updateAll) {
 			dfg =  dfMatrix.buildDfs();
 			// I think I should change something about it, which could remember the result from before
@@ -177,7 +218,8 @@ class ResultMainView extends JPanel{
 			pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
 
 			try {
-				net = ProcessTree2Petrinet.convert(pTree, true);
+				PetrinetWithMarkings net = ProcessTree2Petrinet.convert(pTree, true);
+				anet = new AcceptingPetriNetImpl(net.petrinet, net.initialMarking, net.finalMarking);
 			} catch (NotYetImplementedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -186,13 +228,14 @@ class ResultMainView extends JPanel{
 				e.printStackTrace();
 			}
 
-		}else if(net == null) {
+		}else if(anet == null) {
 			if(pTree == null) {
 				DfgMiningParameters ptParas = getProcessTreParameters();
 				pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
 			}	
 			try {
-				net = ProcessTree2Petrinet.convert(pTree, true);
+				PetrinetWithMarkings net = ProcessTree2Petrinet.convert(pTree, true);
+				anet = new AcceptingPetriNetImpl(net.petrinet, net.initialMarking, net.finalMarking);
 			} catch (NotYetImplementedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -202,12 +245,13 @@ class ResultMainView extends JPanel{
 			}
 				
 		}
-		// how to change pTree into the Petri net 
-		leftView.drawResult(context, net.petrinet);
+		
+		leftView.drawResult(context, anet.getNet());
 		leftView.updateUI();
 	}
 	private DfgMiningParameters getProcessTreParameters() {
 		   IMdMiningDialog dialog = new IMdMiningDialog();
+		   dialog.setSize(100, 100);
 		   // it is a Jpanel, not a dialog, now I just want to get the pop up JPanel and read the input from it 
 		   // String parameters = JOptionPane.showInputDialog(this, "Set parameters fro IM", "Setting", JOptionPane.QUESTION_MESSAGE);
 		   JOptionPane.showMessageDialog( this,
@@ -215,7 +259,7 @@ class ResultMainView extends JPanel{
 	               "Setting Miner Parameters for Dfg",
 	               JOptionPane.INFORMATION_MESSAGE);
 		   DfgMiningParameters parameters = dialog.getMiningParameters();
-	       System.out.println("Paras " + parameters.getNoiseThreshold());     
+	       // System.out.println("Paras " + parameters.getNoiseThreshold());     
 	       
 	       return parameters;
 	   }

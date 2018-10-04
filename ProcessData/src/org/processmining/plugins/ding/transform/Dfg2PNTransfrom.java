@@ -22,7 +22,7 @@ import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
-import org.processmining.plugins.ding.train.Configuration;
+import org.processmining.plugins.ding.model.Configuration;
 /**
  * this class is used to tranform Dfg graph into Petri net 
  */
