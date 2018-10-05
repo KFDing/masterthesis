@@ -6,8 +6,8 @@ import java.util.List;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XTrace;
-import org.processmining.plugins.ding.util.Configuration;
-import org.processmining.plugins.ding.util.EventLogUtilities;
+import org.processmining.plugins.ding.preprocess.util.Configuration;
+import org.processmining.plugins.ding.preprocess.util.EventLogUtilities;
 
 public class TraceVariant {
 	protected int count ; 

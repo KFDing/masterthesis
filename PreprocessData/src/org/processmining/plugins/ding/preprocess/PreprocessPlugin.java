@@ -42,11 +42,11 @@ import org.processmining.framework.util.ui.wizard.ProMWizardDisplay;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.semantics.petrinet.Marking;
-import org.processmining.plugins.ding.ui.LabelParameterStep;
-import org.processmining.plugins.ding.ui.VariantWholeView;
-import org.processmining.plugins.ding.util.Configuration;
-import org.processmining.plugins.ding.util.EventLogUtilities;
-import org.processmining.plugins.ding.util.NetUtilities;
+import org.processmining.plugins.ding.preprocess.ui.LabelParameterStep;
+import org.processmining.plugins.ding.preprocess.ui.VariantWholeView;
+import org.processmining.plugins.ding.preprocess.util.Configuration;
+import org.processmining.plugins.ding.preprocess.util.EventLogUtilities;
+import org.processmining.plugins.ding.preprocess.util.NetUtilities;
 
 
 @Plugin(
