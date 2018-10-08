@@ -17,13 +17,13 @@ import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 
 import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.model.XTrace;
+import org.processmining.framework.util.ui.widgets.ProMScrollPane;
 import org.processmining.framework.util.ui.widgets.traceview.ProMTraceList.ClickListener;
 import org.processmining.framework.util.ui.widgets.traceview.ProMTraceList.MoveListener;
 import org.processmining.framework.util.ui.widgets.traceview.ProMTraceList.TraceBuilder;
@@ -82,10 +82,17 @@ public class ListPanel extends JPanel {
 		setForeground(null);
 		setBackground(null);
         
-        JScrollPane listScrollPane = new JScrollPane(jlist);
+        // JScrollPane listScrollPane = new JScrollPane(jlist);
+        ProMScrollPane listScrollPane = new ProMScrollPane(jlist);
         // add part to cell render, but later
         listScrollPane.setPreferredSize(new Dimension(500, 500));
         listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
+        listScrollPane.setForeground(null);
+        listScrollPane.setOpaque(false);
+        listScrollPane.getViewport().setForeground(null);
+        listScrollPane.getViewport().setOpaque(false);
+        //listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        //listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         
         add(listScrollPane, BorderLayout.CENTER);
 	}

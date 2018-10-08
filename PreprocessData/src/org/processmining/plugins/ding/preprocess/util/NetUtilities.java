@@ -141,7 +141,7 @@ public class NetUtilities {
     	Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postset = null;
     	// set a token at first place... Na, we need to check it from another code
     	// this doesn't include the token stuff. Maybe we should include it.
-    	if(marking == null) {
+    	if(marking == null || marking.size()<1) {
     		Place splace = NetUtilities.getStartPlace(net);
     		splace.getAttributeMap().put(Configuration.TOKEN, 1);
     	}else {
@@ -231,7 +231,7 @@ public class NetUtilities {
 				PetrinetNode node = niter.next();
 				// transition, to trigger one transition, it demands all the spreset places with tokens!! 
 				Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> spreset = net.getInEdges(node);
-				
+				int triggerNum  = 0;
 				for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> sedge : spreset) {
 					arc = (Arc) sedge;
 					// get the prior place for transition
@@ -254,20 +254,24 @@ public class NetUtilities {
 					if(tnum >= 1 ) {
 						// directly consume the token?? or wait until next loop to get it ??
 						sp.getAttributeMap().put(Configuration.TOKEN, tnum -1);
-						// after we consume one token, we need to generate token..
-						// now it is the node, we get the postset for this transition 
-						Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> spostset = net.getOutEdges(node);
-						// we need to see two transitions together???  
-						for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge : spostset) {
-							arc = (Arc) edge;
-							// get the prior place for transition
-							Place place= (Place) arc.getTarget();
-							place.getAttributeMap().put(Configuration.TOKEN, 1);
-						}
-						return false;
+						triggerNum ++;
 					}	
 				}
 				
+				// after we consume one token, we need to generate token..
+				// now it is the node, we get the postset for this transition, but before we must make sure
+				// that all inedges have token, else we can't do it.
+				if(triggerNum == spreset.size()) {
+					Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> spostset = net.getOutEdges(node);
+					// we need to see two transitions together???  
+					for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge : spostset) {
+						arc = (Arc) edge;
+						// get the prior place for transition
+						Place place= (Place) arc.getTarget();
+						place.getAttributeMap().put(Configuration.TOKEN, 1);
+					}
+					return false;
+				}
 				
 			}
 			// after we check all the branches, and we couldn't find the corresponding ones 

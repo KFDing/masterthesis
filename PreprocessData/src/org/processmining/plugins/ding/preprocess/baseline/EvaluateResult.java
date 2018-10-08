@@ -7,6 +7,7 @@ import java.util.Map;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.model.XLog;
+import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
@@ -44,8 +45,8 @@ public class EvaluateResult {
 	 */
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Petrinet Naive CC No Marking",  requiredParameterLabels = { 0,1})
-	public ArrayList<Integer> naiveCheckPN(UIPluginContext context, XLog log, Petrinet net ) { // Marking 
-		return naiveCheckPN(context, log, net, null);
+	public ArrayList<Integer> naiveCheckPN(UIPluginContext context, XLog log, AcceptingPetriNet anet ) { // Marking 
+		return naiveCheckPN(context, log, anet.getNet(), anet.getInitialMarking());
 	}
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)

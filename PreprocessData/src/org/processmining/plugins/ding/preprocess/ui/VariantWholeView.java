@@ -42,9 +42,9 @@ public class VariantWholeView extends JPanel {
 		            	//Selection, update the other detailView
 		            	
 		            	select_idx = list.getSelectedIndex();
-		            	System.out.println(select_idx);
+		            	// System.out.println(select_idx);
 		            	detailView.update(variants.get(select_idx));
-		            	System.out.println(variants.get(select_idx).getTraceVariant().toString());
+		            	// System.out.println(variants.get(select_idx).getTraceVariant().toString());
 		            }
 		        }
 			}

@@ -189,7 +189,7 @@ public class PN2DfgTransform {
 			State state = tau.getSource();
 			Collection<Transition> pre_ts = rg.getInEdges(state);
 			for(Transition t: pre_ts ) {
-				if(t.getLabel().contains("tau")) {
+				if(isTau(t)) {
 					pre_ts.remove(t);
 					pre_ts.addAll(getNonTauTransition(rg, t, true));
 				}	
