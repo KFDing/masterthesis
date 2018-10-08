@@ -1,6 +1,6 @@
 package org.processmining.plugins.ding.process.dfg.model;
 
-import org.processmining.plugins.ding.process.dfg.model.Configuration.ViewType;
+import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ViewType;
 
 /**
  * this class is used to create the control parameters, it includes:

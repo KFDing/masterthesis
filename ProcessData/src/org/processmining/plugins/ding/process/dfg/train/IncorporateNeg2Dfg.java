@@ -12,7 +12,8 @@ import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
-import org.processmining.plugins.ding.process.dfg.model.Configuration;
+import org.processmining.plugins.ding.preprocess.util.Configuration;
+
 
 
 /**

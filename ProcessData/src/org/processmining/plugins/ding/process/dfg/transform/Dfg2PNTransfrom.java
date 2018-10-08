@@ -22,7 +22,7 @@ import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
-import org.processmining.plugins.ding.process.dfg.model.Configuration;
+import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
 /**
  * this class is used to tranform Dfg graph into Petri net 
  */
@@ -67,8 +67,8 @@ public class Dfg2PNTransfrom {
 		// in this way it doesn't work, but where goes wrong..
 		for(int i =0; i< log.size(); i++) {
 			XTrace trace = (XTrace) log.get(i);
-			if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
-				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+			if(trace.getAttributes().containsKey(ProcessConfiguration.POS_LABEL)) {
+				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(ProcessConfiguration.POS_LABEL);
 				if(!attr.getValue()) {
 					neg_log.add((XTrace)trace.clone());
 					neg_count++;
@@ -94,8 +94,8 @@ public class Dfg2PNTransfrom {
 		Iterator<XTrace> iterator = pos_log.iterator();
 		while (iterator.hasNext()) {
 			XTrace trace = iterator.next();
-			if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
-				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+			if(trace.getAttributes().containsKey(ProcessConfiguration.POS_LABEL)) {
+				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(ProcessConfiguration.POS_LABEL);
 				if(!attr.getValue()) {
 					iterator.remove();
 				}
@@ -105,8 +105,8 @@ public class Dfg2PNTransfrom {
 		iterator =neg_log.iterator();
 		while (iterator.hasNext()) {
 			XTrace trace = iterator.next();
-			if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
-				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+			if(trace.getAttributes().containsKey(ProcessConfiguration.POS_LABEL)) {
+				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(ProcessConfiguration.POS_LABEL);
 				if(attr.getValue()) {
 					iterator.remove();
 				}
@@ -180,8 +180,8 @@ public class Dfg2PNTransfrom {
 				trNew.add(evNew);
 			}
 			
-			if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
-				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+			if(trace.getAttributes().containsKey(ProcessConfiguration.POS_LABEL)) {
+				XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(ProcessConfiguration.POS_LABEL);
 				if(attr.getValue()) {
 					pos_log.add(trNew);
 				}else {

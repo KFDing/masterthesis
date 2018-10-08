@@ -172,9 +172,11 @@ public class NetUtilities {
 					p.getAttributeMap().put(Configuration.TOKEN, tnum-1);
 				}else {
 				// for each transition, check the preset places of it the tokens number is greater than one?? 
-					if(isTokenMissing(p,net))
+					if(isTokenMissing(p,net, 0))
 						return false;
-					
+					else {
+						p.getAttributeMap().put(Configuration.TOKEN, (int)p.getAttributeMap().get(Configuration.TOKEN)-1);
+					}	
 				}
 			}
 			
@@ -194,11 +196,14 @@ public class NetUtilities {
     	int tnum = (Integer)eplace.getAttributeMap().get(Configuration.TOKEN);
     	if(tnum == 1) {
     		eplace.getAttributeMap().put(Configuration.TOKEN, tnum-1);
-    		
+
 		}else {
 		// for each transition, check the preset places of it the tokens number is greater than one?? 
-			if(isTokenMissing(eplace,net))
+			if(isTokenMissing(eplace,net, 0))
 				return false;
+			else {
+				eplace.getAttributeMap().put(Configuration.TOKEN, (int)eplace.getAttributeMap().get(Configuration.TOKEN)-1);
+			}
 			
 		}
     	// actually after this, we need to check if there is another place with token in the graph, 
@@ -209,49 +214,48 @@ public class NetUtilities {
     	return true;
 	}
 	// if not token missing, so I could trace back and generate token before and consume later by this place.
-	public static boolean isTokenMissing(Place p, Petrinet net) {
-		int loop_count = 0;
+	public static boolean isTokenMissing(Place p, Petrinet net, int loop_count) {
+		
+		boolean stopCheck = false;
     	Arc arc= null;
 		// if trace back to the silent transition before place p.
 		Collection<PetrinetNode> silentNodes = findSilentNodes(p, net);
 		if(silentNodes.size() == 0) {
+			stopCheck = true;
 			return true;
 		}else {
 			Iterator<PetrinetNode> niter = silentNodes.iterator();
 			
-			while(niter.hasNext()) {
+			while(!stopCheck && niter.hasNext()) {
 				// find the path until the place with token or, without silent transition
 				PetrinetNode node = niter.next();
+				// transition, to trigger one transition, it demands all the spreset places with tokens!! 
 				Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> spreset = net.getInEdges(node);
-				// we need to see two transitions together???  
+				
 				for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> sedge : spreset) {
 					arc = (Arc) sedge;
 					// get the prior place for transition
 					Place sp= (Place) arc.getSource();
 					
 					int tnum = (Integer)sp.getAttributeMap().get(Configuration.TOKEN);
-					
+					// if one of place in preset has token, then continue until all
 					if(tnum == 0 ) {
-						// go back to check the place before and see if works .. when to stop for checking this one?? 
-						// if there is a loop, and then we check if we go back to this place again,if it goes back 
-						// then return false
-						// situation:: not stop:: in a loop but how to test if it is in a loop?? 
-						// and also, it depends on the the number of graph transition. 
-						// we test if the loop is already over the number of transitions;; if it is over, then we stop it 
-						loop_count ++;
-						if(loop_count <= net.getTransitions().size())
-							return isTokenMissing(sp, net); 
-						else {
-							System.out.println("Go back to check silent token, Stop loop");
-							return false;
+						// go depth search for loop
+						if(loop_count <= net.getTransitions().size()) {
+							// if we find out token missing, then we need to change to another branch
+							if(isTokenMissing(sp, net, loop_count + 1)) 
+								break;
+						}else {
+							// if we check all the loops, decide to change to another branch
+							break;
 						}
 					}
 					
-					if(tnum == 1 ) {
+					if(tnum >= 1 ) {
+						// directly consume the token?? or wait until next loop to get it ??
 						sp.getAttributeMap().put(Configuration.TOKEN, tnum -1);
 						// after we consume one token, we need to generate token..
 						// now it is the node, we get the postset for this transition 
-						
 						Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> spostset = net.getOutEdges(node);
 						// we need to see two transitions together???  
 						for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge : spostset) {
@@ -260,14 +264,15 @@ public class NetUtilities {
 							Place place= (Place) arc.getTarget();
 							place.getAttributeMap().put(Configuration.TOKEN, 1);
 						}
-					}
+						return false;
+					}	
 				}
+				
+				
 			}
-			
-		}
-		// after we traverse all the silent transition, still no answer it mean it is false
-		p.getAttributeMap().put(Configuration.TOKEN, (int)p.getAttributeMap().get(Configuration.TOKEN)-1);
-		return false;
+			// after we check all the branches, and we couldn't find the corresponding ones 
+			return true;
+		}		
 	}
 
 	/**

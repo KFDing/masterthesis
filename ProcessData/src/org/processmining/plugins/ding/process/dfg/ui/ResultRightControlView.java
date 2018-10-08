@@ -24,9 +24,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.processmining.plugins.ding.process.dfg.model.Configuration;
-import org.processmining.plugins.ding.process.dfg.model.Configuration.ViewType;
 import org.processmining.plugins.ding.process.dfg.model.ControlParameters;
+import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
+import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ViewType;
 
 import com.fluxicon.slickerbox.ui.SlickerSliderUI;
 public class ResultRightControlView extends JPanel {
@@ -129,16 +129,16 @@ public class ResultRightControlView extends JPanel {
 		existValueLabel.setOpaque(false);
 		existValueLabel.setForeground(COLOR_FG);
 		existValueLabel.setFont(this.smallFont);
-		existValueLabel.setText(Configuration.DEFAULT_WEIGHT);
+		existValueLabel.setText(ProcessConfiguration.DEFAULT_WEIGHT);
 		
-		existSlider = new JSlider(JSlider.VERTICAL, 0, Configuration.WEIGHT_RANGE, Configuration.WEIGHT_VALUE);
+		existSlider = new JSlider(JSlider.VERTICAL, 0, ProcessConfiguration.WEIGHT_RANGE, ProcessConfiguration.WEIGHT_VALUE);
 		existSlider.setUI(new SlickerSliderUI(existSlider));
 		existSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				
 				if (e.getSource() == existSlider) {
 					// updateThresholdSlider();
-					double existWeight = 1.0*existSlider.getValue()/Configuration.WEIGHT_VALUE;
+					double existWeight = 1.0*existSlider.getValue()/ProcessConfiguration.WEIGHT_VALUE;
 					existValueLabel.setText(" "+ existWeight);
 					parameters.setExistWeight(existWeight);
 					
@@ -168,14 +168,14 @@ public class ResultRightControlView extends JPanel {
 		posValueLabel.setOpaque(false);
 		posValueLabel.setForeground(COLOR_FG);
 		posValueLabel.setFont(this.smallFont);
-		posValueLabel.setText(Configuration.DEFAULT_WEIGHT);
+		posValueLabel.setText(ProcessConfiguration.DEFAULT_WEIGHT);
 		// I want to get the listener out of this method .. or to create the specific class for it 
-		posSlider = new JSlider(JSlider.VERTICAL, 0, Configuration.WEIGHT_RANGE, Configuration.WEIGHT_VALUE);
+		posSlider = new JSlider(JSlider.VERTICAL, 0, ProcessConfiguration.WEIGHT_RANGE, ProcessConfiguration.WEIGHT_VALUE);
 		posSlider.setUI(new SlickerSliderUI(posSlider));
 		posSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				
-				double posWeight = 1.0*posSlider.getValue()/Configuration.WEIGHT_VALUE;
+				double posWeight = 1.0*posSlider.getValue()/ProcessConfiguration.WEIGHT_VALUE;
 				posValueLabel.setText(" "+ posWeight);
 				parameters.setPosWeight(posWeight);
 				
@@ -206,14 +206,14 @@ public class ResultRightControlView extends JPanel {
 		negValueLabel.setOpaque(false);
 		negValueLabel.setForeground(COLOR_FG);
 		negValueLabel.setFont(this.smallFont);
-		negValueLabel.setText(Configuration.DEFAULT_WEIGHT);
+		negValueLabel.setText(ProcessConfiguration.DEFAULT_WEIGHT);
 		
-		negSlider = new JSlider(JSlider.VERTICAL, 0, Configuration.WEIGHT_RANGE, Configuration.WEIGHT_VALUE);
+		negSlider = new JSlider(JSlider.VERTICAL, 0, ProcessConfiguration.WEIGHT_RANGE, ProcessConfiguration.WEIGHT_VALUE);
 		negSlider.setUI(new SlickerSliderUI(negSlider));
 		negSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
-				double negWeight = 1.0*negSlider.getValue()/ Configuration.WEIGHT_VALUE;
+				double negWeight = 1.0*negSlider.getValue()/ ProcessConfiguration.WEIGHT_VALUE;
 				negValueLabel.setText(" "+ negWeight);
 				parameters.setNegWeight(negWeight);
 					
@@ -247,14 +247,14 @@ public class ResultRightControlView extends JPanel {
 		reset_button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// submit all the changed parameters 
-				existSlider.setValue(Configuration.WEIGHT_VALUE);
-				existValueLabel.setText(Configuration.DEFAULT_WEIGHT);
+				existSlider.setValue(ProcessConfiguration.WEIGHT_VALUE);
+				existValueLabel.setText(ProcessConfiguration.DEFAULT_WEIGHT);
 				
-				posSlider.setValue(Configuration.WEIGHT_VALUE);
-				posValueLabel.setText(Configuration.DEFAULT_WEIGHT);
+				posSlider.setValue(ProcessConfiguration.WEIGHT_VALUE);
+				posValueLabel.setText(ProcessConfiguration.DEFAULT_WEIGHT);
 				
-				negSlider.setValue(Configuration.WEIGHT_VALUE);
-				negValueLabel.setText(Configuration.DEFAULT_WEIGHT);
+				negSlider.setValue(ProcessConfiguration.WEIGHT_VALUE);
+				negValueLabel.setText(ProcessConfiguration.DEFAULT_WEIGHT);
 				parameters.resetValue();
 			}          
 	    });

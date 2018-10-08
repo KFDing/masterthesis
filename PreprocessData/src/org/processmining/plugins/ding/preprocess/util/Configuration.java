@@ -23,6 +23,8 @@ public class Configuration {
 	
 	public static String TP_TIME = "throughputime";
 	public static String TOKEN = "token";
+	public static String Tau_CLASS = "tau in log";
+	
 	
 	public static int CONFUSION_MATRIX_SIZE = 4;
 	public static int ALLOWED_POS_IDX = 0;

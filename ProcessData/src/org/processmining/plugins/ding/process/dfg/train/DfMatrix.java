@@ -8,7 +8,7 @@ import java.util.Map;
 import org.deckfour.xes.classification.XEventClass;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.DfgImpl;
-import org.processmining.plugins.ding.process.dfg.model.Configuration;
+import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
 
 /**
  * this class is used to store the direct follow relation from existing, pos and neg dfg.
@@ -28,8 +28,8 @@ public class DfMatrix {
 	// only initialization of DfMatrix
 	public DfMatrix(){
 		dfMatrix = new HashMap<ArrayList<XEventClass>, ArrayList<Long>>();
-		keyColNum = Configuration.MATRIX_KEY_COL_NUM;
-		valueColNum = Configuration.MATRIX_VALUE_COL_NUM * 2;
+		keyColNum = ProcessConfiguration.MATRIX_KEY_COL_NUM;
+		valueColNum = ProcessConfiguration.MATRIX_VALUE_COL_NUM * 2;
 	}
 	
 	public void addDirectFollowMatrix(Dfg dfg, int colIdx) {
@@ -51,14 +51,14 @@ public class DfMatrix {
 		
 		// add the start and end activities as a direct follow relation there, 
 		final int startIdx = dfMatrix.size();
-		XEventClass originalPoint = new XEventClass(Configuration.START_LABEL, startIdx);
+		XEventClass originalPoint = new XEventClass(ProcessConfiguration.START_LABEL, startIdx);
 		for(XEventClass startEventClass : dfg.getStartActivities()) {
 			long cardinality = dfg.getStartActivityCardinality(startEventClass); // set the start and end activity in existing model
 			// addMatrixItemWithCheck( originalPoint, startEventClass, cardinality, colIdx);
 			addMatrixItem( originalPoint, startEventClass, cardinality, colIdx);
 		}
 		final int endIdx = dfMatrix.size(); // actually we don't need to build this every time we go to the dfg
-		XEventClass endPoint = new XEventClass(Configuration.END_LABEL, endIdx); 
+		XEventClass endPoint = new XEventClass(ProcessConfiguration.END_LABEL, endIdx); 
 		for(XEventClass endEventClass : dfg.getEndActivities()) {
 			long cardinality = dfg.getEndActivityCardinality(endEventClass);
 			// addMatrixItemWithCheck( endEventClass, endPoint, cardinality, colIdx);
@@ -107,7 +107,7 @@ public class DfMatrix {
 		// we assign the 
 		dfValue.set(colIdx, cardinality );
 		// for update use
-		dfValue.set(colIdx + Configuration.MATRIX_VALUE_COL_NUM, cardinality );
+		dfValue.set(colIdx + ProcessConfiguration.MATRIX_VALUE_COL_NUM, cardinality );
 		
 		if(isContainKey(dfKey)) {
 			// still this key is somehow different from others
@@ -152,7 +152,7 @@ public class DfMatrix {
 	// to update the value of dfMatrix according to weight and colIdx
 	public void updateCardinality(int colIdx, double weight) {
 		for(ArrayList<Long> dfValue: dfMatrix.values()) {
-			dfValue.set(colIdx + Configuration.MATRIX_VALUE_COL_NUM, (long) (dfValue.get(colIdx)*weight));
+			dfValue.set(colIdx + ProcessConfiguration.MATRIX_VALUE_COL_NUM, (long) (dfValue.get(colIdx)*weight));
 		}
 	}
 	/**
@@ -170,13 +170,14 @@ public class DfMatrix {
 			// 
 			// different situation here!! // we can merge those situation and take same action
 			// 1. only happen in neg 0 0 1 or 0 0 0==> delete it, no such relation !!
-			if(dfValue.get(Configuration.MATRIX_EXISTING_IDX)<1 && dfValue.get(Configuration.MATRIX_POS_IDX)<1) {
+			if(dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX)<1 && dfValue.get(ProcessConfiguration.MATRIX_POS_IDX)<1) {
 				continue; // or should we set it 0??
-			}else if(dfValue.get(Configuration.MATRIX_NEG_IDX) <1) {
+			}else if(dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX) <1) {
 				// 2. only in positive 0 1 0,  ==> add it into dfg
 				// 4. only in the existing model, 1 0 0, ==>  add it into dfg
 				// 6. in existing and pos, 1 1 0 ==> no change but add cardinality on it
-				cardinality = dfValue.get(Configuration.MATRIX_POS_IDX) + dfValue.get(Configuration.MATRIX_EXISTING_IDX);
+				// one thing is here that, if we only want the existing ones, then we have it, so no problem
+				cardinality = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX) + dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
 				// here we need to check what situation theny are and then deal with it
 				addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), cardinality );
 			}else {
@@ -184,8 +185,8 @@ public class DfMatrix {
 				// 3. in pos and neg, 0 1 1 ==> neg is only part of pos, then keep, 
 				// 7 in all, existing, pos and neg, 1 1 1==> same situation in 3
 				// 5. in existing and neg, 1 0 1 ==> check the distribution of it 
-				cardinality = dfValue.get(Configuration.MATRIX_POS_IDX) + dfValue.get(Configuration.MATRIX_EXISTING_IDX);
-				long neg = dfValue.get(Configuration.MATRIX_NEG_IDX);
+				cardinality = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX) + dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
+				long neg = dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX);
 				if(cardinality > neg) {
 					addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), cardinality - neg );
 				}else {
@@ -228,15 +229,15 @@ public class DfMatrix {
 	private void addDfgDirectFollow(Dfg dfg, XEventClass source, XEventClass target , long cardinality) {
 		
 		// if  source is start, then we add to dfg start activity, but we need to make sure there is only one index for it
-		if(source.getId().equals(Configuration.START_LABEL)) {
+		if(source.getId().equals(ProcessConfiguration.START_LABEL)) {
 			dfg.addStartActivity(target, cardinality);
 		}
 		// if target is end, we add it to the dfg end activity
-		if(target.getId().equals(Configuration.END_LABEL)) {
+		if(target.getId().equals(ProcessConfiguration.END_LABEL)) {
 			dfg.addEndActivity(source, cardinality);
 		}
 		// else we need just add it simply to dfg
-		if(!source.getId().equals(Configuration.START_LABEL) && !target.getId().equals(Configuration.END_LABEL))
+		if(!source.getId().equals(ProcessConfiguration.START_LABEL) && !target.getId().equals(ProcessConfiguration.END_LABEL))
 			dfg.addDirectlyFollowsEdge(source, target, cardinality);
 	}
 

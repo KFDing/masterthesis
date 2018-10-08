@@ -30,6 +30,7 @@ import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.plugins.ding.preprocess.TraceVariant;
 
+
 /**
  * This class includes the basic information about Event log 
  * and provide utilities for operation
@@ -71,6 +72,8 @@ public class EventLogUtilities {
 		else
 			classes = XLogInfoFactory.createLogInfo(log).getNameClasses();
 		
+		XEventClass tauClassinLog = new XEventClass(Configuration.Tau_CLASS, classes.size());
+		
 		boolean match;
 		for (Transition transition : transitions) {
 			match = false;
@@ -83,7 +86,9 @@ public class EventLogUtilities {
 				}
 			}
 			if(! match) {
-				map.put(null, transition);
+				// here sth not so good about numm eventClass, we can create one eventClass marked to be tau in log
+				
+				map.put(tauClassinLog, transition);
 			}
 		}
 		// three cases: silent transition
