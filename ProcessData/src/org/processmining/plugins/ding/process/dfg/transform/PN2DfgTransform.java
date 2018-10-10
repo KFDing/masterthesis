@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.deckfour.xes.classification.XEventClass;
-import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
@@ -43,16 +42,16 @@ public class PN2DfgTransform {
 	@PluginVariant(variantLabel = "Transfrom PN to Dfg",  requiredParameterLabels = { 0 , 1, 2})
 	public Object[] transform(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
 		
-		double threshold = 0.2;
+		// double threshold = 0.2;
 		
-		int num = (int) (threshold * XLogInfoFactory.createLogInfo(log).getNumberOfTraces());
+		// int num = (int) (threshold * XLogInfoFactory.createLogInfo(log).getNumberOfTraces());
 		
 		XLog2Dfg ld = new XLog2Dfg();
 		Dfg logdfg = ld.log2Dfg( context, log);
 		
 		Dfg dfg = transformPN2Dfg(context, net, marking);
-		
-		setCardinality(dfg, num);
+		// one is only used to show it exists here. 
+		setCardinality(dfg, 1);
 		
 		return new Object[] {dfg, logdfg};
 	}
@@ -188,21 +187,35 @@ public class PN2DfgTransform {
 		if(b) {
 			State state = tau.getSource();
 			Collection<Transition> pre_ts = rg.getInEdges(state);
-			for(Transition t: pre_ts ) {
-				if(isTau(t)) {
-					pre_ts.remove(t);
-					pre_ts.addAll(getNonTauTransition(rg, t, true));
-				}	
+			boolean goCheck = true;
+			
+			while(goCheck) {
+				goCheck = false;
+				for(Transition t : pre_ts) {
+					if(isTau(t)) {
+						pre_ts.remove(t);
+						pre_ts.addAll(getNonTauTransition(rg, t, true));
+						goCheck = true;
+						break;
+					}		
+				}
 			}
 			return pre_ts;
 		}else {
 			State state = tau.getTarget();
 			Collection<Transition> post_ts = rg.getOutEdges(state);
-			for(Transition t: post_ts ) {
-				if(isTau(t)) {
-					post_ts.remove(t);
-					post_ts.addAll(getNonTauTransition(rg, t, false));
-				}	
+			boolean goCheck = true;
+			
+			while(goCheck) {
+				goCheck = false;
+				for(Transition t : post_ts) {
+					if(isTau(t)) {
+						post_ts.remove(t);
+						post_ts.addAll(getNonTauTransition(rg, t, true));
+						goCheck = true;
+						break;
+					}		
+				}
 			}
 			return post_ts;
 		}
@@ -228,4 +241,5 @@ public class PN2DfgTransform {
 			dfg.addEndActivity(endClass, cardinality);
 		}
 	}
+
 }

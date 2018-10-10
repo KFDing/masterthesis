@@ -2,6 +2,7 @@ package org.processmining.plugins.ding.process.dfg.train;
 
 import java.util.Iterator;
 
+import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -13,6 +14,7 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
 import org.processmining.plugins.ding.preprocess.util.Configuration;
+import org.processmining.plugins.ding.process.dfg.model.DfMatrix;
 
 
 
@@ -42,6 +44,8 @@ public class IncorporateNeg2Dfg {
 		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
 		DfMatrix dfMatrix = createDfMatrix(dfg, pos_dfg, neg_dfg);
 		
+		int num = XLogInfoFactory.createLogInfo(pos_log).getNumberOfTraces();
+		dfMatrix.setStandardCardinality(num);
 		// now we need to adjust the complete the features it has. 
 		// 1. accept the threshold adjust on the result panel
 		
@@ -110,12 +114,13 @@ public class IncorporateNeg2Dfg {
 	}
 	
 	public static DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg) {
-		
+		// here we need to update the codes for accepting double percent 
 		
 		DfMatrix dfMatrix = new DfMatrix();
 		dfMatrix.addDirectFollowMatrix( dfg, 0);
 		// one problem here is about the single direct follow relation, it doesn't show here
 		dfMatrix.addDirectFollowMatrix( pos_dfg, 1); 
+		
 		dfMatrix.addDirectFollowMatrix(neg_dfg, 2);
 		// after we have dfMatrix, we need to assign edges to new dfg w.r.t. different situations
 		// Dfg new_dfg = dfMatrix.buildDfs();

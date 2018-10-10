@@ -12,7 +12,7 @@ import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
-import org.processmining.plugins.ding.process.dfg.train.DfMatrix;
+import org.processmining.plugins.ding.process.dfg.model.DfMatrix;
 import org.processmining.plugins.ding.process.dfg.train.IncorporateNeg2Dfg;
 import org.processmining.plugins.ding.process.dfg.transform.PN2DfgTransform;
 
@@ -45,10 +45,10 @@ public class DfgTransformPlugin {
 	@PluginVariant(variantLabel = "Repair Model By Dfg-- With Marking",  requiredParameterLabels = { 0 , 1 , 2})
 	public DfMatrix transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
 		// -- transform Petri net into Dfg
-		double threshold = 0.2;
+		
 		Dfg dfg = PN2DfgTransform.transformPN2Dfg(context, net, marking);
-		int num = (int) (threshold * XLogInfoFactory.createLogInfo(log).getNumberOfTraces());
-		PN2DfgTransform.setCardinality(dfg, num);
+		int num = XLogInfoFactory.createLogInfo(log).getNumberOfTraces();
+		// PN2DfgTransform.setCardinality(dfg, num);
 		// -- incorporate the negative information and give out the Dfg and Petri net model
 		Object[] result = IncorporateNeg2Dfg.splitEventLog(log);
 		XLog pos_log = (XLog) result[0];
@@ -60,6 +60,7 @@ public class DfgTransformPlugin {
 		
 		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
 		DfMatrix dfMatrix = IncorporateNeg2Dfg.createDfMatrix(dfg, pos_dfg, neg_dfg);
+		dfMatrix.setStandardCardinality(num);
 		
 		return dfMatrix;
 	}

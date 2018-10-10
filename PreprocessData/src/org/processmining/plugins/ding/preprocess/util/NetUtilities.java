@@ -245,6 +245,8 @@ public class NetUtilities {
 							// if we find out token missing, then we need to change to another branch
 							if(isTokenMissing(sp, net, loop_count + 1)) 
 								break;
+							else
+								tnum = (Integer)sp.getAttributeMap().get(Configuration.TOKEN);
 						}else {
 							// if we check all the loops, decide to change to another branch
 							break;
