@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.deckfour.xes.classification.XEventClass;
+import org.deckfour.xes.classification.XEventClasses;
+import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
@@ -98,6 +101,41 @@ public class NetUtilities {
         }
 		return cnet;
 	}
+	
+	public static Map<Transition, XEventClass> getTransition2EventMap(XLog log, Petrinet net, XEventClassifier classifier) {
+		// too complex, so now, I will just change back original ones.
+		Map<Transition, XEventClass> map = new HashMap<Transition, XEventClass>();
+		Collection<Transition> transitions = net.getTransitions();
+		XEventClasses classes = null;
+		
+		if(classifier != null && log.getClassifiers().contains(classifier)) 
+			classes = XLogInfoFactory.createLogInfo(log).getEventClasses(classifier);
+		else
+			classes = XLogInfoFactory.createLogInfo(log).getNameClasses();
+		
+		XEventClass tauClassinLog = new XEventClass(Configuration.Tau_CLASS, classes.size());
+		
+		boolean match;
+		for (Transition transition : transitions) {
+			match = false;
+			for (XEventClass eventClass : classes.getClasses()) { // transition.getLabel()
+				// here we need to create a mapping from event log to graphs 
+				if (eventClass.getId().equals(transition.getAttributeMap().get(AttributeMap.LABEL))) {
+					map.put(transition, eventClass);
+					match = true;
+					break;
+				}
+			}
+			if(! match) {
+				map.put(transition, tauClassinLog);
+			}
+		}
+		// three cases: silent transition
+		// in net but not shown in event, how to match them??? Then return null
+		// in event log but not in net  // return null .
+		return map; 
+	}
+	
 	
 	public static Map mapNet(Petrinet fnet, Petrinet tnet) {
 		Map<PetrinetNode, PetrinetNode> nodeMap = new HashMap<PetrinetNode, PetrinetNode>();

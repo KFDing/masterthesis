@@ -97,6 +97,8 @@ public class EventLogUtilities {
 		return map; 
 	}
 	
+	
+	
 	public static void exportSingleLog(XLog log, String targetName) throws IOException {
 		FileOutputStream out = new FileOutputStream(targetName);
 		XSerializer logSerializer = new XesXmlSerializer();

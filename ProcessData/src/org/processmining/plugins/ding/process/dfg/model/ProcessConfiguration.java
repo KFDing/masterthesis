@@ -21,6 +21,13 @@ public class ProcessConfiguration extends Configuration{
 	public static final int WEIGHT_RANGE = 20;
 
 	public static final int WEIGHT_VALUE = 10;
+
+
+	public static final int RULESET_IDX_NUM= 3;
+	
+	public static final int RULESET_EXISTING_IDX = 1;
+	public static final int RULESET_POS_IDX = 1;
+	public static final int RULESET_NEG_IDX = 2;
 	
 	public enum ViewType {
 		Dfg, ProcessTree, PetriNet
