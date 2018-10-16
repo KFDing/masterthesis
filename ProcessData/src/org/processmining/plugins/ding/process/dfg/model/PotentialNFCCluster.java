@@ -17,6 +17,7 @@ package org.processmining.plugins.ding.process.dfg.model;
  */
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
@@ -64,9 +65,14 @@ public class PotentialNFCCluster {
 	
 	
 	public void buildRuleSet() {
-		for(XorSplitCluster cluster: NFCClusters) {
+		Iterator<XorSplitCluster> iter =  NFCClusters.iterator();
+		while(iter.hasNext()) {
+			XorSplitCluster cluster =  iter.next();
 			List<PetrinetNode> nfcNodes = cluster.getNFSet();
-			if(! cluster.isComplete()) {
+			if(nfcNodes.size() < 1) {
+				// it is empty and then we need to remove it 
+				iter.remove();
+			}else if(! cluster.isComplete()) {
 				for(PetrinetNode node : nfcNodes)
 					nfcRules.add(node);
 			}
