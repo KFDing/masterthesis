@@ -23,6 +23,7 @@ import java.util.List;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 
 public class PotentialNFCCluster {
+
 	private PetrinetNode keyNode;
 	List<XorSplitCluster> NFCClusters ;
 	List<PetrinetNode> nfcRules;
@@ -32,7 +33,6 @@ public class PotentialNFCCluster {
 		NFCClusters = new ArrayList<XorSplitCluster>();
 		nfcRules = new ArrayList<PetrinetNode>();
 	}
-	
 	public List<XorSplitCluster> getNFCClusters() {
 		return NFCClusters;
 	}
@@ -59,7 +59,6 @@ public class PotentialNFCCluster {
 	 * return the ruleSet with <Transition, Transition>
 	 */
 	public List<PetrinetNode> getRuleSet() {
-		
 		return nfcRules;
 	}
 	
@@ -73,8 +72,7 @@ public class PotentialNFCCluster {
 				// it is empty and then we need to remove it 
 				iter.remove();
 			}else if(! cluster.isComplete()) {
-				for(PetrinetNode node : nfcNodes)
-					nfcRules.add(node);
+				nfcRules.addAll(nfcNodes);
 			}
 		}
 	}

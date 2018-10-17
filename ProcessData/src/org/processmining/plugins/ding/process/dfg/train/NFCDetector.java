@@ -45,6 +45,7 @@ public class NFCDetector {
 	Map<Place, List<PetrinetNode>> xorJoinSet ;
 	Map<Place, List<PetrinetNode>> xorSplitSet ;
 	Map<PetrinetNode, PotentialNFCCluster> totalCluster ;
+	Map<PetrinetNode, PotentialNFCCluster> reducedCluster ;
 	List<PetrinetNode> addedPlaces;
 	Map<Transition, XEventClass> maps;
 	
@@ -234,42 +235,9 @@ public class NFCDetector {
 				
 	}
 	
-	public void removeNFCConstraints() {
-		// one problem here, maybe there are old different ones in the net, not the newerst ones here, 
-		// so we need to put it before we reduce such things. 
-		for(PetrinetNode ruleKey: totalCluster.keySet()) {
-			
-			PotentialNFCCluster pCluster = totalCluster.get(ruleKey);
-			for(XorSplitCluster cluster: pCluster.getNFCClusters()) {
-				// no matter it complete or not complete, we need to delete the existing global dependency
-				// here, if we get the targets are empty, but they have connection, then how to find them
-				// and delete them?? 
-				// here we need to at first get the structure in the net and then compare it with 
-				// found rules.. we delete some structure before;; 
-				// how to find them back?? I wonder, we could do it from xorSplitSet or xorJoinSet
-				// we make different combinations and check if they exist, if exist, we delete them
-				// so we could consider it as an proprocess of this parts. 
-				List<PetrinetNode> targets = cluster.getNFSet();
-				for(PetrinetNode ruleTarget: targets) {
-						// delete the structure of NFC structure, but we can also put it somewhere else
-						List<PetrinetNode> nfcNodes = getNFCConnection(ruleKey, ruleTarget);
-						if(! nfcNodes.isEmpty()) {
-							// removing we need to check actually is one ruleKey to the cluster, so 
-							// ruleTarget is only a small part
-						
-						   net.removeArc(ruleKey, nfcNodes.get(0));
-						   for(int i=0;i< nfcNodes.size() -1;i++) 
-								net.removeArc(nfcNodes.get(i), nfcNodes.get(i+1));
-							
-						   net.removeArc( nfcNodes.get(-1), ruleTarget);
-						}
-					}
-			}
-		}
-	}
 	// at preprocess part
 	public void removeNFC() {
-		// we need to say that they are global dependency
+		// we need to say that they have global dependency
 		for(Place pXORJoin: xorJoinSet.keySet()) {
 			List<PetrinetNode> joinNodes = xorJoinSet.get(pXORJoin);
 			
@@ -289,8 +257,16 @@ public class NFCDetector {
 						   net.removeArc(jNode, nfcNodes.get(0));
 						   for(int i=0;i< nfcNodes.size() -1;i++) 
 								net.removeArc(nfcNodes.get(i), nfcNodes.get(i+1));
-							
-						   net.removeArc( nfcNodes.get(-1), sNode);
+						
+						   net.removeArc( nfcNodes.get(nfcNodes.size() - 1), sNode);
+						   
+						   for(int i=0;i< nfcNodes.size() -1;i++) {
+							   if(nfcNodes.get(i) instanceof Place)
+								   net.removePlace((Place) nfcNodes.get(i));
+							   else if(nfcNodes.get(i) instanceof Transition)
+								   net.removeTransition((Transition) nfcNodes.get(i));
+						   }
+						   
 						}
 					}
 				
@@ -315,8 +291,8 @@ public class NFCDetector {
 		if(totalCluster.size()<1)
 			return;
 		// at this step there are already the only cluster with uncomplete structures. 
-		for(PetrinetNode ruleKey: totalCluster.keySet()) {
-			PotentialNFCCluster pCluster = totalCluster.get(ruleKey);
+		for(PetrinetNode ruleKey: reducedCluster.keySet()) {
+			PotentialNFCCluster pCluster = reducedCluster.get(ruleKey);
 			
 			for(XorSplitCluster cluster: pCluster.getNFCClusters()) {
 				if(cluster.isComplete())
@@ -334,7 +310,7 @@ public class NFCDetector {
 					// A->G and B->H, one place before G
 					// and then if we change to another structure we create new nodes. 
 					// E->G and D->G or D->H we have another place before G, which is different 
-					// now, how to distinguish them?? 
+					// now, we distinguish them by names
 					addOneClusterConstaint(cluster, node);
 				}
 				
@@ -345,10 +321,22 @@ public class NFCDetector {
 	
 	private void addOneClusterConstaint(XorSplitCluster refCluster, PetrinetNode ruleSource) {
 		// what we want to add is the corresponding cluster not the whole structure,
-		int i=0;
-		XorSplitCluster cluster = null;
 		// we need to get the cluster from refCluster
 		// -- check all the cluster of ruleSource 
+		/*
+		System.out.println(ruleSource.getLabel()+" with " + refCluster.getName());
+		
+		if(!totalCluster.containsKey(ruleSource)) {
+			// if we don't have any information about it 
+		}
+		System.out.println(ruleSource.getLabel()+" with " + refCluster.getName());
+		if(pCluster.getNFCClusters().isEmpty()) {
+			System.out.println(ruleSource.getLabel()+" with " + refCluster.getName()+" pcluster is empty, which is not so often, I think, must something happens.."
+					+ "how about D?? ");
+			return;
+		}
+		*/
+		XorSplitCluster cluster = null;
 		PotentialNFCCluster pCluster = totalCluster.get(ruleSource);
 		for(XorSplitCluster c: pCluster.getNFCClusters()) {
 			if(c.inSameStructure(refCluster)) {
@@ -366,7 +354,7 @@ public class NFCDetector {
 		// of another way, like to combine the cluster information?? 
 		Place postNode = (Place) getAddedPostPlace(ruleSource, cluster);
 		if(postNode == null) {
-			postNode = net.addPlace("Place After "+ ruleSource.getLabel() + cluster.getName() + (i++));
+			postNode = net.addPlace("Place After "+ ruleSource.getLabel() + cluster.getName());
 			addedPlaces.add(postNode);
 			net.addArc((Transition) ruleSource, postNode);
 		}
@@ -383,7 +371,7 @@ public class NFCDetector {
 			preNode = (Place) getAddedPrePlace(ruleTarget, ruleSource);
 			// to get the place before this ruleTarget
 			if(preNode == null) {
-				preNode = net.addPlace("Place Before "+  getSameStructureName(ruleSource) + ruleTarget.getLabel() + (i++));
+				preNode = net.addPlace("Place Before "+  getSameStructureName(ruleSource) + ruleTarget.getLabel());
 				addedPlaces.add(preNode);
 				net.addArc(preNode, (Transition) ruleTarget);
 			}
@@ -402,7 +390,7 @@ public class NFCDetector {
 		// we need to get the same structure of ruleSource  and check if it exists
 		
 		for(PetrinetNode p: addedPlaces) {
-			if(p.getLabel().contains(target.getLabel())  &&  p.getLabel().contains(getSameStructureName(source)) && p.getLabel().contains("After"))
+			if(p.getLabel().contains(target.getLabel())  &&  p.getLabel().contains(getSameStructureName(source)) && p.getLabel().contains("Before"))
 				return p;
 		}
 		return null;
@@ -502,7 +490,8 @@ public class NFCDetector {
 						if(((Transition)arc.getTarget()).isInvisible()) {
 							
 							List<PetrinetNode> silentPaths = getNFCConnection(arc.getTarget(), ruleTarget);
-							if(silentPaths.isEmpty()) {
+							if(!silentPaths.isEmpty()) {
+								paths.add(p);
 								paths.add(arc.getTarget());
 								paths.addAll(silentPaths);
 								match = true;
@@ -523,15 +512,17 @@ public class NFCDetector {
 		// there is no another rules between them
 		int i=0;
 		// we create a new totalCluster to represent this one!! 
-		Map<PetrinetNode, PotentialNFCCluster> newCluster = new HashMap<PetrinetNode, PotentialNFCCluster>();
+		// but we need to keep the nodes in the same structure they are also kept at end
+		// if we have E-->G, then we also keep D-->G, and D-->H
+		reducedCluster = new HashMap<PetrinetNode, PotentialNFCCluster>();
 		for(PetrinetNode ruleSource : totalCluster.keySet()) {
 			// most important is we also change ruleValue from this step
 			// then we need to assign the value differently
 			// here we should also remove the cluster which is not used like. D--> [A,B] cluster
 			List<PetrinetNode> ruleValue = totalCluster.get(ruleSource).getRuleSet();	
+				
 			Iterator<PetrinetNode> iter = ruleValue.iterator();
 			while(iter.hasNext()) {
-				newCluster.put(ruleSource, totalCluster.get(ruleSource));
 				PetrinetNode node = iter.next();
 				// check if we keep this rules, or not, only second structure
 				if(totalCluster.containsKey(node)){
@@ -543,10 +534,14 @@ public class NFCDetector {
 					}
 				}
 			}
-			// after this step, we get one ruleValue which contains possible relations
-			// test if ruleValue and iter at last the same?? 
+			
+			if(ruleValue.size() > 0 ) {
+				// here we also put the same structure into the newCluster
+				reducedCluster.put(ruleSource, totalCluster.get(ruleSource)); // because it is map, so don't worry about the repeated node	
+			}
+			
 		}
-		totalCluster = newCluster;
+		// totalCluster = reducedCluster;
 		return i;
 	}
 	
