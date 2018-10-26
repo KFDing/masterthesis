@@ -39,5 +39,9 @@ public class ProcessConfiguration extends Configuration{
 		Dfg, ProcessTree, PetriNet
 	};
 
+	public enum StructureType {
+		Sequence, Parallel, XorLoop
+	};
+	
 	public static Color COLOR_BG2 = new Color(120, 120, 120);
 }
