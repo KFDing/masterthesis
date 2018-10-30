@@ -3,6 +3,8 @@ package org.processmining.plugins.ding.process.dfg.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.processmining.processtree.Node;
+
 
 /**
  * this class is used to represent the structure of seq, parallel, loop for xor structure, 
@@ -30,6 +32,8 @@ public class XORCluster<T> {
 	private T keyNode;
 	// in its branches it have it, like the branches?? Not sure, but we could use it, that's true
 	private List<XORStructure<T>> xorList;
+	
+
 	// if in seq or parallel, there are a lot, then we need to use list to store them 
 	// but anyway, we could use the branches of one list, but lost the structure information
 	private List<XORStructure<T>> beginXORList;
@@ -42,6 +46,13 @@ public class XORCluster<T> {
 	private List<XORCluster<T>> childrenCluster;
 
 	private boolean hasXOR = false;
+	
+	// if it has no XOR structure, we need to remember the last and end node of this branch
+	// or make them into a sequence
+	private T beginNode;
+	private T endNode;
+	private T sBeginNode;
+	private T sEndNode;
 	
 	public XORCluster(T key){
 		keyNode = key;
@@ -59,6 +70,10 @@ public class XORCluster<T> {
 		this.keyNode = keyNode;
 	}
 
+	public List<XORStructure<T>> getXorList() {
+		return xorList;
+	}
+	
 	public List<XORStructure<T>> getBeginXORList() {
 		if(xorList.isEmpty())
 			return beginXORList;
@@ -160,6 +175,8 @@ public class XORCluster<T> {
 
 	// what I'm writing is the direct relation of them, if not, what to do ??
 	public List<XORPair<T>> createSpecialPair() {
+		getBeginXORList();
+		getEndXORList();
 		// if it is sequence, then we need to create the in between xor list
 		List<XORPair<T>> specialPairs =  new ArrayList<XORPair<T>>();
 		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.SEQUENCE)) {
@@ -235,5 +252,47 @@ public class XORCluster<T> {
 			}
 		}
 		return ePairs;
+	}
+
+	public T getBeginNode() {
+		// we need to create it whatever..
+		return beginNode;
+	}
+
+	public void setBeginNode(T beginNode) {
+		this.beginNode = beginNode;
+	}
+
+	public T getEndNode() {
+		return endNode;
+	}
+
+	public void setEndNode(T endNode) {
+		this.endNode = endNode;
+	}
+
+	public T getSBeginNode() {
+		return sBeginNode;
+	}
+
+	public void setSBeginNode(T sbeginNode) {
+		this.sBeginNode = sbeginNode;
+	}
+
+	public T getSEndNode() {
+		return sEndNode;
+	}
+
+	public void setSEndNode(T sendNode) {
+		this.sEndNode = sendNode;
+	}
+
+	public XORStructure<T> getXOR(Node subNode) {
+		// TODO Auto-generated method stub
+		for(XORStructure<T> xorS: xorList) {
+			if(subNode.equals(xorS.getKeyNode()))
+				return xorS;
+		}
+		return null;
 	}
 }

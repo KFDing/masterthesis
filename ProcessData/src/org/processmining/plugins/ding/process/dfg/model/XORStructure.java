@@ -23,6 +23,8 @@ import org.processmining.processtree.Node;
 public class XORStructure<T> {
 	private T keyNode;
 	private List<XORBranch<T>> branches;
+	// to record the un pure branches information, we just record the children information 
+	private boolean pure;
 	
 	private int numOfBranches;
 	// to test if it get all the xor branches
@@ -30,7 +32,6 @@ public class XORStructure<T> {
 	
 	// information to record the order of xorstructure
 	public XORStructure<T> next = null;
-
 	public XORStructure<T> previous = null;
 	
 	// in the same big structure, like in sequence or parallel, should we also record such information?? 
@@ -129,6 +130,38 @@ public class XORStructure<T> {
 	public void setBranches(List<XORBranch<T>> branches) {
 		this.branches = branches;
 	}
+
+	// the pure means there are only leaves nodes in xor structure 
+	// if it is not, we need to look for its children,
+	// we can build the currentXOR structure list and then get the begin and end branches
+	public boolean isPure() {
+		return pure;
+	}
+
+	public void setPure(boolean pure) {
+		this.pure = pure;
+	}
+	
+	public List<T> getBeginNodes(){
+		List<T> beginNodes = new ArrayList<T>();
+		for(XORBranch<T> b: branches) {
+			beginNodes.add(b.getBeginNode());
+		}
+		return beginNodes;
+	}
+	
+	public List<T> getEndNodes(){
+		List<T> endNodes = new ArrayList<T>();
+		for(XORBranch<T> b: branches) {
+			endNodes.add(b.getEndNode());
+		}
+		return endNodes;
+	}
+	
+	// if it is not pure waht to do then?? ? 
+	// we have the list and then we get all the lists from it 
+	// but something between we don't care?? 
+	
 }
 
 
