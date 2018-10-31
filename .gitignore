@@ -1,0 +1,6 @@
+/.metadata/
+/PreprocessData/bin/
+/PreprocessData/tests/
+/ProcessData/bin/
+/ProcessData/tests/
+*.jar
