@@ -23,7 +23,7 @@ import org.processmining.processtree.Node;
 public class XORStructure<T> {
 	private T keyNode;
 	private List<XORBranch<T>> branches;
-	// to record the un pure branches information, we just record the children information 
+	// to record the impure branches information, we just record the children information 
 	private boolean pure;
 	
 	private int numOfBranches;
