@@ -1,8 +1,10 @@
 package org.processmining.plugins.ding.process.dfg.transform;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
@@ -64,7 +66,17 @@ public class XORPairGenerator {
 		}
 		// addXORPairByDFS(tree.getRoot());
 		analyzeXORByDFS(tree.getRoot());
+		
+		// a test to save energy
+		if(xorList.isEmpty() || xorList.size() < 2) {
+			System.out.println("There is no xor pair for long-term dependency check");
+			return null;
+		}
 
+		// after we organize the xor structure, we create cluster
+		Set<Node> aSet = getAllAncestors();
+		buildCluster(tree.getRoot(), aSet);
+		buildPair((Block)tree.getRoot());
 		return pairList;
 	}
 	
@@ -179,11 +191,8 @@ public class XORPairGenerator {
 		// we check the list of cluster and find the parent
 		for(XORCluster<ProcessTreeElement> cluster: clusterList) {
 			// here we nned to use another method to check the existence 
-			List<Node> subNodes = block.getChildren();
-			for(Node subNode : subNodes) {
-				if(subNode.equals(block))
+			if(cluster.getKeyNode().equals(block))
 					return cluster;
-			}
 			
 		}
         System.out.println("couldn't find the xor cluster");
@@ -195,7 +204,7 @@ public class XORPairGenerator {
 		// all the relations from parent, we should keep it
 		// we need to keep all the information of it
 		String label = block.getClass().getSimpleName();
-		Block seqWithSilent = new AbstractBlock.Seq(label +"_New_Seq");
+		Block seqWithSilent = new AbstractBlock.Seq(label +ProcessConfiguration.NEW_SEQUENCE);
 		seqWithSilent.setProcessTree(block.getProcessTree());
 		block.getProcessTree().addNode(seqWithSilent);
 		
@@ -227,183 +236,6 @@ public class XORPairGenerator {
 		return null;
 	}
 
-	
-	private List<XORStructure<ProcessTreeElement>> sourceXORForPair;
-	/**
-	 * this mehtod is used to create XORPair from XORList, but still we need to consider the structure of process tree
-	 * after visit the process tree, we have xorList
-	 *  now we need to create the xor pair
-	 *   -- for i and j to visit the xorlist
-	 *   for the current xor i and j structure, we need to know if they are direct connected
-		// if they are, then we will create a pair of it
-		// but during the retrieve of them, we can set the current and previous list of xor to use
-		// and then create the current and previous list pair from them
-		//   but how to create the 
-	 * @param block
-	 */
-	
-	// the easiest way to do is creat all combinations of them, but, we need to find the direct following node
-	// now we only consider to find the direct following xor of current xor 
-	// we visit the process tree 
-	// and put the structure of xor in stateStack
-	// then we visit the stateStack of them 
-	private void buildXORPairs() { 
-		// we need to create the cluster at first, only consider no-nested xor structure
-		if(xorList.isEmpty() || xorList.size() < 2) {
-			System.out.println("There is no xor pair for long-term dependency check");
-			return ;
-		}
-		
-		// if there is xor structure for pair >=2
-		// we use them as an stack, and push and pop
-		
-		List<Integer> nextXORList = new ArrayList<Integer>();
-		int currentIdx = 0, nextIdx;
-		
-		while(currentIdx< xorList.size() - 1) {
-			
-			nextIdx = currentIdx +1;
-			while(nextIdx < xorList.size()) {
-				if(inDirectNextOrder(currentIdx, nextIdx)) {
-					nextXORList.add(nextIdx);
-					nextIdx ++;
-				}
-			}
-			// after we have it, we create pairs of them
-			pairList.addAll(createXORPair(currentIdx, nextXORList));
-			currentIdx ++;
-		}
-		
-		
-	}
-	
-	private List<XORPair<ProcessTreeElement>> createXORPair(int sourceIdx,
-			List<Integer> nextXORList) {
-		
-		List<XORPair<ProcessTreeElement>> pList = new ArrayList<XORPair<ProcessTreeElement>>();
-		XORStructure<ProcessTreeElement> xorSource, xorTarget;
-		xorSource = xorList.get(sourceIdx);
-		
-		for( int i: nextXORList) {
-			xorTarget = xorList.get(i);
-			
-			XORPair<ProcessTreeElement> pair = new XORPair<ProcessTreeElement>();
-			pair.setSourceXOR(xorSource);
-			pair.setTargetXOR(xorTarget);
-			pList.add(pair);
-		}
-		
-		return pList;
-	}
-	
-	private boolean inDirectNextOrder(int currentIdx, int nextIdx) {
-		// to check if the currentXOR and nextXOR are the next
-		// how to define the next order relation? 
-		// if they are in seq, so we can define it good
-		if(currentIdx >= nextIdx)
-			return false;
-		// we need to get the currentIdx and nextIdx
-		// if they have the same parent and parent is what ?? 
-		Node currentNode = (Node) xorList.get(currentIdx).getKeyNode();
-		Node nextNode = (Node) xorList.get(nextIdx).getKeyNode();
-		Block cparent = getParent(currentNode);
-		Block nparent = getParent(nextNode);
-		if(cparent.equals(nparent)) {
-			if(cparent.getClass().getSimpleName().equals(ProcessConfiguration.SEQUENCE)) {
-				// so they are the direct next one
-				if(currentIdx + 1 == nextIdx)
-					return true;
-				else
-					return false;
-			}else { // if(cparent.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL)) 
-				return false; // they don't have direct order, only happen in sequence
-			}
-		}else {
-			// they don't have the same parent, so we need to figure in which situation they are direct next
-			// if they are not in the same order, not in parallel, we can be sure 
-			
-		}
-		
-		return false;
-	}
-
-	private List<Integer> getSameOrderXOR(int currentIdx){
-		List<Integer> sameIdxs = new ArrayList<Integer>();
-		
-		// we check from the current to later 
-		
-		Node currentNode = (Node) xorList.get(currentIdx).getKeyNode();
-		List<Node> cancestors = getParallelAncestors(currentNode);
-		if( cancestors.isEmpty()) {
-			// there is no parallel ancestors, so we set it none
-			return null;
-		}
-		
-		int nextIdx = currentIdx + 1;
-		Node nextNode = (Node) xorList.get(nextIdx).getKeyNode();
-		
-		Block cparent = getParent(currentNode);
-		Block nparent = getParent(nextNode);
-		
-		while(nextIdx < xorList.size()) {
-			// if currentNode and nextNode in the same order 
-			if(cparent.equals(nparent) && cparent.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL)) {
-				sameIdxs.add(nextIdx);
-				
-			}else {
-				// if they don't have same parent 
-				// check if one of the xor has parallel parent.. 
-				List<Node> nancestors = getParallelAncestors(nextNode);
-				if( nancestors.isEmpty()) {
-					// there is no parallel ancestors for the nextNode, what to do ?? So we
-					continue;
-				}else {
-					// nextNode has parallel ancestors;; check the relation of them.. 
-					// get the common parallel ancestors of current and nextNode
-					for(Node cp : cancestors) {
-						if(nancestors.contains(cp)) {
-							// if cp is the common parallel ancestor
-							// in same order, if they are first visited in the parallel branches
-							// or last visited
-							if(firstXORVisited(currentNode, cp) && firstXORVisited(nextNode, cp) || 
-									(lastXORVisited(currentNode, cp) && lastXORVisited(nextNode, cp))) {
-								sameIdxs.add(nextIdx);
-							}
-						}
-					}
-					
-					
-					
-				}
-			}
-			nextIdx++;
-		}
-		
-		return sameIdxs;
-	}
-
-	private boolean lastXORVisited(Node currentNode, Node cp) {
-		// last visited node in the parallel branch 
-		return false;
-	}
-
-	private boolean firstXORVisited(Node currentNode, Node pancestor) {
-		// to check if currentNde is firstly visted by the pp on its own branch
-		List<Node> cancestor = getAncestors(currentNode);
-		
-		Block block = (Block) pancestor;
-		List<Node> subNodes = block.getChildren();
-		
-		for(Node subNode : subNodes) {
-			if(cancestor.contains(subNode)) {
-				// we go to the branch of currentNode
-				
-				
-			}
-		}
-		
-		return false;
-	}
 
 	private List<Node> getAncestors(Node currentNode) {
 		// TODO Auto-generated method stub
@@ -436,20 +268,123 @@ public class XORPairGenerator {
 		
 		return ancestors;
 	}
+	private Set<Node> getAllAncestors(){
+		Set<Node> aSet = new HashSet<Node>();
+		for(XORStructure<ProcessTreeElement> xorStructure : xorList) {
+			aSet.addAll(getAncestors((Node) xorStructure.getKeyNode()));
+		}
+		return aSet;
+	}
 
 	// I want to generate the xor cluster for each xor and then check the relation of 
-	private void buildXORCluster() {
-		if(xorList.isEmpty() || xorList.size() < 2) {
-			System.out.println("There is no xor pair for long-term dependency check");
-			return ;
-		}
-		int i=0;
+	private XORCluster<ProcessTreeElement> buildCluster(Node node, Set<Node> aSet) {
+		// but now how to generate the pair from clusterList?? 
+		Block block = (Block) node;
+		System.out.println("visit block name: " + block.getClass().getSimpleName());
 		
-		while(i<xorList.size()) {
-			
+		XORCluster<ProcessTreeElement> cluster =  new XORCluster<ProcessTreeElement>(block);
+		clusterList.add(cluster);
+		
+		List<Node> subNodes = block.getChildren();
+		for(Node subNode : subNodes) {
+			if(subNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR)) {
+				// it we meet directly the xor structure, what to do ?? 
+				// we should create one cluster and then we can add it 
+				// do we need to do it ?? Yes, we need to do it !! 
+				XORCluster<ProcessTreeElement> xorCluster = createXORCluster(subNode);
+				clusterList.add(xorCluster);
+				// but how to know if we should do it again or not?? 
+				xorCluster.parentCluster = cluster;
+				cluster.addChilrenCluster(xorCluster);
+			}else if(aSet.contains(subNode)) {
+				// we go deep part, one thing we need to notice is that the ancestors not include itself
+				XORCluster<ProcessTreeElement> subCluster = buildCluster(subNode, aSet);
+				// here is not enough for us... Because we need to get the relation of children cluster
+				subCluster.parentCluster = cluster;
+				cluster.addChilrenCluster(subCluster);
+			}
 		}
+		return cluster;
 	}
 	
+	private void buildPair(Block block) {
+		
+		// we also need to visit the process tree to get the xor pair
+		System.out.println("visit block name: " + block.getClass().getSimpleName());
+		
+		XORCluster<ProcessTreeElement> cluster = getCluster(block);
+		if(cluster!=null) {
+			// stateStack.push(block.getClass().getSimpleName()); // whatever it needs
+			List<XORCluster<ProcessTreeElement>> childrenCluster = cluster.getChildrenCluster();
+			for(XORCluster<ProcessTreeElement> child : childrenCluster) {
+				// still not good effect... Nanan, because one level missed it
+				if(!child.isAvailable()) {
+					buildPair((Block)child.getKeyNode());
+				}
+				
+			}
+			// we need to go the deep down level and get the begin and end xor list from them
+			// why can't we goes here directly?? Because the child.isAvailable, why can't it go here?? 
+			
+			if(cluster.isSeqCluster()) { // all the elements are available, so we just do use it 
+				// we get the begin and end list of xor of them 
+				if(cluster.getChildrenCluster().size() < 2) {
+					System.out.println("too few xor in sequence to connect it");
+				}else {
+					List<XORStructure<ProcessTreeElement>> sourceXORList = null;
+					List<XORStructure<ProcessTreeElement>> targetXORList = null;
+					// should we move to the next element ?? Not really
+					XORCluster<ProcessTreeElement> child ;
+					sourceXORList = childrenCluster.get(0).getEndXORList();
+					int i=1;
+					// if there is only one, then what to do ??? we need to keep actually the last node to the next one!!!
+					while(i< childrenCluster.size()) {
+						child = childrenCluster.get(i);
+						targetXORList = child.getBeginXORList();
+						 if(!sourceXORList.equals(targetXORList)) {
+							 // create from the two xor list
+							 pairList.addAll(createPair(sourceXORList, targetXORList));
+						 }
+						 
+						sourceXORList = child.getEndXORList();
+						i++;
+					}
+				}// if it is parallel, what to do ?? it seems nothing?? 
+			
+			}
+			cluster.setAvailable(true);	
+		}
+		
+	}
+	
+	private List<XORPair<ProcessTreeElement>> createPair(List<XORStructure<ProcessTreeElement>> sourceXORList,
+			List<XORStructure<ProcessTreeElement>> targetXORList) {
+		
+		List<XORPair<ProcessTreeElement>> pList = new ArrayList<XORPair<ProcessTreeElement>>();
+		
+		for(XORStructure<ProcessTreeElement> xorSource : sourceXORList)
+			for(XORStructure<ProcessTreeElement> xorTarget: targetXORList) {
+				XORPair<ProcessTreeElement> pair = new XORPair<ProcessTreeElement>();
+				pair.setSourceXOR(xorSource);
+				pair.setTargetXOR(xorTarget);
+				pList.add(pair);
+				
+			}
+			
+		return pList;	
+	}
+	
+	private XORCluster<ProcessTreeElement> createXORCluster(Node node) {
+		// TODO create the xor cluster to store xor structure
+		XORCluster<ProcessTreeElement> xorCluster =  new XORCluster<ProcessTreeElement>(node);
+		XORStructure<ProcessTreeElement> xorStructure = getXORStructure(node);
+		// List<XORStructure<ProcessTreeElement>> tmpXORList = new ArrayList<XORStructure<ProcessTreeElement>>();
+		xorCluster.addXORStructure(xorStructure);
+		
+		xorCluster.childrenCluster =null;
+		return xorCluster;
+	}
+
 	private Block getParent(Node currentNode) {
 		// TODO Auto-generated method stub
 		return currentNode.getParents().iterator().next();
@@ -485,6 +420,11 @@ public class XORPairGenerator {
 	        XORPairGenerator generator = new XORPairGenerator();
 	        List<XORPair<ProcessTreeElement>> pairs = generator.generateXORPairs(tree);
 	        System.out.println(pairs.size());
+	        for(XORPair<ProcessTreeElement> p: pairs) {
+	        	System.out.println(p.getSourceXOR().getKeyNode());
+	        	System.out.println(p.getTargetXOR().getKeyNode());
+	        }
+	        
 	        return tree;
 	 } 
 	

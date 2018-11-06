@@ -33,7 +33,7 @@ public class ProcessConfiguration extends Configuration{
 	public static final String PARALLEL = "And";
 	public static final String LOOP = "XorLoop";
 	public static final String XOR_BRANCH = "Xor Branch";
-	public static final String NEW_SEQUENCE = "New_Seq";
+	public static final String NEW_SEQUENCE = "My_New_Seq";
 	
 	
 	public enum ViewType {

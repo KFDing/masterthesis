@@ -42,11 +42,12 @@ public class XORCluster<T> {
 	// to record the previous structure, or we only to remember the parents, it's already fine?? 
 	public XORCluster<T> previousCluster;
 	// here we see it has only one parent 
-	private XORCluster<T> parentCluster;
-	private List<XORCluster<T>> childrenCluster;
+	public XORCluster<T> parentCluster;
+	public List<XORCluster<T>> childrenCluster;
 
 	private boolean hasXOR = false;
 	
+	private boolean available = false;
 	// if it has no XOR structure, we need to remember the last and end node of this branch
 	// or make them into a sequence
 	private T beginNode;
@@ -59,7 +60,6 @@ public class XORCluster<T> {
 		xorList =  new ArrayList<XORStructure<T>>();
 		beginXORList = new ArrayList<XORStructure<T>>();
 		endXORList = new ArrayList<XORStructure<T>>();
-		childrenCluster = new ArrayList<XORCluster<T>>();
 	}
 	
 	public T getKeyNode() {
@@ -75,13 +75,18 @@ public class XORCluster<T> {
 	}
 	
 	public List<XORStructure<T>> getBeginXORList() {
-		if(xorList.isEmpty())
+		// here maybe some problem, actually 
+		if(!beginXORList.isEmpty())
 			return beginXORList;
 		
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.SEQUENCE)) {
-			// we will set the first one in xorList as the begin
-			beginXORList.add(xorList.get(0));
-		}else if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL)) {
+		if(isSeqCluster()) {
+			// even if there are some elements in seq, but we're not sure about the sequence, so we can't do it 
+			// we just go to the first childrenCluster
+			XORCluster<T> cluster = childrenCluster.get(0);
+				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
+			beginXORList.addAll(cluster.getBeginXORList());
+			
+		}else if(isParallelCluster()) {
 			// beginXORList can be inferred from the xorList?? Right?? 
 			// we really need to consider about the sequence and other stuffs here!! 
 			// ok they can be across of them selfs, what we need is to get it from the childen parts
@@ -90,10 +95,13 @@ public class XORCluster<T> {
 				beginXORList.addAll(cluster.getBeginXORList());
 			}
 			
+		}else if(isXORCluster()) {
+			beginXORList.add(xorList.get(0));
 		}
 		return beginXORList;
 	}
 
+	
 	public void setBeginXORList(List<XORStructure<T>> beginXORList) {
 		this.beginXORList = beginXORList;
 	}
@@ -103,13 +111,17 @@ public class XORCluster<T> {
 	}
 	
 	public List<XORStructure<T>> getEndXORList() {
-		if(xorList.isEmpty())
+		if(!endXORList.isEmpty())
 			return endXORList;
 		
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.SEQUENCE)) {
-			// we will set the first one in xorList as the begin
-			endXORList.add(xorList.get(xorList.size() - 1));
-		}else if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL)) {
+		// then how to check if it is really empty or not?? OR we need to assign already the xor to it ?? 
+		// I don't think so, we need to get it from the children cluster;; There is no cluster without the begin and end
+		if(isSeqCluster()) {
+			XORCluster<T> cluster = childrenCluster.get(childrenCluster.size() - 1);
+			// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
+			endXORList.addAll(cluster.getEndXORList());
+			
+		}else if(isParallelCluster()) {
 			// beginXORList can be inferred from the xorList?? Right?? 
 			// we really need to consider about the sequence and other stuffs here!! 
 			// ok they can be across of them selfs, what we need is to get it from the childen parts
@@ -118,6 +130,8 @@ public class XORCluster<T> {
 				endXORList.addAll(cluster.getEndXORList());
 			}
 			
+		}else if(isXORCluster()) {
+			endXORList.add(xorList.get(xorList.size() - 1));
 		}
 		return endXORList;
 	}
@@ -147,15 +161,13 @@ public class XORCluster<T> {
 	}
 	
 	public void addChilrenCluster(XORCluster<T> cluster) {
-		
+		if(childrenCluster == null)
+			childrenCluster = new ArrayList<XORCluster<T>>();
 		childrenCluster.add(cluster);
-		
 	}
 	
 	public void addXORStructure(XORStructure<T> xorS) {
 		xorList.add(xorS);
-		
-		
 	}
 	// one method to generate pair into pairList from current information, 
 	// but here are some other information, how to find them and combine them together?? 
@@ -173,6 +185,43 @@ public class XORCluster<T> {
 		this.hasXOR = hasXOR;
 	}
 
+	public boolean isXORCluster() {
+		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR))
+			return true;
+		return false;
+	}
+	
+	public boolean isSeqCluster() {
+		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.SEQUENCE))
+			return true;
+		return false;
+	}
+	public boolean isParallelCluster() {
+		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL))
+			return true;
+		return false;
+	}
+	
+	
+	public List<XORPair<T>> createInsidePair() {
+		// we just try if we could do it, and later we try this at first,
+		if(isXORCluster()) {
+			// if it is an xor we can't create it 
+			return null;
+		}
+		if(isSeqCluster()) {
+			// if it is sequence, then we need to do what?? 
+			for(XORCluster<T> child: childrenCluster) {
+				if(child.isXORCluster()) {
+					
+				}
+				
+			}
+			
+		}
+		return null;
+	}
+	
 	// what I'm writing is the direct relation of them, if not, what to do ??
 	public List<XORPair<T>> createSpecialPair() {
 		getBeginXORList();
@@ -206,6 +255,8 @@ public class XORCluster<T> {
 				specialPairs.addAll(createPairWithEndXOR(xorList.get(i), false));
 			}
 		}
+		if(specialPairs.size()<1)
+			return null;
 		return specialPairs;
 	}
 	/**
@@ -294,5 +345,19 @@ public class XORCluster<T> {
 				return xorS;
 		}
 		return null;
+	}
+
+	// we need to set the available into true or false
+	// situation is that, if it's xor cluster, then return true
+	// if not, we check the children, direct available, I mean 
+	public void setAvailable(boolean value) {
+		available = value;
+	}
+	
+	public boolean isAvailable() {
+		if(isXORCluster()) // if it is xor, then ok, else check each child to see if they are available
+			available = true;
+		
+		return available;
 	}
 }
