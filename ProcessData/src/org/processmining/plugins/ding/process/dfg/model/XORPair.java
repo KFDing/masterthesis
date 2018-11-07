@@ -25,8 +25,8 @@ public class XORPair<T>{
 	XORStructure<T> targetXOR;
 	
 	List<LTConnection<T>> connections;
-	boolean completeConnection = false;
-	
+	boolean completeConnection = true;
+	List<LTConnection<T>> ltDep ;
 	
 	public XORStructure<T> getSourceXOR() {
 		return sourceXOR;
@@ -67,17 +67,82 @@ public class XORPair<T>{
 		
 	}
 	
+	public List<LTConnection<T>> getLTConnections(){
+		if(connections.isEmpty()){
+			createLTConnection();
+		}
+		return connections;
+	}
+	
 	// if we generate places, we need to get the branch at first and at last element but it is later
 	// a global dependency we need to judge for all the data if they complete, it means that all the branches has
 	// connection then we can do it 
-	public void checkConnection() {
-		// to decide if completeConnection 
+	public List<LTConnection<T>> checkBranchConnection(List<LTConnection<T>> sourceConns) {
+		
+		for(int i=0; i< sourceConns.size(); i++) {
+			LTConnection<T> conn = sourceConns.get(i);
+			// if it doesn't support the connection, so we don't use it 
+			if(!conn.testSupportConnection()) 
+				sourceConns.remove(i);
+				
+		}
+		return sourceConns;
 	}
+	
+	private List<LTConnection<T>> getBranchConnection(XORBranch<T> branch) {
+		// to decide if completeConnection for one branch in source XOR 
+		List<LTConnection<T>> sourceConns = new ArrayList<LTConnection<T>>();
+		for(LTConnection<T> conn : connections) {
+			// if it is complete, or not!!! // so we need to create the list of each source and target
+			if(conn.getFirstBranch().equals(branch))
+				sourceConns.add(conn);
+		}
+		return sourceConns;
+	}
+	
 	
 	// if not complete connection we need to generate the places for Petri net
 	// at first we can put them into some rules, I guess
-	public void generateLTDependency() {
-		
+	public List<LTConnection<T>> generateLTDependency() {
+		ltDep =  new ArrayList<LTConnection<T>>();
+		// because they relative the whole xor structure, so we generate it here 
+		for(XORBranch<T> branch : sourceXOR.getBranches()) {
+			List<LTConnection<T>> branchConns = getBranchConnection(branch);
+			int num = branchConns.size();
+			
+			if(checkBranchConnection(branchConns).size() < num) {
+				completeConnection = false;
+				ltDep.addAll(branchConns);
+			}
+		}
+		// there is no lt dependency
+		if(completeConnection) {
+			return null;
+		}else {
+			return ltDep;
+		}
 	}
+	
+	public boolean hasCompleteConnection() {
+		int num = connections.size();
+		ltDep =  new ArrayList<LTConnection<T>>();
+		
+		for(int i=0; i< connections.size(); i++) {
+			LTConnection<T> conn = connections.get(i);
+			// if it doesn't support the connection, so we don't use it 
+			if(conn.testSupportConnection()) 
+				ltDep.add(conn);
+		}
+		
+		if(num > connections.size()) {
+			completeConnection = false;
+		}
+		return completeConnection;
+	}
+	
+	public List<LTConnection<T>> getLTDependency() {
+		return ltDep;
+	}
+	
 	
 }

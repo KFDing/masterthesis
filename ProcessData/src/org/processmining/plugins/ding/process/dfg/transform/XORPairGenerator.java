@@ -12,6 +12,8 @@ import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
 import org.processmining.plugins.ding.process.dfg.model.XORBranch;
 import org.processmining.plugins.ding.process.dfg.model.XORCluster;
@@ -428,5 +430,20 @@ public class XORPairGenerator {
 	        return tree;
 	 } 
 	
+	// after this we need to connect the process tree with petri net
+	// after we use the dfg structure, we have it and then we use it to get the pair, what would you like to have here??
+	// input the process tree, and petri net ?
+	// output, transfered xor pair list?? So input should also have the xor pair??   
+	// it is too much to create some transfer, so I just do it at end, 
+	// at first to get the LTDepenency from event log and then do it 
+	public List<XORPair<PetrinetNode>> transferXORPairFormat(ProcessTree tree, Petrinet net, List<XORPair<ProcessTreeElement>> treePairs){
+		List<XORPair<PetrinetNode>> netPairs =  new ArrayList<XORPair<PetrinetNode>>();
+		for(XORPair<ProcessTreeElement> tPair: treePairs) {
+			
+			
+		}
+		
+		return null;
+	}
 	
 }

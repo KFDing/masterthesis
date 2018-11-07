@@ -18,13 +18,14 @@ public class LTConnection<T>{
 		return supportConnection;
 	}
 
-	public void testSupportConnection() {
+	public boolean testSupportConnection() {
 		// this method test if supportConnection of such branches, we only need to compare the 
 		// values of connectionValues, and give the value to it
 		if(connectionValues.get(posIdx)> connectionValues.get(negIdx)) 
 			supportConnection = true;
 		else
 			supportConnection = false;
+		return supportConnection;
 	}
 
 	public LTConnection(XORBranch<T> first, XORBranch<T> second) {
