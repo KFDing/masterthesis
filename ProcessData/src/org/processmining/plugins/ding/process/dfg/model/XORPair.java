@@ -68,7 +68,7 @@ public class XORPair<T>{
 	}
 	
 	public List<LTConnection<T>> getLTConnections(){
-		if(connections.isEmpty()){
+		if(connections == null){
 			createLTConnection();
 		}
 		return connections;
@@ -134,7 +134,7 @@ public class XORPair<T>{
 				ltDep.add(conn);
 		}
 		
-		if(num > connections.size()) {
+		if(num > ltDep.size()) {
 			completeConnection = false;
 		}
 		return completeConnection;

@@ -21,6 +21,11 @@ import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
+import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
+import org.processmining.framework.plugin.PluginContext;
+import org.processmining.framework.plugin.annotations.Plugin;
+import org.processmining.framework.plugin.annotations.PluginLevel;
+import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.models.graphbased.directed.AbstractDirectedGraph;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
@@ -53,48 +58,76 @@ public class LTDependencyDetector {
 	ProcessTree tree;
 	XLog log;
 	// from process tree
-	List<XORPair<ProcessTreeElement>> pairList;
+	// List<XORPair<ProcessTreeElement>> pairList;
 	Map<Node, XEventClass> maps;
-	Petrinet net;
-	public LTDependencyDetector(ProcessTree tree, XLog log) {
-		this.tree = tree;
-		this.log = log;
+	
+	public LTDependencyDetector(ProcessTree pTree, XLog xlog) {
+		// there is no implemented way to clone it
+		tree = pTree;
+		log = xlog;
 		maps = getProcessTree2EventMap(log, tree , null);
-		XORPairGenerator generator = new XORPairGenerator();
-		pairList = generator.generateXORPairs(this.tree);
-		
 	}
+	
+	
+	@Plugin(name = "Dfg incorporate negative information", level = PluginLevel.Regular, returnLabels = {"Petri Net" }, returnTypes = {Petrinet.class
+	}, parameterLabels = { "XLog","Process Tree"}, userAccessible = true)
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Add Long Term Dependency from  Process Tree",  requiredParameterLabels = { 0 , 1})
+	public static Petrinet testMain(PluginContext context, XLog log, ProcessTree tree) 
+	{ 
+	    
+		XORPairGenerator generator = new XORPairGenerator();
+	    List<XORPair<ProcessTreeElement>> pairs = generator.generateXORPairs(tree);
+	    System.out.println(pairs.size());
+	    for(XORPair<ProcessTreeElement> p: pairs) {
+	    	System.out.println(p.getSourceXOR().getKeyNode());
+	    	System.out.println(p.getTargetXOR().getKeyNode());
+	    }
+	    
+	    LTDependencyDetector detector = new LTDependencyDetector(tree, log);
+	    detector.detectPairWithLTDependency(pairs);
+	    
+	    try {
+			Petrinet net = ProcessTree2Petrinet.convert(tree, true).petrinet;
+			detector.addLTDependency2Net(net, pairs);
+		    return net;
+		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
+			System.out.println("The method transfering the process tree to net is old");
+			e.printStackTrace();
+		}
+	    return null;  
+	} 
+
 
 	// detect LT dependency
-	public void detectPairWithLTDependency() {
+	public List<XORPair<ProcessTreeElement>>  detectPairWithLTDependency(List<XORPair<ProcessTreeElement>> pairList) {
 		// one list to store the node which should have the connection but what to do ??
 		// we can't use the map, if we use the list of them ?? Still some 
 		
 		List<LabeledTraceVariant> variants = EventLogUtilities.getLabeledTraceVariants(log, null);
 		for(LabeledTraceVariant var : variants) {
 			// for each var, we check for each xor pair 
-			int i=0;
-			while( i< pairList.size()) {
-				XORPair<ProcessTreeElement> pair = pairList.get(i);
-				// we fill the value into the pair
-				fillLTConnectionFreq(var, pair);
+			
+			for(XORPair<ProcessTreeElement> pair : pairList) {
 				
-				// after we have this, we need to check if they have some global dependency in them
-				// it doesn't matter if other impact on it, it return the  
-				// it return a list of dependency?? A list of branch to has the dependency, or not
-				if(pair.hasCompleteConnection()) {
-					pairList.remove(i);// if we remove i, what we should add later?? we need to test on it!!
-				}else 
-					i++;
+				fillLTConnectionFreq(var, pair);
 			}
 		}
-		// after this we get all pairs with lt dependency
 		
+		int i=0;
+		while( i< pairList.size()) {
+			XORPair<ProcessTreeElement> pair = pairList.get(i);
+			if(pair.hasCompleteConnection()) {
+				pairList.remove(i);// if we remove i, what we should add later?? we need to test on it!!
+			}else 
+				i++;
+		}
+		// after this we get all pairs with lt dependency
+		return pairList;
 	}
 	
 	// should we have another function to only add lt dependency to the petri net 
-	public void addLTDependency2Net() throws NotYetImplementedException, InvalidProcessTreeException {
-	    net = ProcessTree2Petrinet.convert(tree, true).petrinet;
+	public Petrinet addLTDependency2Net(Petrinet net, List<XORPair<ProcessTreeElement>> pairList)  {
 	    
 	    Map<Node, Transition> pnMap =  getProcessTree2NetMap(net, tree, null);
 	    // here we should have the xor pairs with global dependency
@@ -103,8 +136,8 @@ public class LTDependencyDetector {
 			XORPair<ProcessTreeElement> pair = pairList.get(i);
 			XORStructure<ProcessTreeElement> sourceXOR = pair.getSourceXOR();
 			XORStructure<ProcessTreeElement> targetXOR = pair.getTargetXOR();
-			String sourceLabel = sourceXOR.getKeyNode().getName();
-			String targetLabel = targetXOR.getKeyNode().getName();
+			String sourceLabel = sourceXOR.getLabel();
+			String targetLabel = targetXOR.getLabel();
 			List<PetrinetNode> sourceNodes =  new ArrayList<PetrinetNode>();
 			
 			List<PetrinetNode> targetNodes =  new ArrayList<PetrinetNode>();
@@ -116,7 +149,7 @@ public class LTDependencyDetector {
 				PetrinetNode endNode = pnMap.get(sBranch.getEndNode());
 				
 				// add post place for it 
-				Place postNode = addPlace(endNode, targetLabel, true);
+				Place postNode = addPlace(net, endNode, targetLabel, true);
 				sourceNodes.add(postNode);
 			}
 			
@@ -126,7 +159,7 @@ public class LTDependencyDetector {
 				PetrinetNode beginNode = pnMap.get(tBranch.getBeginNode());
 				
 				// add pre place for it 
-				Place preNode = addPlace(beginNode, sourceLabel, false);
+				Place preNode = addPlace(net,beginNode, sourceLabel, false);
 				targetNodes.add(preNode);
 			}
 			// check all the connection and add the silent transitions to it
@@ -145,7 +178,9 @@ public class LTDependencyDetector {
 				net.addArc(sTransition, preNode);
 				
 			}
+			i++;
 		}
+		return net;
 	}
 	
 
@@ -158,7 +193,7 @@ public class LTDependencyDetector {
 		return null;
 	}
 
-	private Place addPlace(PetrinetNode node, String targetLabel, boolean post) {
+	private Place addPlace(Petrinet net, PetrinetNode node, String targetLabel, boolean post) {
 		// TODO add PostPlace in this pair, we need to assign a good name to it 
 		if(post) {
 			Place postNode = net.addPlace(ProcessConfiguration.POST_PREFIX + node.getLabel()+ targetLabel);

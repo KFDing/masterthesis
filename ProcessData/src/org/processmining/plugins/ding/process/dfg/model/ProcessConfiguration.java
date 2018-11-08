@@ -24,10 +24,10 @@ public class ProcessConfiguration extends Configuration{
 
 
 	public static final int RULESET_IDX_NUM= 3;
-	
-	public static final int RULESET_EXISTING_IDX = 1;
+	public static final int RULESET_EXISTING_IDX = 0;
 	public static final int RULESET_POS_IDX = 1;
 	public static final int RULESET_NEG_IDX = 2;
+	
 	public static final String XOR = "Xor";
 	public static final String SEQUENCE = "Seq";
 	public static final String PARALLEL = "And";

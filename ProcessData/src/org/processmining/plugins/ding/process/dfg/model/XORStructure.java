@@ -46,6 +46,10 @@ public class XORStructure<T> {
 		branches = new ArrayList<XORBranch<T>>();
 	}
 	
+	
+	public String getLabel() {
+		return keyNode.toString();
+	}
 	public int getNumOfBranches() {
 		numOfBranches = branches.size();
 		return numOfBranches;
@@ -157,10 +161,6 @@ public class XORStructure<T> {
 		}
 		return endNodes;
 	}
-	
-	// if it is not pure waht to do then?? ? 
-	// we have the list and then we get all the lists from it 
-	// but something between we don't care?? 
 	
 }
 

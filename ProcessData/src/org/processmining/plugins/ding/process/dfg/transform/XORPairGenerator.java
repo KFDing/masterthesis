@@ -7,11 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
-import org.processmining.framework.plugin.PluginContext;
-import org.processmining.framework.plugin.annotations.Plugin;
-import org.processmining.framework.plugin.annotations.PluginLevel;
-import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
@@ -413,23 +408,7 @@ public class XORPairGenerator {
 		}
 		
 	}
-	@Plugin(name = "Traverse the Process Tree", level = PluginLevel.Regular, returnLabels = {"Process Tree" }, returnTypes = {ProcessTree.class
-			}, parameterLabels = { "Process Tree"}, userAccessible = true)
-	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "Traverse Process Tree",  requiredParameterLabels = { 0})
-	 public static ProcessTree testMain(PluginContext context, ProcessTree tree) 
-	{ 
-	        XORPairGenerator generator = new XORPairGenerator();
-	        List<XORPair<ProcessTreeElement>> pairs = generator.generateXORPairs(tree);
-	        System.out.println(pairs.size());
-	        for(XORPair<ProcessTreeElement> p: pairs) {
-	        	System.out.println(p.getSourceXOR().getKeyNode());
-	        	System.out.println(p.getTargetXOR().getKeyNode());
-	        }
-	        
-	        return tree;
-	 } 
-	
+
 	// after this we need to connect the process tree with petri net
 	// after we use the dfg structure, we have it and then we use it to get the pair, what would you like to have here??
 	// input the process tree, and petri net ?

@@ -10,6 +10,7 @@ public class LTConnection<T>{
 	// here need to fix the Value using double problems.. But we can get it later, I think..
 	int posIdx = ProcessConfiguration.RULESET_POS_IDX;
 	int negIdx = ProcessConfiguration.RULESET_NEG_IDX;
+	int num = ProcessConfiguration.RULESET_IDX_NUM;
 	List<Double> connectionValues;
 	
 	boolean supportConnection = false;
@@ -32,7 +33,10 @@ public class LTConnection<T>{
 		firstBranch = first;
 		secondBranch = second;
 		connectionValues = new ArrayList<Double>();
+		for(int i=0; i< num;i++)
+			connectionValues.add(0.0);
 	}
+	
 	
 	public LTConnection(XORBranch<T> first, XORBranch<T> second, List<Double> values) {
 		firstBranch = first;
@@ -66,6 +70,7 @@ public class LTConnection<T>{
 	}
 	
 	public void addConnectionValues(List<Double> values) {
+		
 		for(int i=0; i< values.size();i++) {
 			double tmp =  connectionValues.get(i) + values.get(i);
 			connectionValues.set(i, tmp);
