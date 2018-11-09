@@ -1,0 +1,39 @@
+\documentclass[]{article}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+%opening
+\title{Master Thesis --  Math Formalization}
+\author{Kefang Ding} 
+\date{9 Nov 2018}
+
+\begin{document}
+
+\maketitle
+
+\hrulefill
+\hrulefill 
+
+\begin{abstract}
+This article defines the mathematical formalization of algorithm, which is used to incorporate negative information for model repair. The following sections are organized in this way. Section 1 introduces the  problems to solve. Section 2 defines the symbols. Section 2 describes the algorithm to use. Section 3 proves the correctness and completeness of this algorithm. 
+\end{abstract}
+
+\section{Introduction}
+The inputs for process model enhancement within model repair includes the following data, existing process model, event log and KPIs to evaluate the data in event log. 
+
+After applying Dfg-based repair model, a model with good fitness is generated. However, this method can't discovery  change and remove the long-term dependency in the model. \\
+Long-term dependency describes the dependency in events, the execution of one event affects the choice of events in later. It exists in the choices structure of model, like xor structure, loop and or structure. But now we only focus on the long-term dependency in xor and loop structure, due to the complexity of or structure in model. \\
+Here we introduce an additional algorithm to deal with the long term dependency. In the next part, we will focus on the algorithm to discover long-term dependency in model. \\
+The input for the algorithm is:
+\begin{itemize}
+	\item Repaired model in process tree
+	\item Event log with positive and negative labels
+\end{itemize}
+The output of this algorithm is: 
+\begin{itemize}
+	\item Repaired model in petri net with long-term dependency
+\end{itemize}
+
+\section{Definitions}
+In this section, we define the symbols we will use later. 
+
+\end{document}
