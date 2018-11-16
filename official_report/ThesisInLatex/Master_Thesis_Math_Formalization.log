@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  12 NOV 2018 17:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  16 NOV 2018 20:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -277,101 +277,126 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 17.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 34.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 31.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 34.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 31.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 47.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 66.
 
-Overfull \hbox (12.01143pt too wide) in paragraph at lines 53--54
-\OT1/cmr/bx/n/10 Definition 2.2 \OT1/cmr/m/n/10 (Op-er-a-tor Se-man-tics)\OT1/c
+Overfull \hbox (12.01143pt too wide) in paragraph at lines 72--73
+\OT1/cmr/bx/n/10 Definition 2.5 \OT1/cmr/m/n/10 (Op-er-a-tor Se-man-tics)\OT1/c
 mr/bx/n/10 . \OT1/cmr/m/it/10 The se-man-tics of op-er-a-tors $[] \OMS/cmsy/m/n
 /10 ^^R []$
  []
 
 
-Overfull \hbox (5.16753pt too wide) in paragraph at lines 56--57
+Overfull \hbox (5.16753pt too wide) in paragraph at lines 75--76
 []\OT1/cmr/m/it/10 if $\OML/cmm/m/it/10 Q \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 ^^
 B\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Q[]; Q[]; ::Q[]\OT1/cmr/m/n/10 )$\OT1/cmr/m/
 it/10 , the sub-trees have ex-clu-sive re-la-tion and $\OML/cmm/m/it/10 Q[]; Q[
 ]; ::Q[]$
  []
 
-
-Overfull \hbox (20.12161pt too wide) in paragraph at lines 58--59
+[2]
+Overfull \hbox (20.12161pt too wide) in paragraph at lines 77--78
 []\OT1/cmr/m/it/10 if $\OML/cmm/m/it/10 Q \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 [\
 OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Q[]; Q[]; ::Q[]\OT1/cmr/m/n/10 )$\OT1/cmr/m/it
 /10 , the sub-trees have loop re-la-tion and $\OML/cmm/m/it/10 Q[]; Q[]; ::Q[]w
 ithn \OMS/cmsy/m/n/10 ^^U
  []
 
+<./images/PT01_Not_Nested_Overview.png, id=25, 1774.63pt x 410.53375pt>
+File: ./images/PT01_Not_Nested_Overview.png Graphic file (type png)
+<use ./images/PT01_Not_Nested_Overview.png>
+Package pdftex.def Info: ./images/PT01_Not_Nested_Overview.png  used on input l
+ine 83.
+(pdftex.def)             Requested size: 345.0pt x 79.80632pt.
 
-Overfull \hbox (36.03363pt too wide) in paragraph at lines 72--73
-\OT1/cmr/bx/n/10 Definition 2.4 \OT1/cmr/m/n/10 (XOR Pu-rity)\OT1/cmr/bx/n/10 .
+Overfull \hbox (36.03363pt too wide) in paragraph at lines 95--96
+\OT1/cmr/bx/n/10 Definition 2.7 \OT1/cmr/m/n/10 (XOR Pu-rity)\OT1/cmr/bx/n/10 .
  \OT1/cmr/m/it/10 A xor block is pure if and only $\OMS/cmsy/m/n/10 8\OML/cmm/m
 /it/10 X \OMS/cmsy/m/n/10 2 \OML/cmm/m/it/10 XOR[]; Leaf\OT1/cmr/m/n/10 (\OML/c
 mm/m/it/10 X\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 !
  []
 
 
-Overfull \hbox (11.5877pt too wide) in paragraph at lines 75--76
-\OT1/cmr/bx/n/10 Definition 2.5 \OT1/cmr/m/n/10 (XOR Nest-ed-ness)\OT1/cmr/bx/n
+Overfull \hbox (11.5877pt too wide) in paragraph at lines 98--99
+\OT1/cmr/bx/n/10 Definition 2.8 \OT1/cmr/m/n/10 (XOR Nest-ed-ness)\OT1/cmr/bx/n
 /10 . \OT1/cmr/m/it/10 A xor block is nested if and only $\OMS/cmsy/m/n/10 9\OM
 L/cmm/m/it/10 XXOR\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 X\OT1/cmr/m/n/10 ) \OMS/cms
 y/m/n/10 ^
  []
 
-[2]
-Overfull \hbox (79.66101pt too wide) in paragraph at lines 83--84
-\OT1/cmr/bx/n/10 Definition 2.7 \OT1/cmr/m/n/10 (XOR Pair)\OT1/cmr/bx/n/10 . $\
-OML/cmm/m/it/10 xor[]$ \OT1/cmr/m/it/10 and $\OML/cmm/m/it/10 xor[]$ \OT1/cmr/m
-/it/10 is an xor pair, writ-ten in XOR[]Pair($\OML/cmm/m/it/10 XOR[]; XOR[]$\OT
-1/cmr/m/it/10 ),
+<./images/PT02_xor_nested_and_pure.png, id=26, 499.8675pt x 263.98625pt>
+File: ./images/PT02_xor_nested_and_pure.png Graphic file (type png)
+<use ./images/PT02_xor_nested_and_pure.png>
+Package pdftex.def Info: ./images/PT02_xor_nested_and_pure.png  used on input l
+ine 102.
+(pdftex.def)             Requested size: 345.0pt x 182.20306pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[3 <./images/PT01_Not_Nested_Overview.png>]
+<./images/PT03_xor_in_loop.png, id=30, 729.72626pt x 281.05pt>
+File: ./images/PT03_xor_in_loop.png Graphic file (type png)
+<use ./images/PT03_xor_in_loop.png>
+Package pdftex.def Info: ./images/PT03_xor_in_loop.png  used on input line 114.
+
+(pdftex.def)             Requested size: 345.0pt x 132.87401pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Overfull \hbox (85.41098pt too wide) in paragraph at lines 120--121
+\OT1/cmr/bx/n/10 Definition 2.10 \OT1/cmr/m/n/10 (XOR Pair)\OT1/cmr/bx/n/10 . $
+\OML/cmm/m/it/10 xor[]$ \OT1/cmr/m/it/10 and $\OML/cmm/m/it/10 xor[]$ \OT1/cmr/
+m/it/10 is an xor pair, writ-ten in XOR[]Pair($\OML/cmm/m/it/10 XOR[]; XOR[]$\O
+T1/cmr/m/it/10 ),
  []
 
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 132--133
-
- []
-
-[4] [5] (./Master_Thesis_Math_Formalization.aux) ) 
+[4 <./images/PT02_xor_nested_and_pure.png>] [5 <./images/PT03_xor_in_loop.png>]
+[6] [7] [8] (./Master_Thesis_Math_Formalization.aux) ) 
 Here is how much of TeX's memory you used:
- 3223 strings out of 494847
- 46035 string characters out of 6179079
- 113418 words of memory out of 5000000
- 6495 multiletter control sequences out of 15000+600000
+ 3244 strings out of 494847
+ 46666 string characters out of 6179079
+ 113442 words of memory out of 5000000
+ 6511 multiletter control sequences out of 15000+600000
  12766 words of font info for 49 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 41i,15n,30p,451b,408s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/s
-ymbols/msbm10.pfb>
-Output written on Master_Thesis_Math_Formalization.pdf (5 pages, 198488 bytes).
+ 41i,15n,30p,551b,428s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
+>
+Output written on Master_Thesis_Math_Formalization.pdf (8 pages, 277935 bytes).
 
 PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
- 63 compressed objects within 1 object stream
+ 114 PDF objects out of 1000 (max. 8388607)
+ 80 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
