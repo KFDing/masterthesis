@@ -134,7 +134,7 @@ public class XORPair<T>{
 				ltDep.add(conn);
 		}
 		
-		if(num > ltDep.size()) {
+		if(num > ltDep.size() && ltDep.size() > 0) {
 			completeConnection = false;
 		}
 		return completeConnection;

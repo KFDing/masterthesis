@@ -80,7 +80,11 @@ public class XORStructure<T> {
 
 	public void mergeXORStructure(XORStructure<T> toBeMerged) {
 		// put the branches into the main xor structure 
-		addBranchList(toBeMerged.getBranches());
+		for(XORBranch<T> branch: toBeMerged.getBranches()) {
+			if(!branches.contains(branch))
+				branches.add(branch);
+		}
+		
 	}
 
 	public boolean isOpen() {

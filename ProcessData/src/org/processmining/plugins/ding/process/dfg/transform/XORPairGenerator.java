@@ -106,15 +106,31 @@ public class XORPairGenerator {
 			
 			// if the block is xor 
 			if(block.getClass().getSimpleName().equals(ProcessConfiguration.XOR)) {
+				// if it is in one branch, what to do ?? we need to set the branch somehow special..
+				if(!xorBranchList.isEmpty() && xorBranchList.get(xorBranchList.size() - 1).isOpen()) {
+					XORBranch<ProcessTreeElement> currentXORBranch =  xorBranchList.get(xorBranchList.size() - 1);
+					// it need to add set the begin and end node into it 
+					if(currentXORBranch.getBeginNode() == null) {
+						currentXORBranch.setBeginNode(node);
+					}
+					// but after we set it, it has reference in sequence, so we don't need to do this!! 
+					// but such branches, we need special care.. At first, we see it 
+					if(currentXORBranch.isOpen()) 
+						currentXORBranch.setEndNode(node);
+				}
+				
 				XORStructure<ProcessTreeElement> xorStructure = new XORStructure<ProcessTreeElement>(block);
 				// add xor in the xorList, we need to consider when we need it
 				xorList.add(xorStructure);
+				
 				// we have all its subNodes
 				List<Node> subNodes = block.getChildren();
 				for(Node subNode : subNodes) {
-					
-					XORBranch<ProcessTreeElement> branch = new XORBranch<ProcessTreeElement>();
+					// for this branches, we gave different branches, it's true..
+					// but one thing to consider is the nested xor structure
+					XORBranch<ProcessTreeElement> branch = new XORBranch<ProcessTreeElement>(subNode);
 					xorBranchList.add(branch);
+					branch.setParentNode(block);
 					
 					if(subNode.isLeaf()) {
 						analyzeXORByDFS(subNode);
@@ -130,6 +146,9 @@ public class XORPairGenerator {
 						}
 						
 						analyzeXORByDFS(subNode);
+						// we close branch here.. so what to do ?? // if we know the subnode has xor structure?? 
+						// it means that we need to get the ancestors at first, but it's not right.. DO we need to assign
+						// some special symbol there to make it special??
 						branch.setOpen(false);
 						// add some branch here
 						xorStructure.addBranch(branch);
@@ -149,18 +168,21 @@ public class XORPairGenerator {
 					// in a branch 
 					XORBranch<ProcessTreeElement> currentXORBranch =  xorBranchList.get(xorBranchList.size() - 1);
 					if(block.getName().contains(ProcessConfiguration.NEW_SEQUENCE)) {
-						// new created
-						if(currentXORBranch.getBeginNode() == null) {
-							currentXORBranch.setBeginNode(subNodes.get(0));
+						// in a new sequence but we wait to get more things here
+						for(Node subNode : subNodes) {
+							analyzeXORByDFS(subNode);
 						}
-						currentXORBranch.setEndNode((ProcessTreeElement) getLastElement(subNodes));
+						
 					}else {
 						// normal situation, but we need to check if we should add silent transitions
-						// consider the begin and end for parallel or loop.. Both works, somehow
+						// consider the begin and end for parallel or loop.. 
+						// if in sequence, we have xor structure, at begin and end, what to do?? It's in a branch 
 						if(subNodes.get(0).getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL))
 							addSilentNode((Block)subNodes.get(0));
 						if(subNodes.get(subNodes.size() -1 ).getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL)) 
 							addSilentNode((Block)subNodes.get(subNodes.size() -1 ));
+						// for the other situation like xor and loop, we just visit them?? I think we should also give the loop one silent 
+						// transitions at begin and end
 						for(Node subNode : subNodes) {
 							analyzeXORByDFS(subNode);
 						}
@@ -169,7 +191,8 @@ public class XORPairGenerator {
 				}
 				
 			}else { //  if(block.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL))
-				// what to do here?? Actually we don't have much difference of those two structures now.
+				// even it's in parallel, it can be a branch or not, if it is in an branch, we need to set the begin and end node of it 
+				// but I think, we can transfer it into the parallel
 				List<Node> subNodes = block.getChildren();
 				for(Node subNode : subNodes) {
 					analyzeXORByDFS(subNode);
@@ -184,11 +207,11 @@ public class XORPairGenerator {
 		return xlist.get(xlist.size() - 1);
 	}
 
-	private XORCluster<ProcessTreeElement> getCluster(Block block) {
+	private XORCluster<ProcessTreeElement> getCluster(Node node) {
 		// we check the list of cluster and find the parent
 		for(XORCluster<ProcessTreeElement> cluster: clusterList) {
 			// here we nned to use another method to check the existence 
-			if(cluster.getKeyNode().equals(block))
+			if(cluster.getKeyNode().equals(node))
 					return cluster;
 			
 		}
@@ -211,10 +234,16 @@ public class XORPairGenerator {
 			Edge edge = inEdges.get(i);
 			// change the target solves it 
 			edge.setTarget(seqWithSilent);
+			block.removeIncomingEdge(edge);
 		}
-		
+		// with automatic it means the silent transition
 		Node btau = new AbstractTask.Automatic(label+"_Begin_Tau");
 		Node etau = new AbstractTask.Automatic(label+"_End_Tau");
+		btau.setProcessTree(seqWithSilent.getProcessTree());
+		etau.setProcessTree(seqWithSilent.getProcessTree());
+		
+		seqWithSilent.getProcessTree().addNode(btau);
+		seqWithSilent.getProcessTree().addNode(etau);
 		seqWithSilent.addChild(btau);
 		seqWithSilent.addChild(block);
 		seqWithSilent.addChild(etau);
@@ -246,25 +275,7 @@ public class XORPairGenerator {
 		return ancestors;
 	}
 
-	private List<Node> getParallelAncestors(Node currentNode) {
-		List<Node> ancestors = new ArrayList<Node>();
-		
-		while(!currentNode.isRoot()) {
-			Block parent =  getParent(currentNode);
-			if(parent.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL)) {
-				// what if they are not in the same ancestor?? So we need to return the list of ancestors
-				ancestors.add(parent);
-			}
-			currentNode = parent;
-		}
-		// but if currentNode is root, what to do ?? 
-		if(currentNode.isRoot()) {
-			if(currentNode.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL))
-				ancestors.add(currentNode);
-		}
-		
-		return ancestors;
-	}
+
 	private Set<Node> getAllAncestors(){
 		Set<Node> aSet = new HashSet<Node>();
 		for(XORStructure<ProcessTreeElement> xorStructure : xorList) {
@@ -273,7 +284,12 @@ public class XORPairGenerator {
 		return aSet;
 	}
 
-	// I want to generate the xor cluster for each xor and then check the relation of 
+	/**
+	 * after the last steps, we have all the xor list, now we need to 
+	 * @param node
+	 * @param aSet
+	 * @return
+	 */
 	private XORCluster<ProcessTreeElement> buildCluster(Node node, Set<Node> aSet) {
 		// but now how to generate the pair from clusterList?? 
 		Block block = (Block) node;
@@ -281,42 +297,93 @@ public class XORPairGenerator {
 		
 		XORCluster<ProcessTreeElement> cluster =  new XORCluster<ProcessTreeElement>(block);
 		clusterList.add(cluster);
+		if(aSet.contains(node)) {
+			// ancestors only above the xor structure, not include the xor structure itself. 
+			cluster.setHasXOR(true);
+		}
 		
 		List<Node> subNodes = block.getChildren();
 		for(Node subNode : subNodes) {
-			if(subNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR)) {
-				// it we meet directly the xor structure, what to do ?? 
-				// we should create one cluster and then we can add it 
-				// do we need to do it ?? Yes, we need to do it !! 
-				XORCluster<ProcessTreeElement> xorCluster = createXORCluster(subNode);
-				clusterList.add(xorCluster);
-				// but how to know if we should do it again or not?? 
-				xorCluster.parentCluster = cluster;
-				cluster.addChilrenCluster(xorCluster);
-			}else if(aSet.contains(subNode)) {
+			// at first for the xorCluster
+			if(aSet.contains(subNode)) {
+				// ancestors with xor structure.. which avoid the xor branches generation.
 				// we go deep part, one thing we need to notice is that the ancestors not include itself
 				XORCluster<ProcessTreeElement> subCluster = buildCluster(subNode, aSet);
 				// here is not enough for us... Because we need to get the relation of children cluster
 				subCluster.parentCluster = cluster;
 				cluster.addChilrenCluster(subCluster);
+			}else if(subNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR)) {
+				// it we meet directly the xor structure, we need to test it
+				// we get to the directly xor structure
+				XORCluster<ProcessTreeElement> xorCluster = createXORCluster(subNode);
+				clusterList.add(xorCluster);
+				// but how to know if we should do it again or not?? 
+				xorCluster.parentCluster = cluster;
+				cluster.addChilrenCluster(xorCluster);
+				
+			}else if(cluster.hasXOR() && cluster.isXORCluster() ){ // if(subNode.isLeaf() && cluster.isXORCluster()) 
+				// if this cluster is the xor cluster and it has one branch with leaf node, what to do??
+				// we are not sure about the other branches
+				// how to know it is branch cluster?? we need to set one mark
+				XORCluster<ProcessTreeElement> xorBranchCluster = createXORBranchCluster(subNode);
+				clusterList.add(xorBranchCluster);
+				// but how to know if we should do it again or not?? 
+				xorBranchCluster.parentCluster = cluster;
+				cluster.addChilrenCluster(xorBranchCluster);
 			}
 		}
 		return cluster;
 	}
 	
-	private void buildPair(Block block) {
+	private XORCluster<ProcessTreeElement> createXORBranchCluster(Node node) {
+		// TODO create one cluster for xor branch, the most important thing is to keep the branches structure of it
+		// but to keep the code uniform. we need to create one xor structure to it
+		// one to notice is that XORBranchCluster has no xor 
+		XORCluster<ProcessTreeElement> xorBranchCluster =  new XORCluster<ProcessTreeElement>(node);
+		xorBranchCluster.setBranchCluster(true);
+		xorBranchCluster.setHasXOR(false);
+		// here there is no xor structure, only the branch, so we need to find out the branch for it 
+		// due to it is the branch, so we need to mark it ???
+		XORStructure<ProcessTreeElement> xorBranchStructure = new XORStructure<ProcessTreeElement>(node);
+		// we need to create the branch of it and then create branch of it
+		// which should be in the xorBranchList
+		// if it one sequence, then what to do ?? for sequence, how to find it ??
+		// we need to give the keyNode,too
+		XORBranch<ProcessTreeElement> xorBranch = getXORBranch(node);
+		xorBranchStructure.addBranch(xorBranch);
+		
+		xorBranchCluster.addXORStructure(xorBranchStructure);
+		// here we can't make the children cluster null
+		// xorCluster.childrenCluster =null;
+		return xorBranchCluster;
+	}
+
+	private XORBranch<ProcessTreeElement> getXORBranch(Node node) {
+		// TODO get the branch due to the xor branches, if like this, what to do then?? 
+		Iterator<XORBranch<ProcessTreeElement>> iter = xorBranchList.iterator();
+		while(iter.hasNext()) {
+			XORBranch<ProcessTreeElement> xorB =  iter.next();
+			if(xorB.getKeyNode().equals(node)) {
+				return xorB;
+			}
+		}
+		System.out.println("can't find the XOR Structure");
+		return null;
+	}
+
+	private void buildPair(Node node) {
 		
 		// we also need to visit the process tree to get the xor pair
-		System.out.println("visit block name: " + block.getClass().getSimpleName());
+		System.out.println("visit block name: " + node.getClass().getSimpleName());
 		
-		XORCluster<ProcessTreeElement> cluster = getCluster(block);
+		XORCluster<ProcessTreeElement> cluster = getCluster(node);
 		if(cluster!=null) {
 			// stateStack.push(block.getClass().getSimpleName()); // whatever it needs
 			List<XORCluster<ProcessTreeElement>> childrenCluster = cluster.getChildrenCluster();
 			for(XORCluster<ProcessTreeElement> child : childrenCluster) {
 				// still not good effect... Nanan, because one level missed it
 				if(!child.isAvailable()) {
-					buildPair((Block)child.getKeyNode());
+					buildPair((Node) child.getKeyNode());
 				}
 				
 			}
@@ -374,11 +441,12 @@ public class XORPairGenerator {
 	private XORCluster<ProcessTreeElement> createXORCluster(Node node) {
 		// TODO create the xor cluster to store xor structure
 		XORCluster<ProcessTreeElement> xorCluster =  new XORCluster<ProcessTreeElement>(node);
+		// here we just get the half structure
 		XORStructure<ProcessTreeElement> xorStructure = getXORStructure(node);
 		// List<XORStructure<ProcessTreeElement>> tmpXORList = new ArrayList<XORStructure<ProcessTreeElement>>();
 		xorCluster.addXORStructure(xorStructure);
-		
-		xorCluster.childrenCluster =null;
+		// here we can't make the children cluster null
+		// xorCluster.childrenCluster =null;
 		return xorCluster;
 	}
 
