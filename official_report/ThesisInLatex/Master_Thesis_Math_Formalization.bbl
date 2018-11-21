@@ -1,0 +1,18 @@
+\begin{thebibliography}{1}
+
+\bibitem{vanderAalst:2016:PMD:2948762}
+W.~van~der Aalst, {\em Process Mining: Data Science in Action}.
+\newblock Springer Publishing Company, Incorporated, 2nd~ed., 2016.
+
+\bibitem{leemans2013discovering}
+S.~J. Leemans, D.~Fahland, and W.~M. van~der Aalst, ``Discovering
+  block-structured process models from event logs-a constructive approach,'' in
+  {\em International conference on applications and theory of Petri nets and
+  concurrency}, pp.~311--329, Springer, 2013.
+
+\bibitem{Buijs2012OnTR}
+J.~C. A.~M. Buijs, B.~F. van Dongen, and W.~M.~P. van~der Aalst, ``On the role
+  of fitness, precision, generalization and simplicity in process discovery,''
+  in {\em OTM Conferences}, 2012.
+
+\end{thebibliography}

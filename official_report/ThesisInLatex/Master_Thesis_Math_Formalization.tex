@@ -1,11 +1,15 @@
 \documentclass[]{article}
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
+\usepackage{subcaption}
 \usepackage{amsthm}
-\newtheorem{mydef}{Definition}[section]
 \usepackage{amsfonts}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ mathrsfs }
 \usepackage[ruled,linesnumbered]{algorithm2e}
+\newtheorem{mydef}{Definition}[section]
+\newtheorem{mytheorem}{Theorem}[section]
 
 %opening
 \title{Master Thesis --  Math Formalization}
@@ -20,12 +24,25 @@
 \hrulefill 
 
 \begin{abstract}
-This article defines the mathematical formalization of algorithm, which is used to add long-term dependency in model repair by incorporating negative information. The following sections are organized in this way. Section 1 introduces the problems to solve. Section 2 gives formal definitions. Section 3 describes the algorithm to use. 
+This article describes the mathematical formalization of the algorithm, which is used to add long-term dependency in process model repair by incorporating negative information. The following sections are organized in this way. Section 1 introduces the problems to solve. Section 2 gives formal definitions. Section 3 gives details of the algorithm steps. 
 \end{abstract}
 
 \section{Introduction}
-The inputs for process model repair include one existing process model, an corresponding event log and a set of KPIs for the data evaluation in event log. After applying Directly-Following-Graph-based,abv, dfg-method, repair algorithm, a model with high fitness is generated. However, dfg-method can't discover, change the long-term dependency in the model, which makes the model less precise. \\
-With concept Long-term dependency, it describes the dependency between activities, where the execution of one activity affects the execution of another activities later. This dependency  relates the choices structure in model, xor, loop and or structure. due to the complexity of or structure, this article only focus on the long-term dependency in xor and loop structures and introduces an algorithm to deal with this problem. \\
+The inputs for process model repair include one existing process model, a corresponding event log and a set of KPIs for the data evaluation in event log. After evaluating event log by KPIs, positive and negative labels are assigned on each trace in event log file. 
+
+In state-of-the-art technologies in process mining, only positive traces are used to repair model, while negative information is omitted. In this way, the generated models have low precision. In order to increase the precision, we adapt Inductive Miner algorithm on the base of directly-follows relation of activities. This algorithm, called dfg-algorithm, uses both positive and negative information from event log and generates a model with high fitness. However, dfg-algorithm can't discover, change the long-term dependency in the model, so that the model still has less precision. With concept Long-term dependency, it describes the dependency between activities, where the execution of one activity affects the execution of another activities later. One example is given to address this problem.
+%% we have the model of Petri net from 
+
+\textit{Example 1} Consider event log with labels L =[$<A,C,E>^{10,pos}, <B,C,D>^{10,pos}, <A,C,D>^{10,neg}$]. $<A,C,E>^{10,pos}$ means there are 10 traces $<A,C,E>$ labeled as positive in event log. Similarly, $<A,C,D>^{10,neg}$ represents 1o $<A,C,D>$ traces in event log which have negative labels. 
+
+After applying the dfg-algorithm, a model as shown in Figure \ref{fig:pn_without_lt_exm01} is discovered.In event log L, B and D has long-term dependency, and A is expected to support only the execution of E, since $<A,C,D>$ is negative and $<A,C,E>$ is positive. However, the model doesn't express those constraints.
+\begin{figure}[h!]
+	\includegraphics[width=\textwidth]{PN06_Seq_2_xor_notnested.png}
+	\caption{Process model generated from dfg-algorithm}
+	\label{fig:pn_without_lt_exm01}
+\end{figure}
+In this article, we investigate this problem and propose one algorithm to add long-term dependency constraints in model. Obviously, long-term dependency relates the choices structure in process model, such as exclusive choice, loop and or structure. Due to the complexity of or structure, only the long-term dependency in exclusive choice and loop structures is considered. 
+
 The inputs for this algorithm are,
 \begin{itemize}
 	\item Repaired model in process tree
@@ -37,79 +54,79 @@ The output of this algorithm is:
 \end{itemize}
 
 \section{Definitions}
-In this section, the related definitions are listed. Process Tree is one input for this method. To specify the process tree, the definitions involved in tree are reviewed at first.
+Process tree, as one input for the algorithm, is one common model to interpret process in process mining. It's a block-structured tree. To specify the process tree with respect to long-term dependency, the following definitions are in need. Firstly, the definitions related to tree are reviewed.
 \begin{mydef}[Tree]
-	Let $ \mathbb{N} $ be a finite set of entities, a tree is a collection of entities called nodes, which are connected by edges. A tree T is,
+	Let $ \mathscr{E} $ be a finite set of entities, a tree is a collection of entities called nodes, which are connected by edges. A tree T is,
 	\[
 	\begin{array}{ rll}
-		\circ&t(\emptyset) & \mbox{with } t\; has\; no\; outgoing\; edge;\\
-		\circ&t(T_1,T_2,...,T_n) & \mbox{with } i,n\in \mathbb{N}, i \leq n ,T_i\;is\; a\; tree.
+		\circ&t & \mbox{with } t\in \mathscr{E},  \text{t has no outgoing edges}\\
+		\circ&t(T_1,T_2,...,T_n) & \mbox{with} t\in \mathscr{E}, i,n\in \mathbb{N}, i \leq n ,T_i\;is\; a\; tree.
 	\end{array}
 	\]
 \end{mydef}
-For convenience, we call $T_i$ is a child of $t(T_1,T_2,...,T_n)$, marked as $P(t,T_i)$, $t(T_1,T_2,...,T_n)$ is one parent of $T_i$. The root of tree is defined as one node, without any parent. A pat
-For any node in a tree, its ancestor and descendant is defined as:
+$T_i$ is a child or subtree of $t(T_1,T_2,...,T_n)$, $t(T_1,T_2,...,T_n)$ is one parent of $T_i$, which can be expressed in $P(t(T_1,T_2,...,T_n),T_i)$. The root of tree is the node without any parent; A tree has only one root. A leaf node is the node which has no children nodes.\\
+For a node in a tree, its ancestor and descendant are defined as:
 \begin{mydef}[Ancestor]
 	An ancestor for a node t is a node A in a tree, if 
-	\[ A\; is\; the\; parent\; of\; t \] or
-	\[ \exists t_1,t_2..t_n,n\in \mathbb{N}, i < n, P(A,t_1)\land P(t_i,t_{i+1}) \land P(t_n,t) \]
+	\[\text{A is the parent of t or} \]
+	\[ \exists t_1,t_2..t_n,n\in \mathscr{E}, i < n, P(A,t_1)\land P(t_i,t_{i+1}) \land P(t_n,t) \]
 \end{mydef}
-A descendant for a node t is a node D, if t is the ancestor of D. For two nodes t and s, if t is the ancestor of s, we have A(t,s) true. The similar situation for descendant.
+For root, the ancestor is empty, while leaf nodes has no descendants. Except his, for two nodes t and s, if t is the ancestor of s, we have relation Anc(t,s) true. We also define Ancestors(s) as the set of all ancestors of a node s. Similarly, a descendant for a node t is a node s, if t is the ancestor of s, then s is the descendant of node t and Des(s,t) is true; The set of descendants of node t is Descendants(t).
 \begin{mydef}[Least Common Ancestor]
 	A least common ancestor for node $s$ and node $t$ in a tree is a node n, where 
 	\[A(n,s) \land A(n,t) \land \exists! m A(n,m) \land A(m,s) \land A(m,t) \]
 \end{mydef}
-Process tree is a specification of tree in context of process mining. It describes the block-structured process model. 
+In process tree, all the leaves are activities in business process, and the middle nodes are operators which represents the relations of all its children nodes\cite{vanderAalst:2016:PMD:2948762,leemans2013discovering}. This paper uses four operators in context of long-term dependency.
 \begin{mydef}[Process Tree]
-	Let $ A \subseteq \mathbb{A} $ be a finite set of activities with $\tau \in \mathbb{A}$, $\bigoplus \subseteq \{\rightarrow, \times, \land, \cup \footnote{it means the loop operator due to difficulty to print out the real loop symbol}\}$ be the set of process tree operators. 
+	Let $ A \subseteq \mathbb{A} $ be a finite set of activities with silent transition $\tau \in \mathbb{A}$, $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright\}$ be the set of process tree operators. 
 	\begin{itemize}
 		\item $Q=a$ is a process tree with $a\in A$, and 
-		\item $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ is a process tree with $\oplus \in \bigoplus$, $Q_i$ is a process tree, $i\in{1,2,..,n}, n\in \mathbb{N}$. 
+		\item $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ is a process tree with $\oplus \in \bigoplus$, and $Q_i$ is a process tree, $i\in{1,2,..,n}, n\in \mathbb{N}$. 
 	\end{itemize}
 \end{mydef}
-Process tree operators represents different block relation of each subtree. Their semantics are listed below. 
+Process tree operators represents different block relation of each subtree. Their semantics are standardized from \cite{vanderAalst:2016:PMD:2948762, Buijs2012OnTR} and explained with use of Petri net in Figure \ref{fig:pn_pt_relation}\cite{Buijs2012OnTR}.
+\begin{figure}[h!]
+ 	\includegraphics[width=\textwidth]{PT05_Petrinet_PT_Relation.png}
+ 	\caption{Process Tree With All Operators}
+ 	\label{fig:pn_pt_relation}
+\end{figure}
 \begin{mydef}[Operator Semantics] 
-	The semantics of operators $\bigoplus \subseteq {\rightarrow, \times, \land, \cup}$ are,
+	The semantics of operators $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright, \vee \}$ are,
 	\begin{itemize}
 		\item if $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, the subtrees have sequential relation and are executed in order of $Q_1,Q_2,..Q_n$
-		\item if $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have exclusive relation and $Q_1,Q_2,..Q_n$  only one subtree of them can be executed.
+		\item if $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have exclusive choice relation and only one subtree of $Q_1,Q_2,..Q_n$   can be executed.
 		\item if $Q= \land (Q_1 , Q_2 ,.. Q_n)$,  the subtrees have parallel relation and $Q_1,Q_2,..Q_n$ they can be executed in parallel.
-		\item if $Q= \cup(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have loop relation and $Q_1,Q_2,..Q_n with n\geq2$,$Q_1$ is the do-part and is executed at least once, $Q_2,..Q_n$ are redo part and have exclusive relation.
+		\item if $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have loop relation and $Q_1,Q_2,..Q_n \; with\; n\geq2$, $Q_1$ is the do-part and is executed at least once, $Q_2,..Q_n$ are redo part and have exclusive relation.
+		\item $Q=\vee(Q_1 , Q_2 ,.. Q_n)$, the subtrees have or choice relation and at least one of them executes.
 	\end{itemize}
 \end{mydef}
-In the following figure\ref{fig:not_nested_overview}, it's a typical process tree. It describes a business model, which includes the sequential, exclusive and parallel relations among the activities.  The model is sound. 
-%-- add one process tree graph here. 
 \begin{figure}[h!]
 	\includegraphics[width=\textwidth]{PT01_Not_Nested_Overview.png}
 	\caption{Process Tree With All Operators}
 	\label{fig:not_nested_overview}
 \end{figure}
-%-- but we just use the process tree to build the model, actually not to add the long-term dependency on it
-During model execution, we observe that, in some situations, the execution of events in the exclusive block has influence on the execution of events later, which is called long-term dependency. In the following, the focus is to deal with long-term dependency in the model. 
-For the sake of convenience, exclusive block is abbreviated as xor block; also, the subtree of xor block is defined as xor branch. 
+An example of process trees is given in the following Figure \ref{fig:not_nested_overview} . It describes a business model, which includes sequential, exclusive choice and parallel relations among the activities. To handle the long-term dependency in the model, exclusive choice, abbr. as xor  and loop are investigated, and several definitions are derived in the next part.
 \begin{mydef}[xor branch]
-   $Q= \times(Q_1 , Q_2 ,.. Q_n)$, $Q_i$ is one xor branch with respect to Q. For convenience, we use X to represent one xor branch, and record it $X\in XOR_{Q}$
+   $Q= \times(Q_1 , Q_2 ,.. Q_n)$, $Q_i$ is one xor branch with respect to Q. For convenience, we use $XORB_{Q_i}$ to represent one xor branch $Q_i$ in xor block, and record it $XORB_{Q_i} \in XOR_{Q}$. For each branch, there exists the begin and end nodes to represent the beginning and end execution of this branch, which is written respectively as Begin($XORB_{Q_i}$) and End($XORB_{Q_i}$).
 \end{mydef}
-Due to the different structure of xor branch, we drive two properties of xor block, purity and nestedness.
-\begin{mydef}[XOR Purity]
-	A xor block is pure if and only $\forall X\in XOR_Q, Leaf(X) \rightarrow True$. Else, the block is unpure.
+For convenience of analysis, two properties of xor block, purity and nestedness are demonstrated to express the different structures of xor block according to its branches.
+\begin{mydef}[XOR Purity and XOR Nestedness] The xor block purity and nestedness are defined as following: \\
+	\begin{itemize}
+		\item A xor block $XOR_Q$ is pure if and only $\forall XORB_X \in XOR_Q, XORB_X $ is a leaf node. Else, the block is impure.
+		\item A xor block $XOR_Q$ is nested if $ \exists XOR_X, Anc(XOR_Q, XOR_X) \rightarrow True  $.
+	\end{itemize}
 \end{mydef}
-\begin{mydef}[XOR Nestedness]
-	A xor block is nested if and only $\exists X XOR(X) \land Ct(XOR_Q,X) $, where $Ancestor(XOR_Q,X)$ represents $XOR_Q$ is an ancestor of X in the process tree.
-\end{mydef}
-In the Figure\ref{fig:xor_branch_variants}, xor block Xor:(c1,c2) are pure and not nested, since all the xor branches are leaf node, but xor block Xor:(a,Seq:(b,Xor:(c1,c2))) is impure and nested with Xor:(c1,c2). 
+In the Figure\ref {fig:xor_nested_branch_variants}, xor block Xor(c1,c2) are pure and not nested, since all the xor branches are leaf node, but xor block Xor(a,Seq(b,Xor(c1,c2))) is impure and nested with Xor(c1,c2). 
 \begin{figure}[h!]
 	\includegraphics[width=\textwidth]{PT02_xor_nested_and_pure.png}
 	\caption{XOR branch variants}
-	\label{fig:xor_branch_variants}
+	\label{fig:xor_nested_branch_variants}
 \end{figure}
-
-Due to the definition, the least common ancestor of X:(c1,c2) and b in Figure \ref{fig:xor_branch_variants} is Seq:(b,Xor:(c1,c2)).\\
 Long-term dependency is associated with choices in xor block, namely each xor branch in xor block. To define it, the following concepts are in need. The first is the order of xor block in sequential structure.
 \begin{mydef}[Order of xor block]
-	$xor_A$ is before $xor_B$, written in $xor_A \prec xor_B$, if and only if one ancestor branch of $xor_A$ is before the ancestor of $xor_B$ in sequential block. 
+	$XOR_A$ is before $xor_B$, written in $XOR_A \prec XOR_B$, if $XOR_A$ is always executed before $xor_B$.  %The least common ancestor of $XOR_A$ and $XOR_B$ is a sequential node. 
 \end{mydef}
-We can drive the order of xor block in Figure\ref{fig:not_nested_overview}. $Xor:(Seq:(z,o),m) \prec Xor:(w,x)$ , because the least common ancestor of them is sequential, so they are always executed in an order. However, for Xor:(u,v) and Xor:(d,o), their least common ancestor is parallel, so they don't have any execution order. If they are in loop as in Figure\ref{fig:xor_in_loop}, we define the xor in do part is before the xor in redo part, namely $Xor:(f3,f4) \prec Xor:(f6,f7)$.
+Consider the model in Figure \ref{fig:not_nested_overview}, we have xor order block, $Xor(Seq(z,o),m) \prec Xor(w,x)$, because the least common ancestor of them is sequential, so they are always executed in an order. However, for Xor(u,v) and Xor(d,o), their least common ancestor is parallel, so they don't have any execution order. If they are in loop as in Figure \ref{fig:xor_in_loop}, we define the xor in do part is before the xor in redo part, namely $Xor(f3,f4) \prec Xor(f6,f7)$.
 \begin{figure}[h!]
 	\includegraphics[width=\textwidth]{PT03_xor_in_loop.png}
 	\caption{XOR in loop}
@@ -120,35 +137,38 @@ With the order definition, we introduce the definition for xor pair.
 	$xor_A$ and $xor_B$ is an xor pair, written in XOR\_Pair($XOR_A, XOR_B$), if $XOR_A \prec XOR_B$.
 \end{mydef}
 \begin{mydef}[Event Frequency]
-	Event Frequency in an event log l is an atom $F_{l}(a,freq)$ where a is an event,$a \in A$  and freq is the happened frequency in integer for event a.
+	Event Frequency in an event log l is an term $F_{l}(a,freq)$ where a is an activity,$a \in A$  and freq is the happened frequency in integer for event a.
 \end{mydef}
 In the recursive definition from the above, we can define the xor branch frequency in an event log.
 \begin{mydef}[Xor Branch Frequency]
-	Xor branch frequency in event log l is $F_{l}(X,freq)$ where X is an xor branch, and freq is the happened frequency in integer for xor branch X.
+	Xor branch $XORB_X$ frequency in event log l is $F_{l}(XORB_X,freq)$ where $XORB_X$ is an xor branch, and freq is the happened frequency in integer for xor branch $XORB_X$.
 \end{mydef}
 \begin{mydef}[Supported Connection of Xor branches\footnotemark]
-Given an event log, xor branch X and Y have supported connection over a threshold t, $SC_{l}(X,Y,t)$ if and only if \[ for \space X \in xor_S, Y \in xor_T, \exists freq, F_{l}(X,freq) \land F_{l}(Y,freq) \land freq \geq t. \]
+Given an event log, xor branch $XORB_X$ in a xor block $XOR_A$ and $XORB_Y$ in a xor block $XOR_B$ have supported connection over a threshold t, $SC_{l}(XORB_X,XORB_Y,t)$ if and only if
+\begin{align*}
+ \forall  XORB_X \in XOR_A, XORB_Y \in XOR_B, \exists freq, \\
+ F_{l}(XORB_X,freq) \land F_{l}(XORB_Y,freq) \land freq \geq t. 
+\end{align*}
 \end{mydef}
 \footnotetext{here we don't point out the negative instances use. With negative information, it is: $freq(pos) \geq t^{1} \land freq(pos) - freq(neg)\geq t^{2} $}
 After introduction of supported connection of xor branches, we can define the long-term dependency. 
-\begin{mydef}[Long-term Dependency in XOR block]
-	$xor_S$ and $xor_T$ have long-term dependency over an threshold t w.r.t. an event log, $LT(xor_S, xor_T,t) $ if and only if 
+\begin{mydef}[Long-term dependency in xor block]
+	$XOR_A$ and $XOR_B$ as one xor pair have long-term dependency over an threshold t w.r.t. an event log, $LT(XOR_A, XOR_B, t) $ if and only if 
 	\begin{itemize}
-		\item there are at least two xor blocks in model, $xor_S \neq xor_T \land xor_S \prec xor_B$
-		\item $\exists X \in XOR_S, \exists Y \in XOR_T, \lnot SC_{l}(X,Y,t)$. 
+		\item there are at least two xor blocks in model, $XOR_A \neq XOR_B \land XOR_A \prec XOR_B$
+		\item $\exists XORB_X \in XOR_A, \exists XORB_Y \in XOR_B, \lnot SC_{l}(XORB_X, XORB_Y, t)$. 
 	\end{itemize}
 \end{mydef}
 In this context, we define the long-term dependency between xor branches.
-\begin{mydef}[Long-term Dependency in XOR branches]
-	Xor branch X and Y have long-term dependency over an threshold t w.r.t. an event log, $LT(X,Y,t) $ if and only if  
-	\[\exists X \in XOR_S, \exists Y \in XOR_T, LT(XOR_S, XOR_T, t) \land SC(X,Y,t) \rightarrow LT(X,Y,t).\]	
+\begin{mydef}[Long-term dependency in xor branches]
+	Xor branch $XORB_X$ and $XORB_Y$ have long-term dependency over an threshold t w.r.t. an event log, $LT(XORB_X, XORB_Y, t) $ if and only if  
+	\[\exists XORB_X \in XOR_A, \exists XORB_Y \in XOR_B, LT(XOR_A, XOR_B, t) \] \[ \land  SC(XORB_X, XORB_Y, t)  \rightarrow LT(XORB_X, XORB_Y, t).\]	
 \end{mydef}
-
-\section{Algorithm}
-According to the long-term dependency definition, we propose our algorithm to discover long-term dependency. Because the purity, nestedness and its position in process tree, we need to deal with long-term dependency in different situations.However, due to the complexity, the algorithm focuses only on the binary long-term dependency of xor block, which means, we only create xor pair of $XOR_X and XOR_Y$, marked with where 
+% here we need to define the 
+\section{Algorithm Design}
+According to the long-term dependency definition, we propose our algorithm to discover long-term dependency. Because the purity, nestedness and its position in process tree, long-term dependency is handled in different situations. However, due to the complexity, the algorithm focuses only on the binary long-term dependency of xor block, which means, we only create xor pair of $XOR_X and XOR_Y$, marked with where 
 \[ \exists ! XOR_Z, \: XOR_S \prec XOR_T \rightarrow XOR_S \prec XOR_Z \land XOR_Z \prec XOR_Y \]
-The general steps of algorithm is in the following. 
-
+The general steps of algorithm is in the following. \\
 \begin{algorithm}[H]
 	\SetAlgoLined
 	\KwResult{Discover Long-term Dependency In Model}
@@ -168,39 +188,92 @@ Given one process tree with xor blocks, we create XOR pairs in such situations.
 \subsubsection{Sequential XOR Block Without Nested XOR Block}
 In this situation, we only consider the model without nested xor block and create xor pair only in sequential order, like in the figure.
 %% insert one graph to explain this situation and then create those pairs. 
-To get the long-term dependency, the begin and end node in one branch is of importance, it marks the execution of this xor branch. In implementation, we have the following variants of branch. 
+To get the long-term dependency, the begin and end node in one branch is of importance, it implies the begin and end execution of this xor branch. There are several variants of xor branches as shown in the Figure\ref{fig:xor_branches}.
+\begin{figure}[h!]
+	\includegraphics[width=\textwidth]{PT08_xor_branches.png}
+	\caption{XOR in loop}
+	\label{fig:xor_branches}
+\end{figure}
 \begin{itemize}
-	\item xor branch is a leaf node a, beginNode = endNode = a;
-	\item xor branch is sequential, marked as Seq, beginNode = firstChild(Seq), endNode = lastChild(Seq);
-	\item xor branch is parallel, marked as Parallel, to reduce complexity, we add one sequential node for structure modification; silent activities to the begin and end of sequential structure, and parallel kept in the middle. The xor branch goes back to sequential handle.
-	\item xor branch is loop, marked as loop, the similar solution like in parallel, one sequential node is created to keep the loop structure in the middle, two silent activities are divided into the begin and end parts.
+	\item xor branch is a leaf node, the begin node and end node of this branch is this leaf node, like activity E in Fig\ref{fig:xor_branches} written as beginNode = endNode = E;
+	\item xor branch is sequential as shown in graph, marked as Seq:(A,B), beginNode = firstChild(Seq)=A, endNode = lastChild(Seq)=B;
+	\item xor branch is parallel as shown in graph, marked as And:(C,D), to reduce complexity, we add one sequential node for structure modification; silent activities to the begin and end of sequential structure, and parallel kept in the middle. The xor branch goes back to sequential handle.
+	\item xor branch is loop as shown in graph, marked as Loop:(G,H), the similar solution like in parallel, one sequential node is created to keep the loop structure in the middle, two silent activities are divided into the begin and end parts.
 \end{itemize}
-We visit the process tree in depth-first, and create xor pair for two xor blocks $XOR_S$ and $XOR_T$, if they are in order.
-\subsubsection{ Sequential XOR Block With Nested XOR Block}
-For the model with nested xor block like Xor:(a,Seq:(b,Xor:(c1,c2))) in Figure\ref{fig:xor_branch_variants} , the nested block needs a redefinition for its branch. 
+Or to unify and simply the implementation, for each xor branch, we add implicitly silent activities to mark the beginning and end execution of this xor branch.\\\
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PT06_Seq_3_xor_notnested.png}
+		\caption{Process Tree: sequential relation with 3 xor}
+		\label{fig:pt_seq_2_xor}
+	\end{subfigure}
+	\vfill
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PN06_Seq_3_xor_notnested.png}
+		\caption{Petri net: sequential relation with 3 xor}
+		\label{fig:pn_seq_2_xor}
+	\end{subfigure}
+	\caption{example for xor branch variants in seq}
+	\label{fig:seq_situation}
+\end{figure}
+Two xor blocks exist in the model, they are respectively Xor(A,B), Xor(D,E) and Xor(G,H). After checking the order of xor blocks, we have the direct order $Xor(A,B) \prec Xor(D,E) and Xor(D,E) \prec Xor(G,H)$. So we can create one xor pair Pair(Xor(A,B), Xor(D,E)) and Pair(Xor(D,E), Xor(G,H)).
+\subsubsection{Sequential XOR Block With Nested XOR Block}
+For the model with nested xor block like Xor:(a,Seq:(b,Xor:(c1,c2))) in Figure\ref{fig:pt_seq_nested} , the nested block needs a redefinition for its branch. 
 \begin{itemize}
-	\item If one of its xor branches contains no xor block, this branch is kept;
-	\item if one xor branch has xor block, called sub xor block, all branches without xor block in the sub xor block should be added to the nested block.  
+	\item If one of its xor branches contains no xor block, this branch is kept.
+	\item if one xor branch has xor block, called sub xor block, all branches without xor block in the sub xor block should be added to the nested block. 
 \end{itemize}
-This procedure is called nested xor block folding. After we fold all xor block, we create xor pair.  	
+\begin{figure}[h!]
+	\includegraphics[width=\textwidth]{PT09_seq_xor_nested.png}
+	\caption{Sequential nested xor blocks}
+	\label{fig:pt_seq_nested}
+\end{figure}
+So, in the model given by Figure \ref{fig:pt_seq_nested}, for xor block  Xor(A,Seq(B1,Xor(B2,B3),B4)), it has one branch A without xor block, A is therefore kept;  Xor(B2,B3) is nested in Xor(A,Seq(B1,Xor(B2,B3),B4)). 
+
+To create xor pair, we need to put the branches B2 and B3 in the same level of A. It implies that Xor(A,Seq(B1,Xor(B2,B3),B4)) has three real xor branches, which are A, B2 and B3. This procedure is called nested xor block folding. After all xor block is folded, we have two effective xor block, Xor(C,D) and Xor(A,B2,B3) and one pair of them is created, namely Pair(Xor(A,B2,B3), Xor(C,D)).
 \subsubsection{Parallel XOR Block}
 Given a model with xor blocks in parallel relation and event log which supports long-term dependency, we need to add long-term dependency on the model. There are some situations.
 \begin{itemize}
 	\item in each parallel branch, there exists one xor block, long-term pattern is one xor branch decides the choices of another xor
+	\item in parallel branch, there exist more than one xor block
+	\item xor block in parallel branch is nested
 \end{itemize}
-%% put some figures to explain it in process tree
-%% some situations for this problem by using petri net
-  %% in three xor in parallel and then one in sequence, but then how to do it ?? We also need to anaglyze it   
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PT07_And_4_xor_notnested.png}
+		\caption{Process Tree: parallel relation with 3 xor}
+		\label{fig:pt_and_4_xor}
+	\end{subfigure}
+	\vfill
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PN07_And_4_xor_notnested.png}
+		\caption{Petri net: parallel relation with 3 xor}
+		\label{fig:pn_and_4_xor}
+	\end{subfigure}
+	\caption{example parallel relation}
+	\label{fig:and_situation}
+\end{figure}
+%% we still need to analyze it, but how to deal with it?? 
 \subsubsection{Loop XOR Block}
 Long-term dependency divers in loop block as listed below. 
 \begin{itemize}
-	\item xor before loop block, several choices for redo part in loop block, as shown in Figure;; With different support, we can have different long-term dependency.
-	\item xor before loop block, xor in do part of loop block
-	\item xor before loop block, xor in redo part of loop block
+	\item one xor before loop block, several choices for redo part in loop block
+	\item one xor after loop block, several choices for redo part
+	\item one xor before loop block, xor in do part of loop block
+	\item one xor after loop block, xor in do part of loop block
+	\item one xor before loop block, xor in redo part of loop block
+	\item one xor after loop block, xor in redo part of loop block
 	\item xor in loop block do and redo part
-	\item xor before loop, xor in do part and redo part
+	\item one xor before loop, xor in do part and redo part
+	\item one xor after loop, xor in do part and redo part
 \end{itemize}
-We only deal with those situations with like this %put it in one graph and write down the pattern%
+
 \begin{align}
 <A, L_{1}^{*} || L_{2}^{*} || E> \\
 <B, L_{1}^{*} || L_{2}^{*} || E>
@@ -230,4 +303,6 @@ In Petri net, long-term dependency is addressed by adding extra places and silen
 
 \subsubsection{Loop}
 
+\bibliography{bibtex2ref.bib}
+\bibliographystyle{ieeetr}
 \end{document}
