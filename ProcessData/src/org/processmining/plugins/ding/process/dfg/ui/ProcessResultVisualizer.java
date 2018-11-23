@@ -9,6 +9,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.contexts.uitopia.UIPluginContext;
@@ -25,7 +26,9 @@ import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.IMdProcessTree;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.dialogs.IMdMiningDialog;
 import org.processmining.plugins.ding.process.dfg.model.ControlParameters;
 import org.processmining.plugins.ding.process.dfg.model.DfMatrix;
+import org.processmining.plugins.ding.process.dfg.model.DfgProcessResult;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ViewType;
+import org.processmining.plugins.ding.process.dfg.train.LTDependencyDetector;
 import org.processmining.processtree.ProcessTree;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet.InvalidProcessTreeException;
@@ -39,19 +42,15 @@ import org.processmining.processtree.conversion.ProcessTree2Petrinet.PetrinetWit
  * @author dkf
  *
  */
-@Plugin(name = "Show Process Result from Dfg", parameterLabels = { "Process result" }, returnLabels = { "JPanel" }, returnTypes = { JPanel.class })
+@Plugin(name = "Show Process Result from Dfg", parameterLabels = {"DfgProcess Result"}, returnLabels = { "JPanel" }, returnTypes = { JPanel.class })
 @Visualizer
+@SuppressWarnings("deprecation")
 public class ProcessResultVisualizer {
 
 	// one to display the dfg
 	@PluginVariant(requiredParameterLabels = { 0 })
-	public JComponent visualize(UIPluginContext context, DfMatrix dfMatrix) {
-		// but here we need to update the value of dfMatrix and then later to generate the dfg
-		// so here our parameter can be the dfMatrix
-		// Dfg dfg = dfMatrix.buildDfs();
-		// it accept the online controlled parameters and update the value, later to generate new-modfied dfg
-		
-		return new ResultMainView(context, dfMatrix);
+	public JComponent visualize(UIPluginContext context, DfgProcessResult dfgResult) {
+		return new ResultMainView(context, dfgResult);
 		
 	}
 }
@@ -67,21 +66,24 @@ class ResultMainView extends JPanel{
 	ResultRightControlView rightView;
 	ControlParameters parameters;
 	UIPluginContext context;
-	
+	XLog log;
 	DfMatrix dfMatrix;
 	Dfg dfg = null;
 	ProcessTree pTree = null;
-	@SuppressWarnings("deprecation")
 	AcceptingPetriNet anet = null;
-	ProvidedObjectID dfgId = null;
+	AcceptingPetriNet manet = null;
+	
+	ProvidedObjectID ltnetId = null;
 	ProvidedObjectID pTreeId = null;
 	ProvidedObjectID netId = null;
 	ProvidedObjectID markingId = null;
 	boolean updateAll = true;
 	
-	public ResultMainView(UIPluginContext context, final DfMatrix matrix) {
+	
+	public ResultMainView(UIPluginContext context, DfgProcessResult dfgResult) {
 		this.context = context;
-		dfMatrix = matrix;
+		log = dfgResult.getLog();
+		dfMatrix = dfgResult.getDfMatrix();
 		parameters =  new ControlParameters();
 		
 		rl = new RelativeLayout(RelativeLayout.X_AXIS);
@@ -99,16 +101,11 @@ class ResultMainView extends JPanel{
 		dfMatrix.updateCardinality(1, parameters.getPosWeight());
 		dfMatrix.updateCardinality(2, parameters.getNegWeight());
 		
-		showDfg();
-		if(dfgId == null) {
-			dfgId =context.getProvidedObjectManager().createProvidedObject("Generated Dfg", dfg, Dfg.class, context);
+		showProcessTree();
+		if(pTreeId == null) {
+			pTreeId =context.getProvidedObjectManager().createProvidedObject("Generated Process Tree", pTree, ProcessTree.class, context);
 		}
 		
-		/*
-		dfg = dfMatrix.buildDfs();
-		leftView.drawResult(dfg);
-		leftView.setVisible(true);
-		*/
 		JButton submitButton = rightView.getSubmitButton();
 		
 		submitButton.addActionListener(new ActionListener() {
@@ -148,12 +145,7 @@ class ResultMainView extends JPanel{
 		
 		parameters.setType(newParameters.getType());
 		
-		if(parameters.getType() == ViewType.Dfg) {
-			showDfg();
-			// if we show them here, we add dfg into the global context to let them show out
-			if(dfgId != null)
-				context.getProvidedObjectManager().changeProvidedObjectObject(dfgId, dfg);
-		}else if(parameters.getType() == ViewType.ProcessTree) {
+		if(parameters.getType() == ViewType.ProcessTree) {
 			showProcessTree();
 			if(pTreeId == null) {
 				pTreeId =context.getProvidedObjectManager().createProvidedObject("Generated Process Tree", pTree, ProcessTree.class, context);
@@ -172,11 +164,60 @@ class ResultMainView extends JPanel{
 				context.getProvidedObjectManager().changeProvidedObjectObject(netId, anet.getNet());
 				context.getProvidedObjectManager().changeProvidedObjectObject(markingId, anet.getInitialMarking());
 			}
+		}else if(parameters.getType() == ViewType.PetriNetWithLTDependency) {
+			showPetriNetWithLT();
+			if(ltnetId == null) {
+				ltnetId =context.getProvidedObjectManager().createProvidedObject("Petri net with LT", manet.getNet(), Petrinet.class, context);
+				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking with LT", manet.getInitialMarking(), Marking.class, context);
+				
+			}else {
+				context.getProvidedObjectManager().changeProvidedObjectObject(ltnetId, manet.getNet());
+				context.getProvidedObjectManager().changeProvidedObjectObject(markingId, manet.getInitialMarking());
+			}
+			
 		}
 			
 	}
 	
-	
+	@SuppressWarnings("deprecation")
+	private void showPetriNetWithLT() {
+		// TODO input is process tree and output is the petri net with long-term dependency
+		// one way is to generate the process tree, because we need it all the time
+		// but if we generate the petri net without lt, we can choose it 
+		if(updateAll) {
+			dfg =  dfMatrix.buildDfs();
+			// I think I should change something about it, which could remember the result from before
+			// so I could put the Dfg, ProcessTree and Petri net in the class
+			DfgMiningParameters ptParas = getProcessTreParameters();
+			pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+
+			// the steps to change is : 
+			/* Initial Process Tree generated
+			 * Check have anet and manet
+			 * Change threshold for a new process tree
+			 * now we want to have the new anet and manet for it
+			 *   ++ we should have each update value for each of them, and then update them?? Somehow?? 
+			 *   ++ because if we change the 
+			 *   the easy way to do it --- generate it each time
+			 */
+			// here we need to use the customized program to add lt dependency on it 
+			PetrinetWithMarkings mnet = LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters );
+			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
+
+		}else {
+			if(pTree == null) {
+				DfgMiningParameters ptParas = getProcessTreParameters();
+				pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+			}	
+			PetrinetWithMarkings mnet = LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters);
+			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
+			
+		}// we need to set another parameter to store it 
+		
+		leftView.drawResult(context, manet.getNet());
+		leftView.updateUI();
+	}
+
 	private boolean isWeightUpdated(ControlParameters para, ControlParameters newPara) {
 		if(para.getExistWeight() == newPara.getExistWeight() 
 				&& para.getPosWeight() == newPara.getPosWeight()
@@ -185,13 +226,6 @@ class ResultMainView extends JPanel{
 		return true;
 	}
 
-	private void showDfg()  {
-		if( updateAll) {
-			dfg =  dfMatrix.buildDfs();	
-		}
-		leftView.drawResult(dfg);
-		leftView.updateUI();
-	}
 	
 	private void showProcessTree() {
 		if(updateAll) {
@@ -223,14 +257,12 @@ class ResultMainView extends JPanel{
 				PetrinetWithMarkings net = ProcessTree2Petrinet.convert(pTree, true);
 				anet = new AcceptingPetriNetImpl(net.petrinet, net.initialMarking, net.finalMarking);
 			} catch (NotYetImplementedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InvalidProcessTreeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-		}else if(anet == null) {
+		}else{
 			if(pTree == null) {
 				DfgMiningParameters ptParas = getProcessTreParameters();
 				pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
@@ -239,10 +271,8 @@ class ResultMainView extends JPanel{
 				PetrinetWithMarkings net = ProcessTree2Petrinet.convert(pTree, true);
 				anet = new AcceptingPetriNetImpl(net.petrinet, net.initialMarking, net.finalMarking);
 			} catch (NotYetImplementedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InvalidProcessTreeException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 				

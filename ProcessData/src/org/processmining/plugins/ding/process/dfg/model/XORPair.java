@@ -143,6 +143,15 @@ public class XORPair<T>{
 	public List<LTConnection<T>> getLTDependency() {
 		return ltDep;
 	}
+
+	public void adaptLTConnection(int colIdx, double weight) {
+		// TODO adapt connection values according to the weight and column
+		for(int i=0; i< connections.size(); i++) {
+			LTConnection<T> conn = connections.get(i);
+			conn.adaptValue(colIdx, weight);
+		}
+		
+	}
 	
 	
 }

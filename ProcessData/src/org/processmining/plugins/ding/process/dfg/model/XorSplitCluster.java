@@ -10,8 +10,8 @@ import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 
 public class XorSplitCluster{
 	PetrinetNode keyNode;
-	int posIdx = ProcessConfiguration.RULESET_POS_IDX;
-	int negIdx = ProcessConfiguration.RULESET_NEG_IDX;
+	int posIdx = ProcessConfiguration.LT_POS_IDX;
+	int negIdx = ProcessConfiguration.LT_NEG_IDX;
 	Map<PetrinetNode, ArrayList<Double>> xorSplitStructure ;// = new ArrayList<>();
 	int completSize = -1;
 	boolean complete = false;
@@ -106,7 +106,7 @@ public class XorSplitCluster{
 		}
 		else {
 			origFreq = new ArrayList<Double>();
-			for(int i=0; i< ProcessConfiguration.RULESET_IDX_NUM; i++) {
+			for(int i=0; i< ProcessConfiguration.LT_IDX_NUM; i++) {
 				origFreq.add(0.0);
 			}
 		}

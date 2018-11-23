@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  20 NOV 2018 18:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  22 NOV 2018 15:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -338,60 +338,77 @@ File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 48.
- [2 <./images/PN06_Seq_2_xor_notnested.png>]
+<./images/FD_architecture_detail_02.png, id=17, 711.65875pt x 1277.77374pt>
+File: ./images/FD_architecture_detail_02.png Graphic file (type png)
+<use ./images/FD_architecture_detail_02.png>
+Package pdftex.def Info: ./images/FD_architecture_detail_02.png  used on input 
+line 57.
+(pdftex.def)             Requested size: 344.9912pt x 549.99742pt.
+
+
+LaTeX Warning: Float too large for page by 54.69742pt on input line 60.
+
+[2 <./images/PN06_Seq_2_xor_notnested.png>] [3 <./images/FD_architecture_detail
+_02.png>]
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 83.
-<./images/PT05_Petrinet_PT_Relation.png, id=24, 807.015pt x 365.365pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 90.
+<./images/PT05_Petrinet_PT_Relation.png, id=30, 807.015pt x 365.365pt>
 File: ./images/PT05_Petrinet_PT_Relation.png Graphic file (type png)
 <use ./images/PT05_Petrinet_PT_Relation.png>
 Package pdftex.def Info: ./images/PT05_Petrinet_PT_Relation.png  used on input 
-line 89.
+line 96.
 (pdftex.def)             Requested size: 345.0pt x 156.19516pt.
- [3 <./images/PT05_Petrinet_PT_Relation.png>]
-Overfull \hbox (26.78815pt too wide) in paragraph at lines 99--100
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Overfull \hbox (26.78815pt too wide) in paragraph at lines 106--107
 []\OT1/cmr/m/it/10 if $\OML/cmm/m/it/10 Q \OT1/cmr/m/n/10 =\U/msa/m/n/10 ^^H \O
 T1/cmr/m/n/10 (\OML/cmm/m/it/10 Q[]; Q[]; ::Q[]\OT1/cmr/m/n/10 )$\OT1/cmr/m/it/
 10 , the sub-trees have loop re-la-tion and $\OML/cmm/m/it/10 Q[]; Q[]; ::Q[] w
 ith n \OMS/cmsy/m/n/10 ^^U
  []
 
-<./images/PT01_Not_Nested_Overview.png, id=30, 1774.63pt x 410.53375pt>
+<./images/PT01_Not_Nested_Overview.png, id=31, 1774.63pt x 410.53375pt>
 File: ./images/PT01_Not_Nested_Overview.png Graphic file (type png)
 <use ./images/PT01_Not_Nested_Overview.png>
 Package pdftex.def Info: ./images/PT01_Not_Nested_Overview.png  used on input l
-ine 104.
+ine 111.
 (pdftex.def)             Requested size: 345.0pt x 79.80632pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 113--114
-
- []
-
-<./images/PT02_xor_nested_and_pure.png, id=31, 499.8675pt x 263.98625pt>
-File: ./images/PT02_xor_nested_and_pure.png Graphic file (type png)
-<use ./images/PT02_xor_nested_and_pure.png>
-Package pdftex.def Info: ./images/PT02_xor_nested_and_pure.png  used on input l
-ine 121.
-(pdftex.def)             Requested size: 345.0pt x 182.20306pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[4 <./images/PT01_Not_Nested_Overview.png>]
-Overfull \hbox (2.32007pt too wide) in paragraph at lines 127--128
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 120--121
+
+ []
+
+[5 <./images/PT05_Petrinet_PT_Relation.png> <./images/PT01_Not_Nested_Overview.
+png>]
+<./images/PT02_xor_nested_and_pure.png, id=41, 499.8675pt x 263.98625pt>
+File: ./images/PT02_xor_nested_and_pure.png Graphic file (type png)
+<use ./images/PT02_xor_nested_and_pure.png>
+Package pdftex.def Info: ./images/PT02_xor_nested_and_pure.png  used on input l
+ine 128.
+(pdftex.def)             Requested size: 345.0pt x 182.20306pt.
+
+Overfull \hbox (2.32007pt too wide) in paragraph at lines 134--135
 \OT1/cmr/bx/n/10 Definition 2.8 \OT1/cmr/m/n/10 (Or-der of xor block)\OT1/cmr/b
 x/n/10 . $\OML/cmm/m/it/10 XOR[]$ \OT1/cmr/m/it/10 is be-fore $\OML/cmm/m/it/10
  xor[]$\OT1/cmr/m/it/10 , writ-ten in $\OML/cmm/m/it/10 XOR[] \OMS/cmsy/m/n/10 
 ^^^
  []
 
-<./images/PT03_xor_in_loop.png, id=36, 729.72626pt x 281.05pt>
+<./images/PT03_xor_in_loop.png, id=42, 729.72626pt x 281.05pt>
 File: ./images/PT03_xor_in_loop.png Graphic file (type png)
 <use ./images/PT03_xor_in_loop.png>
-Package pdftex.def Info: ./images/PT03_xor_in_loop.png  used on input line 131.
+Package pdftex.def Info: ./images/PT03_xor_in_loop.png  used on input line 138.
 
 (pdftex.def)             Requested size: 345.0pt x 132.87401pt.
 
-Overfull \hbox (0.5004pt too wide) in paragraph at lines 129--136
-[]\OT1/cmr/m/n/10 Consider the model in Fig-ure 3[], we have xor or-der block, 
+Overfull \hbox (0.5004pt too wide) in paragraph at lines 136--143
+[]\OT1/cmr/m/n/10 Consider the model in Fig-ure 4[], we have xor or-der block, 
 $\OML/cmm/m/it/10 Xor\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Seq\OT1/cmr/m/n/10 (\OML
 /cmm/m/it/10 z; o\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ; m\OT1/cmr/m/n/10 ) \OMS/cm
 sy/m/n/10 ^^^
@@ -401,83 +418,83 @@ sy/m/n/10 ^^^
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (79.66101pt too wide) in paragraph at lines 137--138
+Overfull \hbox (79.66101pt too wide) in paragraph at lines 144--145
 \OT1/cmr/bx/n/10 Definition 2.9 \OT1/cmr/m/n/10 (XOR Pair)\OT1/cmr/bx/n/10 . $\
 OML/cmm/m/it/10 xor[]$ \OT1/cmr/m/it/10 and $\OML/cmm/m/it/10 xor[]$ \OT1/cmr/m
 /it/10 is an xor pair, writ-ten in XOR[]Pair($\OML/cmm/m/it/10 XOR[]; XOR[]$\OT
 1/cmr/m/it/10 ),
  []
 
-[5 <./images/PT02_xor_nested_and_pure.png>]
-Overfull \hbox (2.23883pt too wide) in paragraph at lines 164--165
+[6 <./images/PT02_xor_nested_and_pure.png>]
+Overfull \hbox (2.23883pt too wide) in paragraph at lines 171--172
 \OT1/cmr/bx/n/10 Definition 2.14 \OT1/cmr/m/n/10 (Long-term de-pen-dency in xor
  branches)\OT1/cmr/bx/n/10 . \OT1/cmr/m/it/10 Xor branch $\OML/cmm/m/it/10 XORB
 []$
  []
 
-[6 <./images/PT03_xor_in_loop.png>]
-<./images/PT08_xor_branches.png, id=47, 911.405pt x 202.7575pt>
+[7 <./images/PT03_xor_in_loop.png>]
+<./images/PT08_xor_branches.png, id=54, 911.405pt x 202.7575pt>
 File: ./images/PT08_xor_branches.png Graphic file (type png)
 <use ./images/PT08_xor_branches.png>
-Package pdftex.def Info: ./images/PT08_xor_branches.png  used on input line 193
+Package pdftex.def Info: ./images/PT08_xor_branches.png  used on input line 200
 .
 (pdftex.def)             Requested size: 345.0pt x 76.75163pt.
- [7 <./images/PT08_xor_branches.png>]
-<./images/PT06_Seq_3_xor_notnested.png, id=53, 1036.87375pt x 201.75375pt>
+ [8 <./images/PT08_xor_branches.png>]
+<./images/PT06_Seq_3_xor_notnested.png, id=59, 1036.87375pt x 201.75375pt>
 File: ./images/PT06_Seq_3_xor_notnested.png Graphic file (type png)
 <use ./images/PT06_Seq_3_xor_notnested.png>
 Package pdftex.def Info: ./images/PT06_Seq_3_xor_notnested.png  used on input l
-ine 208.
+ine 215.
 (pdftex.def)             Requested size: 345.0pt x 67.12999pt.
-<./images/PN06_Seq_3_xor_notnested.png, id=54, 1521.685pt x 215.80624pt>
+<./images/PN06_Seq_3_xor_notnested.png, id=60, 1521.685pt x 215.80624pt>
 File: ./images/PN06_Seq_3_xor_notnested.png Graphic file (type png)
 <use ./images/PN06_Seq_3_xor_notnested.png>
 Package pdftex.def Info: ./images/PN06_Seq_3_xor_notnested.png  used on input l
-ine 215.
+ine 222.
 (pdftex.def)             Requested size: 345.0pt x 48.9264pt.
-<./images/PT09_seq_xor_nested.png, id=55, 1031.855pt x 303.1325pt>
+<./images/PT09_seq_xor_nested.png, id=61, 1031.855pt x 303.1325pt>
 File: ./images/PT09_seq_xor_nested.png Graphic file (type png)
 <use ./images/PT09_seq_xor_nested.png>
 Package pdftex.def Info: ./images/PT09_seq_xor_nested.png  used on input line 2
-30.
+37.
 (pdftex.def)             Requested size: 345.0pt x 101.35228pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (1.55635pt too wide) in paragraph at lines 234--235
-\OT1/cmr/m/n/10 So, in the model given by Fig-ure 8[], for xor block Xor(A,Seq(
+Overfull \hbox (1.55635pt too wide) in paragraph at lines 241--242
+\OT1/cmr/m/n/10 So, in the model given by Fig-ure 9[], for xor block Xor(A,Seq(
 B1,Xor(B2,B3),B4)),
  []
 
-[8 <./images/PT06_Seq_3_xor_notnested.png> <./images/PN06_Seq_3_xor_notnested.p
+[9 <./images/PT06_Seq_3_xor_notnested.png> <./images/PN06_Seq_3_xor_notnested.p
 ng>]
-<./images/PT07_And_4_xor_notnested.png, id=59, 1300.86pt x 241.90375pt>
+<./images/PT07_And_4_xor_notnested.png, id=65, 1300.86pt x 241.90375pt>
 File: ./images/PT07_And_4_xor_notnested.png Graphic file (type png)
 <use ./images/PT07_And_4_xor_notnested.png>
 Package pdftex.def Info: ./images/PT07_And_4_xor_notnested.png  used on input l
-ine 248.
+ine 255.
 (pdftex.def)             Requested size: 345.0pt x 64.15216pt.
-<./images/PN07_And_4_xor_notnested.png, id=60, 1525.7pt x 491.8375pt>
+<./images/PN07_And_4_xor_notnested.png, id=66, 1525.7pt x 491.8375pt>
 File: ./images/PN07_And_4_xor_notnested.png Graphic file (type png)
 <use ./images/PN07_And_4_xor_notnested.png>
 Package pdftex.def Info: ./images/PN07_And_4_xor_notnested.png  used on input l
-ine 255.
+ine 262.
 (pdftex.def)             Requested size: 345.0pt x 111.214pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[9 <./images/PT09_seq_xor_nested.png>] [10 <./images/PT07_And_4_xor_notnested.p
-ng> <./images/PN07_And_4_xor_notnested.png>]
-(./Master_Thesis_Math_Formalization.bbl) [11]
+[10 <./images/PT09_seq_xor_nested.png>] [11 <./images/PT07_And_4_xor_notnested.
+png> <./images/PN07_And_4_xor_notnested.png>]
+(./Master_Thesis_Math_Formalization.bbl) [12]
 (./Master_Thesis_Math_Formalization.aux) ) 
 Here is how much of TeX's memory you used:
- 4672 strings out of 494847
- 71574 string characters out of 6179079
- 135080 words of memory out of 5000000
- 7905 multiletter control sequences out of 15000+600000
+ 4678 strings out of 494847
+ 71792 string characters out of 6179079
+ 136092 words of memory out of 5000000
+ 7910 multiletter control sequences out of 15000+600000
  14453 words of font info for 57 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  42i,15n,40p,840b,443s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -503,11 +520,11 @@ r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share
 ve/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on Master_Thesis_Math_Formalization.pdf (11 pages, 421069 bytes)
+Output written on Master_Thesis_Math_Formalization.pdf (12 pages, 479095 bytes)
 .
 PDF statistics:
- 143 PDF objects out of 1000 (max. 8388607)
- 95 compressed objects within 1 object stream
+ 149 PDF objects out of 1000 (max. 8388607)
+ 98 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 56 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

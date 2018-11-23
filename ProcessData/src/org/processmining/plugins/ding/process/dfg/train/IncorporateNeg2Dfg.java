@@ -46,15 +46,7 @@ public class IncorporateNeg2Dfg {
 		
 		int num = XLogInfoFactory.createLogInfo(pos_log).getNumberOfTraces();
 		dfMatrix.setStandardCardinality(num);
-		// now we need to adjust the complete the features it has. 
-		// 1. accept the threshold adjust on the result panel
-		
-		// 2. adjust the result w.r.t. different weight
-		
-		// 3. to have the process tree, that's the end. 
-		
-		// transform process tree into Petri net ?? No, we don't need it
-		
+
 		return dfMatrix;
 	}
 	
@@ -117,6 +109,7 @@ public class IncorporateNeg2Dfg {
 		// here we need to update the codes for accepting double percent 
 		
 		DfMatrix dfMatrix = new DfMatrix();
+		// here we don't need magical number, but they should exist, or zero
 		dfMatrix.addDirectFollowMatrix( dfg, 0);
 		// one problem here is about the single direct follow relation, it doesn't show here
 		dfMatrix.addDirectFollowMatrix( pos_dfg, 1); 

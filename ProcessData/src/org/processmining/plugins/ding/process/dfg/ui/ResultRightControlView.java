@@ -46,9 +46,9 @@ public class ResultRightControlView extends JPanel {
 	JLabel negValueLabel;
 	
 	RelativeLayout rl;
-	JRadioButton dfgButton;
 	JRadioButton ptButton;
 	JRadioButton pnButton;
+	JRadioButton pnltButton;
 	
 	JButton submit_button;
 	protected Color COLOR_BG = new Color(60, 60, 60);
@@ -64,17 +64,9 @@ public class ResultRightControlView extends JPanel {
 		this.setLayout(rl);
 		this.setBackground(COLOR_BG2);
 		
-		dfgButton = new JRadioButton("Show Dfg View");
-		dfgButton.setSelected(true);
-		dfgButton.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				// after we choose delete, we delete places and repaint the graph again
-				if(dfgButton.isSelected()) {
-					parameters.setType(ViewType.Dfg);
-				}
-			}
-		});
+		
 		ptButton = new JRadioButton("Show Process Tree");
+		ptButton.setSelected(true);
 		ptButton.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				// after we choose delete, we delete places and repaint the graph again
@@ -94,14 +86,26 @@ public class ResultRightControlView extends JPanel {
 			}
 		});
 		
+		pnltButton = new JRadioButton("Show PN With LT");
+		pnltButton.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				// after we choose delete, we delete places and repaint the graph again
+				if(pnltButton.isSelected()) {
+					parameters.setType(ViewType.PetriNetWithLTDependency);
+				}
+			}
+		});
+		
 		ButtonGroup typeGroup = new ButtonGroup();
-		typeGroup.add(dfgButton);
+		
 		typeGroup.add(ptButton);
 		typeGroup.add(pnButton);
+		typeGroup.add(pnltButton);
 		
-		this.add(dfgButton, new Float(5));
 		this.add(ptButton, new Float(5));
 		this.add(pnButton, new Float(5));
+		this.add(pnltButton, new Float(5));
+		
 		
 	
 		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);

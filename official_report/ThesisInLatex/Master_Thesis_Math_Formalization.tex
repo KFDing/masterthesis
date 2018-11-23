@@ -52,6 +52,13 @@ The output of this algorithm is:
 \begin{itemize}
 	\item Repaired model in petri net with long-term dependency
 \end{itemize}
+After combining this algorithm, the algorithm is completed to incorporate negative information to repair model as shown in Figure \ref{fig:architecture}.
+\begin{figure}
+	\includegraphics[width=\textwidth, height=\textheight]{FD_architecture_detail_02.png}
+	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and output data in eclipse shape, especially customized processes and data are in doubled lattice shape. Input event log and existing model are in blue, KPIs are in cloud. The output is a petri net in purple. }
+	\label{fig:architecture}
+\end{figure}
+%% some explanation about this architecture.
 
 \section{Definitions}
 Process tree, as one input for the algorithm, is one common model to interpret process in process mining. It's a block-structured tree. To specify the process tree with respect to long-term dependency, the following definitions are in need. Firstly, the definitions related to tree are reviewed.

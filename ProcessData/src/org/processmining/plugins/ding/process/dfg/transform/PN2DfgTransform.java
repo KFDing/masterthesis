@@ -88,6 +88,7 @@ public class PN2DfgTransform {
 		
 		addDirectFollow(dfg, ts);
 		
+		// setCardinality(dfg, 1);
 		return dfg;
 	}
 	
@@ -100,11 +101,11 @@ public class PN2DfgTransform {
 			for(Transition t : start_trans) {
 				if(!isTau(t)) {
 					// here we need to build one corresponding relation with initialization at begin
-					dfg.addStartActivity(eventClassMap.get(t.getLabel()), 0);
+					dfg.addStartActivity(eventClassMap.get(t.getLabel()), 1);
 				}else {
 					Collection<Transition> post_tau = getNonTauTransition(rg, t,false);
 					for(Transition post_t : post_tau) {
-						dfg.addStartActivity(eventClassMap.get(post_t.getLabel()), 0);
+						dfg.addStartActivity(eventClassMap.get(post_t.getLabel()), 1);
 					}
 				}
 			}
@@ -115,11 +116,11 @@ public class PN2DfgTransform {
 			for(Transition t : final_trans) {
 				if(!isTau(t)) {
 					// here we need to build one corresponding relation with initialization at begin
-					dfg.addEndActivity(eventClassMap.get(t.getLabel()), 0);
+					dfg.addEndActivity(eventClassMap.get(t.getLabel()), 1);
 				}else {
 					Collection<Transition> pre_tau = getNonTauTransition(rg, t,true);
 					for(Transition pre_t : pre_tau) {
-						dfg.addEndActivity(eventClassMap.get(pre_t.getLabel()), 0);
+						dfg.addEndActivity(eventClassMap.get(pre_t.getLabel()), 1);
 					}
 				}
 			}
@@ -178,7 +179,7 @@ public class PN2DfgTransform {
 		XEventClass source, target; 
 		source = eventClassMap.get(in_t.getLabel());
 		target = eventClassMap.get(out_t.getLabel());
-		dfg.addDirectlyFollowsEdge(source, target, 0);
+		dfg.addDirectlyFollowsEdge(source, target, 1);
 	}
 	
 	

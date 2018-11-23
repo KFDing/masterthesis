@@ -6,8 +6,6 @@ import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
 import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
-import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
-import org.processmining.plugins.ding.process.dfg.util.GraphvizDirectlyFollowsGraph;
 import org.processmining.plugins.ding.process.dfg.util.GraphvizProcessTree;
 import org.processmining.plugins.ding.process.dfg.util.GraphvizProcessTree.NotYetImplementedException;
 import org.processmining.plugins.graphviz.visualisation.DotPanel;
@@ -25,16 +23,6 @@ public class ResultLeftView extends JPanel {
 		rLayout.setFill( true );
 		this.setLayout(rLayout);
 		
-	}
-	
-	public void drawResult(Dfg dfg) { 
-		// we can get some parameters here to decide which graph we want to get
-		// so how to show the dfg result, then back again to the original view
-		this.removeAll();
-		graphPanel = GraphvizDirectlyFollowsGraph.visualise(dfg);
-		graphPanel.setVisible(true);
-		graphPanel.validate();
-		this.add(graphPanel, new Float(100)); // set 100 is important to make it show in right size
 	}
 
 	

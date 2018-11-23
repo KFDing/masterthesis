@@ -2,15 +2,21 @@ package org.processmining.plugins.ding.process.dfg.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * we need an array in length of 6, we reserve one for existing, 
+ * 
+ * @author dkf
+ *
+ * @param <T>
+ */
 public class LTConnection<T>{
 	
 	XORBranch<T> firstBranch ;
 	XORBranch<T> secondBranch;
 	// here need to fix the Value using double problems.. But we can get it later, I think..
-	int posIdx = ProcessConfiguration.RULESET_POS_IDX;
-	int negIdx = ProcessConfiguration.RULESET_NEG_IDX;
-	int num = ProcessConfiguration.RULESET_IDX_NUM;
+	int posIdx = ProcessConfiguration.LT_POS_IDX;
+	int negIdx = ProcessConfiguration.LT_NEG_IDX;
+	int num = ProcessConfiguration.LT_IDX_NUM * 2;
 	List<Double> connectionValues;
 	
 	boolean supportConnection = false;
@@ -70,11 +76,16 @@ public class LTConnection<T>{
 	}
 	
 	public void addConnectionValues(List<Double> values) {
-		
-		for(int i=0; i< values.size();i++) {
+		// add values fro each variant and get the total values
+		for(int i=0; i< num;i++) {
 			double tmp =  connectionValues.get(i) + values.get(i);
 			connectionValues.set(i, tmp);
 		}
+	}
+
+	public void adaptValue(int colIdx, double weight) {
+		// TODO adpat value according to colIdx and weight, but we have it only according 
+		connectionValues.set(colIdx, weight * connectionValues.get(colIdx - ProcessConfiguration.LT_IDX_NUM));
 	}
 
 }

@@ -50,12 +50,12 @@ public class DfMatrix {
 			//there is no direct way to change it, so what we can do it to remove and then add them again
 			XEventClass source = dfg.getDirectlyFollowsEdgeSource(idx);
 			XEventClass target = dfg.getDirectlyFollowsEdgeTarget(idx);
+			
 			long cardinality = dfg.getDirectlyFollowsEdgeCardinality(idx);
 			
 			// we need to get the percent of source->target in all source->* 
-			// so firstly we need to get the all source cardinality?? 
+			// so firstly we need to get the all source cardinality?? but how about the existing ones?? how to compare it ??
 			double percent = 1.0*cardinality / getOutEdgesCardinality(dfg, source);
-					
 			addMatrixItem(source, target, percent, colIdx);
 		}
 		
@@ -199,47 +199,27 @@ public class DfMatrix {
 		}
 	}
 	/**
-	 * some bugs here about the start and end activities. Whic I can't really say it.. 
-	 * if we change the DfMatrix into percent form, then how to transform them back itno cardinality
-	 * Just debug it and see how it works
+	 * some errors happen, because of the values on them, we have dfMatrix in double, and it represents the percentage to transform..
+	 * Then how to judge the effect of them, right noe?? 
+	 * We have rules, we keep t, if 
+	 * first, to know how to assign them into the matrix:: 
+	 *    -- if pos + existing > neg, we keep it??? Else, we leave it out?? 
 	 * @param dfg
 	 */
 	public Dfg buildDfs() {
 		Dfg dfg = new DfgImpl();
 		// read of each item in dfMatrix 
-		double percent;
+		double keepPercent, removePercent;
 		for(Map.Entry<ArrayList<XEventClass>, ArrayList<Double>> entry: dfMatrix.entrySet()) {
 			ArrayList<XEventClass> dfKey =  entry.getKey();
 			ArrayList<Double> dfValue = entry.getValue();
-			// 
-			// different situation here!! // we can merge those situation and take same action
-			// 1. only happen in neg 0 0 1 or 0 0 0==> delete it, no such relation !!
-			if(dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX)<1 && dfValue.get(ProcessConfiguration.MATRIX_POS_IDX)<1) {
-				continue; // or should we set it 0??
-			}else if(dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX) <1) {
-				// 2. only in positive 0 1 0,  ==> add it into dfg
-				// 4. only in the existing model, 1 0 0, ==>  add it into dfg
-				// 6. in existing and pos, 1 1 0 ==> no change but add cardinality on it
-				// one thing is here that, if we only want the existing ones, then we have it, so no problem
-				percent = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX) + dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
-				// here we need to check what situation theny are and then deal with it
-				addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), transform2Cardinality(percent) );
-			}else {
-				// with neg > 0, other combinations can be: 
-				// 3. in pos and neg, 0 1 1 ==> neg is only part of pos, then keep, 
-				// 7 in all, existing, pos and neg, 1 1 1==> same situation in 3
-				// 5. in existing and neg, 1 0 1 ==> check the distribution of it 
-				percent = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX) + dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
-				double neg = dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX);
-				if(percent > neg) {
-					// how to transform percent into cardinality is another question.. 
-					// we could use the 
-					addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), transform2Cardinality(percent - neg));
-				}else {
-					continue; //  do nothing, or something else..
-				}
-			}
 			
+			keepPercent = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX) + dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
+			removePercent = dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX);
+			double diffPercent = keepPercent - removePercent;
+			if(diffPercent > 0) {
+				addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), transform2Cardinality(diffPercent));
+			}
 		}
 		return dfg;
 	}
@@ -254,7 +234,7 @@ public class DfMatrix {
 		// or we just create the dfg, maybe according to its 
 		// we see the negative ones have less choices and it could mean that it have more weights on it.
 		// <1> threshold to filter it 
-		// <2> according to the source out edges cardinality in pos 
+		// <2> according to the source outedges cardinality in pos 
 		// <3> according to the whole log or pos log and assign to it.. 
 		// === I prefer <2>, then make it possible now!!!!
 		

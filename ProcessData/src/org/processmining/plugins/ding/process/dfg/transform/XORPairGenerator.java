@@ -86,7 +86,7 @@ public class XORPairGenerator {
 	 */
 	public void analyzeXORByDFS(Node node) {
 		if(node.isLeaf()) {
-			System.out.println("visit node : " + node.getName());
+			// System.out.println("visit node : " + node.getName());
 			// if there is first node to meet without the xor structure
 			if(xorBranchList.isEmpty())
 				return;
@@ -102,7 +102,7 @@ public class XORPairGenerator {
 			Block block =  (Block) node;
 			// to record the visit order but only for block..
 			// stateStack.push(block.getClass().getSimpleName());
-			System.out.println("visit block name: " + block.getClass().getSimpleName());
+			// System.out.println("visit block name: " + block.getClass().getSimpleName());
 			
 			// if the block is xor 
 			if(block.getClass().getSimpleName().equals(ProcessConfiguration.XOR)) {
@@ -293,7 +293,7 @@ public class XORPairGenerator {
 	private XORCluster<ProcessTreeElement> buildCluster(Node node, Set<Node> aSet) {
 		// but now how to generate the pair from clusterList?? 
 		Block block = (Block) node;
-		System.out.println("visit block name: " + block.getClass().getSimpleName());
+		// System.out.println("visit block name: " + block.getClass().getSimpleName());
 		
 		XORCluster<ProcessTreeElement> cluster =  new XORCluster<ProcessTreeElement>(block);
 		clusterList.add(cluster);

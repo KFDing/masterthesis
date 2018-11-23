@@ -29,7 +29,7 @@ public class ControlParameters {
 		existWeight =1.0 ;
 		posWeight = 1.0;
 		negWeight = 1.0;
-		type = ViewType.Dfg;
+		type = ViewType.ProcessTree;
 	}
 	
 	public void cloneValues(ControlParameters paras) {
@@ -72,7 +72,7 @@ public class ControlParameters {
 	}
 
 	public void resetValue() {
-		type = ViewType.Dfg;
+		type = ViewType.ProcessTree;
 		existWeight = 1.0;
 		posWeight = 1.0;
 		negWeight = 1.0;

@@ -2,7 +2,6 @@ package org.processmining.plugins.ding.process.dfg;
 
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
-import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
@@ -13,8 +12,8 @@ import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
 import org.processmining.plugins.ding.process.dfg.model.DfMatrix;
+import org.processmining.plugins.ding.process.dfg.model.DfgProcessResult;
 import org.processmining.plugins.ding.process.dfg.train.IncorporateNeg2Dfg;
-import org.processmining.plugins.ding.process.dfg.train.NFCDetector;
 import org.processmining.plugins.ding.process.dfg.transform.PN2DfgTransform;
 
 /**
@@ -33,6 +32,7 @@ import org.processmining.plugins.ding.process.dfg.transform.PN2DfgTransform;
  */
 
 public class DfgTransformPlugin {
+	/*
 	@Plugin(name = "Repair Model by Kefang", returnLabels = {"DfMatrix"}, 
 			   returnTypes = { DfMatrix.class}, parameterLabels = { "XLog","Existing Petri Net","Initial Marking"})
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
@@ -40,12 +40,13 @@ public class DfgTransformPlugin {
 	public DfMatrix transformPn2Dfg(UIPluginContext context, XLog log, AcceptingPetriNet anet) throws ConnectionCannotBeObtained {
 		return transformPn2Dfg(context, log, anet.getNet(), anet.getInitialMarking());
 	}
+	*/
 	
-	@Plugin(name = "Repair Model by Kefang", returnLabels = {"DfMatrix"}, 
-			   returnTypes = { DfMatrix.class}, parameterLabels = { "XLog","Existing Petri Net","Initial Marking"})
+	@Plugin(name = "Repair Model by Kefang", returnLabels = {"DfgProcess Result"}, 
+			   returnTypes = {DfgProcessResult.class}, parameterLabels = { "XLog","Existing Petri Net","Initial Marking"})
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Repair Model By Dfg-- With Marking",  requiredParameterLabels = { 0 , 1 , 2})
-	public DfMatrix transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
+	public DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
 		// -- transform Petri net into Dfg
 		
 		Dfg dfg = PN2DfgTransform.transformPN2Dfg(context, net, marking);
@@ -64,21 +65,7 @@ public class DfgTransformPlugin {
 		DfMatrix dfMatrix = IncorporateNeg2Dfg.createDfMatrix(dfg, pos_dfg, neg_dfg);
 		dfMatrix.setStandardCardinality(num);
 		
-		return dfMatrix;
-	}
-	
-	@Plugin(name = "Repair Model by Kefang", returnLabels = {"Petri net"}, 
-			   returnTypes = { Petrinet.class}, parameterLabels = { "XLog","Existing Petri Net"})
-	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "Detect NFC",  requiredParameterLabels = { 0 , 1 })
-	public Petrinet detectNFC(UIPluginContext context, XLog log, Petrinet net) {
-		NFCDetector detector = new NFCDetector(net, log);
- 		detector.buildPotentialCombination();
-		detector.detectNFCClusters();
-		detector.addNFCConstraints();
-		// detector.removeNFCConstraints();
-		return detector.getNet();
-	}
-	
+		return new DfgProcessResult(log, dfMatrix);
+	}	
 
 }
