@@ -24,24 +24,69 @@
 \hrulefill 
 
 \begin{abstract}
-This article describes the mathematical formalization of the algorithm, which is used to add long-term dependency in process model repair by incorporating negative information. The following sections are organized in this way. Section 1 introduces the problems to solve. Section 2 gives formal definitions. Section 3 gives details of the algorithm steps. 
+This article describes the mathematical formalization of the algorithm, which repairs process model by incorporating negative information. The following sections are organized in this way. Section 1 describes the problems to solve. Section 3 introduces formal definitions for dfg-method and adding long-term dependency. Section 4 gives details of the algorithm steps. 
 \end{abstract}
 
 \section{Introduction}
 The inputs for process model repair include one existing process model, a corresponding event log and a set of KPIs for the data evaluation in event log. After evaluating event log by KPIs, positive and negative labels are assigned on each trace in event log file. 
 
-In state-of-the-art technologies in process mining, only positive traces are used to repair model, while negative information is omitted. In this way, the generated models have low precision. In order to increase the precision, we adapt Inductive Miner algorithm on the base of directly-follows relation of activities. This algorithm, called dfg-algorithm, uses both positive and negative information from event log and generates a model with high fitness. However, dfg-algorithm can't discover, change the long-term dependency in the model, so that the model still has less precision. With concept Long-term dependency, it describes the dependency between activities, where the execution of one activity affects the execution of another activities later. One example is given to address this problem.
+In state-of-the-art technologies in process mining, only positive traces are used to repair model, while negative information is omitted. In this way, the generated models have low precision. In order to increase the precision, we adapt Inductive Miner algorithm on the base of directly-follows relation of activities. This algorithm, called dfg-algorithm, uses both positive and negative information from event log and generates a model with high fitness. Yet after application, dfg-algorithm cannot discover, change the long-term dependency in the model, so that the model still has less precision. With concept long-term dependency, it describes the dependency between activities, where the execution of one activity affects the execution of another activities later. Later, we investigate problem and propose one algorithm to add long-term dependency constraints in model. 
 %% we have the model of Petri net from 
 
-\textit{Example 1} Consider event log with labels L =[$<A,C,E>^{10,pos}, <B,C,D>^{10,pos}, <A,C,D>^{10,neg}$]. $<A,C,E>^{10,pos}$ means there are 10 traces $<A,C,E>$ labeled as positive in event log. Similarly, $<A,C,D>^{10,neg}$ represents 1o $<A,C,D>$ traces in event log which have negative labels. 
+In this article, we propose one algorithm which combines dfg-method and adding long-term dependency programs, to incorporate negative information. The architecture of this model repair algorithm is as shown in Figure \ref{fig:architecture_blackbox}.
+\begin{figure}[!h]
+	\includegraphics[width=\textwidth]{FD00_approach_blackbox.png} 
+	\caption[Model Repair Architecture]{Model Repair Architecture -- \small firstly, event log is divided into positive and negative logs according to KPIs. Later, they are passed as inputs into repair process with existing process model. The output of this process is repaired model.}
+	\label{fig:architecture_blackbox}
+\end{figure}
+%% some explanation about this architecture.
 
-After applying the dfg-algorithm, a model as shown in Figure \ref{fig:pn_without_lt_exm01} is discovered.In event log L, B and D has long-term dependency, and A is expected to support only the execution of E, since $<A,C,D>$ is negative and $<A,C,E>$ is positive. However, the model doesn't express those constraints.
+\section{Definitions}
+\subsection{Definitions Related To Dfg-Method}
+In this part, we provides concepts related to the dfg-method which is based on directly-follows graph. A directly-follows graph as used in \cite{leemans2013discovering}, represents the directly-follows relation of activities in event log. For instance, if there are traces of $\langle ...,A,B,... \rangle$ in event log, one edge (A,B) is added into directly-follows graph. By cutting directly-follows graph under different conditions, Inductive Miner\cite{leemans2013discovering,leemans2014discovering} discovers a process model. Unlike this process, we adapt Inductive Miner to repair model by using existing model, and event log with labels.
+ 
+\begin{mydef}[Cardinality in directly-follows graph]
+	Given a directly-follows graph G(L) derived from an event log L, the cardinality of each directly-follows relation in G(L) is defined as:  
+	\begin{itemize}
+		\item $Cardinality(E(A,B))$ is the frequency of traces with $\langle ...,A,B,... \rangle$. 
+		\item Start node A cardinality $Cardinality(Start(A))$ is the frequency of traces with begin node A.
+		\item End node B cardinality $Cardinality(End(A))$ is the frequency of traces with end node B.
+	\end{itemize}	
+\end{mydef}
+From the positive and negative event log, we can get directly-follows graphs, respectively $G(L_{pos})$ and $G(L_{neg})$. Each edge of  $G(L_{pos})$ and $G(L_{neg})$ has a cardinality to represent the strength of this directly-follows relation. 
+However, when the existing model is transformed into  directly-follows graph $G(L_{ext})$, there is no meaning to assign cardinality on each edge. So we just set 1 to cardinality of each edge. 
+
+%To incorporate all information from  $G(L_pos)$, $G(L_neg)$ and $G(L_ext)$, a data structure is defined directly-follows matrix. 
+To incorporate all information from  $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$, we define  weight for each directly-follows relation in graph. 
+\begin{mydef}[Weight of directly-follows relation]
+	Given a directly-follows graph G(L), the weight of each directly-follows relation is defined as \[ Weight(E(A,B)) = \frac{Cardinality(E(A,B))}{Cardinality(E(A,*))}  \] 
+	for start activities A, we have 
+	\[ Weight(Start(A)) = \frac{Cardinality(Start(A))}{Cardinality(Start(*))} \]
+	Similarly for end activities B, we have
+	\[ Weight(End(B)) = \frac{Cardinality(End(B))}{Cardinality(End(*))} \]
+	E(A,*) means all edges with source A, E(*,B) means all edges with target B, Start(*) represents all start nodes, and End(*) represents all end nodes.
+\end{mydef}
+After defining the weights of each directly-follows relation, for each directly-follows relation, there are three weights from $G_{pos}$, $G_{neg}$ and $G_{ext}$. The following strategy assigns new weight to directly-follows relation to new generated directly-follows graph $G_{new}$.
+\begin{mydef}[Assign new weights to graph $G_{new}$]
+	For one directly-follows relation, there are three weights from $G_{pos}$, $G_{neg}$ and $G_{ext}$, the new weight is \[ Weight(E_{G_{new}}(A,B)) = Weight(E_{G_{pos}}(A,B)) + Weight(E_{G_{ext}}(A,B)) - Weight(E_{G_{neg}}(A,B))\]
+		for start activities A, we have 
+	\[ Weight(Start_{G_{new}}(A)) = Weight(Start_{G_{pos}}(A)) + Weight(Start_{G_{ext}}(A)) - Weight(Start_{G_{neg}}(A)) \]
+	for end activities B, we have
+	\[ Weight(End_{G_{new}}(A)) = Weight(End_{G_{pos}}(A)) + Weight(End_{G_{ext}}(A)) - Weight(End_{G_{neg}}(A)) \]
+\end{mydef}
+After assigning all the weight to directly-follows relation in $G_{new}$, we filter out all directly-follows relation in $G_{new}$ with weight less than 0. 
+Then, we transform the $G_{new}$ into process tree for the next stage.
+
+\subsection{Definitions Related To Add Long-term Dependency}
+\textit{Example 1} Consider event log L with labels \[L =[\langle A,C,E \rangle^{10,pos}, \langle B,C,D \rangle^{10,pos}, \langle A,C,D \rangle^{10,neg}]. \] $\langle A,C,E \rangle^{10,pos}$ means there are 10 traces $\langle A,C,E \rangle$ labeled as positive in event log. Similarly, $\langle A,C,D \rangle^{10,neg}$ represents there are $\langle A,C,D \rangle$ traces at number 10 in event log which have negative labels. 
+
+After applying the dfg-algorithm, a model as shown in Figure \ref{fig:pn_without_lt_exm01} is discovered. In event log L, B and D has long-term dependency, and A is expected to support only the execution of E, since $<A,C,D>$ is negative and $<A,C,E>$ is positive. However, the model doesn't express those constraints.
 \begin{figure}[h!]
 	\includegraphics[width=\textwidth]{PN06_Seq_2_xor_notnested.png}
 	\caption{Process model generated from dfg-algorithm}
 	\label{fig:pn_without_lt_exm01}
 \end{figure}
-In this article, we investigate this problem and propose one algorithm to add long-term dependency constraints in model. Obviously, long-term dependency relates the choices structure in process model, such as exclusive choice, loop and or structure. Due to the complexity of or structure, only the long-term dependency in exclusive choice and loop structures is considered. 
+Obviously, long-term dependency relates the choices structure in process model, such as exclusive choice, loop and or structure. Due to the complexity of or structure, only the long-term dependency in exclusive choice and loop structures is considered. 
 
 The inputs for this algorithm are,
 \begin{itemize}
@@ -52,15 +97,7 @@ The output of this algorithm is:
 \begin{itemize}
 	\item Repaired model in petri net with long-term dependency
 \end{itemize}
-After combining this algorithm, the algorithm is completed to incorporate negative information to repair model as shown in Figure \ref{fig:architecture}.
-\begin{figure}
-	\includegraphics[width=\textwidth, height=\textheight]{FD_architecture_detail_02.png}
-	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and output data in eclipse shape, especially customized processes and data are in doubled lattice shape. Input event log and existing model are in blue, KPIs are in cloud. The output is a petri net in purple. }
-	\label{fig:architecture}
-\end{figure}
-%% some explanation about this architecture.
 
-\section{Definitions}
 Process tree, as one input for the algorithm, is one common model to interpret process in process mining. It's a block-structured tree. To specify the process tree with respect to long-term dependency, the following definitions are in need. Firstly, the definitions related to tree are reviewed.
 \begin{mydef}[Tree]
 	Let $ \mathscr{E} $ be a finite set of entities, a tree is a collection of entities called nodes, which are connected by edges. A tree T is,
@@ -173,6 +210,12 @@ In this context, we define the long-term dependency between xor branches.
 \end{mydef}
 % here we need to define the 
 \section{Algorithm Design}
+After combining this algorithm, the algorithm is completed to incorporate negative information to repair model as shown in Figure \ref{fig:architecture}.
+\begin{figure}
+	\includegraphics[width=\textwidth, height=\textheight]{FD_architecture_detail_02.png}
+	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and output data in eclipse shape, especially customized processes and data are in doubled lattice shape. Input event log and existing model are in blue, KPIs are in cloud. The output is a petri net in purple. }
+	\label{fig:architecture}
+\end{figure} 
 According to the long-term dependency definition, we propose our algorithm to discover long-term dependency. Because the purity, nestedness and its position in process tree, long-term dependency is handled in different situations. However, due to the complexity, the algorithm focuses only on the binary long-term dependency of xor block, which means, we only create xor pair of $XOR_X and XOR_Y$, marked with where 
 \[ \exists ! XOR_Z, \: XOR_S \prec XOR_T \rightarrow XOR_S \prec XOR_Z \land XOR_Z \prec XOR_Y \]
 The general steps of algorithm is in the following. \\
