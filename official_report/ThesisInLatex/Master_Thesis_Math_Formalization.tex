@@ -1,6 +1,7 @@
 \documentclass[]{article}
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{amsthm}
 \usepackage{amsfonts}
@@ -68,11 +69,14 @@ To incorporate all information from  $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$
 \end{mydef}
 After defining the weights of each directly-follows relation, for each directly-follows relation, there are three weights from $G_{pos}$, $G_{neg}$ and $G_{ext}$. The following strategy assigns new weight to directly-follows relation to new generated directly-follows graph $G_{new}$.
 \begin{mydef}[Assign new weights to graph $G_{new}$]
-	For one directly-follows relation, there are three weights from $G_{pos}$, $G_{neg}$ and $G_{ext}$, the new weight is \[ Weight(E_{G_{new}}(A,B)) = Weight(E_{G_{pos}}(A,B)) + Weight(E_{G_{ext}}(A,B)) - Weight(E_{G_{neg}}(A,B))\]
-		for start activities A, we have 
-	\[ Weight(Start_{G_{new}}(A)) = Weight(Start_{G_{pos}}(A)) + Weight(Start_{G_{ext}}(A)) - Weight(Start_{G_{neg}}(A)) \]
-	for end activities B, we have
-	\[ Weight(End_{G_{new}}(A)) = Weight(End_{G_{pos}}(A)) + Weight(End_{G_{ext}}(A)) - Weight(End_{G_{neg}}(A)) \]
+	there are three weights from $G_{pos}$, $G_{neg}$ and $G_{ext}$, the new weight is 
+	\begin{itemize}
+		\item For one directly-follows relation, \[ Weight(E_{G_{new}}(A,B)) = Weight(E_{G_{pos}}(A,B)) + Weight(E_{G_{ext}}(A,B)) - Weight(E_{G_{neg}}(A,B))\]
+		\item For start activities A, we have 
+		\[ Weight(Start_{G_{new}}(A)) = Weight(Start_{G_{pos}}(A)) + Weight(Start_{G_{ext}}(A)) - Weight(Start_{G_{neg}}(A)) \]
+		\item For end activities B, we have
+		\[ Weight(End_{G_{new}}(A)) = Weight(End_{G_{pos}}(A)) + Weight(End_{G_{ext}}(A)) - Weight(End_{G_{neg}}(A)) \]
+	\end{itemize}
 \end{mydef}
 After assigning all the weight to directly-follows relation in $G_{new}$, we filter out all directly-follows relation in $G_{new}$ with weight less than 0. 
 Then, we transform the $G_{new}$ into process tree for the next stage.
@@ -101,19 +105,20 @@ The output of this algorithm is:
 Process tree, as one input for the algorithm, is one common model to interpret process in process mining. It's a block-structured tree. To specify the process tree with respect to long-term dependency, the following definitions are in need. Firstly, the definitions related to tree are reviewed.
 \begin{mydef}[Tree]
 	Let $ \mathscr{E} $ be a finite set of entities, a tree is a collection of entities called nodes, which are connected by edges. A tree T is,
-	\[
-	\begin{array}{ rll}
-		\circ&t & \mbox{with } t\in \mathscr{E},  \text{t has no outgoing edges}\\
-		\circ&t(T_1,T_2,...,T_n) & \mbox{with} t\in \mathscr{E}, i,n\in \mathbb{N}, i \leq n ,T_i\;is\; a\; tree.
-	\end{array}
-	\]
+	
+\begin{itemize}
+	\item t, with  $t\in \mathscr{E}$, t has no outgoing edges
+	\item $t(T_1,T_2,...,T_n)$, with $t\in \mathscr{E}, i,n\in \mathbb{N}, i \leq n ,T_i$ is a tree.
+\end{itemize}
 \end{mydef}
 $T_i$ is a child or subtree of $t(T_1,T_2,...,T_n)$, $t(T_1,T_2,...,T_n)$ is one parent of $T_i$, which can be expressed in $P(t(T_1,T_2,...,T_n),T_i)$. The root of tree is the node without any parent; A tree has only one root. A leaf node is the node which has no children nodes.\\
 For a node in a tree, its ancestor and descendant are defined as:
 \begin{mydef}[Ancestor]
 	An ancestor for a node t is a node A in a tree, if 
-	\[\text{A is the parent of t or} \]
-	\[ \exists t_1,t_2..t_n,n\in \mathscr{E}, i < n, P(A,t_1)\land P(t_i,t_{i+1}) \land P(t_n,t) \]
+	\begin{itemize}
+	\item A is the parent of t, or
+	\item $\exists t_1,t_2..t_n,n\in \mathscr{E}, i < n, P(A,t_1)\land P(t_i,t_{i+1}) \land P(t_n,t) $
+   \end{itemize}
 \end{mydef}
 For root, the ancestor is empty, while leaf nodes has no descendants. Except his, for two nodes t and s, if t is the ancestor of s, we have relation Anc(t,s) true. We also define Ancestors(s) as the set of all ancestors of a node s. Similarly, a descendant for a node t is a node s, if t is the ancestor of s, then s is the descendant of node t and Des(s,t) is true; The set of descendants of node t is Descendants(t).
 \begin{mydef}[Least Common Ancestor]
@@ -128,28 +133,55 @@ In process tree, all the leaves are activities in business process, and the midd
 		\item $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ is a process tree with $\oplus \in \bigoplus$, and $Q_i$ is a process tree, $i\in{1,2,..,n}, n\in \mathbb{N}$. 
 	\end{itemize}
 \end{mydef}
-Process tree operators represents different block relation of each subtree. Their semantics are standardized from \cite{vanderAalst:2016:PMD:2948762, Buijs2012OnTR} and explained with use of Petri net in Figure \ref{fig:pn_pt_relation}\cite{Buijs2012OnTR}.
-\begin{figure}[h!]
- 	\includegraphics[width=\textwidth]{PT05_Petrinet_PT_Relation.png}
- 	\caption{Process Tree With All Operators}
- 	\label{fig:pn_pt_relation}
+Process tree operators represents different block relation of each subtree. Their semantics are standardized from \cite{vanderAalst:2016:PMD:2948762, Buijs2012OnTR} and explained with use of Petri net in Figure \ref{fig:pn_pt_correspondings}\cite{Buijs2012OnTR}.
+\begin{figure}[!h]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PT_PN_corresponding_01_seq_PN.png}
+		\caption{Sequence}
+		\label{fig:pt_pn_seq}
+	\end{subfigure}%
+    \quad
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PT_PN_corresponding_02_xor_PN.png}
+		\caption{Exclusive choice}
+		\label{fig:pt_pn_xor}
+	\end{subfigure}%
+    \\ %this makes much difference
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PT_PN_corresponding_03_and_PN.png}
+		\caption{ Parallelism }
+		\label{fig:pt_pn_and}
+	\end{subfigure}%
+    \quad
+	\begin{subfigure}[b]{0.45\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PT_PN_corresponding_04_loop_PN.png}
+		\caption{Loop}
+		\label{fig:pt_pn_loop}
+	\end{subfigure}%
+	\caption{Semantics of process tree operators w.r.t. Petri net}
+	\label{fig:pn_pt_correspondings}
 \end{figure}
 \begin{mydef}[Operator Semantics] 
-	The semantics of operators $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright, \vee \}$ are,
+	The semantics of operators $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright \}$ are,
 	\begin{itemize}
 		\item if $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, the subtrees have sequential relation and are executed in order of $Q_1,Q_2,..Q_n$
 		\item if $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have exclusive choice relation and only one subtree of $Q_1,Q_2,..Q_n$   can be executed.
 		\item if $Q= \land (Q_1 , Q_2 ,.. Q_n)$,  the subtrees have parallel relation and $Q_1,Q_2,..Q_n$ they can be executed in parallel.
 		\item if $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have loop relation and $Q_1,Q_2,..Q_n \; with\; n\geq2$, $Q_1$ is the do-part and is executed at least once, $Q_2,..Q_n$ are redo part and have exclusive relation.
-		\item $Q=\vee(Q_1 , Q_2 ,.. Q_n)$, the subtrees have or choice relation and at least one of them executes.
 	\end{itemize}
 \end{mydef}
+
+An example of process trees is given in the following Figure \ref{fig:not_nested_overview} . It describes a business model, which includes sequential, exclusive choice and parallel relations among the activities. To handle the long-term dependency in the model, exclusive choice, abbr. as xor  and loop are investigated, and several definitions are derived in the next part.
 \begin{figure}[h!]
 	\includegraphics[width=\textwidth]{PT01_Not_Nested_Overview.png}
 	\caption{Process Tree With All Operators}
 	\label{fig:not_nested_overview}
 \end{figure}
-An example of process trees is given in the following Figure \ref{fig:not_nested_overview} . It describes a business model, which includes sequential, exclusive choice and parallel relations among the activities. To handle the long-term dependency in the model, exclusive choice, abbr. as xor  and loop are investigated, and several definitions are derived in the next part.
 \begin{mydef}[xor branch]
    $Q= \times(Q_1 , Q_2 ,.. Q_n)$, $Q_i$ is one xor branch with respect to Q. For convenience, we use $XORB_{Q_i}$ to represent one xor branch $Q_i$ in xor block, and record it $XORB_{Q_i} \in XOR_{Q}$. For each branch, there exists the begin and end nodes to represent the beginning and end execution of this branch, which is written respectively as Begin($XORB_{Q_i}$) and End($XORB_{Q_i}$).
 \end{mydef}
@@ -310,6 +342,80 @@ Given a model with xor blocks in parallel relation and event log which supports 
 	\label{fig:and_situation}
 \end{figure}
 %% we still need to analyze it, but how to deal with it?? 
+\subsubsection{Nested Xor in Parallel}
+%% here we need to consider if nested xor in parallel what to do then?? If in sequential, it's fine, but if in parallel, like this situation, what to do ??
+In situation, xor is nested in the parallel block listed in Figure \ref{fig:nested_and_situation}. Figure \ref{fig:pt_nested_xor_in_parallel} shows there are two kind of nested xor blocks, one is in sequence and the other is in parallel. To add long-term dependency, if it is in sequence, we can unfold the xor branches to the higher level. But if there are parallel, we need to unify the situations. 
+\begin{figure}[h]
+	\centering
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PT10_NestedXorInParallel_01.png}
+		\caption{Process Tree: nested xor in parallel block}
+		\label{fig:pt_nested_xor_in_parallel}
+	\end{subfigure}%
+
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PN10_NestedXorInParallel_01.png}
+		\caption{Petri net: nested xor in parallel block}
+		\label{fig:pn_nested_xor_in_parallel}
+	\end{subfigure}%
+   \\
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{PN10_NestedXorInParallel_02.png}
+		\caption{Petri net: long-term dependency on nested xor in parallel block}
+		\label{fig:pn_lt_nested_xor_in_parallel}
+	\end{subfigure}%
+	\caption{nested xor in parallel block}
+	\label{fig:nested_and_situation}
+\end{figure}
+According to the number of direct branches in the biggest xor block, silent transitions of the same number are generated. After those silent transitions, different number of places are created with respect to the nested xor list. 
+
+To explain this, a example with xor branch Seq(B,Xor(C1,C2)) is given. In this branch, there is only one xor block as begin xor block, Xor(C1,C2). So we generate only one place after this silent transition. \\
+For xor branch And(Xor(D1,D2), Xor(E1,E2)), there are two xor block Xor(D1,D2) and Xor(E1,E2) as begin xor blocks. So, we generate two places after the silent transition for this xor branch. 
+
+Above is for situations to create xor pair for the relation before the nested xor relation. Similarly, to add long-term dependency for xor block after the nested xor blocks, we need to remember the number of end xor list for each xor branch. If there are more than two xor blocks, we then add two places and one silent transition to combine parallelism of two xor blocks.
+
+% If there is one branch is of connection, but the other has complete connection with other xor block, how to reduce the number of silent transitions?? how to escape them ?? 
+But how to create xor pairs??? We need to consider the structure difference of parallelism. 
+For pure branch, we treat it as one xor block but with only one choice. For the sequence branch, pair of before and after is generated.. But for parallel, with two xor block, or one block, what to do then??  
+we create xor pair like this.. XorPair(Xor(S1,S2) , Xor(D1,D2)), XorPair(Xor(S1,S2) , Xor(E1,E2)). 
+But it has to be in parallel, so we know it. How to define the complete connection, if any combination happens once.. 
+
+Given example event log 
+\begin{align*}
+ L_2=[ &\langle S1,A,T1 \rangle^{10,pos},  \langle S1,B,C1,T1 \rangle^{10,pos},  \langle S1,B,C2,T1, \rangle^{10,pos}, \\ 
+  &\langle S1,D2,E2,T2 \rangle^{10,pos},  \langle S2,A,T2 \rangle^{10,pos}, \langle S2,D1,E1,T1 \rangle^{10,pos},\\
+  &\langle S2,D1,E2,T1 \rangle^{10,pos}  ].
+\end{align*}
+
+Only considering the XorPair(Xor(S1,S2) , Xor(D1,D2)), XorPair(Xor(S1,S2) , Xor(E1,E2)), we have connections.. how to check the while connection with it, that's the problem, because we consider the whole xor into one part!!! 
+
+So, if we consider also all the xor to xor branches, and then think them all together, how to do it with connections of xor(D1,D2) and xor(E1,E2).. We have data, $\langle S1,D2,E2,T2 \rangle, \langle S2,D1,E1,T1 \rangle $, connections, we have like in the S1,D2, ... S2,D1. 
+
+Parallel situations must stay together..If we try to change the LTConnection, we mark the first and second branch as a list, then we create LTConnection, with structure, they should happen in the same trace.. 
+
+{[S1],[D1,E1]} {[S1],[D2,E1]}, {[S1],[D1,E2]} {[S1],[D2,E2]}.. Then we check the situation in event log.. 
+< ....S1, D1,E1,...> or <...S1,E1,D1....> we add 1 to connection {[S1],[D1,E1]} cardinality. 
+
+How to decide there is no complete connection, if we don't have all of the connections.. 
+
+How to add long-term dependency?? Observed that we have connection of $\langle S1,D2,E2 \rangle, \langle S2,D1,E1 \rangle $, we add long-term dependency by following procedure. 
+\begin{enumerate}
+	\item check where this LT connection is from, seq or parallel
+	\item if from parallel, add one branch silent transition and two places after it ; \\
+	Else, add one branch silent transition and one place after it
+	\item if parallel, add silent transitions to connect places in the LTConnection when there is no such connection;\\
+	if xor in seq, given $\langle ..., S1,B,C1,... \rangle, \langle ...,S1,B,D2... \rangle $, add silent transition to connect to branch place and the place before node in LTConnection. \\
+	if only leaf node, given  $\langle ..., S1,A,... \rangle, \langle ...,S1,A,... \rangle $, we connect it like in seq, but later delete the silent transitions. From place of branch for one places and then connect to the node in LTConnection. 
+\end{enumerate}
+To create pair after them, likely, we follow the same strategy. Firstly, to check the different situations, if it is sequence or leaf node, we create one branch silent transitions and place. Else, we create more places for it. 
+
+I still have one doubt, if we go deeper, what happens??? IF we go third depth for it?? For sequential and then parallel?? How to combine them??
+
+To generate pairs, it is ok to write them down, the problem is to detect the connection in parallel
+
 \subsubsection{Loop XOR Block}
 Long-term dependency divers in loop block as listed below. 
 \begin{itemize}
@@ -324,6 +430,8 @@ Long-term dependency divers in loop block as listed below.
 	\item one xor after loop, xor in do part and redo part
 \end{itemize}
 
+For long-term dependency, we need to focus on xor branch, the xorcluster as general structure.
+After this, we need to draw a graph to mark which parts we can achieve long-term dependency detector, which parts we can not. Right now, only the parallel part is considered and can be added, the loop part, we need to consider it later. Now, add the parallel part into codes.
 \begin{align}
 <A, L_{1}^{*} || L_{2}^{*} || E> \\
 <B, L_{1}^{*} || L_{2}^{*} || E>

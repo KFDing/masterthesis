@@ -3,7 +3,7 @@ package org.processmining.plugins.ding.process.dfg.model;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * we need an array in length of 6, we reserve one for existing, 
+ * this is for the real nodes in process tree connection. 
  * 
  * @author dkf
  *
@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class LTConnection<T>{
 	
-	XORBranch<T> firstBranch ;
-	XORBranch<T> secondBranch;
+	XORBranch<T> sourceBranch ;
+	XORBranch<T> targetBranch;
 	// here need to fix the Value using double problems.. But we can get it later, I think..
 	int posIdx = ProcessConfiguration.LT_POS_IDX;
 	int negIdx = ProcessConfiguration.LT_NEG_IDX;
@@ -36,8 +36,8 @@ public class LTConnection<T>{
 	}
 
 	public LTConnection(XORBranch<T> first, XORBranch<T> second) {
-		firstBranch = first;
-		secondBranch = second;
+		sourceBranch = first;
+		targetBranch = second;
 		connectionValues = new ArrayList<Double>();
 		for(int i=0; i< num;i++)
 			connectionValues.add(0.0);
@@ -45,25 +45,25 @@ public class LTConnection<T>{
 	
 	
 	public LTConnection(XORBranch<T> first, XORBranch<T> second, List<Double> values) {
-		firstBranch = first;
-		secondBranch = second;
+		sourceBranch = first;
+		targetBranch = second;
 		connectionValues = values;
 	}
 	
-	public XORBranch<T> getFirstBranch() {
-		return firstBranch;
+	public XORBranch<T> getSourceBranch() {
+		return sourceBranch;
 	}
 
-	public void setFirstBranch(XORBranch<T> firstBranch) {
-		this.firstBranch = firstBranch;
+	public void setSourceBranch(XORBranch<T> firstBranch) {
+		this.sourceBranch = firstBranch;
 	}
 
-	public XORBranch<T> getSecondBranch() {
-		return secondBranch;
+	public XORBranch<T> getTargetBranch() {
+		return targetBranch;
 	}
 
-	public void setSecondBranch(XORBranch<T> secondBranch) {
-		this.secondBranch = secondBranch;
+	public void setTargetBranch(XORBranch<T> secondBranch) {
+		this.targetBranch = secondBranch;
 	}
 
 	
@@ -89,3 +89,4 @@ public class LTConnection<T>{
 	}
 
 }
+

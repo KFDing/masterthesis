@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  26 NOV 2018 17:58
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  27 NOV 2018 16:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -47,9 +47,6 @@ File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
 )
-(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
-Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
-
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
 
@@ -66,6 +63,8 @@ Package caption3 Info: TeX engine: e-TeX on input line 67.
 )
 \c@ContinuedFloat=\count87
 )
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
 \c@subfigure=\count88
 \c@subtable=\count89
 )
@@ -215,18 +214,18 @@ Package: relsize 2013/03/29 ver 4.1
 (./Master_Thesis_Math_Formalization.aux)
 \openout1 = `Master_Thesis_Math_Formalization.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -299,17 +298,17 @@ e
 ))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 21.
+LaTeX Font Info:    Try loading font information for U+msa on input line 22.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 21.
+LaTeX Font Info:    Try loading font information for U+msb on input line 22.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 21.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 22.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
@@ -318,7 +317,7 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 File: ./images/FD00_approach_blackbox.png Graphic file (type png)
 <use ./images/FD00_approach_blackbox.png>
 Package pdftex.def Info: ./images/FD00_approach_blackbox.png  used on input lin
-e 38.
+e 39.
 (pdftex.def)             Requested size: 345.0pt x 221.74736pt.
 
 
@@ -327,15 +326,15 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 51.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 52.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 51.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 52.
  [2 <./images/FD00_approach_blackbox.png>]
-Overfull \hbox (63.57635pt too wide) detected at line 71
+Overfull \hbox (88.57639pt too wide) detected at line 74
 \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\O
 ML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 
 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) +
@@ -346,7 +345,7 @@ ight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B
  []
 
 
-Overfull \hbox (79.9469pt too wide) detected at line 73
+Overfull \hbox (104.94693pt too wide) detected at line 76
 \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10
  (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10
  (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 ))
@@ -357,7 +356,7 @@ Overfull \hbox (79.9469pt too wide) detected at line 73
  []
 
 
-Overfull \hbox (60.58582pt too wide) detected at line 75
+Overfull \hbox (85.58585pt too wide) detected at line 78
 \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (
 \OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (
 \OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) + \
@@ -372,64 +371,83 @@ t\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1
 File: ./images/PN06_Seq_2_xor_notnested.png Graphic file (type png)
 <use ./images/PN06_Seq_2_xor_notnested.png>
 Package pdftex.def Info: ./images/PN06_Seq_2_xor_notnested.png  used on input l
-ine 85.
+ine 89.
 (pdftex.def)             Requested size: 345.0pt x 87.2297pt.
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 93.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 97.
  [4 <./images/PN06_Seq_2_xor_notnested.png>]
-<./images/PT05_Petrinet_PT_Relation.png, id=34, 807.015pt x 365.365pt>
-File: ./images/PT05_Petrinet_PT_Relation.png Graphic file (type png)
-<use ./images/PT05_Petrinet_PT_Relation.png>
-Package pdftex.def Info: ./images/PT05_Petrinet_PT_Relation.png  used on input 
-line 133.
-(pdftex.def)             Requested size: 345.0pt x 156.19516pt.
+<./images/PT_PN_corresponding_01_seq_PN.png, id=34, 326.21875pt x 58.2175pt>
+File: ./images/PT_PN_corresponding_01_seq_PN.png Graphic file (type png)
+<use ./images/PT_PN_corresponding_01_seq_PN.png>
+Package pdftex.def Info: ./images/PT_PN_corresponding_01_seq_PN.png  used on in
+put line 141.
+(pdftex.def)             Requested size: 155.24895pt x 27.7069pt.
+<./images/PT_PN_corresponding_02_xor_PN.png, id=35, 224.84pt x 73.27374pt>
+File: ./images/PT_PN_corresponding_02_xor_PN.png Graphic file (type png)
+<use ./images/PT_PN_corresponding_02_xor_PN.png>
+Package pdftex.def Info: ./images/PT_PN_corresponding_02_xor_PN.png  used on in
+put line 148.
+(pdftex.def)             Requested size: 155.24895pt x 50.59692pt.
+<./images/PT_PN_corresponding_03_and_PN.png, id=36, 385.44pt x 73.27374pt>
+File: ./images/PT_PN_corresponding_03_and_PN.png Graphic file (type png)
+<use ./images/PT_PN_corresponding_03_and_PN.png>
+Package pdftex.def Info: ./images/PT_PN_corresponding_03_and_PN.png  used on in
+put line 155.
+(pdftex.def)             Requested size: 155.24895pt x 29.51357pt.
+<./images/PT_PN_corresponding_04_loop_PN.png, id=37, 224.84pt x 78.2925pt>
+File: ./images/PT_PN_corresponding_04_loop_PN.png Graphic file (type png)
+<use ./images/PT_PN_corresponding_04_loop_PN.png>
+Package pdftex.def Info: ./images/PT_PN_corresponding_04_loop_PN.png  used on i
+nput line 162.
+(pdftex.def)             Requested size: 155.24895pt x 54.06248pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (26.78815pt too wide) in paragraph at lines 143--144
+Overfull \hbox (26.78815pt too wide) in paragraph at lines 175--176
 []\OT1/cmr/m/it/10 if $\OML/cmm/m/it/10 Q \OT1/cmr/m/n/10 =\U/msa/m/n/10 ^^H \O
 T1/cmr/m/n/10 (\OML/cmm/m/it/10 Q[]; Q[]; ::Q[]\OT1/cmr/m/n/10 )$\OT1/cmr/m/it/
 10 , the sub-trees have loop re-la-tion and $\OML/cmm/m/it/10 Q[]; Q[]; ::Q[] w
 ith n \OMS/cmsy/m/n/10 ^^U
  []
 
-[5]
-<./images/PT01_Not_Nested_Overview.png, id=40, 1774.63pt x 410.53375pt>
+<./images/PT01_Not_Nested_Overview.png, id=38, 1774.63pt x 410.53375pt>
 File: ./images/PT01_Not_Nested_Overview.png Graphic file (type png)
 <use ./images/PT01_Not_Nested_Overview.png>
 Package pdftex.def Info: ./images/PT01_Not_Nested_Overview.png  used on input l
-ine 148.
+ine 181.
 (pdftex.def)             Requested size: 345.0pt x 79.80632pt.
- [6 <./images/PT05_Petrinet_PT_Relation.png> <./images/PT01_Not_Nested_Overview
-.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 157--158
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 189--190
 
  []
 
-<./images/PT02_xor_nested_and_pure.png, id=44, 499.8675pt x 263.98625pt>
+[6 <./images/PT_PN_corresponding_01_seq_PN.png> <./images/PT_PN_corresponding_0
+2_xor_PN.png> <./images/PT_PN_corresponding_03_and_PN.png> <./images/PT_PN_corr
+esponding_04_loop_PN.png> <./images/PT01_Not_Nested_Overview.png>]
+<./images/PT02_xor_nested_and_pure.png, id=51, 499.8675pt x 263.98625pt>
 File: ./images/PT02_xor_nested_and_pure.png Graphic file (type png)
 <use ./images/PT02_xor_nested_and_pure.png>
 Package pdftex.def Info: ./images/PT02_xor_nested_and_pure.png  used on input l
-ine 165.
+ine 197.
 (pdftex.def)             Requested size: 345.0pt x 182.20306pt.
 
-Overfull \hbox (8.07004pt too wide) in paragraph at lines 171--172
+Overfull \hbox (8.07004pt too wide) in paragraph at lines 203--204
 \OT1/cmr/bx/n/10 Definition 2.11 \OT1/cmr/m/n/10 (Or-der of xor block)\OT1/cmr/
 bx/n/10 . $\OML/cmm/m/it/10 XOR[]$ \OT1/cmr/m/it/10 is be-fore $\OML/cmm/m/it/1
 0 xor[]$\OT1/cmr/m/it/10 , writ-ten in $\OML/cmm/m/it/10 XOR[] \OMS/cmsy/m/n/10
  ^^^
  []
 
-<./images/PT03_xor_in_loop.png, id=45, 729.72626pt x 281.05pt>
+<./images/PT03_xor_in_loop.png, id=52, 729.72626pt x 281.05pt>
 File: ./images/PT03_xor_in_loop.png Graphic file (type png)
 <use ./images/PT03_xor_in_loop.png>
-Package pdftex.def Info: ./images/PT03_xor_in_loop.png  used on input line 175.
+Package pdftex.def Info: ./images/PT03_xor_in_loop.png  used on input line 207.
 
 (pdftex.def)             Requested size: 345.0pt x 132.87401pt.
 
-Overfull \hbox (0.5004pt too wide) in paragraph at lines 173--180
+Overfull \hbox (0.5004pt too wide) in paragraph at lines 205--212
 []\OT1/cmr/m/n/10 Consider the model in Fig-ure 4[], we have xor or-der block, 
 $\OML/cmm/m/it/10 Xor\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Seq\OT1/cmr/m/n/10 (\OML
 /cmm/m/it/10 z; o\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ; m\OT1/cmr/m/n/10 ) \OMS/cm
@@ -440,7 +458,7 @@ sy/m/n/10 ^^^
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (85.41098pt too wide) in paragraph at lines 181--182
+Overfull \hbox (85.41098pt too wide) in paragraph at lines 213--214
 \OT1/cmr/bx/n/10 Definition 2.12 \OT1/cmr/m/n/10 (XOR Pair)\OT1/cmr/bx/n/10 . $
 \OML/cmm/m/it/10 xor[]$ \OT1/cmr/m/it/10 and $\OML/cmm/m/it/10 xor[]$ \OT1/cmr/
 m/it/10 is an xor pair, writ-ten in XOR[]Pair($\OML/cmm/m/it/10 XOR[]; XOR[]$\O
@@ -448,113 +466,151 @@ T1/cmr/m/it/10 ),
  []
 
 [7 <./images/PT02_xor_nested_and_pure.png>]
-Overfull \hbox (2.23883pt too wide) in paragraph at lines 208--209
+Overfull \hbox (2.23883pt too wide) in paragraph at lines 240--241
 \OT1/cmr/bx/n/10 Definition 2.17 \OT1/cmr/m/n/10 (Long-term de-pen-dency in xor
  branches)\OT1/cmr/bx/n/10 . \OT1/cmr/m/it/10 Xor branch $\OML/cmm/m/it/10 XORB
 []$
  []
 
 [8 <./images/PT03_xor_in_loop.png>]
-<./images/FD_architecture_detail_02.png, id=57, 711.65875pt x 1277.77374pt>
+<./images/FD_architecture_detail_02.png, id=64, 711.65875pt x 1277.77374pt>
 File: ./images/FD_architecture_detail_02.png Graphic file (type png)
 <use ./images/FD_architecture_detail_02.png>
 Package pdftex.def Info: ./images/FD_architecture_detail_02.png  used on input 
-line 215.
+line 247.
 (pdftex.def)             Requested size: 344.9912pt x 549.99742pt.
 
 
-LaTeX Warning: Float too large for page by 54.69742pt on input line 218.
+LaTeX Warning: Float too large for page by 54.69742pt on input line 250.
 
-<./images/PT08_xor_branches.png, id=58, 911.405pt x 202.7575pt>
+<./images/PT08_xor_branches.png, id=65, 911.405pt x 202.7575pt>
 File: ./images/PT08_xor_branches.png Graphic file (type png)
 <use ./images/PT08_xor_branches.png>
-Package pdftex.def Info: ./images/PT08_xor_branches.png  used on input line 243
+Package pdftex.def Info: ./images/PT08_xor_branches.png  used on input line 275
 .
 (pdftex.def)             Requested size: 345.0pt x 76.75163pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [9] [10 <./images/FD_architecture_detail_02.png>]
-<./images/PT06_Seq_3_xor_notnested.png, id=67, 1036.87375pt x 201.75375pt>
+<./images/PT06_Seq_3_xor_notnested.png, id=74, 1036.87375pt x 201.75375pt>
 File: ./images/PT06_Seq_3_xor_notnested.png Graphic file (type png)
 <use ./images/PT06_Seq_3_xor_notnested.png>
 Package pdftex.def Info: ./images/PT06_Seq_3_xor_notnested.png  used on input l
-ine 258.
+ine 290.
 (pdftex.def)             Requested size: 345.0pt x 67.12999pt.
-<./images/PN06_Seq_3_xor_notnested.png, id=68, 1521.685pt x 215.80624pt>
+<./images/PN06_Seq_3_xor_notnested.png, id=75, 1521.685pt x 215.80624pt>
 File: ./images/PN06_Seq_3_xor_notnested.png Graphic file (type png)
 <use ./images/PN06_Seq_3_xor_notnested.png>
 Package pdftex.def Info: ./images/PN06_Seq_3_xor_notnested.png  used on input l
-ine 265.
+ine 297.
 (pdftex.def)             Requested size: 345.0pt x 48.9264pt.
  [11 <./images/PT08_xor_branches.png> <./images/PT06_Seq_3_xor_notnested.png> <
 ./images/PN06_Seq_3_xor_notnested.png>]
-<./images/PT09_seq_xor_nested.png, id=72, 1031.855pt x 303.1325pt>
+<./images/PT09_seq_xor_nested.png, id=79, 1031.855pt x 303.1325pt>
 File: ./images/PT09_seq_xor_nested.png Graphic file (type png)
 <use ./images/PT09_seq_xor_nested.png>
-Package pdftex.def Info: ./images/PT09_seq_xor_nested.png  used on input line 2
-80.
+Package pdftex.def Info: ./images/PT09_seq_xor_nested.png  used on input line 3
+12.
 (pdftex.def)             Requested size: 345.0pt x 101.35228pt.
 
-Overfull \hbox (6.55637pt too wide) in paragraph at lines 284--285
+Overfull \hbox (6.55637pt too wide) in paragraph at lines 316--317
 \OT1/cmr/m/n/10 So, in the model given by Fig-ure 10[], for xor block Xor(A,Seq
 (B1,Xor(B2,B3),B4)),
  []
 
-<./images/PT07_And_4_xor_notnested.png, id=73, 1300.86pt x 241.90375pt>
+<./images/PT07_And_4_xor_notnested.png, id=80, 1300.86pt x 241.90375pt>
 File: ./images/PT07_And_4_xor_notnested.png Graphic file (type png)
 <use ./images/PT07_And_4_xor_notnested.png>
 Package pdftex.def Info: ./images/PT07_And_4_xor_notnested.png  used on input l
-ine 298.
+ine 330.
 (pdftex.def)             Requested size: 345.0pt x 64.15216pt.
-<./images/PN07_And_4_xor_notnested.png, id=74, 1525.7pt x 491.8375pt>
+<./images/PN07_And_4_xor_notnested.png, id=81, 1525.7pt x 491.8375pt>
 File: ./images/PN07_And_4_xor_notnested.png Graphic file (type png)
 <use ./images/PN07_And_4_xor_notnested.png>
 Package pdftex.def Info: ./images/PN07_And_4_xor_notnested.png  used on input l
-ine 305.
+ine 337.
 (pdftex.def)             Requested size: 345.0pt x 111.214pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[12 <./images/PT09_seq_xor_nested.png>] [13 <./images/PT07_And_4_xor_notnested.
-png> <./images/PN07_And_4_xor_notnested.png>]
-(./Master_Thesis_Math_Formalization.bbl [14]) [15]
-(./Master_Thesis_Math_Formalization.aux) ) 
+<./images/PT10_NestedXorInParallel_01.png, id=82, 357.335pt x 208.78pt>
+File: ./images/PT10_NestedXorInParallel_01.png Graphic file (type png)
+<use ./images/PT10_NestedXorInParallel_01.png>
+Package pdftex.def Info: ./images/PT10_NestedXorInParallel_01.png  used on inpu
+t line 352.
+(pdftex.def)             Requested size: 345.0pt x 201.58292pt.
+<./images/PN10_NestedXorInParallel_01.png, id=83, 673.51625pt x 304.13625pt>
+File: ./images/PN10_NestedXorInParallel_01.png Graphic file (type png)
+<use ./images/PN10_NestedXorInParallel_01.png>
+Package pdftex.def Info: ./images/PN10_NestedXorInParallel_01.png  used on inpu
+t line 359.
+(pdftex.def)             Requested size: 345.0pt x 155.78961pt.
+<./images/PN10_NestedXorInParallel_02.png, id=84, 673.51625pt x 350.30875pt>
+File: ./images/PN10_NestedXorInParallel_02.png Graphic file (type png)
+<use ./images/PN10_NestedXorInParallel_02.png>
+Package pdftex.def Info: ./images/PN10_NestedXorInParallel_02.png  used on inpu
+t line 366.
+(pdftex.def)             Requested size: 345.0pt x 179.44084pt.
+
+LaTeX Warning: Float too large for page by 61.81337pt on input line 372.
+
+[12 <./images/PT09_seq_xor_nested.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (11.66737pt too wide) in paragraph at lines 375--377
+\OT1/cmr/m/n/10 For xor branch And(Xor(D1,D2), Xor(E1,E2)), there are two xor b
+lock Xor(D1,D2)
+ []
+
+[13 <./images/PT07_And_4_xor_notnested.png> <./images/PN07_And_4_xor_notnested.
+png>]
+Overfull \hbox (2.94519pt too wide) in paragraph at lines 393--394
+[]\OT1/cmr/m/n/10 Only con-sid-er-ing the Xor-Pair(Xor(S1,S2) , Xor(D1,D2)), Xo
+r-Pair(Xor(S1,S2)
+ []
+
+[14] (./Master_Thesis_Math_Formalization.bbl [15]) [16] [17 <./images/PT10_Nest
+edXorInParallel_01.png> <./images/PN10_NestedXorInParallel_01.png> <./images/PN
+10_NestedXorInParallel_02.png>] (./Master_Thesis_Math_Formalization.aux) ) 
 Here is how much of TeX's memory you used:
- 4685 strings out of 494847
- 72028 string characters out of 6179079
- 136111 words of memory out of 5000000
- 7916 multiletter control sequences out of 15000+600000
- 14453 words of font info for 57 fonts, out of 8000000 for 9000
+ 4726 strings out of 494847
+ 73674 string characters out of 6179079
+ 138249 words of memory out of 5000000
+ 7953 multiletter control sequences out of 15000+600000
+ 13755 words of font info for 55 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 42i,15n,40p,916b,443s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on Master_Thesis_Math_Formalization.pdf (15 pages, 518352 bytes)
+ 41i,15n,39p,916b,448s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbo
+ls/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbol
+s/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
+
+Output written on Master_Thesis_Math_Formalization.pdf (17 pages, 588837 bytes)
 .
 PDF statistics:
- 162 PDF objects out of 1000 (max. 8388607)
- 105 compressed objects within 2 object streams
+ 181 PDF objects out of 1000 (max. 8388607)
+ 109 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 66 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 96 words of extra memory for PDF output out of 10000 (max. 10000000)
 

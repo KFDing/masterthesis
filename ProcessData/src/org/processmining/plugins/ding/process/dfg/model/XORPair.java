@@ -94,7 +94,7 @@ public class XORPair<T>{
 		List<LTConnection<T>> sourceConns = new ArrayList<LTConnection<T>>();
 		for(LTConnection<T> conn : connections) {
 			// if it is complete, or not!!! // so we need to create the list of each source and target
-			if(conn.getFirstBranch().equals(branch))
+			if(conn.getSourceBranch().equals(branch))
 				sourceConns.add(conn);
 		}
 		return sourceConns;
@@ -136,6 +136,8 @@ public class XORPair<T>{
 		
 		if(num > ltDep.size() && ltDep.size() > 0) {
 			completeConnection = false;
+		}else if(ltDep.size() <1) {
+			System.out.println("No valid connection exists here");
 		}
 		return completeConnection;
 	}

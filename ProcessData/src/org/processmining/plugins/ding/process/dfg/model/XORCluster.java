@@ -110,9 +110,9 @@ public class XORCluster<T> {
 			 *   
 			 *   we get all the parallel branches into one xor structure
 			 */
-			if(branchCluster || !hasXOR())
+			if(branchCluster || isNotNXORCluster())
 				beginXORList.add(xorList.get(0));
-			else {
+			else if(isNXORCluster()){
 				// it's nested xor 
 				XORStructure<T> XORResult =  new XORStructure<T>(keyNode);
 				for(XORCluster<T> cluster: childrenCluster) {
@@ -229,11 +229,6 @@ public class XORCluster<T> {
 		this.hasXOR = hasXOR;
 	}
 
-	public boolean isXORCluster() {
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR))
-			return true;
-		return false;
-	}
 	
 	public boolean isSeqCluster() {
 		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.SEQUENCE))
@@ -254,7 +249,7 @@ public class XORCluster<T> {
 	}
 	
 	public boolean isAvailable() {
-		if(isXORCluster()&& !hasXOR() || branchCluster) // if it is xor, then ok, else check each child to see if they are available
+		if(isNotNXORCluster() || branchCluster) // if it is xor, then ok, else check each child to see if they are available
 			available = true;
 		
 		return available;
@@ -266,5 +261,22 @@ public class XORCluster<T> {
 
 	public void setBranchCluster(boolean branchCluster) {
 		this.branchCluster = branchCluster;
+	}
+
+	public boolean isNotNXORCluster() {
+		// TODO test if this cluster is not nested xor structure
+		// if it is not nested xor cluster, then return true, 
+		// nested xor cluster, then return false
+		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR) && !hasXOR())
+			return true;
+		
+		return false;
+	}
+	
+	// if it is nested xor cluster
+	public boolean isNXORCluster() {
+		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR) && hasXOR())
+			return true;
+		return false;
 	}
 }

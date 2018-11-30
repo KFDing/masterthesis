@@ -31,7 +31,7 @@ import org.processmining.plugins.ding.process.dfg.transform.PN2DfgTransform;
  *
  */
 
-public class DfgTransformPlugin {
+public class DfgRepairPlugin {
 	/*
 	@Plugin(name = "Repair Model by Kefang", returnLabels = {"DfMatrix"}, 
 			   returnTypes = { DfMatrix.class}, parameterLabels = { "XLog","Existing Petri Net","Initial Marking"})
