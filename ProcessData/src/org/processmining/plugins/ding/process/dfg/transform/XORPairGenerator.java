@@ -31,11 +31,13 @@ import org.processmining.processtree.impl.AbstractTask;
  * -- its attributes:
  *    ++ XOR Pair List to use
  *    ++ current state
- * -- we use the preorder DFS to traverse it and generate such pair
- *   ++ one thing to remember that the branches can be in different xor structure
+ * -- 
+ *  
  *   
  * @author dkf
- *
+ *  02 Dec 2018 modified
+ *  -- we use more general structure to deal with parallel situations, but we need to change all the strucuture,
+ *    then I think I could try to use the generic type and see what I can get
  */
 public class XORPairGenerator {
 
@@ -467,8 +469,8 @@ public class XORPairGenerator {
 				
 				sourceXORList = sourceCluster.getEndXORList();
 				targetXORList = targetCluster.getBeginXORList();
-				pair.addAllXORPair(createPair(sourceXORList, targetXORList));
-				pairList.addAll(pair.getXORPairList());
+				//pair.addAllXORPair(createPair(sourceXORList, targetXORList));
+				// pairList.addAll(pair.getXORPairList());
 	
 				// 1.2 target is parallel 
 			}else if(targetCluster.isParallelCluster()) {
@@ -476,21 +478,21 @@ public class XORPairGenerator {
 				// We make sure that we only store information of xor, so another branches without xor is ignored
 				for(XORCluster<ProcessTreeElement> child: targetCluster.getChildrenCluster()) {
 					// we need to create the pair of them 
-					pair.addChildClusterPair(createClusterXORPair(sourceCluster, child));
+					pair.addBranchClusterPair(createClusterXORPair(sourceCluster, child));
 				}
 				
 				// 1.3 target is nested xor cluster
 			}else if(targetCluster.isNXORCluster()) {
 				// even if it's nested xor, so we can have childrencluster for it, so same solution like before
 				for(XORCluster<ProcessTreeElement> child: targetCluster.getChildrenCluster()) {
-					pair.addChildClusterPair(createClusterXORPair(sourceCluster, child));
+					pair.addBranchClusterPair(createClusterXORPair(sourceCluster, child));
 				}
 			}
 		}else {
 			for(XORCluster<ProcessTreeElement> childSource: sourceCluster.getChildrenCluster()) 
 				for(XORCluster<ProcessTreeElement> childTarget: sourceCluster.getChildrenCluster()) {
 				// we need to create the pair of them 
-					pair.addChildClusterPair(createClusterXORPair(childSource, childTarget));
+					pair.addBranchClusterPair(createClusterXORPair(childSource, childTarget));
 			}
 			
 		}

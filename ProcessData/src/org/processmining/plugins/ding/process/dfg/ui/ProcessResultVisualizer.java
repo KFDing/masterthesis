@@ -200,8 +200,10 @@ class ResultMainView extends JPanel{
 			 *   ++ because if we change the 
 			 *   the easy way to do it --- generate it each time
 			 */
-			// here we need to use the customized program to add lt dependency on it 
-			PetrinetWithMarkings mnet = LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters );
+			// here we need to use the customized program to add lt dependency on it
+			LTDependencyDetector detector = new LTDependencyDetector(pTree, log);
+			PetrinetWithMarkings mnet = detector.buildPetrinetWithLT(log, pTree, parameters);
+			// PetrinetWithMarkings mnet = LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters );
 			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
 
 		}else {
@@ -209,7 +211,8 @@ class ResultMainView extends JPanel{
 				DfgMiningParameters ptParas = getProcessTreParameters();
 				pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
 			}	
-			PetrinetWithMarkings mnet = LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters);
+			LTDependencyDetector detector = new LTDependencyDetector(pTree, log);
+			PetrinetWithMarkings mnet = detector.buildPetrinetWithLT(log, pTree, parameters);//LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters);
 			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
 			
 		}// we need to set another parameter to store it 

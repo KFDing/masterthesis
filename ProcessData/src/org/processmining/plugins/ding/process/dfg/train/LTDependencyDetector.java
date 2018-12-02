@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
@@ -31,13 +32,11 @@ import org.processmining.plugins.ding.preprocess.util.Configuration;
 import org.processmining.plugins.ding.preprocess.util.EventLogUtilities;
 import org.processmining.plugins.ding.preprocess.util.LabeledTraceVariant;
 import org.processmining.plugins.ding.process.dfg.model.ControlParameters;
-import org.processmining.plugins.ding.process.dfg.model.LTConnection;
+import org.processmining.plugins.ding.process.dfg.model.NewLTConnection;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
-import org.processmining.plugins.ding.process.dfg.model.XORBranch;
+import org.processmining.plugins.ding.process.dfg.model.XORCluster;
 import org.processmining.plugins.ding.process.dfg.model.XORClusterPair;
-import org.processmining.plugins.ding.process.dfg.model.XORPair;
-import org.processmining.plugins.ding.process.dfg.model.XORStructure;
-import org.processmining.plugins.ding.process.dfg.transform.XORPairGenerator;
+import org.processmining.plugins.ding.process.dfg.transform.NewXORPairGenerator;
 import org.processmining.processtree.Node;
 import org.processmining.processtree.ProcessTree;
 import org.processmining.processtree.ProcessTreeElement;
@@ -58,9 +57,10 @@ public class LTDependencyDetector {
 
 	ProcessTree tree;
 	XLog log;
-	// from process tree
-	// List<XORPair<ProcessTreeElement>> pairList;
 	Map<Node, XEventClass> maps;
+	
+	Petrinet net;
+	NewXORPairGenerator<ProcessTreeElement> generator;
 	
 	public LTDependencyDetector(ProcessTree pTree, XLog xlog) {
 		// there is no implemented way to clone it
@@ -69,34 +69,26 @@ public class LTDependencyDetector {
 		maps = getProcessTree2EventMap(log, tree , null);
 	}
 	
-	@SuppressWarnings("deprecation")
-	public static PetrinetWithMarkings buildPetrinetWithLT(XLog log, ProcessTree tree, ControlParameters parameters) {
-		XORPairGenerator generator = new XORPairGenerator();
+	
+	public PetrinetWithMarkings buildPetrinetWithLT(XLog log, ProcessTree tree, ControlParameters parameters) {
+		
+		generator = new NewXORPairGenerator<ProcessTreeElement>();
 	    generator.generatePairs(tree);
 	    
-	    List<XORPair<ProcessTreeElement>> pairs = generator.getXORPair();
-	    System.out.println("We have "+ pairs.size()+ " xor pairs");
-	    for(XORPair<ProcessTreeElement> p: pairs) {
-	    	System.out.println(p.getSourceXOR().getKeyNode());
-	    	System.out.println(p.getTargetXOR().getKeyNode());
-	    }
-	    
 	    List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
-	    
-	    LTDependencyDetector detector = new LTDependencyDetector(tree, log);
-	    // initializeConnection, we only needs to do once?? Not really, every model changes, then one needs generated again
-	    // and everytime there are control parameters there
-	    detector.initializeConnection(pairs);
-	    detector.adaptPairValue(pairs, parameters);
+	    Set<NewLTConnection<ProcessTreeElement>> connSet = generator.getAllLTConnection();
+	  
+	    initializeConnection(connSet);
+	    adaptConnectionValue(connSet, parameters);
 	    
 	    // detector.detectPairWithLTDependency(pairs, parameters);
-	    detector.detectXORClusterLTDependency(clusterPairs);
+	    detectXORClusterLTDependency(clusterPairs);
 	    try {
 	    	@SuppressWarnings("deprecation")
 			PetrinetWithMarkings mnet = ProcessTree2Petrinet.convert(tree, true);
-			Petrinet net = mnet.petrinet;
+			net = mnet.petrinet;
 			// detector.addLTDependency2Net(net, pairs);
-			detector.addClusterLT2Net(net, clusterPairs);
+			addClusterLT2Net(tree.getRoot());
 		    return mnet;
 		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
 			System.out.println("The method transfering the process tree to net is old");
@@ -106,43 +98,26 @@ public class LTDependencyDetector {
 	}
 
 	// fill the connection with base data from event log 
-	public void initializeConnection(List<XORPair<ProcessTreeElement>> pairList) {
+	public void initializeConnection(Set<NewLTConnection<ProcessTreeElement>> connSet) {
 		List<LabeledTraceVariant> variants = EventLogUtilities.getLabeledTraceVariants(log, null);
 		for(LabeledTraceVariant var : variants) {
 			// for each var, we check for each xor pair 
-			for(XORPair<ProcessTreeElement> pair : pairList) {
-				fillLTConnectionFreq(var, pair);
+			for(NewLTConnection<ProcessTreeElement> conn : connSet) {
+				fillLTConnectionFreq(var, conn);
 			}
 		}
 	}
 
-	public void  adaptPairValue(List<XORPair<ProcessTreeElement>> pairList, ControlParameters parameters) {
-		int i=0;
-		while( i< pairList.size()) {
-			XORPair<ProcessTreeElement> pair = pairList.get(i);
-			pair.adaptLTConnection(ProcessConfiguration.LT_POS_IDX, parameters.getPosWeight());
-			pair.adaptLTConnection(ProcessConfiguration.LT_NEG_IDX, parameters.getNegWeight());
-			i++;
+	public void  adaptConnectionValue(Set<NewLTConnection<ProcessTreeElement>> connSet, ControlParameters parameters) {
+		
+		for(NewLTConnection<ProcessTreeElement>  conn: connSet) {
+			
+			conn.adaptValue(ProcessConfiguration.LT_POS_IDX, parameters.getPosWeight());
+			conn.adaptValue(ProcessConfiguration.LT_NEG_IDX, parameters.getNegWeight());	
 		}
 		
 	}
-	// detect LT dependency according to the threshold from pos and neg data
-	public List<XORPair<ProcessTreeElement>>  detectPairWithLTDependency(List<XORPair<ProcessTreeElement>> pairList, ControlParameters parameters) {
-		// here we change the value according to the parameters: pos and neg values to the pair connection, and then detectPair
-		int i=0;
-		while( i< pairList.size()) {
-			XORPair<ProcessTreeElement> pair = pairList.get(i);
-			pair.adaptLTConnection(ProcessConfiguration.LT_POS_IDX, parameters.getPosWeight());
-			pair.adaptLTConnection(ProcessConfiguration.LT_NEG_IDX, parameters.getNegWeight());
-			//// here needs changes 
-			if(pair.hasCompleteConnection()) {
-				pairList.remove(i);// if we remove i, what we should add later?? we need to test on it!!
-			}else 
-				i++;
-		}
-		// after this we get all pairs with lt dependency
-		return pairList;
-	}
+	
 	
 	// we need one method to test if clusterpair has long-term dependency
 	// if we need to make all the pair list to go and then we find out the xor pair is complete
@@ -152,7 +127,6 @@ public class LTDependencyDetector {
 		int i=0;
 		while(i< clusterPairs.size()) {
 			XORClusterPair<ProcessTreeElement> pair = clusterPairs.get(i);
-			
 			if(pair.testComplete()) {
 				clusterPairs.remove(i);
 			}else
@@ -160,84 +134,120 @@ public class LTDependencyDetector {
 		}
 		return clusterPairs;
 	}
-	public void addClusterLT2Net(Petrinet net, List<XORClusterPair<ProcessTreeElement>> clusterPairs) {
-		// TODO to add places and silent transitions on it 
-		// but we do it later, now we test if methods before are right
-		// how to add places, if we look for one cluster pair if it is available, then we add them directly,
-		// else not, but we need to find out the proper structure to add them..
-		// now we need to find the biggest structure but in the same level, so 
-		// we needs the process tree again.. 
-		// one hand to visit the tree and reach proper level, 
-		// get cluster pair
-		// generate the places in the petri net for source and target?? Are you sure?? 
-		// check the dependency on it 
-		
-		
-		// anyway to check the codes before
-		
-	}
-	// should we have another function to only add lt dependency to the petri net 
-	public Petrinet addLTDependency2Net(Petrinet net, List<XORPair<ProcessTreeElement>> pairList)  {
-	    
-	    Map<Node, Transition> pnMap =  getProcessTree2NetMap(net, tree, null);
-	    // here we should have the xor pairs with global dependency
-	    int i=0;
-		while( i< pairList.size()) {
-			XORPair<ProcessTreeElement> pair = pairList.get(i);
-			XORStructure<ProcessTreeElement> sourceXOR = pair.getSourceXOR();
-			XORStructure<ProcessTreeElement> targetXOR = pair.getTargetXOR();
-			String sourceLabel = sourceXOR.getLabel();
-			String targetLabel = targetXOR.getLabel();
-			List<PetrinetNode> sourceNodes =  new ArrayList<PetrinetNode>();
-			
-			List<PetrinetNode> targetNodes =  new ArrayList<PetrinetNode>();
-			
-			// create post places after end node of xor source branches and pre places before xor target branch begin
-			for(XORBranch<ProcessTreeElement> sBranch: sourceXOR.getBranches()) {
-				// create post place to the end of branch node
-				// change the end node from process tree into the net
-				PetrinetNode endNode = pnMap.get(sBranch.getEndNode());
-				
-				// add post place for it 
-				Place postNode = addPlace(net, endNode, targetLabel, true);
-				sourceNodes.add(postNode);
-			}
-			
-			for(XORBranch<ProcessTreeElement> tBranch: targetXOR.getBranches()) {
-				// create pre place to the begin node for one branch
-				// change the begin node from process tree into the net
-				PetrinetNode beginNode = pnMap.get(tBranch.getBeginNode());
-				
-				// add pre place for it 
-				Place preNode = addPlace(net,beginNode, sourceLabel, false);
-				targetNodes.add(preNode);
-			}
-			// check all the connection and add the silent transitions to it
-			for(LTConnection<ProcessTreeElement> conn: pair.getLTDependency()) {
-				// for all the connection with global dependency
-				// but at first we need to find the added places for each
-				PetrinetNode ruleSource = pnMap.get(conn.getSourceBranch().getEndNode());
-				// here we need to make sure that they don't have another places to add into it..
-				// but how to say thoses??? We have pair, post_prefix is alreday fixed
-				// to identify it, we also need the targetLabel of it.. So how to get it ??
-				String postLabel = ProcessConfiguration.POST_PREFIX + ruleSource.getLabel() + targetLabel;
-				Place postNode = (Place) getPlace(sourceNodes, postLabel);
-				
-				PetrinetNode ruleTarget = pnMap.get(conn.getTargetBranch().getBeginNode());
-				String preLabel = ProcessConfiguration.PRE_PREFIX + ruleTarget.getLabel() + sourceLabel;
-				Place preNode = (Place) getPlace(targetNodes, preLabel);
-				
-				Transition sTransition = net.addTransition(ruleSource.getLabel() + ruleTarget.getLabel());
-				sTransition.setInvisible(true);
-				net.addArc(postNode, sTransition);
-				net.addArc(sTransition, preNode);
-				
-			}
-			i++;
-		}
-		return net;
-	}
 	
+	/**
+	 * we goes into the structure again and then add places or silent transitions here
+	 * @param node the current visited node in process treee
+	 * @param net
+	 * @param clusterPairs
+	 */
+	public void addClusterLT2Net(Node node) {
+		
+		XORCluster<ProcessTreeElement> cluster = generator.getCluster(node);
+		
+		if(cluster!=null) {
+			
+			List<XORCluster<ProcessTreeElement>> childrenCluster = cluster.getChildrenCluster();
+			for(XORCluster<ProcessTreeElement> child : childrenCluster) {
+				// still not good effect... Nanan, because one level missed it
+				if(!child.isAvailable()) {
+					addClusterLT2Net((Node)child.getKeyNode());
+				}
+				
+			}
+			
+			if(cluster.isSeqCluster()) { // all the elements are available, so we just do use it 
+				// we just have the useful childrencluster to create pair 
+				if(cluster.getChildrenCluster().size() < 2) {
+					System.out.println("too few xor in sequence to connect it");
+				}else {
+					XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
+					sourceCluster = childrenCluster.get(0);
+					int i=1;
+					
+					while(i< childrenCluster.size()) {
+						targetCluster = childrenCluster.get(i);
+						// here we get the pair here and then to add lt on net here
+						XORClusterPair<ProcessTreeElement> pair = generator.findClusterPair(sourceCluster, targetCluster);
+						if(pair!=null) {
+							// here exists the cluster pair, we need to add lt on this pair
+							addLTWithClusterPair(pair);
+						}
+						
+						sourceCluster = targetCluster;
+						i++;
+					}
+				}
+			}
+		}
+		
+	}
+
+	private void addLTWithClusterPair(XORClusterPair<ProcessTreeElement> pair) {
+		// add long-term dependency within cluster pair, but we need to change the visit order, because 
+		// we need to add them according to the 
+		XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
+		sourceCluster = pair.getSourceXORCluster();
+		targetCluster = pair.getTargetXORCluster();
+		
+		// after this we need to check the situation of this pair
+		if(sourceCluster.isPureBranchCluster()) {
+			
+			// both are the pure branch, and then we need to add 
+			if(targetCluster.isPureBranchCluster()) {
+				
+				
+			}
+			
+		}
+		// for parallel with xor, we have branchClusterPair
+		// image pair from seq, they are xor block!! remember, not branch!!
+		List<XORCluster<ProcessTreeElement>> schildren = sourceCluster.getChildrenCluster();
+		List<XORCluster<ProcessTreeElement>> tchildren = targetCluster.getChildrenCluster();
+		
+		// generate the post places after source Children
+		for(int si=0; si< schildren.size(); si++) {
+			// for each branch here, we need to do it 
+			XORCluster<ProcessTreeElement> sBranch = schildren.get(si);
+			
+			List<ProcessTreeElement> sNodeList = sBranch.getEndNodeList();
+			for(int ti=0; ti< tchildren.size(); ti++) {
+				XORCluster<ProcessTreeElement> tBranch = tchildren.get(si);
+				List<ProcessTreeElement> tNodeList = tBranch.getEndNodeList();
+				// we get the branchClusterPair and
+				// test if they have complete connection6
+				XORClusterPair<ProcessTreeElement> branchPair = pair.findLTBranchClusterPair(sBranch, tBranch);
+				if(branchPair != null) {
+					// there is connection, so we need to create lt in branches]
+					// image seq and other situations 
+					
+					// if it works at this state
+					
+				}
+				
+				
+				
+			}
+			
+		}
+		
+		
+		// image this pair from seq, and we have this pair, but we need to know which parts they belong to 
+		// from sourceCluster, or targetCluster
+		for(XORClusterPair<ProcessTreeElement> branchPair: pair.getBranchClusterPair()) {
+			if(branchPair.getSourceXORCluster().equals(sourceCluster)) {
+				// it is from the source branch, but if we need to generate the places
+				// according to the 
+				
+			}
+		}
+		
+		
+		
+		
+		
+	}
+
 
 	private PetrinetNode getPlace(List<PetrinetNode> nodes, String postLabel) {
 		// TODO we need to get the placce after this rule source, so how to get it ??
@@ -262,29 +272,26 @@ public class LTDependencyDetector {
 	}
 
 
-	private void fillLTConnectionFreq(LabeledTraceVariant var, XORPair<ProcessTreeElement> pair) {
+	private void fillLTConnectionFreq(LabeledTraceVariant var, NewLTConnection<ProcessTreeElement> conn) {
 		// TODO fill the frequency for lt connection in pair.. But should we put the LTConnection into pair
 		List<XEventClass> traceVariant = var.getTraceVariant();
-		List<LTConnection<ProcessTreeElement>> connections = pair.getLTConnections();
 		// even if we have sourceXOR but it includes branches, so we should go into the branches of sourceXOR
 		int sourceIdx, targetIdx;
-		for(LTConnection<ProcessTreeElement> conn: connections) {
-			sourceIdx = findNodeIndex(conn.getSourceBranch().getEndNode(), traceVariant);
-			if(sourceIdx!=-1) {
-				targetIdx = findNodeIndex(conn.getTargetBranch().getBeginNode(), traceVariant);
-				if(targetIdx > sourceIdx) {
-					// we add the freq into this connection
-					ArrayList<Double> counts = new ArrayList<Double>();
-					for(int i=0;i<ProcessConfiguration.LT_IDX_NUM *2;i++)
-						counts.add(0.0); // initialize it counts
-					
-					counts.set(1, (double) var.getPosNum());
-					counts.set(2, (double) var.getNegNum());
-					counts.set(ProcessConfiguration.LT_POS_IDX, (double) var.getPosNum());
-					counts.set(ProcessConfiguration.LT_NEG_IDX, (double) var.getNegNum());
-					
-					conn.addConnectionValues(counts);
-				}
+		sourceIdx = findNodeIndex(conn.getSourceBranch(), traceVariant);
+		if(sourceIdx!=-1) {
+			targetIdx = findNodeIndex(conn.getTargetBranch(), traceVariant);
+			if(targetIdx > sourceIdx) {
+				// we add the freq into this connection
+				ArrayList<Double> counts = new ArrayList<Double>();
+				for(int i=0;i<ProcessConfiguration.LT_IDX_NUM *2;i++)
+					counts.add(0.0); // initialize it counts
+				
+				counts.set(1, (double) var.getPosNum());
+				counts.set(2, (double) var.getNegNum());
+				counts.set(ProcessConfiguration.LT_POS_IDX, (double) var.getPosNum());
+				counts.set(ProcessConfiguration.LT_NEG_IDX, (double) var.getNegNum());
+				
+				conn.addConnectionValues(counts);
 			}
 		}
 	}

@@ -255,9 +255,7 @@ public class XORCluster<T> {
 		return available;
 	}
 
-	public boolean isBranchCluster() {
-		return branchCluster;
-	}
+	
 
 	public void setBranchCluster(boolean branchCluster) {
 		this.branchCluster = branchCluster;
@@ -278,5 +276,70 @@ public class XORCluster<T> {
 		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR) && hasXOR())
 			return true;
 		return false;
+	}
+	// here we mean a cluster without xor and not xor 
+		public boolean isPureBranchCluster() {
+			if(!hasXOR && !isXORCluster()) 
+				return true;
+			return false;
+		}
+		
+	// only for pure branch, we have this
+	List<T> beginNodeList;
+	public List<T> getBeginNodeList() {
+		// TODO Auto-generated method stub, so should we also record its childrenCluster, 
+		// yap, we need to do it 
+		beginNodeList = new ArrayList<T>();
+		// if it is just one single node, so what to to then?? 
+		if(isLeafCluster()) {
+			beginNodeList.add(keyNode);
+		}else if(isSeqCluster()) {
+			beginNodeList.addAll(childrenCluster.get(0).getBeginNodeList());
+		}else if(isParallelCluster()) {
+			for(XORCluster<T> child: childrenCluster) {
+				beginNodeList.addAll(child.getBeginNodeList());
+			}
+		}
+		
+		return beginNodeList;
+	}
+
+	// but after we do this, it means that we need to record all the childrenCluster of this branch
+	// Could we stop them here?? No, we can't because we need data for parallel
+	// assign their children cluster but assign them if they are leaf node
+	// we should record that we are in a branch, and then record the cluster of them .'
+	// if we meet one parallel, then we record its seq branch, but until we reach the leaf node, that's how it works
+	// yes, we need to remember all things relative to xor structure
+	
+	// for pure branch, there is the End node list
+	List<T> endNodeList;
+	public List<T> getEndNodeList() {
+		// TODO Auto-generated method stub
+		endNodeList = new ArrayList<T>();
+		if(isLeafCluster()) {
+			endNodeList.add(keyNode);
+		}else if(isSeqCluster()) {
+			endNodeList.addAll(childrenCluster.get(childrenCluster.size() -1).getEndNodeList());
+		}else if(isParallelCluster()) {
+			for(XORCluster<T> child: childrenCluster) {
+				endNodeList.addAll(child.getEndNodeList());
+			}
+		}
+		return endNodeList;
+	}
+
+	public boolean isXORCluster() {
+		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR))
+			return true;
+		
+		return false;
+	}
+	
+	boolean isLeaf =false;
+	public boolean isLeafCluster() {
+		return isLeaf;
+	}
+	public void setIsLeaf(boolean value) {
+		isLeaf = value;
 	}
 }
