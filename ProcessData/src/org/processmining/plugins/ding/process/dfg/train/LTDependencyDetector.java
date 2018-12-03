@@ -57,20 +57,23 @@ public class LTDependencyDetector {
 
 	ProcessTree tree;
 	XLog log;
-	Map<Node, XEventClass> maps;
-	
+	Map<Node, XEventClass> tlmaps;
+	Map<Node, Transition> tnMap;
 	Petrinet net;
 	NewXORPairGenerator<ProcessTreeElement> generator;
+	Map<String, PetrinetNode> pnNodeMap ;
 	
 	public LTDependencyDetector(ProcessTree pTree, XLog xlog) {
 		// there is no implemented way to clone it
 		tree = pTree;
 		log = xlog;
-		maps = getProcessTree2EventMap(log, tree , null);
+		
 	}
 	
 	
 	public PetrinetWithMarkings buildPetrinetWithLT(XLog log, ProcessTree tree, ControlParameters parameters) {
+		
+		tlmaps = getProcessTree2EventMap(log, tree , null);
 		
 		generator = new NewXORPairGenerator<ProcessTreeElement>();
 	    generator.generatePairs(tree);
@@ -87,7 +90,9 @@ public class LTDependencyDetector {
 	    	@SuppressWarnings("deprecation")
 			PetrinetWithMarkings mnet = ProcessTree2Petrinet.convert(tree, true);
 			net = mnet.petrinet;
-			// detector.addLTDependency2Net(net, pairs);
+			tnMap = getProcessTree2NetMap(net, tree, null);
+			
+			pnNodeMap = new HashMap<String, PetrinetNode>();
 			addClusterLT2Net(tree.getRoot());
 		    return mnet;
 		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
@@ -164,15 +169,16 @@ public class LTDependencyDetector {
 					XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
 					sourceCluster = childrenCluster.get(0);
 					int i=1;
-					
+					XORClusterPair<ProcessTreeElement> pair;
 					while(i< childrenCluster.size()) {
 						targetCluster = childrenCluster.get(i);
-						// here we get the pair here and then to add lt on net here
-						XORClusterPair<ProcessTreeElement> pair = generator.findClusterPair(sourceCluster, targetCluster);
-						if(pair!=null) {
-							// here exists the cluster pair, we need to add lt on this pair
-							addLTWithClusterPair(pair);
-						}
+						
+						for(XORCluster<ProcessTreeElement> schild: sourceCluster.getEndXORList())
+							for(XORCluster<ProcessTreeElement> tchild: targetCluster.getBeginXORList()) {
+								pair = generator.findClusterPair(schild, tchild);
+								if(pair != null)
+									addLTWithClusterPair(pair);
+							}
 						
 						sourceCluster = targetCluster;
 						i++;
@@ -183,79 +189,160 @@ public class LTDependencyDetector {
 		
 	}
 
+	// Place, or transition?? If we need one transition, 
+	// we check if there is a place already connects to the transiton and the tragetCluster
+	// if there is one place, then we use it, else, we need to generate one for it
+	// if we use place directly, we need to generate it before, so my decision is?? 
+	// we use transition!!! for the concrete, we just see it as the branchEndNodeList, one by one to check them
+	// maybe it's a list, somehow ?? so we need to gather them together?? 
+	private void addLTInBranch(XORClusterPair<ProcessTreeElement> branchPair, List<Transition> midTransitions, boolean singleSource) {
+		// goes at first only single source
+		XORCluster<ProcessTreeElement> sBranch, tBranch;
+		sBranch = branchPair.getSourceXORCluster();
+		tBranch = branchPair.getTargetXORCluster();
+		String sourceLabel = sBranch.getLabel();
+		String targetLabel = tBranch.getLabel();
+		Transition sTransition = null;
+		List<Transition> subMidTransitions = new ArrayList<Transition>();
+		
+		if(! pnNodeMap.containsKey(sBranch.getLabel() + tBranch.getLabel())) {
+			sTransition = net.addTransition(sBranch.getLabel() + tBranch.getLabel());
+			sTransition.setInvisible(true);
+			pnNodeMap.put(sBranch.getLabel() + tBranch.getLabel(), sTransition);
+		}else {
+			sTransition = (Transition) pnNodeMap.get(sBranch.getLabel() + tBranch.getLabel());
+		}
+		subMidTransitions.add(sTransition);
+		
+		for(Transition t: midTransitions) {
+			// check if there is the place after it, if we have found it the pnNodeMap, then we use them directly
+			String keyName = ProcessConfiguration.POST_PREFIX + t.getLabel()+ targetLabel;
+			Place postNode;
+			if(!pnNodeMap.containsKey(keyName)) {
+				postNode = addPlace(net, t, targetLabel, true);
+				// we need to add the silent transition after it
+				pnNodeMap.put(keyName, postNode);
+			}else
+				postNode = (Place) pnNodeMap.get(keyName);
+			
+			net.addArc(postNode, sTransition);
+
+		}
+		// after creating places, we generate one silent transition, and then goes deeper to see,
+		// what happends with the targetBranch
+		if(tBranch.isPureBranchCluster()) {
+			
+			List<ProcessTreeElement> tNodeList = tBranch.getBeginNodeList();
+			// pure then we have EndNodeList
+			for(ProcessTreeElement tNode: tNodeList) {
+				// generate places pre them 
+				PetrinetNode beginNode = tnMap.get(tNode);
+				Place preNode;
+				String keyName = ProcessConfiguration.PRE_PREFIX + beginNode.getLabel()+ sourceLabel;
+				if(!pnNodeMap.containsKey(keyName)) {
+					 preNode = addPlace(net, beginNode, sourceLabel, false);
+					 pnNodeMap.put(keyName, preNode);
+				}else
+					preNode = (Place) pnNodeMap.get(keyName);
+				
+				net.addArc(sTransition, preNode);
+			}
+	
+		}else {
+			// else, we goes into deeper branch, but how to get all the transitions?? 
+			
+			for(XORClusterPair<ProcessTreeElement> subBranchPair : branchPair.getBranchClusterPair())
+				addLTInBranch(subBranchPair, subMidTransitions, false);
+		}
+		
+		
+		
+		
+		
+		
+		// how about if the source target has branchClusterpair, then what to do ?? 
+		// we need to mark which direction, we need to go, source or target
+	}
+	
 	private void addLTWithClusterPair(XORClusterPair<ProcessTreeElement> pair) {
-		// add long-term dependency within cluster pair, but we need to change the visit order, because 
-		// we need to add them according to the 
+		// add long-term dependency within cluster pair
+		
+		// we only have xor to xor cluster pair, maybe nested, maybe not !! so we need to prepare for this!!
 		XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
+
 		sourceCluster = pair.getSourceXORCluster();
 		targetCluster = pair.getTargetXORCluster();
+		String sourceLabel = sourceCluster.getLabel();
+		String targetLabel = targetCluster.getLabel();
 		
-		// after this we need to check the situation of this pair
-		if(sourceCluster.isPureBranchCluster()) {
+		Transition sTransition = null;
+		// we are in a cluster pair
+		for(XORClusterPair<ProcessTreeElement> branchPair : pair.getLtBranchClusterPair()) {
+			// based on branch
+			XORCluster<ProcessTreeElement> sBranch = branchPair.getSourceXORCluster();
 			
-			// both are the pure branch, and then we need to add 
-			if(targetCluster.isPureBranchCluster()) {
+			XORCluster<ProcessTreeElement> tBranch = branchPair.getTargetXORCluster();
+			// we can't go this step until we are sure, they can use the sNodeList and tNodeList
+			
+			// branch can be considered directly.. we can't change sBranch, but we need to pass
+			// the transition for it
+			if(sBranch.isPureBranchCluster() && tBranch.isPureBranchCluster()) {
+				// we just add them directly by using this
+				List<ProcessTreeElement> sNodeList = sBranch.getEndNodeList();
+				List<ProcessTreeElement> tNodeList = tBranch.getBeginNodeList();
 				
-				
-			}
-			
-		}
-		// for parallel with xor, we have branchClusterPair
-		// image pair from seq, they are xor block!! remember, not branch!!
-		List<XORCluster<ProcessTreeElement>> schildren = sourceCluster.getChildrenCluster();
-		List<XORCluster<ProcessTreeElement>> tchildren = targetCluster.getChildrenCluster();
-		
-		// generate the post places after source Children
-		for(int si=0; si< schildren.size(); si++) {
-			// for each branch here, we need to do it 
-			XORCluster<ProcessTreeElement> sBranch = schildren.get(si);
-			
-			List<ProcessTreeElement> sNodeList = sBranch.getEndNodeList();
-			for(int ti=0; ti< tchildren.size(); ti++) {
-				XORCluster<ProcessTreeElement> tBranch = tchildren.get(si);
-				List<ProcessTreeElement> tNodeList = tBranch.getEndNodeList();
-				// we get the branchClusterPair and
-				// test if they have complete connection6
-				XORClusterPair<ProcessTreeElement> branchPair = pair.findLTBranchClusterPair(sBranch, tBranch);
-				if(branchPair != null) {
-					// there is connection, so we need to create lt in branches]
-					// image seq and other situations 
-					
-					// if it works at this state
-					
+				// but before we need to get the transition to add such places
+				if(! pnNodeMap.containsKey(sBranch.getLabel() + tBranch.getLabel())) {
+					sTransition = net.addTransition(sBranch.getLabel() + tBranch.getLabel());
+					sTransition.setInvisible(true);
+					pnNodeMap.put(sBranch.getLabel() + tBranch.getLabel(), sTransition);
+				}else {
+					sTransition = (Transition) pnNodeMap.get(sBranch.getLabel() + tBranch.getLabel());
 				}
 				
 				
+				// we have the post places there and then, we nned to do?? 
+				for(ProcessTreeElement sNode: sNodeList) {
+					// here the nodes alreay changes, if we add the silent transition, we shoudl looke for them from here
+					// not just add the places here, could we also find the transitions like this??
+					// somehow??
+					PetrinetNode endNode = tnMap.get(sNode);
+					// there is no post place exists, so we need to add them
+					String keyName = ProcessConfiguration.POST_PREFIX + endNode.getLabel()+ targetLabel;
+					Place postNode;
+					if(!pnNodeMap.containsKey(keyName)) {
+						postNode = addPlace(net, endNode, targetLabel, true);
+						// we need to add the silent transition after it
+						pnNodeMap.put(keyName, postNode);
+					}else
+						postNode = (Place) pnNodeMap.get(keyName);
+					
+					net.addArc(postNode, sTransition);
+				}
+
+				for(ProcessTreeElement tNode: tNodeList) {
+					// generate places pre them 
+					PetrinetNode beginNode = tnMap.get(tNode);
+					Place preNode;
+					String keyName = ProcessConfiguration.PRE_PREFIX + beginNode.getLabel()+ sourceLabel;
+					if(!pnNodeMap.containsKey(keyName)) {
+						 preNode = addPlace(net, beginNode, sourceLabel, false);
+						 pnNodeMap.put(keyName, preNode);
+					}else
+						preNode = (Place) pnNodeMap.get(keyName);
+					net.addArc(sTransition, preNode);
+				}
 				
+			}else {
+				
+				addLTWithClusterPair(branchPair);
+				// but how to connect places to transitions?? 
 			}
+		
 			
 		}
-		
-		
-		// image this pair from seq, and we have this pair, but we need to know which parts they belong to 
-		// from sourceCluster, or targetCluster
-		for(XORClusterPair<ProcessTreeElement> branchPair: pair.getBranchClusterPair()) {
-			if(branchPair.getSourceXORCluster().equals(sourceCluster)) {
-				// it is from the source branch, but if we need to generate the places
-				// according to the 
-				
-			}
-		}
-		
-		
-		
-		
-		
-	}
 
-
-	private PetrinetNode getPlace(List<PetrinetNode> nodes, String postLabel) {
-		// TODO we need to get the placce after this rule source, so how to get it ??
-		// why so simple, because we have unique relation to make sure that arguments are unique
-		for(PetrinetNode n: nodes)
-			if(n.getLabel().equals(postLabel))
-				return n;
-		return null;
+			
 	}
 
 	private Place addPlace(Petrinet net, PetrinetNode node, String targetLabel, boolean post) {
@@ -298,7 +385,7 @@ public class LTDependencyDetector {
 
 	private int findNodeIndex(ProcessTreeElement keyNode, List<XEventClass> traceVariant) {
 		// TODO get the index of process tree element, if it is in the tracevariant
-		return traceVariant.indexOf(maps.get(keyNode));
+		return traceVariant.indexOf(tlmaps.get(keyNode));
 	}
 
 	private Map<Node, XEventClass> getProcessTree2EventMap(XLog xLog, ProcessTree pTree, XEventClassifier classifier) {

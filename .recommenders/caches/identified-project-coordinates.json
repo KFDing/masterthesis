@@ -1,1 +1,1 @@
-[[{"location":"/usr/lib/jvm/java-8-openjdk-amd64","type":"JRE","hints":{}},"jre:jre:1.8.0"],[{"location":"/home/dkf/ProcessMining/programs/masterthesis/ProcessData","type":"PROJECT","hints":{"PROJECT_NAME":"ProcessData"}},"ABSENT"]]
+[[{"location":"/usr/lib/jvm/java-8-openjdk-amd64","type":"JRE","hints":{}},"jre:jre:1.8.0"],[{"location":"/home/dkf/ProcessMining/programs/masterthesis/ProcessData/lib/ProcessTree-latest.jar","type":"JAR","hints":{}},"ABSENT"]]

@@ -83,9 +83,12 @@ public class NewXORPairGenerator<T> {
 					// if there is only one, then what to do ??? we need to keep actually the last node to the next one!!!
 					while(i< childrenCluster.size()) {
 						targetCluster = childrenCluster.get(i);
-						if(!sourceCluster.equals(targetCluster)) {
-							clusterPairList.add(createClusterXORPair(sourceCluster, targetCluster));
-						}
+						
+						for(XORCluster<T> schild: sourceCluster.getEndXORList())
+							for(XORCluster<T> tchild: targetCluster.getBeginXORList()) {
+								clusterPairList.addAll(createClusterXORPair(schild, tchild));
+							}
+						
 						sourceCluster = targetCluster;
 						i++;
 					}
@@ -96,17 +99,15 @@ public class NewXORPairGenerator<T> {
 	}
 
 	
-	private XORClusterPair<T> createClusterXORPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
-		// we create one pair cluster for it.. 
+	private List<XORClusterPair<T>> createClusterXORPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
+		// here are only the xor cluster, we need only to create the branch cluster into it 
+		List<XORClusterPair<T>> pairList =  new ArrayList<XORClusterPair<T>>();
+		
 		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster);
-		// after this creation, we need to get initialize ??? 
-		// but initialize the pair needs a lot, like?? 
-		// pair.initialize();
-		
-		// here we can add the list of NewLTConnection
 		connList.addAll(pair.getLTConnection());
+		pairList.add(pair);
 		
-		return pair;
+		return pairList;
 	}
 
 	public Set<NewLTConnection<T>> getAllLTConnection() {
@@ -128,16 +129,14 @@ public class NewXORPairGenerator<T> {
 		//1. as one branch in xor
 		//2. including xor branch.
 		if(node.isLeaf()) {
-			System.out.println("visit Node name: " + node.getClass().getSimpleName());
 			XORCluster<T> cluster =  new XORCluster<T>((T) node);
 			cluster.setIsLeaf(true);
+			cluster.setAvailable(true);
 			clusterList.add(cluster);
 			return cluster;
 		}
 		
 		Block block =(Block) node;
-		System.out.println("visit block name: " + block.getClass().getSimpleName());
-		
 		
 		XORCluster<T> cluster =  new XORCluster<T>((T) block);
 		clusterList.add(cluster);
@@ -189,9 +188,9 @@ public class NewXORPairGenerator<T> {
 		// TODO get all xor ancestors in process tree including the xor structure?
 		// no, so we can distinguish nested and not nested xor block. 
 		
-		
 		Set<Node> aSet = new HashSet<Node>();
-		// 2. get the ancestors of them 
+		// 2. get the ancestors of them, here is one problem, 
+		// if we don't go for it, only the parents node, what we can do later??  
 		for(Node xorNode: getAllXORs(tree)) {
 			aSet.addAll(xorNode.getParents());
 		}
@@ -210,8 +209,7 @@ public class NewXORPairGenerator<T> {
 		return clusterPairList;
 	}
 
-	public XORClusterPair<T> findClusterPair(XORCluster<T> sourceCluster,
-			XORCluster<T> targetCluster) {
+	public XORClusterPair<T> findClusterPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
 		for(XORClusterPair<T> pair: clusterPairList) {
 			if(pair.getSourceXORCluster().equals(sourceCluster) && pair.getTargetXORCluster().equals(targetCluster))
 				return pair;
