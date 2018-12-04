@@ -74,8 +74,10 @@ public class XORCluster<T> {
 		// here maybe some problem, actually 
 		if(!beginXORList.isEmpty())
 			return beginXORList;
-
-		if(isSeqCluster()) {
+		if(isLeafCluster()){
+			// be careful, this might be wrong.. we need to know more about it 
+			beginXORList.add(this);
+		}else if(isSeqCluster()) {
 			// even if there are some elements in seq, but we're not sure about the sequence, so we can't do it 
 			// we just go to the first childrenCluster
 			XORCluster<T> cluster = childrenCluster.get(0);
@@ -90,7 +92,7 @@ public class XORCluster<T> {
 				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 				beginXORList.addAll(cluster.getBeginXORList());
 			}
-			
+		// my question is should we stop here?? Or somewhere else?? 	
 		}else if(isXORCluster()) {
 			// we need to deal with other situations, if there is something, 
 			beginXORList.add(this);
@@ -112,7 +114,12 @@ public class XORCluster<T> {
 	public List<XORCluster<T>> getEndXORList() {
 		if(!endXORList.isEmpty())
 			return endXORList;
-		if(isSeqCluster()) {
+		
+		if(isLeafCluster()){
+			// leaf node as one branch in xor, we can also return it here
+			// but we have the endXORList
+			endXORList.add(this);
+		}else if(isSeqCluster()) {
 			XORCluster<T> cluster = childrenCluster.get(childrenCluster.size() - 1);
 			// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 			endXORList.addAll(cluster.getEndXORList());

@@ -1,6 +1,7 @@
 package org.processmining.plugins.ding.process.dfg.transform;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -86,6 +87,7 @@ public class NewXORPairGenerator<T> {
 						
 						for(XORCluster<T> schild: sourceCluster.getEndXORList())
 							for(XORCluster<T> tchild: targetCluster.getBeginXORList()) {
+								// but what happens if they are in a branch, not matter
 								clusterPairList.addAll(createClusterXORPair(schild, tchild));
 							}
 						
@@ -103,7 +105,7 @@ public class NewXORPairGenerator<T> {
 		// here are only the xor cluster, we need only to create the branch cluster into it 
 		List<XORClusterPair<T>> pairList =  new ArrayList<XORClusterPair<T>>();
 		
-		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster);
+		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster, false);
 		connList.addAll(pair.getLTConnection());
 		pairList.add(pair);
 		
@@ -161,11 +163,7 @@ public class NewXORPairGenerator<T> {
 				
 				cluster.addChilrenCluster(xorCluster);
 			}else if(inXor) {
-				// for another cluster which is not in the xor branch
-				// here are the structure in xor branch, how to add them then??? 
-				// we need to add all the childrenCluster there until reach the end.. not so nice
-				// but do we really need to go so far?? to record all the things here.. Nana, 
-				// right now, it's an easy way to do
+				// until reach the leaf node
 				XORCluster<T> branchCluster = buildCluster(subNode, aSet, true);
 				cluster.addChilrenCluster(branchCluster);
 			}
@@ -192,7 +190,11 @@ public class NewXORPairGenerator<T> {
 		// 2. get the ancestors of them, here is one problem, 
 		// if we don't go for it, only the parents node, what we can do later??  
 		for(Node xorNode: getAllXORs(tree)) {
-			aSet.addAll(xorNode.getParents());
+			Collection<Block> parents = xorNode.getParents();
+			
+			while(!aSet.containsAll(parents))
+				aSet.addAll(parents);
+			
 		}
 		return aSet;
 	}

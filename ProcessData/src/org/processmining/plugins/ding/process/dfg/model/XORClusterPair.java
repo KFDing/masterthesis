@@ -16,7 +16,9 @@ public class XORClusterPair<T> {
 	// pair composites  source and target cluster
 	XORCluster<T> sourceXORCluster;
 	XORCluster<T> targetXORCluster;
+	boolean inBranch = false;
 	
+
 	// we can create branchClusterPair by using SBranch * TBranch
 	// not add them here, but we need to make sure, it has an end	 
 	List<XORClusterPair<T>> branchClusterPair = null, ltBranchClusterPair;
@@ -45,10 +47,18 @@ public class XORClusterPair<T> {
 		// or we need to 
 	}
 	
-	public XORClusterPair(XORCluster<T> source, XORCluster<T> target){
+	public boolean isInBranch() {
+		return inBranch;
+	}
+
+	public void setInBranch(boolean inBranch) {
+		this.inBranch = inBranch;
+	}
+	
+	public XORClusterPair(XORCluster<T> source, XORCluster<T> target, boolean inBranch){
 		sourceXORCluster = source;
 		targetXORCluster = target;
-		
+		this.inBranch = inBranch;
 		initialize();
 		
 	}
@@ -76,20 +86,27 @@ public class XORClusterPair<T> {
 				}
 			}
 			
-			
 		}else if(sourceXORCluster.isXORCluster()){ 
+			// should we generate cluster specialy for source and also special for the target?? Somehow??
+			// I think it's alreday fine, until now
 			branchClusterPair = new ArrayList<XORClusterPair<T>>();
 			
 			if(targetXORCluster.isXORCluster()) {
 				// two are both xor cluster and not nested, so generate the branchClusterPair
-				for(XORCluster<T> scluster: sourceXORCluster.getChildrenCluster())
-					for(XORCluster<T> tcluster: targetXORCluster.getChildrenCluster()){
-						// to add all the branchcluster here, which we need to ?? really ?? Not like this
-						branchClusterPair.add(new XORClusterPair(scluster, tcluster));
+				for(XORCluster<T> scluster: sourceXORCluster.getEndXORList())
+					// even if we get the end xor list, we need to make sure that the single
+					// cluster can also be listed here to combine the childrenCluster.. 
+					// so and so... change code and see how to make it
+					for(XORCluster<T> tcluster: targetXORCluster.getBeginXORList()){
+						// if the source XORCluster is seq, and target is parallel, then we need begin and end 
+						// because in each branch, it can be different 
+						branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
 					}
 				
 			}
 		
+		}else {
+			System.out.println("Could this situation happens?? Not really, because of what ?? But it can happen");
 		} 
 	}
 	
@@ -128,9 +145,7 @@ public class XORClusterPair<T> {
 		
 		return null;
 	}
-	
-	
-	
+
 
 	public List<XORClusterPair<T>> getLtBranchClusterPair() {
 		return ltBranchClusterPair;
