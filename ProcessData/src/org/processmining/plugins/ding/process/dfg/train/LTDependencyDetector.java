@@ -73,33 +73,39 @@ public class LTDependencyDetector {
 	
 	public PetrinetWithMarkings buildPetrinetWithLT(XLog log, ProcessTree tree, ControlParameters parameters) {
 		
-		tlmaps = getProcessTree2EventMap(log, tree , null);
+		PetrinetWithMarkings mnet = null;
+		try {
+			mnet = ProcessTree2Petrinet.convert(tree, true);
+		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		generator = new NewXORPairGenerator<ProcessTreeElement>();
 	    generator.generatePairs(tree);
 	    
 	    List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
+	    if(clusterPairs.isEmpty()) {
+	    	System.out.println("no need to to add long-term dependency");
+	    	return mnet;
+	    }
+		
+		
 	    Set<NewLTConnection<ProcessTreeElement>> connSet = generator.getAllLTConnection();
-	  
+	    
+	    tlmaps = getProcessTree2EventMap(log, tree , null);
 	    initializeConnection(connSet);
 	    adaptConnectionValue(connSet, parameters);
 	    
 	    // detector.detectPairWithLTDependency(pairs, parameters);
 	    detectXORClusterLTDependency(clusterPairs);
-	    try {
-	    	@SuppressWarnings("deprecation")
-			PetrinetWithMarkings mnet = ProcessTree2Petrinet.convert(tree, true);
-			net = mnet.petrinet;
-			tnMap = getProcessTree2NetMap(net, tree, null);
-			
-			pnNodeMap = new HashMap<String, PetrinetNode>();
-			addClusterLT2Net(tree.getRoot());
-		    return mnet;
-		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
-			System.out.println("The method transfering the process tree to net is old");
-			e.printStackTrace();
-		}
-	    return null;  
+	    
+    	net = mnet.petrinet;
+		tnMap = getProcessTree2NetMap(net, tree, null);
+		
+		pnNodeMap = new HashMap<String, PetrinetNode>();
+		addClusterLT2Net(tree.getRoot());
+	    return mnet; 
 	}
 
 	// fill the connection with base data from event log 
@@ -185,6 +191,7 @@ public class LTDependencyDetector {
 					}
 				}
 			}
+			cluster.setLtVisited(true);
 		}
 		
 	}
@@ -199,26 +206,46 @@ public class LTDependencyDetector {
 		targetCluster = pair.getTargetXORCluster();
 		
 		
-		List<XORCluster<ProcessTreeElement>> sourceXORList = sourceCluster.getEndXORList();
-		// it's the smallest units.. 
-		// and then we look for every xor cluster its branch
-		for(XORCluster<ProcessTreeElement> sourceXOR: sourceXORList) {
-			// first we have it then, we check it here then
-			XORClusterPair<ProcessTreeElement> branchPair = pair.findLTBranchClusterPair(sourceXOR, targetCluster);
-			if(branchPair == null)
+		
+		for(XORCluster<ProcessTreeElement> sBranch: sourceCluster.getEndXORBranch()) {
+			
+			// but how to find the subBranchPair and get the relation of them till back ?? 
+			List<XORClusterPair<ProcessTreeElement>> subBranchPairs = findLTBranchClusterPair(pair, sBranch, targetCluster);
+			if(subBranchPairs.isEmpty())
 				continue;
-			// check each branch, but at first we need to make sure that all is folded
-			for(XORCluster<ProcessTreeElement> sBranch : sourceXOR.getChildrenCluster()) {
-				// because we get all the branch, so we can make sure it includes all 
-				XORClusterPair<ProcessTreeElement> subBranchPair = branchPair.findLTBranchClusterPair(sourceXOR, targetCluster);
-				if(subBranchPair == null)
-					continue;
-				Place sBranchPlace = addBranchPlace(net, sBranch);
-				addLTInBranch(subBranchPair, sBranchPlace);
+			Place sBranchPlace = addBranchPlace(net, sBranch);
+			for(XORClusterPair<ProcessTreeElement> subPair: subBranchPairs)
+				addLTInBranch(subPair, sBranchPlace);
+				
 			}
-		}
+			
 	}
 	
+	private List<XORClusterPair<ProcessTreeElement>> findLTBranchClusterPair(XORClusterPair<ProcessTreeElement> pair, XORCluster<ProcessTreeElement> branch,
+			XORCluster<ProcessTreeElement> targetCluster) {
+		// TODO this method return the subBranchPair on target 
+		List<XORClusterPair<ProcessTreeElement>> branchPairList = new ArrayList<XORClusterPair<ProcessTreeElement>>();
+		// we should get the branch which source they belong to 
+		XORCluster<ProcessTreeElement> sourceXOR = null ;
+		for(XORCluster<ProcessTreeElement> child: pair.getSourceXORCluster().getChildrenCluster()) {
+			if(child.getEndXORBranch().contains(branch)) {
+				sourceXOR = child;
+				break;
+			}
+		}
+		
+		// then find the one with connection, what if there are many?? SO we need a list
+		for(XORClusterPair<ProcessTreeElement> subPair: pair.getLtBranchClusterPair()) {
+			if(subPair.getSourceXORCluster().equals(sourceXOR))
+				if(subPair.isConnected()) {
+					branchPairList.add(subPair);
+				}
+		}
+		
+		return branchPairList;
+	}
+
+
 	private Place addBranchPlace(Petrinet net2, XORCluster<ProcessTreeElement> sBranch) {
 		
 		// it shoudl generate from the 
