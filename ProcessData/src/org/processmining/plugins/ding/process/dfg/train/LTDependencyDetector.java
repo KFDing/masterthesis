@@ -138,7 +138,13 @@ public class LTDependencyDetector {
 		int i=0;
 		while(i< clusterPairs.size()) {
 			XORClusterPair<ProcessTreeElement> pair = clusterPairs.get(i);
-			if(pair.testComplete()) {
+			pair.testConnected();
+			// this pair is not connected
+			if(!pair.isConnected()) {
+				clusterPairs.remove(i);
+			}
+				
+			if(pair.isComplete()) {
 				clusterPairs.remove(i);
 			}else
 				i++;
@@ -195,6 +201,47 @@ public class LTDependencyDetector {
 		}
 		
 	}
+	// how to deal with this situations?? we need to check the branches of pair
+	private void addLTOnPair(XORClusterPair<ProcessTreeElement> pair) {
+		// if those pair is notnestd xor and not nested xor
+		XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
+		sourceCluster = pair.getSourceXORCluster();
+		targetCluster = pair.getTargetXORCluster();
+		if(!pair.isConnected()) {
+			return;
+		}
+		
+		if(sourceCluster.isNotNXORCluster() && targetCluster.isNotNXORCluster())
+			addLTOnNotNestedXORNotInBranch(pair);
+		// else, we need to get the 
+		else {
+			// how to add them for each source XOR, we should get the its children cluster
+			// add the branch of it as basic unit
+			if(sourceCluster.isPureBranchCluster()) {
+				// add source branch directly here and return the sourcePlace here
+				Place sourcePlace = addBranchPlace(net, sourceCluster);
+				
+			}else if(sourceCluster.isSeqCluster()) {
+				// we need to get the last xor of it, we only want to have it with the subltBranchPairs, but
+				// it also goes one level deeper, so we need to go here then
+				
+				List<XORClusterPair<ProcessTreeElement>> subltBranchPairs = pair.getLtBranchClusterPair();
+				
+				if(subltBranchPairs.size() >0 ) {
+					// there is only one xor cluster there
+					for(XORClusterPair<ProcessTreeElement> subBranchPair: subltBranchPairs) {
+						// how to make 
+						addLTOnPair(subBranchPair);
+					}
+				}
+				
+				
+				
+			}
+			
+			
+		}
+	}
 
 	// if it one is nested xor, one is not nested xor?? 
 	// and then both is nested somehow??
@@ -209,7 +256,8 @@ public class LTDependencyDetector {
 		
 		for(XORCluster<ProcessTreeElement> sBranch: sourceCluster.getEndXORBranch()) {
 			
-			// but how to find the subBranchPair and get the relation of them till back ?? 
+			// but for parallel situations, what to do then here?? Because we need to merge them together to provide
+			// the choices, so source situations also need care
 			List<XORClusterPair<ProcessTreeElement>> subBranchPairs = findLTBranchClusterPair(pair, sBranch, targetCluster);
 			if(subBranchPairs.isEmpty())
 				continue;
@@ -227,6 +275,7 @@ public class LTDependencyDetector {
 		List<XORClusterPair<ProcessTreeElement>> branchPairList = new ArrayList<XORClusterPair<ProcessTreeElement>>();
 		// we should get the branch which source they belong to 
 		XORCluster<ProcessTreeElement> sourceXOR = null ;
+		
 		for(XORCluster<ProcessTreeElement> child: pair.getSourceXORCluster().getChildrenCluster()) {
 			if(child.getEndXORBranch().contains(branch)) {
 				sourceXOR = child;

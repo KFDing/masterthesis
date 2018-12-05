@@ -28,7 +28,7 @@ public class XORClusterPair<T> {
 	boolean available;
 	
 	// this cluster pair is complete only if all the branches are complete 
-	boolean complete;
+	boolean complete = false;
 	
 	// it is concrete Branch * concrete Branch!! It is available 
 	// but even it is like this.. We don't need to worry about in the deep part
@@ -156,7 +156,8 @@ public class XORClusterPair<T> {
 	}
 	
 	
-	public boolean testComplete() {
+	public boolean testConnected() {
+		connected = false;
 		complete = true;
 		if(available) {
 			// only pure branch to pure branch, we can say it, now check their connection
@@ -172,17 +173,21 @@ public class XORClusterPair<T> {
 				
 				if(ltConnections.size() < connections.size())
 					complete = false;
-				if(ltBranchClusterPair.isEmpty())
-					connected = false;
+				if(!ltConnections.isEmpty())
+					connected = true;
 			}
 			
 		}else {
 			// we need to test the children cluster and find them out, but we need to record the complete branch
 			ltBranchClusterPair =  new ArrayList<XORClusterPair<T>>();
 			for(XORClusterPair<T> cPair : branchClusterPair) {
+				cPair.testConnected();
 				if(cPair.isConnected()) {
-					complete &= cPair.testComplete();
+					complete &= cPair.isComplete();
 					ltBranchClusterPair.add(cPair);
+				}else {
+					// not connected,so what to do then??
+					complete &= false;
 				}
 			}
 			
@@ -192,7 +197,7 @@ public class XORClusterPair<T> {
 				connected = true;
 			
 		}
-		return complete;
+		return connected;
 	}
 
 	public Collection<? extends NewLTConnection<T>> getLTConnection() {
@@ -210,7 +215,7 @@ public class XORClusterPair<T> {
 		}
 	}
 
-	boolean connected = false;
+	boolean connected = true;
 	public boolean isConnected() {
 		// TODO Auto-generated method stub
 		return connected;
