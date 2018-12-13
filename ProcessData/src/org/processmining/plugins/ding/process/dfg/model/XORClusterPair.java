@@ -1,7 +1,6 @@
 package org.processmining.plugins.ding.process.dfg.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -100,12 +99,20 @@ public class XORClusterPair<T> {
 					for(XORCluster<T> tcluster: targetXORCluster.getBeginXORList()){
 						// if the source XORCluster is seq, and target is parallel, then we need begin and end 
 						// because in each branch, it can be different 
+						// it stops if it meets one xor cluster; but then if we check the children, it keeps going.
 						branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
 					}
 				
 			}
 		
 		}else {
+			// because we have change the codes, or we don't change them, but according to the cluster
+			// situation?? 
+			// if we do this, at that step, we should actually add something there, else, what to do ??
+			// if we meet parallel cluster, it is in nested xor, but if there is not nested xor,
+			// its structure can't be recorded. Then we need to find a way to remember it
+			// 
+			
 			System.out.println("Could this situation happens?? Not really, because of what ?? But it can happen");
 		} 
 	}
@@ -152,7 +159,17 @@ public class XORClusterPair<T> {
 	}
 
 	public List<NewLTConnection<T>> getLtConnections() {
-		return ltConnections;
+		if(ltConnections!= null)
+			return ltConnections;
+		else { // if it is not pure then we need to get the branchPaiur
+			ltConnections = new ArrayList<NewLTConnection<T>>();
+			
+			for(XORClusterPair<T> cPair : ltBranchClusterPair) {
+				ltConnections.addAll(cPair.getLtConnections());
+			}
+			return ltConnections;
+		}
+
 	}
 
 	public boolean isComplete() {
@@ -197,7 +214,7 @@ public class XORClusterPair<T> {
 		return complete;
 	}
 
-	public Collection<? extends NewLTConnection<T>> getLTConnection() {
+	public List< NewLTConnection<T>> getConnection() {
 		// TODO return connections of this pair
 		// what if we use it later, so we still need to keep reference to it, but anyway by later use
 		if(connections!= null)
@@ -206,7 +223,7 @@ public class XORClusterPair<T> {
 			connections = new ArrayList<NewLTConnection<T>>();
 			
 			for(XORClusterPair<T> cPair : branchClusterPair) {
-				connections.addAll(cPair.getLTConnection());
+				connections.addAll(cPair.getConnection());
 			}
 			return connections;
 		}

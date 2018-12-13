@@ -32,6 +32,7 @@ import org.processmining.plugins.ding.preprocess.util.Configuration;
 import org.processmining.plugins.ding.preprocess.util.EventLogUtilities;
 import org.processmining.plugins.ding.preprocess.util.LabeledTraceVariant;
 import org.processmining.plugins.ding.process.dfg.model.ControlParameters;
+import org.processmining.plugins.ding.process.dfg.model.LTRule;
 import org.processmining.plugins.ding.process.dfg.model.NewLTConnection;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
 import org.processmining.plugins.ding.process.dfg.model.XORCluster;
@@ -63,6 +64,7 @@ public class LTDependencyDetector {
 	NewXORPairGenerator<ProcessTreeElement> generator;
 	Map<String, PetrinetNode> pnNodeMap ;
 	
+	List<LTRule<PetrinetNode>> ruleSet;
 	public LTDependencyDetector(ProcessTree pTree, XLog xlog) {
 		// there is no implemented way to clone it
 		tree = pTree;
@@ -93,6 +95,8 @@ public class LTDependencyDetector {
 			tnMap = getProcessTree2NetMap(net, tree, null);
 			
 			pnNodeMap = new HashMap<String, PetrinetNode>();
+			ruleSet = new ArrayList<LTRule<PetrinetNode>>();
+			
 			addClusterLT2Net(tree.getRoot());
 		    return mnet;
 		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
@@ -141,6 +145,231 @@ public class LTDependencyDetector {
 	}
 	
 	/**
+	 * here we need one method to combine the connection, but it shoudl due to the target
+	 * it seems that we don't need the cluster pair, but the structure of process tree
+	 */
+public void addLT2Net(Node node) {
+		
+		XORCluster<ProcessTreeElement> cluster = generator.getCluster(node);
+		
+		if(cluster!=null) {
+			
+			List<XORCluster<ProcessTreeElement>> childrenCluster = cluster.getChildrenCluster();
+			for(XORCluster<ProcessTreeElement> child : childrenCluster) {
+				// still not good effect... Nanan, because one level missed it
+				if(!child.isLtAvailable()) {
+					addClusterLT2Net((Node)child.getKeyNode());
+				}
+			}
+			// after that we come to the small unit of xor, but how about the seq, parallel, the thing else
+			// what to deal them ?? but whatever, we need to find the connection with the nodes in them!! 
+			
+			// if only leaf node is available, now, we need to check its begin and end node list
+			if(cluster.isSeqCluster()) {
+				if(cluster.getChildrenCluster().size() < 2) {
+					System.out.println("too few xor in sequence to connect it");
+				}else {
+					XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
+					sourceCluster = childrenCluster.get(0);
+					
+					// we are in sequence and we have the cluster pair, somehow ??? 
+					
+					
+				}
+			}
+			
+			// if this pair is nested
+		}
+	}
+
+    public void addLT2XORConnection(XORClusterPair<ProcessTreeElement> pair) {
+    	// this pair is not nested xor, and check how can we add lt on it 
+    	
+    	XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
+		sourceCluster = pair.getSourceXORCluster();
+		targetCluster = pair.getTargetXORCluster();
+		
+		// check the branchClusterPair
+		List<XORClusterPair<ProcessTreeElement>> ltBranchPair = pair.getLtBranchClusterPair();
+		for(XORClusterPair<ProcessTreeElement> branchPair : ltBranchPair) {
+			 
+			XORCluster<ProcessTreeElement> sBranch = branchPair.getSourceXORCluster();
+			// check the type of sBranch
+			
+			if(sBranch.isSeqCluster()) {
+				// get the endNodeList
+				List<ProcessTreeElement> endNodes = sBranch.getEndNodeList();
+				// there is only one node there
+				for(ProcessTreeElement eNode: endNodes ) {
+					
+					// get connections with eNode 
+					List<NewLTConnection<ProcessTreeElement>> branchConns = branchPair.getLtConnections();
+					
+					for(NewLTConnection<ProcessTreeElement> conn: branchConns) {
+						if(conn.getSourceBranch().equals(eNode)) {
+							// we need to add places, and silent transition there to make sure
+							// and make the places end as target branch
+							Transition ePNNode = tnMap.get(eNode);
+							String sourcePlaceName = ProcessConfiguration.POST_PREFIX + "-" + ePNNode.getLabel();
+							Place postNode ;
+							if(!pnNodeMap.containsKey(sourcePlaceName)) {
+								postNode = net.addPlace(sourcePlaceName);
+								net.addArc(ePNNode, postNode);
+								pnNodeMap.put(sourcePlaceName, postNode);
+							}else
+								postNode = (Place) pnNodeMap.get(sourcePlaceName);
+							
+							// add silent transition and make the name on it 
+							Transition sTransition = null;
+							String transtionName = sBranch.getLabel() + "-"+ conn.getTargetBranch().getName();
+							if(!pnNodeMap.containsKey(transtionName)) {
+								sTransition = net.addTransition(transtionName);
+								sTransition.setInvisible(true);
+								
+								pnNodeMap.put(transtionName, sTransition);
+							}else {
+								sTransition = (Transition) pnNodeMap.get(transtionName);
+							}
+							
+							net.addArc(postNode, sTransition);
+							
+							// add one place to mark the pointer is for the targetBranch there...
+							// here we need to give one name
+							String targetPlaceName = sBranch.getLabel() + "-"+ conn.getTargetBranch().getName();
+							Place targetPlace ;
+							if(pnNodeMap.containsKey(targetPlaceName)) {
+								targetPlace = net.addPlace(targetPlaceName);
+								
+								pnNodeMap.put(targetPlaceName, targetPlace);
+							}else {
+								targetPlace = (Place) pnNodeMap.get(targetPlaceName);
+							}
+							
+							net.addArc(sTransition, targetPlace);
+
+							// we need to add the rule set new item, the rule set should be like, inputList , outputList
+							// if we want to add them into rule set, we need to create one here 
+							// and then compare if there exists, if not then we add them here
+							LTRule<PetrinetNode> rule = new LTRule<PetrinetNode>();
+							// for source and target, we need to make them clear
+							PetrinetNode ruleSource = ePNNode;
+							PetrinetNode ruleTarget = pnNodeMap.get(conn.getTargetBranch());
+							rule.addRule(ruleSource, ruleTarget);
+							
+							if(!ruleSet.contains(rule))
+								ruleSet.add(rule);
+							
+						}
+					}
+					
+				}
+				
+			}else if(sBranch.isParallelCluster()) {
+				// source is parallel, and then we need to do what ?? 
+				// so there is more than one endNodeList but we can deal with it..
+				// we create cluster pair, when it includes the xor cluster
+				// sBranch is in one xor branch, we need to deal with it w.r.t. the target
+				
+				List<XORCluster<ProcessTreeElement>> xorSourceList = sBranch.getEndXORList();
+				
+				List<XORCluster<ProcessTreeElement>> xorTargetList = targetCluster.getBeginXORList();
+				
+				XORCluster<ProcessTreeElement> xorTarget = xorTargetList.get(0);
+				
+				List<Place> placeList = new ArrayList<Place>();
+				String targetName = null;
+				for(PetrinetNode pnNode : pnNodeMap.values()) {
+					// get the most out place
+					if(net.getOutEdges(pnNode).isEmpty()) {
+						if(targetName==null) {
+							String tmpString =  pnNode.getLabel();
+							targetName = tmpString.substring(tmpString.lastIndexOf("-"), tmpString.length());
+						
+						}
+						// look for place with the same targetPlaceName
+						if(pnNode.getLabel().contains(targetName))
+							placeList.add((Place) pnNode);
+						
+					}
+				}
+				
+				
+				// we choose the first place of place list
+			    Place refPlace = placeList.get(0);
+			    int i=1;
+			    
+				while(i< placeList.size()) {
+					// place are from the same xor, then we don't has it else we should merge them
+					Place tmpPlace = placeList.get(i);
+					if(! fromSameXOR(refPlace, tmpPlace)) {
+						// merge this place together
+						
+						// get the rule for refPlace, and rule for tmpPlace
+						
+						
+						
+						// here we can change the rule and make it different
+						
+						
+						// we can add places based on rule and process tree structure
+						
+						
+						Transition sTransition = null;
+						String transtionName = sBranch.getLabel() + "-"+ targetName;
+						if(!pnNodeMap.containsKey(transtionName)) {
+							sTransition = net.addTransition(transtionName);
+							sTransition.setInvisible(true);
+							
+							pnNodeMap.put(transtionName, sTransition);
+						}else {
+							sTransition = (Transition) pnNodeMap.get(transtionName);
+						}
+						
+						net.addArc(refPlace, sTransition);
+						net.addArc(tmpPlace, sTransition);
+						
+						// create one place here
+						String targetPlaceName = sBranch.getLabel() + "-"+ targetName;
+						Place targetPlace ;
+						if(pnNodeMap.containsKey(targetPlaceName)) {
+							targetPlace = net.addPlace(targetPlaceName);
+							
+							pnNodeMap.put(targetPlaceName, targetPlace);
+						}else {
+							targetPlace = (Place) pnNodeMap.get(targetPlaceName);
+						}
+						
+						net.addArc(sTransition, targetPlace);
+						
+						
+					}
+					
+					i++;
+					
+				}	
+				
+						
+				
+				
+			}
+			
+			
+			
+		}
+		
+		/// it should based on the source cluster
+		
+    	
+    }
+	
+    
+	private boolean  fromSameXOR(Place refPlace, Place tmpPlace) {
+		
+		return false;
+	}
+
+
+	/**
 	 * we go into the structure again and then add places or silent transitions here; 
 	 * @param node 
 	 */
@@ -153,7 +382,7 @@ public class LTDependencyDetector {
 			List<XORCluster<ProcessTreeElement>> childrenCluster = cluster.getChildrenCluster();
 			for(XORCluster<ProcessTreeElement> child : childrenCluster) {
 				// still not good effect... Nanan, because one level missed it
-				if(!child.isLtVisited()) {
+				if(!child.isLtAvailable()) {
 					addClusterLT2Net((Node)child.getKeyNode());
 				}
 				

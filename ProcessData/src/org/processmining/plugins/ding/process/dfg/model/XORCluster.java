@@ -49,8 +49,12 @@ public class XORCluster<T> {
 	// if it's in xor cluster, it means this is a nested xor cluster.
 	private boolean hasXOR = false;
 	// the available implies if we need to visit children cluster to get the xor list..
-	private boolean available = false;
+	private boolean pairAvailable = false;
+	// this is for the adding of lt dependency; 
+	// it is visited, we should go deeper into the pure branch cluster and check for this.
+	private boolean ltAvailable = isPureBranchCluster();
 	
+
 	public XORCluster(T key){
 		keyNode = key;
 		xorList =  new ArrayList<XORCluster<T>>();
@@ -195,27 +199,8 @@ public class XORCluster<T> {
 	// we need to set the available into true or false
 	// situation is that, if it's xor cluster, then return true
 	// if not, we check the children, direct available, I mean 
-	public void setAvailable(boolean value) {
-		available = value;
-	}
+
 	
-	public boolean isAvailable() {
-		return available;
-	}
-
-	boolean ltVisited=false;
-	
-
-	public boolean isLtVisited() {
-		// this is visited only when it is a NotNXORCluster
-		if(isNotNXORCluster())
-			ltVisited = true;
-		return ltVisited;
-	}
-
-	public void setLtVisited(boolean ltVisited) {
-		this.ltVisited = ltVisited;
-	}
 
 	public boolean isNotNXORCluster() {
 		// TODO test if this cluster is not nested xor structure
@@ -302,5 +287,21 @@ public class XORCluster<T> {
 	public String getLabel() {
 		// TODO return the label for this cluster only required when it's xor cluster, need to see later
 		return keyNode.toString();
+	}
+
+	public boolean isPairAvailable() {
+		return pairAvailable;
+	}
+
+	public void setPairAvailable(boolean pairAvailable) {
+		this.pairAvailable = pairAvailable;
+	}
+
+	public boolean isLtAvailable() {
+		return ltAvailable;
+	}
+
+	public void setLtAvailable(boolean ltAvailable) {
+		this.ltAvailable = ltAvailable;
 	}
 }

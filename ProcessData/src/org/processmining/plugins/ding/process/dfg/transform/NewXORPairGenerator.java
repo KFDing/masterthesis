@@ -67,7 +67,7 @@ public class NewXORPairGenerator<T> {
 			List<XORCluster<T>> childrenCluster = cluster.getChildrenCluster();
 			for(XORCluster<T> child : childrenCluster) {
 				// still not good effect... Nanan, because one level missed it
-				if(!child.isAvailable()) {
+				if(!child.isPairAvailable()) {
 					buildClusterPair((Node) child.getKeyNode());
 				}
 				
@@ -96,7 +96,7 @@ public class NewXORPairGenerator<T> {
 					}
 				}
 			}
-			cluster.setAvailable(true);
+			cluster.setPairAvailable(true);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class NewXORPairGenerator<T> {
 		List<XORClusterPair<T>> pairList =  new ArrayList<XORClusterPair<T>>();
 		
 		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster, false);
-		connList.addAll(pair.getLTConnection());
+		connList.addAll(pair.getConnection());
 		pairList.add(pair);
 		
 		return pairList;
@@ -133,7 +133,8 @@ public class NewXORPairGenerator<T> {
 		if(node.isLeaf()) {
 			XORCluster<T> cluster =  new XORCluster<T>((T) node);
 			cluster.setIsLeaf(true);
-			cluster.setAvailable(true);
+			cluster.setPairAvailable(true);
+			// cluster.setLtAvailable(true);
 			clusterList.add(cluster);
 			return cluster;
 		}
