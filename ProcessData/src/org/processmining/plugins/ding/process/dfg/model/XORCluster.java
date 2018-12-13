@@ -54,12 +54,15 @@ public class XORCluster<T> {
 	// it is visited, we should go deeper into the pure branch cluster and check for this.
 	private boolean ltAvailable = isPureBranchCluster();
 	
+	List<XORCluster<T>> endBranchList ;
 
 	public XORCluster(T key){
 		keyNode = key;
 		xorList =  new ArrayList<XORCluster<T>>();
 		beginXORList = new ArrayList<XORCluster<T>>();
 		endXORList = new ArrayList<XORCluster<T>>();
+		
+		endBranchList = new ArrayList<XORCluster<T>>();
 	}
 	
 	public T getKeyNode() {
@@ -78,8 +81,7 @@ public class XORCluster<T> {
 		// here maybe some problem, actually 
 		if(!beginXORList.isEmpty())
 			return beginXORList;
-		if(isLeafCluster()){
-			// be careful, this might be wrong.. we need to know more about it 
+		if(isPureBranchCluster()) {
 			beginXORList.add(this);
 		}else if(isSeqCluster()) {
 			// even if there are some elements in seq, but we're not sure about the sequence, so we can't do it 
@@ -100,6 +102,7 @@ public class XORCluster<T> {
 		}else if(isXORCluster()) {
 			// we need to deal with other situations, if there is something, 
 			beginXORList.add(this);
+			
 		}else {
 			System.out.println("in loop situation, not go deeper");
 		}
@@ -115,15 +118,52 @@ public class XORCluster<T> {
 		beginXORList.add(xorS);
 	}
 	
+	
+	public List<XORCluster<T>> getEndXORBranch() {
+		
+		if(!endBranchList.isEmpty())
+			return endBranchList;
+		// in nested end, we are going to do this, else not like this
+		// something interesting because, we add something more, which is not like this..
+		if(isPureBranchCluster()) {
+			endBranchList.add(this);
+		}else if(isSeqCluster()) {
+			XORCluster<T> cluster = childrenCluster.get(childrenCluster.size() - 1);
+			// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
+			endBranchList.addAll(cluster.getEndXORBranch());
+			
+		}else if(isParallelCluster()) {
+			// beginXORList can be inferred from the xorList?? Right?? 
+			// we really need to consider about the sequence and other stuffs here!! 
+			// ok they can be across of them selfs, what we need is to get it from the childen parts
+			for(XORCluster<T> cluster: childrenCluster) {
+				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
+				endBranchList.addAll(cluster.getEndXORBranch());
+			}
+			
+		}else if(isNotNXORCluster()){
+			// here we need control of it, we need to go into the pure branch and also another branch
+			// we would see the branch in xor should also return it 
+			endBranchList.add(this);
+
+		}else if(isNXORCluster()){
+			for(XORCluster<T> cluster: childrenCluster) {
+				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
+				endBranchList.addAll(cluster.getEndXORBranch());
+			}
+		}else {
+			System.out.println("in loop situation, not go deeper");
+		}
+		return endBranchList;
+	
+	}
+	
+	
 	public List<XORCluster<T>> getEndXORList() {
 		if(!endXORList.isEmpty())
 			return endXORList;
 		
-		if(isLeafCluster()){
-			// leaf node as one branch in xor, we can also return it here
-			// but we have the endXORList
-			endXORList.add(this);
-		}else if(isSeqCluster()) {
+		if(isSeqCluster()) {
 			XORCluster<T> cluster = childrenCluster.get(childrenCluster.size() - 1);
 			// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 			endXORList.addAll(cluster.getEndXORList());
@@ -138,7 +178,11 @@ public class XORCluster<T> {
 			}
 			
 		}else if(isXORCluster()){
+			// here we need control of it, we need to go into the pure branch and also another branch
+			// we would see the branch in xor should also return it 
 			endXORList.add(this);
+			
+			
 		}else {
 			System.out.println("in loop situation, not go deeper");
 		}
@@ -199,8 +243,27 @@ public class XORCluster<T> {
 	// we need to set the available into true or false
 	// situation is that, if it's xor cluster, then return true
 	// if not, we check the children, direct available, I mean 
-
+	public void setAvailable(boolean value) {
+		available = value;
+	}
 	
+	public boolean isAvailable() {
+		return available;
+	}
+
+	boolean ltVisited=false;
+	
+
+	public boolean isLtVisited() {
+		// this is visited only when it is a NotNXORCluster
+		if(isNotNXORCluster())
+			ltVisited = true;
+		return ltVisited;
+	}
+
+	public void setLtVisited(boolean ltVisited) {
+		this.ltVisited = ltVisited;
+	}
 
 	public boolean isNotNXORCluster() {
 		// TODO test if this cluster is not nested xor structure

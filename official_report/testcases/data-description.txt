@@ -1,0 +1,117 @@
+/***
+this file is used to describe the test cases for long-term dependency. 
+I will use it as one base line for later use. So make it formal
+**/
+
+** Test Case Seq 01:: not in xor but with xor, also not in xor and not with xor 
+// with 3 xor and test the as source and as target
+// Input: tc_seq_01_01.xes
+## pos
+50 S1,A,B1,C,T1;
+50 S2,A,B1,C,T2;
+50 S2,A,B2,C,T2;
+## neg
+50 S1,A,B2,C,T1
+// result :: ?? 
+
+
+
+** Test Case Seq 02:: in xor but not with xor
+// only two xor but with parallel and seq
+// Input: tc_seq_02_01.xes
+## pos
+50 S1,S2,S4,A,T2,T1,T3;
+50 S1,S4,S2,A,T1,T2,T3;
+50 S5,S6,A,T2,T1,T3;
+50 S6,S6,A,T4,T5,T6;
+50 S6,S6,A,T5,T4,T6;
+
+## neg
+50 S1,S4,S2,A,T4,T5,T6;
+// result :: ?? 
+
+
+** Test Case Seq 03:: in xor and with xor
+// with one branch has xor
+// Input: tc_seq_03_01.xes
+## pos
+50 S1,A,C,T1;
+50 S1,A,B1,B2,T1;
+50 S2,A,D1,D2,T2;
+50 S2,A,B1,B3,T2;
+## neg
+50 S2,A,C,T1;
+50 S2,A,B1,B2,T2;
+// result ?? 
+
+
+** Test Case Seq 04:: in xor and with xor, depth in 3
+// we need to consider more difficult situation, and what we should do??
+
+
+/**
+* For test cases with sequence
+**/ 
+** Test Case And 01:: not in xor but with xor, also not in xor and not with xor 
+// One parallel with 2 branches with xor
+// Input :: tc_and_01_01.xes
+## pos
+50 S1,A,B1,C1,D,T1;
+50 S1,A,C1,B1,D,T1;
+50 S2,A,B2,C2,D,T2;
+50 S2,A,C1,B2,D,T1;
+## neg
+50 S1,A,B2,C2,D,T2;
+50 S2,A,B1,C1,D,T1;
+// result is ?? 
+
+
+** Test Case And 02:: in xor but not with xor
+// as shown in example, quite complex, we can create one simple
+// Input:: tc_and_02_01.xes
+## pos
+50 S1,A,B,T1;
+50 S2,A,B,T2;
+50 S2,A,C1,C2,T1;
+50 S2,A,C2,C1,T2;
+## neg
+50 S1,A,C1,C2,T2;
+// result?? 
+
+
+** Test Case And 03:: in xor and with xor
+// direct of parallel in xor
+// Input:: tc_and_03_01.xes
+50 S1,A,C1,D1,T1;
+50 S1,A,B1,T1;
+50 S2,D2,C2,T2;
+50 S2,C2,D2,T2;
+## neg
+50 S1,A,B1,T2;
+// result?? 
+
+
+// parallel in a seq and then with xor
+// Input:: tc_and_03_02.xes
+50 S1,A,E,C1,D1,F,T1;
+50 S1,A,B1,T1;
+50 S2,E,D2,C2,F,T2;
+50 S2,E,C2,D2,F,T2;
+## neg
+50 S1,A,B1,T2;
+// result?? 
+
+
+** Test Case And 04:: in xor and with xor, depth in 3
+// we need to think of this later, now go to bed!!!
+
+
+** Test Case And 01:: not 
+
+
+** Test Case Nested Xor::
+
+
+** Test Case Loop:
+
+

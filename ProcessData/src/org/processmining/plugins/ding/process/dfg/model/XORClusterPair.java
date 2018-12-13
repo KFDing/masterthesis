@@ -61,60 +61,44 @@ public class XORClusterPair<T> {
 		initialize();
 		
 	}
-	// we test the source and target kinds and then create corresponding elements
-	// should we return it, not really!! but we need to remember its connection
-	// 
+	
+	
+	/**
+	 * this initialize is used to get the branchPair from source and target cluster
+	 * but when the sBranch and tBranch changes its form, and with xor, we need to take care of this
+	 * the most important thing is if it has xor and then get the xorList of it then
+	 */
 	public void initialize() {
-		
-		// I need to test the branch situations, one is the branch and has no XOR, 
 		if(sourceXORCluster.isPureBranchCluster() && targetXORCluster.isPureBranchCluster()) {
-			available = true;
-			
 			// we can have first and last children in Cluster, and then we need to use them 
 			// create the LTConnection of those, we don't need XORBranch again, only the nodes on it.
 			connections =  new ArrayList<NewLTConnection<T>>();
-			
+			available = true;
 			// we deal with the situation of seq and parallel, but we need to do consider the 
 			for(T sEndNode: sourceXORCluster.getEndNodeList()) {
 				for(T tBeginNode : targetXORCluster.getBeginNodeList()) {		
-					// we separate them.. But how to add them back, by checking the type 
-					// of cluster, if they are just seq, what to do then?? If they are parallel
-					// then we need to fgenerate two plaes ??? Like this, 
-					// but they are just branch to branch, then about the or structuer, we need something more
 					connections.add(new NewLTConnection(sEndNode,tBeginNode));
 				}
 			}
 			
-		}else if(sourceXORCluster.isXORCluster()){ 
-			// should we generate cluster specialy for source and also special for the target?? Somehow??
-			// I think it's alreday fine, until now
+		}else if(sourceXORCluster.isXORCluster() && targetXORCluster.isXORCluster()) {
 			branchClusterPair = new ArrayList<XORClusterPair<T>>();
+			for(XORCluster<T> scluster: sourceXORCluster.getChildrenCluster())
+				for(XORCluster<T> tcluster: targetXORCluster.getChildrenCluster()){
+					branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
+				}
 			
-			if(targetXORCluster.isXORCluster()) {
-				// two are both xor cluster and not nested, so generate the branchClusterPair
-				for(XORCluster<T> scluster: sourceXORCluster.getEndXORList())
-					// even if we get the end xor list, we need to make sure that the single
-					// cluster can also be listed here to combine the childrenCluster.. 
-					// so and so... change code and see how to make it
-					for(XORCluster<T> tcluster: targetXORCluster.getBeginXORList()){
-						// if the source XORCluster is seq, and target is parallel, then we need begin and end 
-						// because in each branch, it can be different 
-						// it stops if it meets one xor cluster; but then if we check the children, it keeps going.
-						branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
-					}
-				
-			}
-		
 		}else {
-			// because we have change the codes, or we don't change them, but according to the cluster
-			// situation?? 
-			// if we do this, at that step, we should actually add something there, else, what to do ??
-			// if we meet parallel cluster, it is in nested xor, but if there is not nested xor,
-			// its structure can't be recorded. Then we need to find a way to remember it
-			// 
+			branchClusterPair = new ArrayList<XORClusterPair<T>>();
+			for(XORCluster<T> scluster: sourceXORCluster.getEndXORList())
+				for(XORCluster<T> tcluster: targetXORCluster.getBeginXORList()){
+					
+					branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
+				}
+					
+			}
 			
-			System.out.println("Could this situation happens?? Not really, because of what ?? But it can happen");
-		} 
+		
 	}
 	
 	public XORCluster<T> getSourceXORCluster() {
@@ -159,17 +143,7 @@ public class XORClusterPair<T> {
 	}
 
 	public List<NewLTConnection<T>> getLtConnections() {
-		if(ltConnections!= null)
-			return ltConnections;
-		else { // if it is not pure then we need to get the branchPaiur
-			ltConnections = new ArrayList<NewLTConnection<T>>();
-			
-			for(XORClusterPair<T> cPair : ltBranchClusterPair) {
-				ltConnections.addAll(cPair.getLtConnections());
-			}
-			return ltConnections;
-		}
-
+		return ltConnections;
 	}
 
 	public boolean isComplete() {
@@ -180,7 +154,8 @@ public class XORClusterPair<T> {
 	}
 	
 	
-	public boolean testComplete() {
+	public boolean testConnected() {
+		connected = false;
 		complete = true;
 		if(available) {
 			// only pure branch to pure branch, we can say it, now check their connection
@@ -196,22 +171,31 @@ public class XORClusterPair<T> {
 				
 				if(ltConnections.size() < connections.size())
 					complete = false;
+				if(!ltConnections.isEmpty())
+					connected = true;
 			}
 			
 		}else {
 			// we need to test the children cluster and find them out, but we need to record the complete branch
 			ltBranchClusterPair =  new ArrayList<XORClusterPair<T>>();
 			for(XORClusterPair<T> cPair : branchClusterPair) {
-				if(cPair.testComplete()) {
+				cPair.testConnected();
+				if(cPair.isConnected()) {
+					complete &= cPair.isComplete();
 					ltBranchClusterPair.add(cPair);
+				}else {
+					// not connected,so what to do then??
+					complete &= false;
 				}
 			}
 			
-			if(ltBranchClusterPair.size() < branchClusterPair.size() && ltBranchClusterPair.size() > 0)
-				complete = false;
+			// if there is some connection with ltClusterPair, if there is, still we need to add them here 
+			// it is just not complete
+			if(ltBranchClusterPair.size() > 0)
+				connected = true;
 			
 		}
-		return complete;
+		return connected;
 	}
 
 	public List< NewLTConnection<T>> getConnection() {
@@ -227,6 +211,12 @@ public class XORClusterPair<T> {
 			}
 			return connections;
 		}
+	}
+
+	boolean connected = true;
+	public boolean isConnected() {
+		// TODO Auto-generated method stub
+		return connected;
 	}
 	
 	

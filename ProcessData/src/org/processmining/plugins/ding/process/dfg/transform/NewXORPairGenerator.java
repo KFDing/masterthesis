@@ -47,12 +47,15 @@ public class NewXORPairGenerator<T> {
 		clusterList =  new ArrayList<XORCluster<T>>();
 		connList =  new HashSet<NewLTConnection<T>>();
 		// do DFS to add pair into the pairs, we also need one stack to record its current state
-		if(tree.size() < 1) {
-			System.out.println("The tree is empty");
-			
+		Set<Node> xorSet = getAllXORs(tree);
+		
+		if(tree.size() < 1 || xorSet.size() <2) {
+			System.out.println("The tree is empty or not enough xors");
+			return ;
 		}
 		
-		Set<Node> aSet = getAllXORAncestors(tree);
+		Set<Node> aSet = getAllXORAncestors(xorSet);
+
 		buildCluster(tree.getRoot(), aSet, false);
 		buildClusterPair(tree.getRoot());
 		
@@ -164,7 +167,8 @@ public class NewXORPairGenerator<T> {
 				
 				cluster.addChilrenCluster(xorCluster);
 			}else if(inXor) {
-				// until reach the leaf node
+				// until reach the leaf node, this will pass all the time, which makes it remember 
+				// the choice we have made
 				XORCluster<T> branchCluster = buildCluster(subNode, aSet, true);
 				cluster.addChilrenCluster(branchCluster);
 			}
@@ -183,20 +187,45 @@ public class NewXORPairGenerator<T> {
 		return xorSet;
 	}
 	
-	public Set<Node> getAllXORAncestors(ProcessTree tree) {
+	public Set<Block> getAncestors(Node node){
+		Set<Block> ancestors = new HashSet<Block>();
+		if(node.isRoot())
+			return ancestors;
+		
+		Collection<Block> currentParents, parents = node.getParents();
+		if(parents.isEmpty())
+			return ancestors;
+		
+		currentParents = parents;
+		while(!ancestors.containsAll(currentParents)) {
+			ancestors.addAll(currentParents);
+			
+			for(Block pBlock: parents) {
+				if(!pBlock.isRoot() && !currentParents.contains(pBlock))
+					currentParents.addAll(pBlock.getParents());
+			}
+			
+			parents = currentParents;
+		}
+		
+		return ancestors;
+	}
+ 	
+	public Set<Node> getAllXORAncestors(Set<Node> xorSet) {
 		// TODO get all xor ancestors in process tree including the xor structure?
 		// no, so we can distinguish nested and not nested xor block. 
 		
 		Set<Node> aSet = new HashSet<Node>();
 		// 2. get the ancestors of them, here is one problem, 
 		// if we don't go for it, only the parents node, what we can do later??  
-		for(Node xorNode: getAllXORs(tree)) {
-			Collection<Block> parents = xorNode.getParents();
+		for(Node xorNode: xorSet) {
+			Set<Block> ancestors = getAncestors(xorNode);
+			if(ancestors.isEmpty())
+				continue;
 			
-			while(!aSet.containsAll(parents))
-				aSet.addAll(parents);
-			
+			aSet.addAll(ancestors);
 		}
+		
 		return aSet;
 	}
 
