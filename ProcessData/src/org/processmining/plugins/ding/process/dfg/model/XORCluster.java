@@ -244,11 +244,11 @@ public class XORCluster<T> {
 	// situation is that, if it's xor cluster, then return true
 	// if not, we check the children, direct available, I mean 
 	public void setAvailable(boolean value) {
-		available = value;
+		pairAvailable = value;
 	}
 	
 	public boolean isAvailable() {
-		return available;
+		return pairAvailable;
 	}
 
 	boolean ltVisited=false;

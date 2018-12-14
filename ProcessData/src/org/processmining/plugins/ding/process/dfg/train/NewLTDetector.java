@@ -117,13 +117,8 @@ public class NewLTDetector {
 					while(i< childrenCluster.size()) {
 						targetCluster = childrenCluster.get(i);
 						// does it make any difference here ?? to test if source cluster is parallel or not??
-						
-						if(sourceCluster.isParallelCluster()) {
-							adder.addLTInAnd(sourceCluster, targetCluster);
-						}else {
-							adder.addLTInPair(sourceCluster, targetCluster);
-						}
-						
+						adder.addLTOnPair(generator.findClusterPair(sourceCluster, targetCluster));
+
 						sourceCluster = targetCluster;
 					}
 					
@@ -164,7 +159,8 @@ public class NewLTDetector {
 		int i=0;
 		while(i< clusterPairs.size()) {
 			XORClusterPair<ProcessTreeElement> pair = clusterPairs.get(i);
-			if(pair.testComplete()) {
+			pair.testConnected();
+			if(pair.isComplete()) {
 				clusterPairs.remove(i);
 			}else
 				i++;

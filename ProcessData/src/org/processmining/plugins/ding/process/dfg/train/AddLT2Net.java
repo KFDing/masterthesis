@@ -52,6 +52,24 @@ public class AddLT2Net {
 		ruleSet = new HashSet<LTRule<PetrinetNode>>();
 	}
 	
+	/**
+	 * I want to have a method, actually if we meet the source cluster in parallel, 
+	 * we merge some rules, that all, I think!! 
+	 * -- precondition:: 
+	 *    ++ source cluster is the parallel
+	 *   
+	 * -- process:
+	 *    ++ find current connections in this pair!! 
+	 *    ++ all sources nodes in the connection 
+	 *    ++ 
+	 * -- post process:
+	 * 
+	 * 
+	 *  how to merge it ??
+	 *   firstly to combine them together and then 
+	 * @param pair
+	 */
+	
 	
 	
     public void addLTOnPair(XORClusterPair<ProcessTreeElement> pair) {
@@ -459,7 +477,8 @@ public class AddLT2Net {
 
 
 	public void addLTInAnd(XORCluster<ProcessTreeElement> sourceCluster, XORCluster<ProcessTreeElement> targetCluster) {
-		// TODO Auto-generated method stub
+		// TODO here we have the source cluster of parallel type and target cluster in And,
+		
 		
 	}
 
