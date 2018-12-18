@@ -30,6 +30,7 @@ public class NewXORPairGenerator<T> {
 	List<XORCluster<T>> clusterList;
 	Set<NewLTConnection<T>> connList;
 	
+	List<XORCluster<T>> branchList;
 	ProcessTree tree;
 	// here we can test the cluster pair, the size of it, if we don't have anyone, then
 	// we don't need to do it then.. But do you really think there is a need for this?? 
@@ -56,11 +57,54 @@ public class NewXORPairGenerator<T> {
 		
 		Set<Node> aSet = getAllXORAncestors(xorSet);
 
+		buildXORBranches(tree.getRoot(), aSet, false);
+		
 		buildCluster(tree.getRoot(), aSet, false);
 		buildClusterPair(tree.getRoot());
 		
 	}
 
+
+	public void buildXORBranches(Node node, Set<Node> aSet, boolean inXOR) {
+		
+		// for leaf node, we only visit in pure branch ones
+		if(node.isLeaf()) {
+			XORCluster<T> cluster =  new XORCluster<T>((T) node);
+			cluster.setIsLeaf(true);
+			branchList.add(cluster);
+		}
+		
+		Block block = (Block)node;
+		if(isXORBlocck(block)) {
+			// if we meet one xor block
+			List<Node> subNodes = block.getChildren();
+			for(Node subNode : subNodes) {
+				if(aSet.contains(subNode))
+					buildXORBranches(subNode, aSet, false);
+				else {
+					buildXORBranches(subNode, aSet, true);
+				}
+			}
+			
+		}else if(aSet.contains(node)) {
+			// not xor but contains xor we visit its subnodes
+			List<Node> subNodes = block.getChildren();
+			for(Node subNode : subNodes) {
+				if(aSet.contains(subNode))
+					buildXORBranches(subNode, aSet, false);
+			}
+			
+		}else {
+			if(inXOR) {
+				// here for pure branch, but now we don't care about its begin or end node, get it later
+				XORCluster<T> cluster =  new XORCluster<T>((T) block);
+				branchList.add(cluster);
+			}
+			
+		}
+		
+	}
+	
 	private void buildClusterPair(Node node) {
 		// TODO Auto-generated method stub
 		XORCluster<T> cluster = getCluster(node);

@@ -52,7 +52,7 @@ public class XORCluster<T> {
 	private boolean pairAvailable = false;
 	// this is for the adding of lt dependency; 
 	// it is visited, we should go deeper into the pure branch cluster and check for this.
-	private boolean ltAvailable = isPureBranchCluster();
+	private boolean ltAvailable = false; //isPureBranchCluster();
 	
 	List<XORCluster<T>> endBranchList ;
 

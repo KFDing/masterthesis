@@ -47,4 +47,9 @@ public class ProcessConfiguration extends Configuration{
 	};
 	
 	public static Color COLOR_BG2 = new Color(120, 120, 120);
+	public static String DECISION_TREE = "Decision Tree";
+	public static String ASSOCIATIOn_RULE = "Association Rule";
+	public static String ILP = "ILP";
+	
+	
 }

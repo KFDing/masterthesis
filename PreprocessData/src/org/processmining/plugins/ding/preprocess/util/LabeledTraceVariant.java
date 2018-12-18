@@ -15,7 +15,7 @@ public class LabeledTraceVariant extends TraceVariant{
 	private int posNum =0;
 	private int negNum =0;
 	
-	
+	boolean isPos;
 	public LabeledTraceVariant(List<XEventClass> toTraceClass, XTrace trace, int idx, boolean isPos) {
 		super(toTraceClass, trace, idx);
 		if(isPos)
@@ -23,6 +23,14 @@ public class LabeledTraceVariant extends TraceVariant{
 		else
 			addNegNum(1);
 	}
+	// should we change the mechanism?? if pos is greater than neg, then we see it is pos?? 
+	// we can test at first this effect and check later.
+	public boolean isPos() {
+		if(posNum>negNum)
+			isPos = true;
+		return isPos;
+	}
+	
 	public int getPosNum() {
 		// but how to get it, we need to do something else
 		return posNum;
