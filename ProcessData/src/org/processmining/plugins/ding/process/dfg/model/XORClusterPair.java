@@ -22,7 +22,7 @@ public class XORClusterPair<T> {
 	// not add them here, but we need to make sure, it has an end	 
 	List<XORClusterPair<T>> branchClusterPair = null, ltBranchClusterPair;
 
-	List<NewLTConnection<T>> connections, ltConnections;
+	List<LTRule<XORCluster<T>>> connections, ltConnections;
 	// for Not NXor * NOt NXor, should we go deeper, more general, we need to go to branchCluster and check it 
 	boolean available;
 	
@@ -58,8 +58,6 @@ public class XORClusterPair<T> {
 		sourceXORCluster = source;
 		targetXORCluster = target;
 		this.inBranch = inBranch;
-		initialize();
-		
 	}
 	
 	
@@ -70,16 +68,15 @@ public class XORClusterPair<T> {
 	 */
 	public void initialize() {
 		if(sourceXORCluster.isPureBranchCluster() && targetXORCluster.isPureBranchCluster()) {
-			// we can have first and last children in Cluster, and then we need to use them 
-			// create the LTConnection of those, we don't need XORBranch again, only the nodes on it.
-			connections =  new ArrayList<NewLTConnection<T>>();
+			// we create the branch connection of source and target xor cluster
+			// if one is this but the others are not this.. Not really, we can get it
+			connections =  new ArrayList<LTRule<XORCluster<T>>>();
 			available = true;
 			// we deal with the situation of seq and parallel, but we need to do consider the 
-			for(T sEndNode: sourceXORCluster.getEndNodeList()) {
-				for(T tBeginNode : targetXORCluster.getBeginNodeList()) {		
-					connections.add(new NewLTConnection(sEndNode,tBeginNode));
-				}
-			}
+			LTRule<XORCluster<T>> conn = new LTRule<XORCluster<T>>(sourceXORCluster, targetXORCluster);
+			connections.add(conn);
+			
+			// one thing is how to get the connection of those branch connection?? 
 			
 		}else if(sourceXORCluster.isXORCluster() && targetXORCluster.isXORCluster()) {
 			branchClusterPair = new ArrayList<XORClusterPair<T>>();
@@ -89,6 +86,8 @@ public class XORClusterPair<T> {
 				}
 			
 		}else {
+			// when here something happens, how to keep them in same level,
+			// by this, I mean that 
 			branchClusterPair = new ArrayList<XORClusterPair<T>>();
 			for(XORCluster<T> scluster: sourceXORCluster.getEndXORList())
 				for(XORCluster<T> tcluster: targetXORCluster.getBeginXORList()){
@@ -142,7 +141,7 @@ public class XORClusterPair<T> {
 		return ltBranchClusterPair;
 	}
 
-	public List<NewLTConnection<T>> getLtConnections() {
+	public List<LTRule<XORCluster<T>>> getLtConnections() {
 		return ltConnections;
 	}
 
@@ -161,8 +160,8 @@ public class XORClusterPair<T> {
 			// only pure branch to pure branch, we can say it, now check their connection
 			if(!connections.isEmpty()) {
 
-				ltConnections =  new ArrayList<NewLTConnection<T>>();
-				for(NewLTConnection<T> conn: connections) {
+				ltConnections =  new ArrayList<LTRule<XORCluster<T>>>();
+				for(LTRule<XORCluster<T>> conn: connections) {
 					if(conn.testSupportConnection()) {
 						// if it support the connection, then we return the true
 						ltConnections.add(conn);
@@ -198,13 +197,13 @@ public class XORClusterPair<T> {
 		return connected;
 	}
 
-	public List< NewLTConnection<T>> getConnection() {
+	public List<LTRule<XORCluster<T>>> getConnection() {
 		// TODO return connections of this pair
 		// what if we use it later, so we still need to keep reference to it, but anyway by later use
 		if(connections!= null)
 			return connections;
 		else { // if it is not pure then we need to get the branchPaiur
-			connections = new ArrayList<NewLTConnection<T>>();
+			connections = new ArrayList<LTRule<XORCluster<T>>>();
 			
 			for(XORClusterPair<T> cPair : branchClusterPair) {
 				connections.addAll(cPair.getConnection());

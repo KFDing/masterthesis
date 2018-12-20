@@ -69,12 +69,15 @@ public class NewBranchLTDetector {
 		int[][][] connInfo = new int[rowSize +1][colSize + 1][elementSize];
 		*/
 		
-		String classifier = ProcessConfiguration.ASSOCIATIOn_RULE;
+		String classifier = ProcessConfiguration.DECISION_TREE;
 		DataTransfer transfer = new DataTransfer(log, tree);
-		Instances data = transfer.transferData(classifier, branchList, variants);
+		Instances[] data = transfer.transferData(classifier, branchList, variants);
 		
 		CorrelationTrainer trainer = new CorrelationTrainer();
 		trainer.trainCorrelation(classifier,data, branchList);
+		
+		// after the lt traninig, we get the lt rules, but how to add them into the petri net ?
+		// if we have a 
 		
 		
 	}

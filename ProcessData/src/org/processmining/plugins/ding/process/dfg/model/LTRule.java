@@ -21,26 +21,41 @@ public class LTRule<E>{
 		targetNodes = new ArrayList<E>();
 	}
 	
+	public LTRule(E source, E target) {
+		// TODO Auto-generated constructor stub
+		sourceNodes = new ArrayList<E>();
+		targetNodes = new ArrayList<E>();
+		sourceNodes.add(source);
+		targetNodes.add(target);
+	}
+
 	public void addRule(E source, E target) {
 		if(!sourceNodes.contains(source)) {
 			sourceNodes.add(source);
 		}
-		if(!targetNodes.contains(source)) {
-			targetNodes.add(source);
+		if(!targetNodes.contains(target)) {
+			targetNodes.add(target);
 		}
 		
 	}
 	
 	public void addRuleList(List<E> sourceList, List<E> targetList) {
 		for(E source: sourceList)
-			for(E target: targetList)
-				addRule(source, target);
+			addRuleSource(source);
+		for(E target: targetList)
+			addRuleTarget(target);
 	}
 
 	public void addRuleSource(E source) {
 		// TODO Auto-generated method stub
 		if(!sourceNodes.contains(source)) {
 			sourceNodes.add(source);
+		}
+	}
+	public void addRuleTarget(E target) {
+		// TODO Auto-generated method stub
+		if(!targetNodes.contains(target)) {
+			targetNodes.add(target);
 		}
 	}
 

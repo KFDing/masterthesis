@@ -37,7 +37,7 @@ public class DataTransfer {
 		tlmaps = getProcessTree2EventMap(log, tree, null);
 	}
 	
-	public Instances transferData(String classifer, List<XORBranch<ProcessTreeElement>> branchList, List<LabeledTraceVariant> variants) {
+	public Instances[] transferData(String classifer, List<XORBranch<ProcessTreeElement>> branchList, List<LabeledTraceVariant> variants) {
 		if(classifer.equals(ProcessConfiguration.DECISION_TREE)) {
 			return trasferDataForDT(branchList, variants);
 		}else if(classifer.equals(ProcessConfiguration.ASSOCIATIOn_RULE)) {
@@ -50,13 +50,13 @@ public class DataTransfer {
 		return null;
 	}
 	
-	private Instances trasferDataForILP(List<XORBranch<ProcessTreeElement>> branchList,
+	private Instances[] trasferDataForILP(List<XORBranch<ProcessTreeElement>> branchList,
 			List<LabeledTraceVariant> variants) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private Instances trasferDataForAT(List<XORBranch<ProcessTreeElement>> branchList, List<LabeledTraceVariant> variants) {
+	private Instances[] trasferDataForAT(List<XORBranch<ProcessTreeElement>> branchList, List<LabeledTraceVariant> variants) {
 		// TODO transfer data for association rule by only using positive examples
 		ArrayList<Attribute> atts = new ArrayList<Attribute>();
 		Attribute attribute = null;
@@ -69,18 +69,16 @@ public class DataTransfer {
 			atts.add(attribute);
 		}
 
-		Instances data = new Instances("TrainDataForDT", atts, 0);
+		Instances posData = new Instances("PosTrainDataForAT", atts, 0);
+		Instances negData = new Instances("NegTrainDataForAT", atts, 0);
 		
 		for(LabeledTraceVariant var : variants) {
 			// for each var, we create one row into the data info, find out all the relative branch 
 			// which shows in variant and then assign the value on it
-			if(!var.isPos()) {
-				continue;
-			}
 			
 			List<XEventClass> traceVariant = var.getTraceVariant();
 			// double[] newVals = new double[data.numAttributes()];
-			Instance instance = new DenseInstance(data.numAttributes());
+			Instance instance = new DenseInstance(posData.numAttributes());
 			int k=0;
 			// here we only use information if it exisits here. if it, then we what we do, else,
 			// we might use much more data, I guess, we have two values for one part, we create
@@ -94,15 +92,20 @@ public class DataTransfer {
 			}
 			
 			instance.setWeight(var.getCount());
-			instance.setDataset(data);
-			data.add(instance);
+			if(var.isPos()) {
+				instance.setDataset(posData);
+				posData.add(instance);
+			}else {
+				instance.setDataset(negData);
+				negData.add(instance);
+			}
 			
 		}
-		return data;
+		return new Instances[] {posData, negData};
 	}
 
 	// after we fill item into connInfo, we have created the table for computation, we transfer it into Instance
-	public Instances trasferDataForDT(List<XORBranch<ProcessTreeElement>> branchList, List<LabeledTraceVariant> variants) {
+	public Instances[] trasferDataForDT(List<XORBranch<ProcessTreeElement>> branchList, List<LabeledTraceVariant> variants) {
 		// transfer data into instances, this format and then use it do the classification
 		// I would see now it is value decision tree
 		
@@ -159,7 +162,7 @@ public class DataTransfer {
 		}
 		
 		data.setClassIndex(data.numAttributes() - 1);
-		return data;
+		return new Instances[] {data};
 	}
 	
 

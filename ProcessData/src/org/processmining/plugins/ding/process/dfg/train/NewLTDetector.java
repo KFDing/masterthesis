@@ -45,7 +45,7 @@ public class NewLTDetector {
 	Map<String, PetrinetNode> pnNodeMap ;
 	
 	List<LTRule<PetrinetNode>> ruleSet;
-	AddLT2Net adder;
+	
 	public NewLTDetector(ProcessTree pTree, XLog xlog) {
 		// there is no implemented way to clone it
 		tree = pTree;
@@ -78,8 +78,7 @@ public class NewLTDetector {
 			pnNodeMap = new HashMap<String, PetrinetNode>();
 			ruleSet = new ArrayList<LTRule<PetrinetNode>>();
 			
-			// ?? here we need to add the long-term dependency into net.
-			adder = new AddLT2Net(net, tree);
+			// after we get the
 			addLTOnNet(tree.getRoot());
 		    return mnet;
 		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
@@ -89,6 +88,8 @@ public class NewLTDetector {
 	    return null;  
 	}
 
+	// after we checked all the pair list, we need to add the dependency on them
+	// nested or not nestes, parallel, or others, but do we need to visit pair again, or not ??
 	public void addLTOnNet(Node node) {
 		// we need to get the cluster with respect to this node
 		XORCluster<ProcessTreeElement> cluster = generator.getCluster(node);
@@ -117,8 +118,8 @@ public class NewLTDetector {
 					while(i< childrenCluster.size()) {
 						targetCluster = childrenCluster.get(i);
 						// does it make any difference here ?? to test if source cluster is parallel or not??
-						adder.addLTOnPair(generator.findClusterPair(sourceCluster, targetCluster));
-
+						// adder.addLTOnPair(generator.findClusterPair(sourceCluster, targetCluster));
+						
 						sourceCluster = targetCluster;
 					}
 					
@@ -128,6 +129,23 @@ public class NewLTDetector {
 			// if this pair is nested
 		}
 	}
+	// we can at first create the LTRule from pair, but LTRule, we still need structure of process tree
+	// to add long-term dependency.
+	// what if now, we have rules from the association rule discovery, and we need to put them on Petri net??
+	
+	// how to combine them together??  
+	// We recreate the proper rules for it, like also the direct -followly relation,
+	// then we could have parallel together, one to one branch, or two many branches
+	
+	// how to test if the branch is before or after those ones?? 
+	// we can use the index of them;; 
+	// [Source1, souce2]  ==> [target1, target2]
+	
+	
+	
+	
+	
+	
 	
 	// fill the connection with base data from event log 
 	public void initializeConnection(Set<NewLTConnection<ProcessTreeElement>> connSet) {

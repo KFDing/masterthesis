@@ -57,53 +57,12 @@ public class NewXORPairGenerator<T> {
 		
 		Set<Node> aSet = getAllXORAncestors(xorSet);
 
-		buildXORBranches(tree.getRoot(), aSet, false);
 		
 		buildCluster(tree.getRoot(), aSet, false);
 		buildClusterPair(tree.getRoot());
 		
 	}
 
-
-	public void buildXORBranches(Node node, Set<Node> aSet, boolean inXOR) {
-		
-		// for leaf node, we only visit in pure branch ones
-		if(node.isLeaf()) {
-			XORCluster<T> cluster =  new XORCluster<T>((T) node);
-			cluster.setIsLeaf(true);
-			branchList.add(cluster);
-		}
-		
-		Block block = (Block)node;
-		if(isXORBlocck(block)) {
-			// if we meet one xor block
-			List<Node> subNodes = block.getChildren();
-			for(Node subNode : subNodes) {
-				if(aSet.contains(subNode))
-					buildXORBranches(subNode, aSet, false);
-				else {
-					buildXORBranches(subNode, aSet, true);
-				}
-			}
-			
-		}else if(aSet.contains(node)) {
-			// not xor but contains xor we visit its subnodes
-			List<Node> subNodes = block.getChildren();
-			for(Node subNode : subNodes) {
-				if(aSet.contains(subNode))
-					buildXORBranches(subNode, aSet, false);
-			}
-			
-		}else {
-			if(inXOR) {
-				// here for pure branch, but now we don't care about its begin or end node, get it later
-				XORCluster<T> cluster =  new XORCluster<T>((T) block);
-				branchList.add(cluster);
-			}
-			
-		}
-		
-	}
 	
 	private void buildClusterPair(Node node) {
 		// TODO Auto-generated method stub
@@ -131,12 +90,13 @@ public class NewXORPairGenerator<T> {
 					// if there is only one, then what to do ??? we need to keep actually the last node to the next one!!!
 					while(i< childrenCluster.size()) {
 						targetCluster = childrenCluster.get(i);
+						// cluster only have children cluster with xor or is xor
+						// but if it is in a branch, then it stores all the nodes 
+						// we need to pay attention to this thing 
+						// the only thing we can do is to stop it goes too far into branch,
+						// seq should always contain the xor
 						
-						for(XORCluster<T> schild: sourceCluster.getEndXORList())
-							for(XORCluster<T> tchild: targetCluster.getBeginXORList()) {
-								// but what happens if they are in a branch, not matter
-								clusterPairList.addAll(createClusterXORPair(schild, tchild));
-							}
+						clusterPairList.add(createClusterXORPair(sourceCluster, targetCluster));
 						
 						sourceCluster = targetCluster;
 						i++;
@@ -148,15 +108,17 @@ public class NewXORPairGenerator<T> {
 	}
 
 	
-	private List<XORClusterPair<T>> createClusterXORPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
+	private XORClusterPair<T> createClusterXORPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
 		// here are only the xor cluster, we need only to create the branch cluster into it 
-		List<XORClusterPair<T>> pairList =  new ArrayList<XORClusterPair<T>>();
 		
 		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster, false);
+		// even if we didn't see the codes here, we create pair only with situation in seq
+		// seq has children: xor, parallel, or loop
+		// if we have parallel, one xor and one parallel, we need to goes down to get the number of parallel xor
+		pair.initialize();
 		connList.addAll(pair.getConnection());
-		pairList.add(pair);
 		
-		return pairList;
+		return pair;
 	}
 
 	public Set<NewLTConnection<T>> getAllLTConnection() {
