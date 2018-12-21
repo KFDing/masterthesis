@@ -28,7 +28,7 @@ import org.processmining.plugins.ding.process.dfg.model.ControlParameters;
 import org.processmining.plugins.ding.process.dfg.model.DfMatrix;
 import org.processmining.plugins.ding.process.dfg.model.DfgProcessResult;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ViewType;
-import org.processmining.plugins.ding.process.dfg.train.LTDependencyDetector;
+import org.processmining.plugins.ding.process.dfg.train.NewLTDetector;
 import org.processmining.processtree.ProcessTree;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet.InvalidProcessTreeException;
@@ -201,7 +201,8 @@ class ResultMainView extends JPanel{
 			 *   the easy way to do it --- generate it each time
 			 */
 			// here we need to use the customized program to add lt dependency on it
-			LTDependencyDetector detector = new LTDependencyDetector(pTree, log);
+			// LTDependencyDetector detector = new LTDependencyDetector(pTree, log);
+			NewLTDetector detector = new NewLTDetector(pTree, log);
 			PetrinetWithMarkings mnet = detector.buildPetrinetWithLT(log, pTree, parameters);
 			// PetrinetWithMarkings mnet = LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters );
 			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
@@ -211,7 +212,8 @@ class ResultMainView extends JPanel{
 				DfgMiningParameters ptParas = getProcessTreParameters();
 				pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
 			}	
-			LTDependencyDetector detector = new LTDependencyDetector(pTree, log);
+			// LTDependencyDetector detector = new LTDependencyDetector(pTree, log);
+			NewLTDetector detector = new NewLTDetector(pTree, log);
 			PetrinetWithMarkings mnet = detector.buildPetrinetWithLT(log, pTree, parameters);//LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters);
 			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
 			

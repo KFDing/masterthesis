@@ -45,7 +45,9 @@ public class XORCluster<T> {
 	
 	// to record the previous structure, or we only to remember the parents, it's already fine?? 
 	public List<XORCluster<T>> childrenCluster;
-
+    
+	private XORCluster<T> parent;
+	
 	// if it's in xor cluster, it means this is a nested xor cluster.
 	private boolean hasXOR = false;
 	// the available implies if we need to visit children cluster to get the xor list..
@@ -366,5 +368,14 @@ public class XORCluster<T> {
 
 	public void setLtAvailable(boolean ltAvailable) {
 		this.ltAvailable = ltAvailable;
+	}
+
+	public XORCluster<T> getParent() {
+		// TODO Auto-generated method stub
+		return parent;
+	}
+
+	public void setParent(XORCluster<T> parent) {
+		this.parent = parent;
 	}
 }

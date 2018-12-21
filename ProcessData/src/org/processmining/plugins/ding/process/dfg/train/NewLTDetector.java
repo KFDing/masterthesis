@@ -22,7 +22,6 @@ import org.processmining.plugins.ding.preprocess.util.EventLogUtilities;
 import org.processmining.plugins.ding.preprocess.util.LabeledTraceVariant;
 import org.processmining.plugins.ding.process.dfg.model.ControlParameters;
 import org.processmining.plugins.ding.process.dfg.model.LTRule;
-import org.processmining.plugins.ding.process.dfg.model.NewLTConnection;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
 import org.processmining.plugins.ding.process.dfg.model.XORCluster;
 import org.processmining.plugins.ding.process.dfg.model.XORClusterPair;
@@ -45,7 +44,7 @@ public class NewLTDetector {
 	Map<String, PetrinetNode> pnNodeMap ;
 	
 	List<LTRule<PetrinetNode>> ruleSet;
-	
+	AddLT2Net adder;
 	public NewLTDetector(ProcessTree pTree, XLog xlog) {
 		// there is no implemented way to clone it
 		tree = pTree;
@@ -62,7 +61,7 @@ public class NewLTDetector {
 	    generator.generatePairs(tree);
 	    
 	    List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
-	    Set<NewLTConnection<ProcessTreeElement>> connSet = generator.getAllLTConnection();
+	    Set<LTRule<XORCluster<ProcessTreeElement>>> connSet = generator.getAllLTConnection();
 	  
 	    initializeConnection(connSet);
 	    adaptConnectionValue(connSet, parameters);
@@ -77,7 +76,7 @@ public class NewLTDetector {
 			
 			pnNodeMap = new HashMap<String, PetrinetNode>();
 			ruleSet = new ArrayList<LTRule<PetrinetNode>>();
-			
+			adder = new AddLT2Net(net, tree);
 			// after we get the
 			addLTOnNet(tree.getRoot());
 		    return mnet;
@@ -117,50 +116,35 @@ public class NewLTDetector {
 					XORClusterPair<ProcessTreeElement> pair;
 					while(i< childrenCluster.size()) {
 						targetCluster = childrenCluster.get(i);
-						// does it make any difference here ?? to test if source cluster is parallel or not??
-						// adder.addLTOnPair(generator.findClusterPair(sourceCluster, targetCluster));
-						
+						pair = generator.findClusterPair(sourceCluster, targetCluster);
+						adder.addLTOnPair(pair);
 						sourceCluster = targetCluster;
+						i++;
 					}
 					
 				}
 			}
 			cluster.setLtAvailable(true);
-			// if this pair is nested
 		}
 	}
-	// we can at first create the LTRule from pair, but LTRule, we still need structure of process tree
-	// to add long-term dependency.
-	// what if now, we have rules from the association rule discovery, and we need to put them on Petri net??
-	
-	// how to combine them together??  
-	// We recreate the proper rules for it, like also the direct -followly relation,
-	// then we could have parallel together, one to one branch, or two many branches
-	
-	// how to test if the branch is before or after those ones?? 
-	// we can use the index of them;; 
-	// [Source1, souce2]  ==> [target1, target2]
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
 	// fill the connection with base data from event log 
-	public void initializeConnection(Set<NewLTConnection<ProcessTreeElement>> connSet) {
+	public void initializeConnection(Set<LTRule<XORCluster<ProcessTreeElement>>> connSet) {
 		List<LabeledTraceVariant> variants = EventLogUtilities.getLabeledTraceVariants(log, null);
 		for(LabeledTraceVariant var : variants) {
 			// for each var, we check for each xor pair 
-			for(NewLTConnection<ProcessTreeElement> conn : connSet) {
+			for(LTRule<XORCluster<ProcessTreeElement>> conn : connSet) {
 				fillLTConnectionFreq(var, conn);
 			}
 		}
 	}
 
-	public void  adaptConnectionValue(Set<NewLTConnection<ProcessTreeElement>> connSet, ControlParameters parameters) {
+	public void  adaptConnectionValue(Set<LTRule<XORCluster<ProcessTreeElement>>> connSet, ControlParameters parameters) {
 		// we adpat all the concrete connection, and check its connection 
-		for(NewLTConnection<ProcessTreeElement>  conn: connSet) {
+		for(LTRule<XORCluster<ProcessTreeElement>>  conn: connSet) {
 			
 			conn.adaptValue(ProcessConfiguration.LT_POS_IDX, parameters.getPosWeight());
 			conn.adaptValue(ProcessConfiguration.LT_NEG_IDX, parameters.getNegWeight());	
@@ -186,14 +170,19 @@ public class NewLTDetector {
 		return clusterPairs;
 	}
 	
-	private void fillLTConnectionFreq(LabeledTraceVariant var, NewLTConnection<ProcessTreeElement> conn) {
+	private void fillLTConnectionFreq(LabeledTraceVariant var, LTRule<XORCluster<ProcessTreeElement>> conn) {
 		// TODO fill the frequency for lt connection in pair.. But should we put the LTConnection into pair
 		List<XEventClass> traceVariant = var.getTraceVariant();
 		// even if we have sourceXOR but it includes branches, so we should go into the branches of sourceXOR
 		int sourceIdx, targetIdx;
-		sourceIdx = findNodeIndex(conn.getSourceBranch(), traceVariant);
+		// here if we find one represented node here, it is ok to decide it's fine 
+		// here is only the pure branch, so we can make it, but if not we need another stategy
+		XORCluster<ProcessTreeElement> source = conn.getSources().get(0);
+		XORCluster<ProcessTreeElement> target = conn.getTargets().get(0);
+		
+		sourceIdx = findNodeIndex(source.getBeginNodeList().get(0), traceVariant);
 		if(sourceIdx!=-1) {
-			targetIdx = findNodeIndex(conn.getTargetBranch(), traceVariant);
+			targetIdx = findNodeIndex(target.getBeginNodeList().get(0), traceVariant);
 			if(targetIdx > sourceIdx) {
 				// we add the freq into this connection
 				ArrayList<Double> counts = new ArrayList<Double>();

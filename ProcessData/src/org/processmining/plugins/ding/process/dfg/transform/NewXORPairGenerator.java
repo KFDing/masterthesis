@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.processmining.plugins.ding.process.dfg.model.NewLTConnection;
+import org.processmining.plugins.ding.process.dfg.model.LTRule;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
 import org.processmining.plugins.ding.process.dfg.model.XORCluster;
 import org.processmining.plugins.ding.process.dfg.model.XORClusterPair;
@@ -28,7 +28,7 @@ public class NewXORPairGenerator<T> {
 	List<XORClusterPair<T>> clusterPairList;
 	
 	List<XORCluster<T>> clusterList;
-	Set<NewLTConnection<T>> connList;
+	Set<LTRule<XORCluster<T>>> connList;
 	
 	List<XORCluster<T>> branchList;
 	ProcessTree tree;
@@ -46,7 +46,7 @@ public class NewXORPairGenerator<T> {
 		tree = pTree;
 	    clusterPairList = new ArrayList<XORClusterPair<T>>();
 		clusterList =  new ArrayList<XORCluster<T>>();
-		connList =  new HashSet<NewLTConnection<T>>();
+		connList =  new HashSet<LTRule<XORCluster<T>>>();
 		// do DFS to add pair into the pairs, we also need one stack to record its current state
 		Set<Node> xorSet = getAllXORs(tree);
 		
@@ -90,11 +90,6 @@ public class NewXORPairGenerator<T> {
 					// if there is only one, then what to do ??? we need to keep actually the last node to the next one!!!
 					while(i< childrenCluster.size()) {
 						targetCluster = childrenCluster.get(i);
-						// cluster only have children cluster with xor or is xor
-						// but if it is in a branch, then it stores all the nodes 
-						// we need to pay attention to this thing 
-						// the only thing we can do is to stop it goes too far into branch,
-						// seq should always contain the xor
 						
 						clusterPairList.add(createClusterXORPair(sourceCluster, targetCluster));
 						
@@ -115,13 +110,14 @@ public class NewXORPairGenerator<T> {
 		// even if we didn't see the codes here, we create pair only with situation in seq
 		// seq has children: xor, parallel, or loop
 		// if we have parallel, one xor and one parallel, we need to goes down to get the number of parallel xor
-		pair.initialize();
+		// pair.initialize();
+		// why do we need the connList here?? 
 		connList.addAll(pair.getConnection());
 		
 		return pair;
 	}
 
-	public Set<NewLTConnection<T>> getAllLTConnection() {
+	public Set<LTRule<XORCluster<T>>> getAllLTConnection() {
 		return connList;
 	}
 	
@@ -143,7 +139,7 @@ public class NewXORPairGenerator<T> {
 			XORCluster<T> cluster =  new XORCluster<T>((T) node);
 			cluster.setIsLeaf(true);
 			cluster.setPairAvailable(true);
-			// cluster.setLtAvailable(true);
+			cluster.setLtAvailable(true);
 			clusterList.add(cluster);
 			return cluster;
 		}
@@ -177,6 +173,7 @@ public class NewXORPairGenerator<T> {
 				// the choice we have made
 				XORCluster<T> branchCluster = buildCluster(subNode, aSet, true);
 				cluster.addChilrenCluster(branchCluster);
+				branchCluster.setParent(cluster);
 			}
 		}
 		return cluster;

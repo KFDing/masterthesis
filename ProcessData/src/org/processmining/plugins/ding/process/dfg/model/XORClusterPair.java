@@ -58,6 +58,8 @@ public class XORClusterPair<T> {
 		sourceXORCluster = source;
 		targetXORCluster = target;
 		this.inBranch = inBranch;
+		
+		initialize();
 	}
 	
 	
@@ -76,18 +78,16 @@ public class XORClusterPair<T> {
 			LTRule<XORCluster<T>> conn = new LTRule<XORCluster<T>>(sourceXORCluster, targetXORCluster);
 			connections.add(conn);
 			
-			// one thing is how to get the connection of those branch connection?? 
-			
 		}else if(sourceXORCluster.isXORCluster() && targetXORCluster.isXORCluster()) {
 			branchClusterPair = new ArrayList<XORClusterPair<T>>();
+			// if they are nested, we check if they have more nested xor, if not back to first
 			for(XORCluster<T> scluster: sourceXORCluster.getChildrenCluster())
 				for(XORCluster<T> tcluster: targetXORCluster.getChildrenCluster()){
 					branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
 				}
 			
 		}else {
-			// when here something happens, how to keep them in same level,
-			// by this, I mean that 
+			// not nested, we only use the xor branch, 
 			branchClusterPair = new ArrayList<XORClusterPair<T>>();
 			for(XORCluster<T> scluster: sourceXORCluster.getEndXORList())
 				for(XORCluster<T> tcluster: targetXORCluster.getBeginXORList()){
@@ -162,7 +162,8 @@ public class XORClusterPair<T> {
 
 				ltConnections =  new ArrayList<LTRule<XORCluster<T>>>();
 				for(LTRule<XORCluster<T>> conn: connections) {
-					if(conn.testSupportConnection()) {
+					conn.testSupportConnection();
+					if(conn.isSupportConnection()) {
 						// if it support the connection, then we return the true
 						ltConnections.add(conn);
 					}
