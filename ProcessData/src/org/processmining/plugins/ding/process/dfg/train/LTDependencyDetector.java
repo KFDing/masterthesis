@@ -93,7 +93,7 @@ public class LTDependencyDetector {
 	    }
 		
 		
-	    Set<NewLTConnection<ProcessTreeElement>> connSet = generator.getAllLTConnection();
+	    Set<NewLTConnection<ProcessTreeElement>> connSet = null;// = generator.getAllLTConnection();
 	    
 	    tlmaps = getProcessTree2EventMap(log, tree , null);
 	    initializeConnection(connSet);
@@ -213,7 +213,7 @@ public void addLT2Net(Node node) {
 				for(ProcessTreeElement eNode: endNodes ) {
 					
 					// get connections with eNode 
-					List<NewLTConnection<ProcessTreeElement>> branchConns = branchPair.getLtConnections();
+					List<NewLTConnection<ProcessTreeElement>> branchConns = null;//branchPair.getLtConnections();
 					
 					for(NewLTConnection<ProcessTreeElement> conn: branchConns) {
 						if(conn.getSourceBranch().equals(eNode)) {

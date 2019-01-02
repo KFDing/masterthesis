@@ -1,9 +1,16 @@
 /***
 this file is used to describe the test cases for long-term dependency. 
-I will use it as one base line for later use. So make it formal
+I will use it as one base line for later use. So make it formal.
+We divie them into four catologues::
+
+++ as main structure with xor
+++ as branch in xor structure
+++ as main structure with nested xor
+++ as branch in nested structure
+
 **/
 
-** Test Case Seq 01:: not in xor but with xor, also not in xor and not with xor 
+** Test Case Seq 01:: seq as main structure with xor
 // with 3 xor and test the as source and as target
 // Input: tc_seq_01_01.xes
 ## pos
@@ -16,44 +23,45 @@ I will use it as one base line for later use. So make it formal
 
 
 
-** Test Case Seq 02:: in xor but not with xor
-// only two xor but with parallel and seq
+** Test Case Seq 02:: seq and parallel as branch in xor structure
 // Input: tc_seq_02_01.xes
 ## pos
 50 S1,S2,S4,A,T2,T1,T3;
 50 S1,S4,S2,A,T1,T2,T3;
 50 S5,S6,A,T2,T1,T3;
-50 S6,S6,A,T4,T5,T6;
-50 S6,S6,A,T5,T4,T6;
+50 S6,S5,A,T4,T5,T6;
+50 S5,S6,A,T5,T4,T6;
 
 ## neg
 50 S1,S4,S2,A,T4,T5,T6;
 // result :: ?? 
 
 
-** Test Case Seq 03:: in xor and with xor
+** Test Case Seq 03:: seq as branch in xor structure and with nested xor
 // with one branch has xor
 // Input: tc_seq_03_01.xes
 ## pos
-50 S1,A,C,T1;
-50 S1,A,B1,B2,T1;
-50 S2,A,D1,D2,T2;
-50 S2,A,B1,B3,T2;
+50 S1,A,C,D,T1;
+50 S1,A,C,D,T2;
+50 S1,A,B1,B2,D,T1;
+50 S2,A,B1,B2,D,T2;
+50 S2,A,B1,B3,D,T2;
 ## neg
-50 S2,A,C,T1;
-50 S2,A,B1,B2,T2;
+50 S2,A,C,D,T1;
+50 S2,A,B1,B2,D,T2;
 // result ?? 
 
 
-** Test Case Seq 04:: in xor and with xor, depth in 3
+** Test Case Seq 04:: seq as branch in xor structure and with nested xor, depth in 3
 // we need to consider more difficult situation, and what we should do??
 
 
 /**
-* For test cases with sequence
+* For test cases with parallel, same as with And
 **/ 
-** Test Case And 01:: not in xor but with xor, also not in xor and not with xor 
+** Test Case And 01:: and as main structure with two xors
 // One parallel with 2 branches with xor
+// have modified the process tree to have corresponding model
 // Input :: tc_and_01_01.xes
 ## pos
 50 S1,A,B1,C1,D,T1;
@@ -62,43 +70,45 @@ I will use it as one base line for later use. So make it formal
 50 S2,A,C1,B2,D,T1;
 ## neg
 50 S1,A,B2,C2,D,T2;
-50 S2,A,B1,C1,D,T1;
+50 S2,A,C1,B1,D,T1;
 // result is ?? 
 
 
-** Test Case And 02:: in xor but not with xor
-// as shown in example, quite complex, we can create one simple
+** Test Case And 02:: and as branch in xor structure a simple example
+// as shown in example, quite complex seen in tc_seq_02_01.xes
 // Input:: tc_and_02_01.xes
 ## pos
 50 S1,A,B,T1;
 50 S2,A,B,T2;
 50 S2,A,C1,C2,T1;
-50 S2,A,C2,C1,T2;
+50 S2,A,C2,C1,T1;
 ## neg
 50 S1,A,C1,C2,T2;
 // result?? 
 
 
-** Test Case And 03:: in xor and with xor
+** Test Case And 03:: and as branch in xor structure, and also with nested xor 
 // direct of parallel in xor
 // Input:: tc_and_03_01.xes
-50 S1,A,C1,D1,T1;
-50 S1,A,B1,T1;
-50 S2,D2,C2,T2;
-50 S2,C2,D2,T2;
+50 S1,A,C1,D1,E,T1;
+50 S1,A,B1,E,T1;
+50 S2,A,D2,C2,E,T2;
+50 S2,A,C2,D2,E,T2;
+50 S1,A,C1,D2,E,T1;
 ## neg
-50 S1,A,B1,T2;
+50 S1,A,B1,E,T2;
 // result?? 
 
-
-// parallel in a seq and then with xor
-// Input:: tc_and_03_02.xes
-50 S1,A,E,C1,D1,F,T1;
-50 S1,A,B1,T1;
-50 S2,E,D2,C2,F,T2;
-50 S2,E,C2,D2,F,T2;
+** Test Case And 03_02:: and as branch in xor structure, and also with nested xor 
+// imdirect of parallel in xor but in seq
+// Input:: tc_and_03_01.xes
+50 S1,A,B2,C1,D1,E,T1;
+50 S1,A,B1,E,T1;
+50 S2,A,B2,D2,C2,E,T2;
+50 S2,A,B2,C2,D2,E,T2;
+50 S1,A,B2,C1,D2,E,T1;
 ## neg
-50 S1,A,B1,T2;
+50 S1,A,B1,E,T2;
 // result?? 
 
 

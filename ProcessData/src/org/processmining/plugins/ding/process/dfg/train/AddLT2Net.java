@@ -2,12 +2,16 @@ package org.processmining.plugins.ding.process.dfg.train;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.deckfour.xes.classification.XEventClassifier;
+import org.processmining.models.graphbased.directed.AbstractDirectedGraph;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
@@ -50,17 +54,32 @@ public class AddLT2Net {
 	public AddLT2Net(Petrinet net, ProcessTree tree) {
 		this.net = net;
 		this.tree = tree;
+		
+		tnMap = getProcessTree2NetMap(net, tree, null);
+		
 		ruleSet = new HashSet<LTRule<XORCluster<ProcessTreeElement>>>();
+		pnNodeMap = new HashMap<String, PetrinetNode>();
 	}
 
+	public void initializeAdder() {
+		ruleSet.clear();
+		pnNodeMap.clear();
+	}
+	
     public void addLTOnPair(XORClusterPair<ProcessTreeElement> pair) {
 	   XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
 	   sourceCluster = pair.getSourceXORCluster();
 	   targetCluster = pair.getTargetXORCluster();
 	   // focus on source 
 	   if(sourceCluster.isPureBranchCluster()) {
-		   if(targetCluster.isPureBranchCluster())
+		   // for pure branch, we shouldn't connect them early...
+		   if(targetCluster.isPureBranchCluster()) {
 			   addLTOnPureBranch(pair);
+			   // we just return them back, but wait for others to connect them.. Like on pair
+			   // the ruleSet is special for this, so we can do it in this way
+			   // only for special pair 
+			   return;
+		   }
 		   
 	   }else if(sourceCluster.isParallelCluster()) {
 		   // here we need to do what ?? source is parallel
@@ -75,11 +94,13 @@ public class AddLT2Net {
 		   }
 	   }
 	   // after this,adding places for sources, we need to add the target places and the other places
-	   // how to we get all the  target, we don't really know, how to end them, but we need to make it end 
-	   
+	   // we have all ruleset for this pair, in direct connection, source branch
+	   // we need to merge the source branch, if we have nested structure also in parallel, else just in single rule
+	   // if sources are in parallel, we need to do them differently, but not here, I guess
+	   // what if we organize the sources and targets at first?
 	   for(LTRule<XORCluster<ProcessTreeElement>> rule: ruleSet ) {
 		   List<XORCluster<ProcessTreeElement>> sourceBranches = rule.getSources();
-		   String sBranchName = ProcessConfiguration.POST_PREFIX;
+		   String sBranchName = ProcessConfiguration.PLACE_POST_PREFIX+"-";
 		   
 		   for(XORCluster<ProcessTreeElement> sBranch: sourceBranches) {
 				String tmpName = sBranch.getLabel();
@@ -111,47 +132,37 @@ public class AddLT2Net {
 
 
 	private void addLTFromXOR2Branch(XORCluster<ProcessTreeElement> parentXOR, XORCluster<ProcessTreeElement> tBranch, String sBranchName) {
-		// TODO add lt dependency of parent xor and tBranch
+		// TODO add lt dependency of parent xor and tBranch, we should name the transition better
 		Place parentPlace = (Place)getSourcePlace(parentXOR);
-		// now it is one branch and one xor list, we need to ??
-		
-		// create silent transtion
-		Transition sTransition = null;
-		// this transition should be connected to the parentXOR, but also the source List
-		String transitionName = sBranchName + parentPlace.getLabel() + tBranch.getLabel();
-		
-		if(!pnNodeMap.containsKey(transitionName)) {
-			sTransition = net.addTransition(transitionName);
-			sTransition.setInvisible(true);
-			
-			pnNodeMap.put(transitionName, sTransition);
-		}else {
-			sTransition = (Transition) pnNodeMap.get(transitionName);
+		// if parentPlace is null, find the place from sBranchname
+		if(parentPlace == null) {
+			parentPlace = (Place) pnNodeMap.get(sBranchName);
 		}
 		
-		net.addArc(parentPlace, sTransition);
 		
-		String branchName = ProcessConfiguration.PRE_PREFIX + tBranch.getLabel();
-		Place tBranchPlace ;
-		if(!pnNodeMap.containsKey(branchName)) {
-			tBranchPlace = net.addPlace(branchName);
-			// we need to add the silent transition after it
-			pnNodeMap.put(branchName, tBranchPlace);
-		}else
-			tBranchPlace = (Place) pnNodeMap.get(branchName);
+		// this transition should be connected to the parentXOR, but also the source List
+		// if we only use the branch and find out the branch connection, is it enough? 
+		// if we meet nested xor structure, then we can't really make it
+		String transitionName ;
+		transitionName = sBranchName + parentPlace.getLabel() + tBranch.getLabel();
+		Transition sTransition = addTransitionWithTest(transitionName);
 		
-		net.addArc(sTransition, tBranchPlace);
+		addArcWithTest(parentPlace, sTransition);
+		String branchName = ProcessConfiguration.PLACE_PRE_PREFIX +"-"+ tBranch.getLabel();
+		Place tBranchPlace = addPlaceWithTest(branchName);
+		addArcWithTest(sTransition, tBranchPlace);
 		
 	}
 
 	private PetrinetNode getSourcePlace(XORCluster<ProcessTreeElement> parentXOR) {
-		// TODO Auto-generated method stub
+		// TODO if they are pure branch, we need to 
 		String placeName = parentXOR.getLabel();
 		
 		for(String keyName: pnNodeMap.keySet())
-			if(placeName.contains(keyName) && placeName.contains(ProcessConfiguration.POST_PREFIX))
+			if(placeName.contains(keyName) && placeName.contains(ProcessConfiguration.PLACE_POST_PREFIX))
 				return pnNodeMap.get(keyName);
 		
+		// if we can't find the parentXOR place, it is then in the real branch
 		return null;
 	}
 
@@ -160,7 +171,7 @@ public class AddLT2Net {
 		XORCluster<ProcessTreeElement> sBranch, tBranch;
 		sBranch = branchPair.getSourceXORCluster();
 		tBranch = branchPair.getTargetXORCluster();
-		branchPair.testConnected();
+		// branchPair.testConnected();
 		if(branchPair.isConnected()) {
 			// if this branch is connected, we need to add them self for it and keep into place list
 			List<LTRule<XORCluster<ProcessTreeElement>>> connRules = branchPair.getLtConnections();
@@ -174,14 +185,10 @@ public class AddLT2Net {
 				// add the places for source branch
 				List<Place> postPlaces = new ArrayList<Place>();
 				for(PetrinetNode endNode: endNodeList) {
-					String keyName =  ProcessConfiguration.POST_PREFIX + "-"+ endNode.getLabel();
-					Place postNode ;
-					if(!pnNodeMap.containsKey(keyName)) {
-						postNode = net.addPlace(keyName);
-						// we need to add the silent transition after it
-						pnNodeMap.put(keyName, postNode);
-					}else
-						postNode = (Place) pnNodeMap.get(keyName);
+					String keyName =  ProcessConfiguration.PLACE_POST_PREFIX + "-"+ endNode.getLabel();
+					Place postNode = addPlaceWithTest(keyName);
+					// here to connect the transition with post place
+					addArcWithTest(endNode, postNode);
 					
 					postPlaces.add(postNode);
 				}
@@ -189,76 +196,42 @@ public class AddLT2Net {
 				// add merged transition to combine end node list 
 				if(endNodeList.size()>1) {
 					// add one silent transition to combine all the source nodes
-					Transition sTransition = null;
-					String transtionName = sBranch.getLabel();
-					if(!pnNodeMap.containsKey(transtionName)) {
-						sTransition = net.addTransition(transtionName);
-						sTransition.setInvisible(true);
-						
-						pnNodeMap.put(transtionName, sTransition);
-					}else {
-						sTransition = (Transition) pnNodeMap.get(transtionName);
-					}
+					String transtionName = ProcessConfiguration.TRANSITION_POST_PREFIX + "-"+ sBranch.getLabel();
+					Transition sTransition = addTransitionWithTest(transtionName);
 					for(Place p: postPlaces)
-						net.addArc(p, sTransition);
-					// also one place for silent transition
+						// net.addArc(p, sTransition);
+						addArcWithTest(p, sTransition);
 					
-					Place sBranchPlace;
-					String branchName = sBranch.getLabel();
-					if(!pnNodeMap.containsKey(branchName)) {
-						sBranchPlace = net.addPlace(branchName);
-						// we need to add the silent transition after it
-						pnNodeMap.put(branchName, sBranchPlace);
-					}else
-						sBranchPlace = (Place) pnNodeMap.get(branchName);
 					
-					net.addArc(sTransition, sBranchPlace);
-					
+					String branchName = ProcessConfiguration.PLACE_POST_PREFIX + "-"+ sBranch.getLabel();
+					Place sBranchPlace = addPlaceWithTest(branchName);
+					addArcWithTest(sTransition, sBranchPlace);
 				}
 				
 				// add for the target
 				List<Place> prePlaces = new ArrayList<Place>();
 				for(PetrinetNode beginNode: beginNodeList) {
-					String keyName = ProcessConfiguration.PRE_PREFIX + "-" +beginNode.getLabel();
-					Place preNode ;
-					if(!pnNodeMap.containsKey(keyName)) {
-						preNode = net.addPlace(keyName);
-						// we need to add the silent transition after it
-						pnNodeMap.put(keyName, preNode);
-					}else
-						preNode = (Place) pnNodeMap.get(keyName);
+					String keyName = ProcessConfiguration.PLACE_PRE_PREFIX + "-" +beginNode.getLabel();
+					Place preNode = addPlaceWithTest(keyName);
 					
+					addArcWithTest(preNode, beginNode);
 					prePlaces.add(preNode);
 				}
 				
 				// add merged transtion to combine the begin node list
 				if(beginNodeList.size() > 1) {
 					// add one silent transition to combine all the target nodes
-					Transition tTransition = null;
 					String transtionName = tBranch.getLabel();
-					if(!pnNodeMap.containsKey(transtionName)) {
-						tTransition = net.addTransition(transtionName);
-						tTransition.setInvisible(true);
-						
-						pnNodeMap.put(transtionName, tTransition);
-					}else {
-						tTransition = (Transition) pnNodeMap.get(transtionName);
-					}
+					Transition tTransition = addTransitionWithTest(transtionName);
 					
 					for(Place p: prePlaces)
-						net.addArc(tTransition, p);
+						addArcWithTest(tTransition, p);
 					
-					// one place for it 
-					Place tBranchPlace;
+					// how to avoid repeated name on it ??
 					String branchName = tBranch.getLabel();
-					if(!pnNodeMap.containsKey(branchName)) {
-						tBranchPlace = net.addPlace(branchName);
-						// we need to add the silent transition after it
-						pnNodeMap.put(branchName, tBranchPlace);
-					}else
-						tBranchPlace = (Place) pnNodeMap.get(branchName);
+					Place tBranchPlace = addPlaceWithTest(branchName);
+					addArcWithTest(tBranchPlace, tTransition);
 					
-					net.addArc(tBranchPlace, tTransition);
 				}
 			}
 			
@@ -266,7 +239,47 @@ public class AddLT2Net {
 		
 	}
 
+	// create one method to add place into net with test
+	private Place addPlaceWithTest(String keyName) {
+		Place placeNode ;
+		if(!pnNodeMap.containsKey(keyName)) {
+			placeNode = net.addPlace(keyName);
+			// we need to add the silent transition after it
+			pnNodeMap.put(keyName, placeNode);
+		}else
+			placeNode = (Place) pnNodeMap.get(keyName);
+		
+		return placeNode;
+	}
+	
+	// create method to add transition into net with test
+	private Transition addTransitionWithTest(String transtionName) {
+		Transition tTransition = null;
+		if(!pnNodeMap.containsKey(transtionName)) {
+			tTransition = net.addTransition(transtionName);
+			tTransition.setInvisible(true);
+			
+			pnNodeMap.put(transtionName, tTransition);
+		}else {
+			tTransition = (Transition) pnNodeMap.get(transtionName);
+		}
+		return tTransition;
+	}
 
+	private void addArcWithTest(PetrinetNode src, PetrinetNode tgt) {
+		// TODO we need to add arc into net but not change the weight on them
+		// test the type of src and tgt
+		if(src instanceof Place) {
+			if(tgt instanceof Transition)
+				if(net.getArc(src, tgt)== null)
+					net.addArc((Place)src, (Transition)tgt);
+		}else if(src instanceof Transition) {
+			if(tgt instanceof Place){
+				if(net.getArc(src, tgt)== null)
+					net.addArc((Transition)src, (Place)tgt);
+			}
+		}
+	}
 
 	private void addLTOnParallel(XORClusterPair<ProcessTreeElement> pair) {
 		// TODO should we return the new added places ??
@@ -342,44 +355,31 @@ public class AddLT2Net {
 
 	private List<Place> splitPlaces(Place splitPlace, List<XORCluster<ProcessTreeElement>> xorInAnd) {
 		// after this splitPlace, we xor list happen in parallel
-		if(xorInAnd.size() >1) {
-			   System.out.println("the size of xor in And is this");
+		if(xorInAnd.size() < 2) {
+			   System.out.println("the size of xor in And is " + xorInAnd.size());
 			   return null;
 		}
 	   List<Place> placeList = new ArrayList<Place>();
 	   
-	   Transition sTransition = null;
+	   
 	   String transitionName = null;
 	   // we give it the name of target label
 	   for(XORCluster<ProcessTreeElement> xor: xorInAnd)
 		   transitionName += xor.getLabel();
 	   
-	   if(!pnNodeMap.containsKey(transitionName)) {
-			sTransition = net.addTransition(transitionName);
-			sTransition.setInvisible(true);
-			
-			pnNodeMap.put(transitionName, sTransition);
-	   }else {
-			sTransition = (Transition) pnNodeMap.get(transitionName);
-	   }
+	   Transition sTransition = addTransitionWithTest(transitionName);
 	   
 	   // connect them together
 	   net.addArc(splitPlace, sTransition);
 	   
 	   for(XORCluster<ProcessTreeElement> xor: xorInAnd) {
 		   // generate the place for it 
-		   Place sBranchPlace;
+		   
 		   String branchName = transitionName + xor.getLabel();
-			if(!pnNodeMap.containsKey(branchName)) {
-				sBranchPlace = net.addPlace(branchName);
-				// we need to add the silent transition after it
-				pnNodeMap.put(branchName, sBranchPlace);
-			}else
-				sBranchPlace = (Place) pnNodeMap.get(branchName);
-			
-			net.addArc(sTransition, sBranchPlace);
-			
-			placeList.add(sBranchPlace);
+		   Place sBranchPlace = addPlaceWithTest(branchName);
+		   addArcWithTest(sTransition, sBranchPlace);
+		
+		   placeList.add(sBranchPlace);
 	   }
 		return placeList;
 	}
@@ -388,40 +388,22 @@ public class AddLT2Net {
 	private Place combinePlaces(List<Place> postPlaces) {
 		// TODO combine places origPlace, addedPlace
 		// we need to give them a name, we could use the combine name in them or we give them a name
-		String combineName = ProcessConfiguration.POST_PREFIX;
-		
+		String combineName = ProcessConfiguration.TRANSITION_POST_PREFIX;
+		String branchName = ProcessConfiguration.PLACE_POST_PREFIX;
 		for(Place p: postPlaces) {
 			String tmpName = p.getLabel();
 			combineName += tmpName.split("-", 1)[1];
+			branchName += tmpName.split("-", 1)[1];
 		}
 		
-		Transition sTransition = null;
-		// this is not proper to add this transition, we need to mark this silent transtion here to combine all the  postplaces
-		// postPlace
-
-		if(!pnNodeMap.containsKey(combineName)) {
-			sTransition = net.addTransition(combineName);
-			sTransition.setInvisible(true);
-			
-			pnNodeMap.put(combineName, sTransition);
-		}else {
-			sTransition = (Transition) pnNodeMap.get(combineName);
-		}
+		Transition sTransition = addTransitionWithTest(combineName);
+		
 		for(Place p: postPlaces)
 			net.addArc(p, sTransition);
+		
 		// also one place for silent transition
-		
-		Place sBranchPlace;
-		String branchName = combineName;
-		if(!pnNodeMap.containsKey(branchName)) {
-			sBranchPlace = net.addPlace(branchName);
-			// we need to add the silent transition after it
-			pnNodeMap.put(branchName, sBranchPlace);
-		}else
-			sBranchPlace = (Place) pnNodeMap.get(branchName);
-		
-		net.addArc(sTransition, sBranchPlace);
-		
+		Place sBranchPlace = addPlaceWithTest(branchName);
+		addArcWithTest(sTransition, sBranchPlace);
 		return sBranchPlace;
 	}
 
@@ -433,7 +415,7 @@ public class AddLT2Net {
 		
 	
 		for(String keyName: pnNodeMap.keySet())
-			if(placeName.contains(keyName) && placeName.contains(ProcessConfiguration.POST_PREFIX))
+			if(placeName.contains(keyName) && placeName.contains(ProcessConfiguration.PLACE_POST_PREFIX))
 				return pnNodeMap.get(keyName);
 		
 		return null;
@@ -517,6 +499,8 @@ public class AddLT2Net {
 		while(pParent.get(pIdx) == tParent.get(tIdx)) {
 			pIdx --;
 			tIdx --;
+			if(pIdx < 0 || tIdx < 0)
+				break;
 		}
 		pIdx++;
 		
@@ -605,6 +589,36 @@ public class AddLT2Net {
 		return targetNodes;
 	}
 
+	private Map<Node, Transition> getProcessTree2NetMap(Petrinet net, ProcessTree pTree, XEventClassifier classifier) {
+		// TODO generate the transfer from process tree to event classes in log
+		Map<Node, Transition> map = new HashMap<Node, Transition>();
+		Collection<Node> nodes = pTree.getNodes();
+		Collection<Transition> transitions = net.getTransitions();
+		
+		Transition tauTransition = new Transition(ProcessConfiguration.Tau_CLASS, (AbstractDirectedGraph<PetrinetNode, PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>>) net);
+		
+		boolean match;
+		for (Node node : nodes) {
+			if(!node.isLeaf())
+				continue;
+			
+			match = false;
+			for (Transition transition : transitions) {
+				// here we need to create a mapping from event log to graphs
+				// need to check at first what the Name and other stuff
+				if (node.getName().equals(transition.getLabel())) {
+					map.put(node, transition);
+					match = true;
+					break;
+				}
+			}
+			if(! match) {// it there is node not showing in the petri net, which we don't really agree
+				map.put(node, tauTransition);
+			}
+		}
+		
+		return map;
+	}
 
 
 	private List<PetrinetNode> transform2PNNodes(List<ProcessTreeElement> nodeList) {

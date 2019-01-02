@@ -152,6 +152,7 @@ public class NewXORPairGenerator<T> {
 			// ancestors only above the xor structure, not include the xor structure itself. 
 			cluster.setHasXOR(true);
 		}
+		boolean ltAvailable = true;
 		
 		List<Node> subNodes = block.getChildren();
 		for(Node subNode : subNodes) {
@@ -159,7 +160,6 @@ public class NewXORPairGenerator<T> {
 			if(aSet.contains(subNode)) {
 				// including nested and not nested xor
 				XORCluster<T> subCluster = buildCluster(subNode, aSet, false);
-				
 				cluster.addChilrenCluster(subCluster);
 				
 			}else if(isXORBlocck(subNode)) {
@@ -174,8 +174,12 @@ public class NewXORPairGenerator<T> {
 				XORCluster<T> branchCluster = buildCluster(subNode, aSet, true);
 				cluster.addChilrenCluster(branchCluster);
 				branchCluster.setParent(cluster);
+				ltAvailable &= branchCluster.isLtAvailable();
 			}
 		}
+		// assign ltAvailable here with condition all childrencluster are pure branch 
+		cluster.setLtAvailable(ltAvailable);
+		
 		return cluster;
 	}
 

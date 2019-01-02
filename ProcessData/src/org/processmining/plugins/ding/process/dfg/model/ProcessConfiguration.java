@@ -34,8 +34,10 @@ public class ProcessConfiguration extends Configuration{
 	public static final String LOOP = "XorLoop";
 	public static final String XOR_BRANCH = "Xor Branch";
 	public static final String NEW_SEQUENCE = "My_New_Seq";
-	public static final String POST_PREFIX = "Place After ";
-	public static final String PRE_PREFIX = "Place Before ";
+	public static final String PLACE_POST_PREFIX = "PlaceAfter";
+	public static final String PLACE_PRE_PREFIX = "PlaceBefore";
+	public static final String TRANSITION_POST_PREFIX = "TransitionAfter";
+	public static final String TRANSITION_PRE_PREFIX = "TransitionBefore";
 	
 	
 	public enum ViewType {

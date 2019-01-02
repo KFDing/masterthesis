@@ -12,9 +12,7 @@ import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
-import org.processmining.models.graphbased.directed.AbstractDirectedGraph;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
-import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.plugins.ding.preprocess.util.Configuration;
@@ -72,7 +70,7 @@ public class NewLTDetector {
 	    	@SuppressWarnings("deprecation")
 			PetrinetWithMarkings mnet = ProcessTree2Petrinet.convert(tree, true);
 			net = mnet.petrinet;
-			tnMap = getProcessTree2NetMap(net, tree, null);
+			
 			
 			pnNodeMap = new HashMap<String, PetrinetNode>();
 			ruleSet = new ArrayList<LTRule<PetrinetNode>>();
@@ -97,7 +95,8 @@ public class NewLTDetector {
 			
 			List<XORCluster<ProcessTreeElement>> childrenCluster = cluster.getChildrenCluster();
 			for(XORCluster<ProcessTreeElement> child : childrenCluster) {
-				// still not good effect... Nanan, because one level missed it
+				// we need to make sure if the child is pure branch, then we don't need to go into it 
+				// the assignment of it should be done before
 				if(!child.isLtAvailable()) {
 					addLTOnNet((Node)child.getKeyNode());
 				}
@@ -107,6 +106,7 @@ public class NewLTDetector {
 			
 			// if only leaf node is available, now, we need to check its begin and end node list
 			if(cluster.isSeqCluster()) {
+				// here we need to check the xor size in this cluster if it has no xor cluster, we don't need to consider it
 				if(cluster.getChildrenCluster().size() < 2) {
 					System.out.println("too few xor in sequence to connect it");
 				}else {
@@ -117,6 +117,8 @@ public class NewLTDetector {
 					while(i< childrenCluster.size()) {
 						targetCluster = childrenCluster.get(i);
 						pair = generator.findClusterPair(sourceCluster, targetCluster);
+						// we need to reset the pnNodeMap and ruleSet
+						adder.initializeAdder();
 						adder.addLTOnPair(pair);
 						sourceCluster = targetCluster;
 						i++;
@@ -243,34 +245,4 @@ public class NewLTDetector {
 	}
 	
 	
-	private Map<Node, Transition> getProcessTree2NetMap(Petrinet net, ProcessTree pTree, XEventClassifier classifier) {
-		// TODO generate the transfer from process tree to event classes in log
-		Map<Node, Transition> map = new HashMap<Node, Transition>();
-		Collection<Node> nodes = pTree.getNodes();
-		Collection<Transition> transitions = net.getTransitions();
-		
-		Transition tauTransition = new Transition(ProcessConfiguration.Tau_CLASS, (AbstractDirectedGraph<PetrinetNode, PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>>) net);
-		
-		boolean match;
-		for (Node node : nodes) {
-			if(!node.isLeaf())
-				continue;
-			
-			match = false;
-			for (Transition transition : transitions) {
-				// here we need to create a mapping from event log to graphs
-				// need to check at first what the Name and other stuff
-				if (node.getName().equals(transition.getLabel())) {
-					map.put(node, transition);
-					match = true;
-					break;
-				}
-			}
-			if(! match) {// it there is node not showing in the petri net, which we don't really agree
-				map.put(node, tauTransition);
-			}
-		}
-		
-		return map;
-	}
 }
