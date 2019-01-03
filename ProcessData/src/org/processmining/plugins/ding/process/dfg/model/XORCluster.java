@@ -100,7 +100,7 @@ public class XORCluster<T> {
 				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 				beginXORList.addAll(cluster.getBeginXORList());
 			}
-		// my question is should we stop here?? Or somewhere else?? 	
+		// my question is should we stop here?? if we have deeper structure what to do ?	
 		}else if(isXORCluster()) {
 			// we need to deal with other situations, if there is something, 
 			beginXORList.add(this);

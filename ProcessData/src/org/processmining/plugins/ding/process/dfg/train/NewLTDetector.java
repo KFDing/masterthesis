@@ -120,6 +120,7 @@ public class NewLTDetector {
 						// we need to reset the pnNodeMap and ruleSet
 						adder.initializeAdder();
 						adder.addLTOnPair(pair);
+						adder.connectSourceWithTarget();
 						sourceCluster = targetCluster;
 						i++;
 					}

@@ -220,7 +220,7 @@ public void addLT2Net(Node node) {
 							// we need to add places, and silent transition there to make sure
 							// and make the places end as target branch
 							Transition ePNNode = tnMap.get(eNode);
-							String sourcePlaceName = ProcessConfiguration.POST_PREFIX + "-" + ePNNode.getLabel();
+							String sourcePlaceName = ProcessConfiguration.PLACE_POST_PREFIX + "-" + ePNNode.getLabel();
 							Place postNode ;
 							if(!pnNodeMap.containsKey(sourcePlaceName)) {
 								postNode = net.addPlace(sourcePlaceName);
@@ -505,7 +505,7 @@ public void addLT2Net(Node node) {
 		for(ProcessTreeElement sNode: sNodeList) {
 			// check if there is the place after it, if we have found it the pnNodeMap, then we use them directly
 			PetrinetNode endNode = tnMap.get(sNode);
-			keyName = ProcessConfiguration.POST_PREFIX + endNode.getLabel()+ sourceBranchLabel;
+			keyName = ProcessConfiguration.PLACE_POST_PREFIX + endNode.getLabel()+ sourceBranchLabel;
 			Place postNode;
 			if(!pnNodeMap.containsKey(keyName)) {
 				postNode = addPlace(net, endNode, sourceBranchLabel, true);
@@ -519,7 +519,7 @@ public void addLT2Net(Node node) {
 		}
 		// generate one place here 
 		// now create place for branch connection, only one is enough	
-		keyName = ProcessConfiguration.POST_PREFIX + sourceBranchLabel;
+		keyName = ProcessConfiguration.PLACE_POST_PREFIX + sourceBranchLabel;
 		Place branchPlace;
 		if(!pnNodeMap.containsKey(keyName)) {
 			branchPlace = net.addPlace(keyName);
@@ -561,7 +561,7 @@ public void addLT2Net(Node node) {
 				// generate places pre them 
 				PetrinetNode beginNode = tnMap.get(tNode);
 				Place preNode;
-				String keyName = ProcessConfiguration.PRE_PREFIX + beginNode.getLabel()+ targetPairLabel;
+				String keyName = ProcessConfiguration.PLACE_PRE_PREFIX + beginNode.getLabel()+ targetPairLabel;
 				if(!pnNodeMap.containsKey(keyName)) {
 					 preNode = addPlace(net, beginNode, targetPairLabel, false);
 					 pnNodeMap.put(keyName, preNode);
@@ -606,7 +606,7 @@ public void addLT2Net(Node node) {
 					XORCluster<ProcessTreeElement> subtBranch = subBranchPair.getTargetXORCluster();
 					// for each subtBranch
 					Place preNode;
-					String keyName = ProcessConfiguration.PRE_PREFIX + tTransition.getLabel()+ subtBranch.getLabel();
+					String keyName = ProcessConfiguration.PLACE_PRE_PREFIX + tTransition.getLabel()+ subtBranch.getLabel();
 					if(!pnNodeMap.containsKey(keyName)) {
 						 preNode = addPlace(net, tTransition, subtBranch.getLabel(), false);
 						 pnNodeMap.put(keyName, preNode);
@@ -678,7 +678,7 @@ public void addLT2Net(Node node) {
 				for(ProcessTreeElement sNode: sNodeList) {
 					// check if there is the place after it, if we have found it the pnNodeMap, then we use them directly
 					PetrinetNode endNode = tnMap.get(sNode);
-					keyName = ProcessConfiguration.POST_PREFIX + endNode.getLabel()+ sourceBranchLabel;
+					keyName = ProcessConfiguration.PLACE_POST_PREFIX + endNode.getLabel()+ sourceBranchLabel;
 					Place postNode;
 					if(!pnNodeMap.containsKey(keyName)) {
 						postNode = addPlace(net, endNode, sourceBranchLabel, true);
@@ -693,7 +693,7 @@ public void addLT2Net(Node node) {
 				//////////////////// end of the branch creation for the whole  
 				
 				// now create place for branch connection, only one is enough	
-				keyName = ProcessConfiguration.POST_PREFIX + sourceBranchLabel + targetPairLabel;
+				keyName = ProcessConfiguration.PLACE_POST_PREFIX + sourceBranchLabel + targetPairLabel;
 				Place branchPlace;
 				if(!pnNodeMap.containsKey(keyName)) {
 					branchPlace = addPlace(net, sTransition, targetPairLabel, true);
@@ -719,7 +719,7 @@ public void addLT2Net(Node node) {
 					// generate places pre them 
 					PetrinetNode beginNode = tnMap.get(tNode);
 					Place preNode;
-					keyName = ProcessConfiguration.PRE_PREFIX + beginNode.getLabel()+ targetBranchLabel;
+					keyName = ProcessConfiguration.PLACE_PRE_PREFIX + beginNode.getLabel()+ targetBranchLabel;
 					if(!pnNodeMap.containsKey(keyName)) {
 						 preNode = addPlace(net, beginNode, targetBranchLabel, false);
 						 pnNodeMap.put(keyName, preNode);
@@ -741,11 +741,11 @@ public void addLT2Net(Node node) {
 	private Place addPlace(Petrinet net, PetrinetNode node, String targetLabel, boolean post) {
 		// TODO add PostPlace in this pair, we need to assign a good name to it 
 		if(post) {
-			Place postNode = net.addPlace(ProcessConfiguration.POST_PREFIX + node.getLabel()+ targetLabel);
+			Place postNode = net.addPlace(ProcessConfiguration.PLACE_POST_PREFIX + node.getLabel()+ targetLabel);
 			net.addArc((Transition) node, postNode);
 			return postNode;
 		}else {
-			Place preNode = net.addPlace(ProcessConfiguration.PRE_PREFIX + node.getLabel()+ targetLabel);
+			Place preNode = net.addPlace(ProcessConfiguration.PLACE_PRE_PREFIX + node.getLabel()+ targetLabel);
 			net.addArc(preNode, (Transition) node);
 			return preNode;
 		}

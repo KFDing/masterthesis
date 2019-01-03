@@ -69,35 +69,42 @@ public class XORClusterPair<T> {
 	 * the most important thing is if it has xor and then get the xorList of it then
 	 */
 	public void initialize() {
+		// a way to organize them, only create connection when they are pure
+		// if xor using childrenCluster, else use xor cluster for both source and target
 		if(sourceXORCluster.isPureBranchCluster() && targetXORCluster.isPureBranchCluster()) {
-			// we create the branch connection of source and target xor cluster
-			// if one is this but the others are not this.. Not really, we can get it
+			// create connection only with condition like this
 			connections =  new ArrayList<LTRule<XORCluster<T>>>();
 			available = true;
 			// we deal with the situation of seq and parallel, but we need to do consider the 
 			LTRule<XORCluster<T>> conn = new LTRule<XORCluster<T>>(sourceXORCluster, targetXORCluster);
 			connections.add(conn);
-			
-		}else if(sourceXORCluster.isXORCluster() && targetXORCluster.isXORCluster()) {
-			branchClusterPair = new ArrayList<XORClusterPair<T>>();
-			// if they are nested, we check if they have more nested xor, if not back to first
-			for(XORCluster<T> scluster: sourceXORCluster.getChildrenCluster())
-				for(XORCluster<T> tcluster: targetXORCluster.getChildrenCluster()){
-					branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
-				}
-			
 		}else {
-			// not nested, we only use the xor branch, 
+			List<XORCluster<T>> sclusterList = new ArrayList<XORCluster<T>>();
+			if(sourceXORCluster.isPureBranchCluster()) {
+				sclusterList.add(sourceXORCluster);
+			}else if(sourceXORCluster.isXORCluster()) {
+				sclusterList.addAll(sourceXORCluster.getChildrenCluster());
+			}else {
+				sclusterList.addAll(sourceXORCluster.getEndXORList());
+			}
+			
+			List<XORCluster<T>> tclusterList = new ArrayList<XORCluster<T>>();
+			if(targetXORCluster.isPureBranchCluster()) {
+				tclusterList.add(targetXORCluster);
+			}else if(targetXORCluster.isXORCluster()) {
+				tclusterList.addAll(targetXORCluster.getChildrenCluster());
+			}else {
+				tclusterList.addAll(targetXORCluster.getBeginXORList());
+			}
+			
+			// here to use the sclusterList and tClusterList to create new branch pair
 			branchClusterPair = new ArrayList<XORClusterPair<T>>();
-			for(XORCluster<T> scluster: sourceXORCluster.getEndXORList())
-				for(XORCluster<T> tcluster: targetXORCluster.getBeginXORList()){
-					
+			for(XORCluster<T> scluster: sclusterList)
+				for(XORCluster<T> tcluster: tclusterList){
 					branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
 				}
 					
 			}
-			
-		
 	}
 	
 	public XORCluster<T> getSourceXORCluster() {

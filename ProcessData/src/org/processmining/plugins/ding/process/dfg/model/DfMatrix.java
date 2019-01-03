@@ -184,7 +184,7 @@ public class DfMatrix {
 	public void setValue(ArrayList<XEventClass> dfKey, ArrayList<Double> dfValue2) {
 		@SuppressWarnings("unchecked")
 		ArrayList<Double> dfValue = (ArrayList<Double>) getValue(dfKey);
-		System.out.println(dfValue.get(3));
+		// System.out.println(dfValue.get(3));
 		// we can only change on the dfValue
 		for(int i=0; i< valueColNum; i++) {
 			// System.out.println("id " + i+ dfValue2.get(3));

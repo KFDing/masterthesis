@@ -23,7 +23,9 @@ public class LTRule<E>{
 	int num = ProcessConfiguration.LT_IDX_NUM * 2;
 	List<Double> connectionValues;
 	boolean supportConnection = false;
-	
+	// mark if this rule is visited, if visited, then we don't need to consider it anymore
+	boolean ltVisited = false;
+
 	// we have same sourceNode, and we can have different target leading to
 	public LTRule() {
 		sourceNodes = new ArrayList<E>();
@@ -119,5 +121,13 @@ public class LTRule<E>{
 	public void adaptValue(int colIdx, double weight) {
 		// TODO adpat value according to colIdx and weight, but we have it only according 
 		connectionValues.set(colIdx, weight * connectionValues.get(colIdx - ProcessConfiguration.LT_IDX_NUM));
+	}
+	
+	public boolean isLtVisited() {
+		return ltVisited;
+	}
+
+	public void setLtVisited(boolean ltVisited) {
+		this.ltVisited = ltVisited;
 	}
 }
