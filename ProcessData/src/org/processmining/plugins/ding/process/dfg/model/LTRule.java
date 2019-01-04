@@ -41,12 +41,16 @@ public class LTRule<E>{
 		// TODO Auto-generated constructor stub
 		sourceNodes = new ArrayList<E>();
 		targetNodes = new ArrayList<E>();
-		sourceNodes.add(source);
-		targetNodes.add(target);
+		newSourceNodes = new ArrayList<E>();
 		
 		connectionValues = new ArrayList<Double>();
 		for(int i=0; i< num;i++)
 			connectionValues.add(0.0);
+		
+		sourceNodes.add(source);
+		targetNodes.add(target);
+		
+		
 	}
 
 	public void addRule(E source, E target) {

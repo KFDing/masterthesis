@@ -131,8 +131,9 @@ public class AddLT2Net {
     }
 	private void addLTFromXOR2Branch(XORCluster<ProcessTreeElement> parentXOR, XORCluster<ProcessTreeElement> tBranch, String sBranchName) {
 		// TODO add lt dependency of parent xor and tBranch, we should name the transition better
-		// should we consider it due to different previous nodes?? Not really.. 
-		Place parentPlace = (Place)getSourcePlace(parentXOR); // here we need more information, and also the different parts
+		// consider different previous condition, we need to set them, anyway, we can delete them later
+		// so to find the place for this branch after sBranch, we need to consider the sBranchName with it 
+		Place parentPlace = (Place)getSourcePlace(parentXOR, sBranchName); // here we need more information, and also the different parts
 		// if parentPlace is null, find the place from sBranchname
 		if(parentPlace == null) {
 			parentPlace = (Place) pnNodeMap.get(sBranchName);
@@ -144,7 +145,7 @@ public class AddLT2Net {
 		String transitionName =ProcessConfiguration.TRANSITION_PRE_PREFIX + "-" ;
 		// we need to do in two situations, one is that we have the branch place, but we shouldn't forget 
 		// that the previous node decides the choices here and different choice should be made!!! 
-		transitionName += sBranchName.split("-", 2)[1] + parentXOR.getLabel() + tBranch.getLabel();
+		transitionName += parentXOR.getLabel() + sBranchName.split("-", 2)[1] +  tBranch.getLabel();
 		Transition sTransition = addTransitionWithTest(transitionName);
 		addArcWithTest(parentPlace, sTransition);
 		// one problem here is the branch label and single label, difference, so goes back to purebranch
@@ -154,12 +155,13 @@ public class AddLT2Net {
 		
 	}
 
-	private PetrinetNode getSourcePlace(XORCluster<ProcessTreeElement> parentXOR) {
+	private PetrinetNode getSourcePlace(XORCluster<ProcessTreeElement> parentXOR, String sBranchName) {
 		// TODO if they are pure branch, we need to 
 		String placeName = parentXOR.getLabel();
 		
 		for(String keyName: pnNodeMap.keySet())
-			if(keyName.contains(placeName) && keyName.contains(ProcessConfiguration.PLACE_PRE_PREFIX))
+			if(keyName.contains(placeName) && keyName.contains(ProcessConfiguration.PLACE_PRE_PREFIX) 
+					&& keyName.contains(sBranchName.split("-", 2)[1]))
 				return pnNodeMap.get(keyName);
 		
 		// if we can't find the parentXOR place, it is then in the real branch
@@ -279,9 +281,8 @@ public class AddLT2Net {
 
 	private void addLTOnParallel(XORClusterPair<ProcessTreeElement> pair) {
 		// TODO should we return the new added places ??
-		XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
+		XORCluster<ProcessTreeElement> sourceCluster;
 		sourceCluster = pair.getSourceXORCluster();
-		targetCluster = pair.getTargetXORCluster();
 		
 		for(XORClusterPair<ProcessTreeElement> branchPair: pair.getLtBranchClusterPair()) {
 			   addLTOnPair(branchPair);
@@ -290,15 +291,13 @@ public class AddLT2Net {
 		// how many xor branch it has
 		List<XORCluster<ProcessTreeElement>> endXORList= sourceCluster.getEndXORList();
 		if(endXORList.size()>1) {
-			List<LTRule<XORCluster<ProcessTreeElement>>> ltConns = pair.getLtConnections();
-			// we have connection rules here
-			
+			// here we can finish them on by one, if we use if visited mark?? but later re
 			// to merge rules together, we need to find all the sources with the same target
-			List<XORCluster<ProcessTreeElement>> targetBranches = getTargetNodeSet(ltConns);
+			Set<XORCluster<ProcessTreeElement>> targetBranches = getTargetNodeSet(ruleSet);
 			
 			for(XORCluster<ProcessTreeElement> tBranch: targetBranches) {
 				// return the source set with same target
-				List<XORCluster<ProcessTreeElement>> sourceWithTarget = getSourceWithTarget(ltConns, tBranch);
+				List<XORCluster<ProcessTreeElement>> sourceWithTarget = getSourceWithTarget(ruleSet, tBranch);
 				
 				for(XORCluster<ProcessTreeElement> sBranch: sourceWithTarget) {
 					
@@ -307,13 +306,19 @@ public class AddLT2Net {
 					// combine them all together, put them into ruleSet
 					// here we need to modify the rules to make them together
 					// first to make them work... 
-					LTRule<XORCluster<ProcessTreeElement>> rule = findRuleForConn(sBranch, tBranch, ltConns);
+					LTRule<XORCluster<ProcessTreeElement>> rule = findRuleForConn(sBranch, tBranch, ruleSet);
+					
 					
 					if(rule != null) {
+						List<XORCluster<ProcessTreeElement>> tmpSources = new ArrayList<XORCluster<ProcessTreeElement>>();
+						// one thing to consider, s is only one branch, if multiple branch combines one branch, what to do then?? 
+						tmpSources.add(sBranch);
+						Place addedPlace = (Place) getSourcePlace(tmpSources);
+						
 						// sourceInAnd, could also be changed, because it can be more stuff here..
 						for(XORCluster<ProcessTreeElement> s: sourceInAnd) {
 							// the source can be in a list
-							LTRule<XORCluster<ProcessTreeElement>> tmpRule = findRuleForConn(s, tBranch, ltConns);
+							LTRule<XORCluster<ProcessTreeElement>> tmpRule = findRuleForConn(s, tBranch, ruleSet);
 							if(tmpRule!= null) {
 								// merge this two rules together, the rules can be together, so we need to find them into ltConns
 								// still, due to they are in parallel, it should work.
@@ -324,18 +329,15 @@ public class AddLT2Net {
 								// find the place for original source and then one for the new added source
 								List<Place> postPlaces = new ArrayList<Place>();
 								// combine them together and merge them
+								// original place we mean s, from tmpRule ..
 								Place origPlace = (Place)getSourcePlace(tmpRule.getSources());
-								// we need to get the places there
-								List<XORCluster<ProcessTreeElement>> tmpSources = new ArrayList<XORCluster<ProcessTreeElement>>();
-								tmpSources.add(s);
-								Place addedPlace = (Place) getSourcePlace(tmpSources);
 								
 								postPlaces.add(origPlace);
 								postPlaces.add(addedPlace);
 								// here we can create a new silent transition and place for it !!
 								combinePlaces(postPlaces);
 								
-								tmpRule.addRuleSource(s);
+								tmpRule.addRuleSource(sBranch);
 							}
 						}
 						ruleSet.remove(rule);
@@ -353,9 +355,9 @@ public class AddLT2Net {
 		// after this splitPlace, we xor list happen in parallel
 	
 	   List<Place> placeList = new ArrayList<Place>();
-	   String transitionName = ProcessConfiguration.TRANSITION_POST_PREFIX+"-";
+	   String transitionName = ProcessConfiguration.TRANSITION_POST_PREFIX+"-"+splitPlace.getLabel().split("-",2)[1];
 	   
-	   // we give it the name of target label
+	   // we give it the name of target label, but because it connects to source, we need to add the source effect
 	   for(XORCluster<ProcessTreeElement> xor: xorInAnd) {
 		   transitionName += xor.getLabel();
 	   }
@@ -381,8 +383,8 @@ public class AddLT2Net {
 	private Place combinePlaces(List<Place> postPlaces) {
 		// TODO combine places origPlace, addedPlace
 		// we need to give them a name, we could use the combine name in them or we give them a name
-		String combineName = ProcessConfiguration.TRANSITION_POST_PREFIX;
-		String branchName = ProcessConfiguration.PLACE_POST_PREFIX;
+		String combineName = ProcessConfiguration.TRANSITION_POST_PREFIX+"-";
+		String branchName = ProcessConfiguration.PLACE_POST_PREFIX+"-";
 		for(Place p: postPlaces) {
 			String tmpName = p.getLabel();
 			combineName += tmpName.split("-", 2)[1];
@@ -392,7 +394,7 @@ public class AddLT2Net {
 		Transition sTransition = addTransitionWithTest(combineName);
 		
 		for(Place p: postPlaces)
-			net.addArc(p, sTransition);
+			addArcWithTest(p, sTransition);
 		
 		// also one place for silent transition
 		Place sBranchPlace = addPlaceWithTest(branchName);
@@ -402,13 +404,13 @@ public class AddLT2Net {
 
 	private PetrinetNode getSourcePlace(List<XORCluster<ProcessTreeElement>> sources) {
 		// TODO we search them into the pnMap
-		String placeName = null;
+		String placeName =ProcessConfiguration.PLACE_POST_PREFIX +"-";
 		for(XORCluster<ProcessTreeElement> s: sources)
 			placeName += s.getLabel();
 		
 	
 		for(String keyName: pnNodeMap.keySet())
-			if(placeName.contains(keyName) && placeName.contains(ProcessConfiguration.PLACE_POST_PREFIX))
+			if(keyName.equals(placeName))
 				return pnNodeMap.get(keyName);
 		
 		return null;
@@ -453,13 +455,10 @@ public class AddLT2Net {
 		List<XORCluster<ProcessTreeElement>> xorInAnd = new ArrayList<XORCluster<ProcessTreeElement>>();
 		
 		for(XORCluster<ProcessTreeElement> tXOR : targetXOR) {
-			if(tXOR.equals(parentXOR))
-				continue;
-			if(isXORInAnd(parentXOR, tXOR))
-				xorInAnd.add(tXOR);
+			if(!xorInAnd.contains(tXOR))
+				if(parentXOR.equals(tXOR) || isXORInAnd(parentXOR, tXOR))
+					xorInAnd.add(tXOR);
 		}
-		if(xorInAnd.size() > 0)
-			xorInAnd.add(parentXOR);
 		
 		return xorInAnd;
 	}
@@ -542,12 +541,12 @@ public class AddLT2Net {
 	
 
 	private LTRule<XORCluster<ProcessTreeElement>> findRuleForConn(XORCluster<ProcessTreeElement> sBranch, 
-			XORCluster<ProcessTreeElement> tBranch, List<LTRule<XORCluster<ProcessTreeElement>>> connList) {
+			XORCluster<ProcessTreeElement> tBranch, Set<LTRule<XORCluster<ProcessTreeElement>>> ruleSetList) {
 		// TODO the rule set should be not here but in between of them, so we need one set
-		for(LTRule<XORCluster<ProcessTreeElement>> conn: connList) {
+		for(LTRule<XORCluster<ProcessTreeElement>> conn: ruleSetList) {
 			// the condition is not sufficient, if we have parallel, and now we want to combine more
 			// let it like this at first and modify it later
-			if(conn.getSources().contains(sBranch) && conn.getTargets().contains(tBranch))
+			if(conn.getSources().equals(sBranch) && conn.getTargets().equals(tBranch))
 				return conn;
 			
 		}
@@ -562,11 +561,11 @@ public class AddLT2Net {
 
 
 
-	private List<XORCluster<ProcessTreeElement>> getSourceWithTarget(List<LTRule<XORCluster<ProcessTreeElement>>> ltConns,
+	private List<XORCluster<ProcessTreeElement>> getSourceWithTarget(Set<LTRule<XORCluster<ProcessTreeElement>>> ruleSetList,
 			XORCluster<ProcessTreeElement> tBranch) {
 		List<XORCluster<ProcessTreeElement>> sourceNodes = new ArrayList<XORCluster<ProcessTreeElement>>();
 		
-		for(LTRule<XORCluster<ProcessTreeElement>> conn: ltConns) {
+		for(LTRule<XORCluster<ProcessTreeElement>> conn: ruleSetList) {
 			if(conn.getTargets().contains(tBranch) && !sourceNodes.containsAll(conn.getSources())) {
 				sourceNodes.addAll(conn.getSources());
 			}
@@ -576,11 +575,11 @@ public class AddLT2Net {
 	}
 
 	
-	private List<XORCluster<ProcessTreeElement>> getTargetNodeSet(List<LTRule<XORCluster<ProcessTreeElement>>> ltConns) {
+	private Set<XORCluster<ProcessTreeElement>> getTargetNodeSet(Set<LTRule<XORCluster<ProcessTreeElement>>> ruleSetList) {
 		 
-		List<XORCluster<ProcessTreeElement>> targetNodes = new ArrayList<XORCluster<ProcessTreeElement>>();
+		Set<XORCluster<ProcessTreeElement>> targetNodes = new HashSet<XORCluster<ProcessTreeElement>>();
 		
-		for(LTRule<XORCluster<ProcessTreeElement>> conn: ltConns) {
+		for(LTRule<XORCluster<ProcessTreeElement>> conn: ruleSetList) {
 			if(!targetNodes.contains(conn.getTargets())) {
 				targetNodes.addAll(conn.getTargets());
 			}
