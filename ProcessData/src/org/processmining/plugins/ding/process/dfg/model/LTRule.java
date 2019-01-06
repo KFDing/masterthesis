@@ -134,4 +134,18 @@ public class LTRule<E>{
 	public void setLtVisited(boolean ltVisited) {
 		this.ltVisited = ltVisited;
 	}
+
+	public void addRuleSourceList(List<E> sourceList) {
+		// TODO Auto-generated method stub
+		sourceNodes.addAll(sourceList);
+	}
+	
+	public void addRuleTargetList(List<E> targetList) {
+		targetNodes.addAll(targetList);
+	}
+
+	public void addTarget(E target) {
+		// TODO Auto-generated method stub
+		targetNodes.add(target);
+	}
 }

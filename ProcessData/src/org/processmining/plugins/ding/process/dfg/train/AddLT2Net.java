@@ -106,7 +106,7 @@ public class AddLT2Net {
  				String tmpName = sBranch.getLabel();
  				sBranchName += tmpName;
  		   }
- 		   
+ 		   // here we can also change them into HashMap to organize them better, and more solution..
  		   Place splitPlace = (Place) pnNodeMap.get(sBranchName);
  		   // get the target with same source
  		   List<XORCluster<ProcessTreeElement>> targetWithSource = getTargetWithSource(sourceBranches);
@@ -118,7 +118,7 @@ public class AddLT2Net {
  			   // get all xor cluster which are parallel with this parent xor of tBranch..
  			   // we get the target in And, but we only need places of xor cluster those
  			   List<XORCluster<ProcessTreeElement>> xorInAnd = getTargetInAnd(tBranch, targetXOR);
- 			   if(xorInAnd.size()>0)
+ 			   if(xorInAnd.size()>1)
  				   // we need to get the source place from sBranch here
  				   splitPlaces(splitPlace, xorInAnd);
  			   
@@ -291,64 +291,137 @@ public class AddLT2Net {
 		// how many xor branch it has
 		List<XORCluster<ProcessTreeElement>> endXORList= sourceCluster.getEndXORList();
 		if(endXORList.size()>1) {
-			// here we can finish them on by one, if we use if visited mark?? but later re
-			// to merge rules together, we need to find all the sources with the same target
-			Set<XORCluster<ProcessTreeElement>> targetBranches = getTargetNodeSet(ruleSet);
-			
-			for(XORCluster<ProcessTreeElement> tBranch: targetBranches) {
-				// return the source set with same target
-				List<XORCluster<ProcessTreeElement>> sourceWithTarget = getSourceWithTarget(ruleSet, tBranch);
+			// here we can finish them on by one, if we use if visited mark?? 
+			// use hashMap to group rule set with same target
+			HashMap<XORCluster<ProcessTreeElement>, List<LTRule<XORCluster<ProcessTreeElement>>>> ruleGroup = new HashMap();
+			for(LTRule<XORCluster<ProcessTreeElement>> rule: ruleSet) {
 				
-				for(XORCluster<ProcessTreeElement> sBranch: sourceWithTarget) {
-					
-					List<XORCluster<ProcessTreeElement>> sourceInAnd = getSourceInAnd(sBranch, sourceWithTarget);
-					
-					// combine them all together, put them into ruleSet
-					// here we need to modify the rules to make them together
-					// first to make them work... 
-					LTRule<XORCluster<ProcessTreeElement>> rule = findRuleForConn(sBranch, tBranch, ruleSet);
-					
-					
-					if(rule != null) {
-						List<XORCluster<ProcessTreeElement>> tmpSources = new ArrayList<XORCluster<ProcessTreeElement>>();
-						// one thing to consider, s is only one branch, if multiple branch combines one branch, what to do then?? 
-						tmpSources.add(sBranch);
-						Place addedPlace = (Place) getSourcePlace(tmpSources);
-						
-						// sourceInAnd, could also be changed, because it can be more stuff here..
-						for(XORCluster<ProcessTreeElement> s: sourceInAnd) {
-							// the source can be in a list
-							LTRule<XORCluster<ProcessTreeElement>> tmpRule = findRuleForConn(s, tBranch, ruleSet);
-							if(tmpRule!= null) {
-								// merge this two rules together, the rules can be together, so we need to find them into ltConns
-								// still, due to they are in parallel, it should work.
-								
-								
-								// after merge rules, we need to add places and silent transition
-								// for sBranch and s here, but we need to find the old rule??
-								// find the place for original source and then one for the new added source
-								List<Place> postPlaces = new ArrayList<Place>();
-								// combine them together and merge them
-								// original place we mean s, from tmpRule ..
-								Place origPlace = (Place)getSourcePlace(tmpRule.getSources());
-								
-								postPlaces.add(origPlace);
-								postPlaces.add(addedPlace);
-								// here we can create a new silent transition and place for it !!
-								combinePlaces(postPlaces);
-								
-								tmpRule.addRuleSource(sBranch);
-							}
-						}
-						ruleSet.remove(rule);
-					}
-					
+				XORCluster<ProcessTreeElement> target = rule.getTargets().get(0);
+				if (!ruleGroup.containsKey(target)) {
+					List<LTRule<XORCluster<ProcessTreeElement>>> tmpRuleList = new ArrayList<>();
+					tmpRuleList.add(rule);
+	
+					ruleGroup.put(target, tmpRuleList);
+				} else {
+					ruleGroup.get(target).add(rule);
 				}
-				
 			}
 			
+			// after grouping rule later, gather them together, also add new rule into ruleSet
+			// for each target, consider the relation of sources of each ruleSet.. 
+			for(XORCluster<ProcessTreeElement> target: ruleGroup.keySet()) {
+				// get all the rule with same target
+				List<LTRule<XORCluster<ProcessTreeElement>>> ruleList = ruleGroup.get(target);
+				
+				// for each xor, we find rules of tmpRuleList in them in a List
+				// after those we have EndXORList.size list of rules 
+				HashMap<XORCluster<ProcessTreeElement>, List<LTRule<XORCluster<ProcessTreeElement>>>> endXORGroup = new HashMap();
+				for(LTRule<XORCluster<ProcessTreeElement>> tmpRule: ruleList) {
+					XORCluster<ProcessTreeElement> endXOR = getXOR(tmpRule, endXORList);
+					if(!endXORGroup.containsKey(endXOR)) {
+						List<LTRule<XORCluster<ProcessTreeElement>>> tmpRuleList = new ArrayList<>();
+						tmpRuleList.add(tmpRule);
+		
+						endXORGroup.put(endXOR, tmpRuleList);
+					} else {
+						endXORGroup.get(endXOR).add(tmpRule);
+					}
+		
+				}
+				// then we traverse them and combine them together into new rules
+				// how to get the list of LTRule from n endXORGroup !! we need to mark the idx of each of them
+				// we can't delete them!! Permutation of them but unknown 
+				int endXORSize = endXORList.size();
+				// create indx for them, but why add them 
+				int[] indexes = new int[endXORSize];
+				
+				while(true) {
+					// construct the new rule here, but at first to merge them together
+					List<LTRule<XORCluster<ProcessTreeElement>>> rulesToMerge = new ArrayList<LTRule<XORCluster<ProcessTreeElement>>>();
+					for(int i=0; i< endXORSize;i++) {
+						// get all the lists there
+						rulesToMerge.add(endXORGroup.get(endXORList.get(i)).get(indexes[i]));	
+					}
+					
+					mergeRules(rulesToMerge);
+					
+					// change indexes of them, change from the last one 
+					int incrementIdx = endXORSize - 1;
+					while(incrementIdx >=0 &&
+							++ indexes[incrementIdx] >= endXORGroup.get(endXORList.get(incrementIdx)).size()) {
+						indexes[incrementIdx] =0;
+						incrementIdx -- ;
+					}
+					if(incrementIdx < 0)
+						break;
+				}
+				
+				// delete the old rule
+				deleteOldRules(ruleList);	
+			}	
 		}
 		
+	}
+	
+	private void deleteOldRules(List<LTRule<XORCluster<ProcessTreeElement>>> ruleList) {
+		ruleSet.removeAll(ruleList);
+	}
+
+	private void mergeRules(List<LTRule<XORCluster<ProcessTreeElement>>> rulesToMerge) {
+		// first to merge places
+		// for all sources we find the places from them, we then combine with places there
+		
+		List<Place> postPlaces = new ArrayList<Place>();
+		// second to create a new rule with it 
+		LTRule<XORCluster<ProcessTreeElement>> newRule = new LTRule<XORCluster<ProcessTreeElement>>();
+		for(LTRule<XORCluster<ProcessTreeElement>> tmpRule: rulesToMerge) {
+			newRule.addRuleSourceList(tmpRule.getSources());
+			
+			Place sPlace = (Place)getSourcePlace(tmpRule.getSources());
+			postPlaces.add(sPlace);
+		}
+		
+		combinePlaces(postPlaces);
+		
+		newRule.addRuleTargetList(rulesToMerge.get(0).getTargets());
+		ruleSet.add(newRule);
+	}
+
+	private XORCluster<ProcessTreeElement> getXOR(LTRule<XORCluster<ProcessTreeElement>> tmpRule,
+			List<XORCluster<ProcessTreeElement>> endXORList) {
+		// TODO get the endXOR in endXORList which includes tmpRule sources
+		// sources are in a list, if we can visit all the sources in endXOR in tree
+		// we return this xor 
+		boolean inXOR = true;
+		for(XORCluster<ProcessTreeElement> endXOR: endXORList) {
+			// if we just stop at branch, not really, because we have multiple sources
+			inXOR = true;
+			for(XORCluster<ProcessTreeElement> source: tmpRule.getSources()) {
+				if(!isInclude(endXOR, source)) {
+					// if endXOR include source
+					inXOR = false;
+					break;
+				}
+			}
+			// after all of those, we return endXOR
+			if(inXOR) {
+				return endXOR;
+			}
+		}
+		return null;
+	}
+
+	
+	private boolean isInclude(XORCluster<ProcessTreeElement> endXOR, XORCluster<ProcessTreeElement> source) {
+		// TODO how to check if this endXOR include this source element
+		// they can be a long history
+		Node xor = (Node) endXOR.getKeyNode();
+		Node child = (Node)source.getKeyNode();
+		List<Node> ancestorList = getAncestors(child);
+		if(ancestorList.contains(xor))
+			return true;
+		
+		return false;
 	}
 
 	private List<Place> splitPlaces(Place splitPlace, List<XORCluster<ProcessTreeElement>> xorInAnd) {
@@ -414,21 +487,6 @@ public class AddLT2Net {
 				return pnNodeMap.get(keyName);
 		
 		return null;
-	}
-
-
-	private List<XORCluster<ProcessTreeElement>> getSourceInAnd(XORCluster<ProcessTreeElement> sBranch,
-			List<XORCluster<ProcessTreeElement>> sourceWithTarget) {
-		// then we check sources in same XOR
-		List<XORCluster<ProcessTreeElement>> sourceInXOR = getSourceInXOR(sBranch);
-		
-		List<XORCluster<ProcessTreeElement>> sourceInAnd = new ArrayList<XORCluster<ProcessTreeElement>>();
-		
-		for(XORCluster<ProcessTreeElement> s : sourceWithTarget) {
-			if(!sourceInXOR.contains(s))
-				sourceInAnd.add(s);
-		}
-		return sourceInAnd;
 	}
 
 	private List<XORCluster<ProcessTreeElement>> divideTargetsInXOR(
@@ -539,50 +597,13 @@ public class AddLT2Net {
 		return targetList;
 	}
 	
-
-	private LTRule<XORCluster<ProcessTreeElement>> findRuleForConn(XORCluster<ProcessTreeElement> sBranch, 
-			XORCluster<ProcessTreeElement> tBranch, Set<LTRule<XORCluster<ProcessTreeElement>>> ruleSetList) {
-		// TODO the rule set should be not here but in between of them, so we need one set
-		for(LTRule<XORCluster<ProcessTreeElement>> conn: ruleSetList) {
-			// the condition is not sufficient, if we have parallel, and now we want to combine more
-			// let it like this at first and modify it later
-			if(conn.getSources().equals(sBranch) && conn.getTargets().equals(tBranch))
-				return conn;
-			
-		}
-		return null;
-	}
-
-	private List<XORCluster<ProcessTreeElement>> getSourceInXOR(XORCluster<ProcessTreeElement> sBranch) {
-		
-		XORCluster<ProcessTreeElement> parentXOR = sBranch.getParent();
-		return parentXOR.getChildrenCluster();
-	}
-
-
-
-	private List<XORCluster<ProcessTreeElement>> getSourceWithTarget(Set<LTRule<XORCluster<ProcessTreeElement>>> ruleSetList,
-			XORCluster<ProcessTreeElement> tBranch) {
-		List<XORCluster<ProcessTreeElement>> sourceNodes = new ArrayList<XORCluster<ProcessTreeElement>>();
-		
-		for(LTRule<XORCluster<ProcessTreeElement>> conn: ruleSetList) {
-			if(conn.getTargets().contains(tBranch) && !sourceNodes.containsAll(conn.getSources())) {
-				sourceNodes.addAll(conn.getSources());
-			}
-		}
-
-		return sourceNodes;
-	}
-
 	
 	private Set<XORCluster<ProcessTreeElement>> getTargetNodeSet(Set<LTRule<XORCluster<ProcessTreeElement>>> ruleSetList) {
 		 
 		Set<XORCluster<ProcessTreeElement>> targetNodes = new HashSet<XORCluster<ProcessTreeElement>>();
-		
+		// something not so well, because here the targets are only one branch !
 		for(LTRule<XORCluster<ProcessTreeElement>> conn: ruleSetList) {
-			if(!targetNodes.contains(conn.getTargets())) {
-				targetNodes.addAll(conn.getTargets());
-			}
+			targetNodes.addAll(conn.getTargets());
 		}
 		
 		return targetNodes;
