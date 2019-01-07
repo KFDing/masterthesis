@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: Master_Thesis_Math_Formalization.aux
+The style file: ieeetr.bst
+Database file #1: bibtex2ref.bib.bib
+You've used 4 entries,
+            1876 wiz_defined-function locations,
+            502 strings with 4345 characters,
+and the built_in function-call counts, 1057 in all, are:
+= -- 97
+> -- 37
+< -- 0
++ -- 14
+- -- 10
+* -- 69
+:= -- 149
+add.period$ -- 5
+call.type$ -- 4
+change.case$ -- 4
+chr.to.int$ -- 0
+cite$ -- 4
+duplicate$ -- 62
+empty$ -- 117
+format.name$ -- 10
+if$ -- 258
+int.to.chr$ -- 0
+int.to.str$ -- 4
+missing$ -- 5
+newline$ -- 16
+num.names$ -- 4
+pop$ -- 25
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 30
+stack$ -- 0
+substring$ -- 59
+swap$ -- 18
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 10
+width$ -- 5
+write$ -- 40

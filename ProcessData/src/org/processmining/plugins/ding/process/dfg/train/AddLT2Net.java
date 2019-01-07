@@ -283,6 +283,7 @@ public class AddLT2Net {
 		// TODO should we return the new added places ??
 		XORCluster<ProcessTreeElement> sourceCluster;
 		sourceCluster = pair.getSourceXORCluster();
+		// should we try to keep only the current targetCluster use??? 
 		
 		for(XORClusterPair<ProcessTreeElement> branchPair: pair.getLtBranchClusterPair()) {
 			   addLTOnPair(branchPair);
@@ -306,6 +307,9 @@ public class AddLT2Net {
 					ruleGroup.get(target).add(rule);
 				}
 			}
+		    //after dealing with one parallel with xor to one branch, consider they come together.. then??
+			// we have new added rule with multiple sources and orginal rules have less ones,
+			// it's normal, I need to say..
 			
 			// after grouping rule later, gather them together, also add new rule into ruleSet
 			// for each target, consider the relation of sources of each ruleSet.. 
@@ -318,16 +322,19 @@ public class AddLT2Net {
 				HashMap<XORCluster<ProcessTreeElement>, List<LTRule<XORCluster<ProcessTreeElement>>>> endXORGroup = new HashMap();
 				for(LTRule<XORCluster<ProcessTreeElement>> tmpRule: ruleList) {
 					XORCluster<ProcessTreeElement> endXOR = getXOR(tmpRule, endXORList);
-					if(!endXORGroup.containsKey(endXOR)) {
-						List<LTRule<XORCluster<ProcessTreeElement>>> tmpRuleList = new ArrayList<>();
-						tmpRuleList.add(tmpRule);
-		
-						endXORGroup.put(endXOR, tmpRuleList);
-					} else {
-						endXORGroup.get(endXOR).add(tmpRule);
-					}
-		
+					if(endXOR != null)
+						if(!endXORGroup.containsKey(endXOR)) {
+							List<LTRule<XORCluster<ProcessTreeElement>>> tmpRuleList = new ArrayList<>();
+							tmpRuleList.add(tmpRule);
+			
+							endXORGroup.put(endXOR, tmpRuleList);
+						} else {
+							endXORGroup.get(endXOR).add(tmpRule);
+						}
 				}
+				if(endXORGroup.isEmpty())
+					continue;
+				
 				// then we traverse them and combine them together into new rules
 				// how to get the list of LTRule from n endXORGroup !! we need to mark the idx of each of them
 				// we can't delete them!! Permutation of them but unknown 
@@ -348,7 +355,7 @@ public class AddLT2Net {
 					// change indexes of them, change from the last one 
 					int incrementIdx = endXORSize - 1;
 					while(incrementIdx >=0 &&
-							++ indexes[incrementIdx] >= endXORGroup.get(endXORList.get(incrementIdx)).size()) {
+							(++ indexes[incrementIdx]) >= endXORGroup.get(endXORList.get(incrementIdx)).size()) {
 						indexes[incrementIdx] =0;
 						incrementIdx -- ;
 					}

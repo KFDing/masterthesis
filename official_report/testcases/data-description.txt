@@ -101,7 +101,7 @@ We divie them into four catologues::
 
 ** Test Case And 03_02:: and as branch in xor structure, and also with nested xor 
 // imdirect of parallel in xor but in seq
-// Input:: tc_and_03_01.xes
+// Input:: tc_and_03_02.xes
 50 S1,A,B2,C1,D1,E,T1;
 50 S1,A,B1,E,T1;
 50 S2,A,B2,D2,C2,E,T2;

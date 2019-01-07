@@ -85,7 +85,23 @@ public class XORClusterPair<T> {
 			}else if(sourceXORCluster.isXORCluster()) {
 				sclusterList.addAll(sourceXORCluster.getChildrenCluster());
 			}else {
-				sclusterList.addAll(sourceXORCluster.getEndXORList());
+				// here are something wrong, because ?? if we have seq with parallel, then back to
+				// endxor list is deeper than before, so we need to goes back into another structure
+				// if seq or parallel with xor structure, one : directly includes xor 
+				// or nested with xor:: if nested, then we need to go deeper!! 
+				// how to check if the last experiment includes it?? 
+				
+				// seq and with xor
+				if(sourceXORCluster.isSeqCluster()) {
+					sclusterList.add(sourceXORCluster.getChildrenCluster().get(
+							sourceXORCluster.getChildrenCluster().size()-1));
+					
+				}else if(sourceXORCluster.isParallelCluster()) {
+					// add all the children cluster into it, still the children cluster
+					sclusterList.addAll(sourceXORCluster.getChildrenCluster());
+				}
+				
+				
 			}
 			
 			List<XORCluster<T>> tclusterList = new ArrayList<XORCluster<T>>();
@@ -94,7 +110,17 @@ public class XORClusterPair<T> {
 			}else if(targetXORCluster.isXORCluster()) {
 				tclusterList.addAll(targetXORCluster.getChildrenCluster());
 			}else {
-				tclusterList.addAll(targetXORCluster.getBeginXORList());
+				// we can't use the end xor list and another list, only this one is fine
+				// seq and with xor
+				if(targetXORCluster.isSeqCluster()) {
+					tclusterList.add(targetXORCluster.getChildrenCluster().get(0));
+					
+				}else if(targetXORCluster.isParallelCluster()) {
+					// add all the children cluster into it, still the children cluster
+					tclusterList.addAll(targetXORCluster.getChildrenCluster());
+				}
+				
+				// tclusterList.addAll(targetXORCluster.getBeginXORList());
 			}
 			
 			// here to use the sclusterList and tClusterList to create new branch pair

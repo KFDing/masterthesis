@@ -1,0 +1,33 @@
+%% this document is used to explain what I have achieved so far
+%% it includes the reasoning part and the implementation part
+
+%% as for abitrary xor branch, how to connect them?? Did you consider it ever ??
+%% we don't have a way to connec them, because the complexity to keep the model sound, if not, we only want to see the correlation of those choices, what you can do ??
+
+%% I can use some other methods to get the dependency of them, but how to add them, we have no idea!!! 
+
+%% firstly, to get the dependency of branches
+%% then, we only add them into the model, when the branches are directly followed.. Else, we don't consider it 
+
+%% explain how to add long-term dependency on the petri net, and to keep the model sound..
+%% several situations:: 
+%%  <1> complete, no dependency
+%%  <2> not complete, but each branch choice happen once in the event log 
+%%  <3> one branch not shown in the event log but in model
+%%So at this situation, what we can do ?? The model will be not sound, add something to make model sound?? Or we just remove this branch, because we decide to keep it here,  but it can have some negative information to avoid this connection!! 
+%% <3.1> there is negative information here for connection, then we add connection of the reverse branch, like neg S1->B1, then we should have S2->B1 is activated?? 
+%% <3.2> there is no information about this connection, what to do ?? We need to connect them both from the above branches!! 
+%% from what we know, we create the model, then actually, we think there should be some lt dependency on existing model, we need to think about it !!! 
+%%  If there is bigger impact of existing model, then we keep it there!!! 
+
+%% CONSIDER the effect of existing model on long-term dependency!!! 
+
+%% but it seems to me not so reasonable, because we want to reduce the effect of negetive information, we can prove it..
+%% in open world assumption, we think something unknown to be unknown, well in the model, 
+
+%% we restrict ourselves only to known world. Open world assumption: close world assumption
+
+%% why soundness is so important, because when we keep it, we allow more behaviours in model, but now we have such data, and we want to delete them, then how to do it?? Under certain conditions, we have such model, but we still need to think of them..
+
+
+

@@ -107,11 +107,6 @@ public class NewXORPairGenerator<T> {
 		// here are only the xor cluster, we need only to create the branch cluster into it 
 		
 		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster, false);
-		// even if we didn't see the codes here, we create pair only with situation in seq
-		// seq has children: xor, parallel, or loop
-		// if we have parallel, one xor and one parallel, we need to goes down to get the number of parallel xor
-		// pair.initialize();
-		// why do we need the connList here?? 
 		connList.addAll(pair.getConnection());
 		
 		return pair;
@@ -194,28 +189,24 @@ public class NewXORPairGenerator<T> {
 		return xorSet;
 	}
 	
-	public Set<Block> getAncestors(Node node){
-		Set<Block> ancestors = new HashSet<Block>();
-		if(node.isRoot())
-			return ancestors;
-		
-		Collection<Block> currentParents, parents = node.getParents();
-		if(parents.isEmpty())
-			return ancestors;
-		
-		currentParents = parents;
-		while(!ancestors.containsAll(currentParents)) {
-			ancestors.addAll(currentParents);
+	public List<Node> getAncestors(Node node){
+		List<Node> parentList = new ArrayList<Node>();
+		// parentList.add(node);
+		Collection<Block> parent = node.getParents();
+		while(!parentList.containsAll(parent)) {
+			parentList.addAll(parent);
 			
-			for(Block pBlock: parents) {
-				if(!pBlock.isRoot() && !currentParents.contains(pBlock))
-					currentParents.addAll(pBlock.getParents());
+			
+			List<Block> tmpParents = new ArrayList<Block>();
+			for(Block block: parent) {
+				tmpParents.addAll(block.getParents());
 			}
+			parent = tmpParents;
 			
-			parents = currentParents;
+			if(parent.isEmpty())
+				break;
 		}
-		
-		return ancestors;
+		return parentList;
 	}
  	
 	public Set<Node> getAllXORAncestors(Set<Node> xorSet) {
@@ -226,7 +217,7 @@ public class NewXORPairGenerator<T> {
 		// 2. get the ancestors of them, here is one problem, 
 		// if we don't go for it, only the parents node, what we can do later??  
 		for(Node xorNode: xorSet) {
-			Set<Block> ancestors = getAncestors(xorNode);
+			Set<Node> ancestors = new HashSet<Node>(getAncestors(xorNode));
 			if(ancestors.isEmpty())
 				continue;
 			
