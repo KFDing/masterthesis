@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  8 JAN 2019 18:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  9 JAN 2019 14:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -388,7 +388,7 @@ Package pdftex.def Info: ./images/PT02_xor_nested_and_pure.png  used on input l
 ine 153.
 (pdftex.def)             Requested size: 345.0pt x 182.20306pt.
  [6 <./images/PT02_xor_nested_and_pure.png>]
-Overfull \hbox (2.89983pt too wide) detected at line 179
+Overfull \hbox (2.89983pt too wide) detected at line 180
 \OML/cmm/m/it/10 SC\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n
 /10 ) = \OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT
 1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/c
@@ -396,25 +396,25 @@ mm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n/10 )
  []
 
 
-Overfull \hbox (0.40549pt too wide) in paragraph at lines 184--185
+Overfull \hbox (0.40549pt too wide) in paragraph at lines 185--186
 \OT1/cmr/bx/n/10 Definition 2.12 \OT1/cmr/m/n/10 (Di-rect-ly--fol-lowed re-la-t
 ion of xor branch)\OT1/cmr/bx/n/10 . $\OML/cmm/m/it/10 XORB[]$ \OT1/cmr/m/it/10
  is directly-
  []
 
 
-Overfull \hbox (0.2056pt too wide) in paragraph at lines 193--194
+Overfull \hbox (0.2056pt too wide) in paragraph at lines 194--195
 \OT1/cmr/m/it/10 branches $[]$, $[]$
  []
 
 
-Overfull \hbox (37.01111pt too wide) detected at line 195
+Overfull \hbox (37.01111pt too wide) detected at line 196
 \OML/cmm/m/it/10 SC\OT1/cmr/m/n/10 ([]\OML/cmm/m/it/10 ; []\OT1/cmr/m/n/10 ) \O
 ML/cmm/m/it/10 > threshold
  []
 
 
-Overfull \hbox (77.9961pt too wide) in paragraph at lines 197--198
+Overfull \hbox (77.9961pt too wide) in paragraph at lines 198--199
 []$[]$ \OT1/cmr/m/n/10 de-pend the ex-e-cu-tion of $[]$. 
  []
 
@@ -422,31 +422,61 @@ Overfull \hbox (77.9961pt too wide) in paragraph at lines 197--198
 File: ./images/FD_architecture_detail_02.png Graphic file (type png)
 <use ./images/FD_architecture_detail_02.png>
 Package pdftex.def Info: ./images/FD_architecture_detail_02.png  used on input 
-line 203.
+line 204.
 (pdftex.def)             Requested size: 344.9912pt x 549.99742pt.
 
-LaTeX Warning: Float too large for page by 54.69742pt on input line 206.
+LaTeX Warning: Float too large for page by 54.69742pt on input line 207.
 
 [7] [8 <./images/FD_architecture_detail_02.png>]
 
-Package caption Warning: \label without proper reference on input line 216.
+Package caption Warning: \label without proper reference on input line 217.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `alg: detect-lt' on page 9 undefined on input line 213
+LaTeX Warning: Reference `alg: detect-lt' on page 9 undefined on input line 214
 .
 
-[9] [10] (./Master_Thesis_Implementation.bbl) [11]
+<./images/PN_tc_and_03_01.png, id=51, 1483.5425pt x 545.03625pt>
+File: ./images/PN_tc_and_03_01.png Graphic file (type png)
+<use ./images/PN_tc_and_03_01.png>
+Package pdftex.def Info: ./images/PN_tc_and_03_01.png  used on input line 258.
+(pdftex.def)             Requested size: 345.0pt x 126.74457pt.
+[9] [10 <./images/PN_tc_and_03_01.png>]
+Overfull \hbox (163.55547pt too wide) detected at line 264
+\OML/cmm/m/it/10 Wlt\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/
+n/10 ) = \OML/cmm/m/it/10 Wlt[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]
+\OT1/cmr/m/n/10 ) + \OML/cmm/m/it/10 Wlt[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XOR
+B[]; XORB[]\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Wlt[]\OT1/cm
+r/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n/10 )
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 264--268
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 264--268
+
+ []
+
+
+Overfull \hbox (17.12938pt too wide) in paragraph at lines 271--273
+\OML/cmm/m/it/10 B[] \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 ; B[] \OT1/cmr/m/n/10
+ = []$\OT1/cmr/m/it/10 ,
+ []
+
+[11] (./Master_Thesis_Implementation.bbl [12]) [13]
 (./Master_Thesis_Implementation.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 4616 strings out of 494847
- 69890 string characters out of 6179079
- 139022 words of memory out of 5000000
- 7858 multiletter control sequences out of 15000+600000
+ 4624 strings out of 494847
+ 70118 string characters out of 6179079
+ 139101 words of memory out of 5000000
+ 7865 multiletter control sequences out of 15000+600000
  13755 words of font info for 55 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  41i,15n,39p,920b,461s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -462,14 +492,15 @@ msfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
 7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on Master_Thesis_Implementation.pdf (11 pages, 318012 bytes).
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
+Output written on Master_Thesis_Implementation.pdf (13 pages, 399978 bytes).
 PDF statistics:
- 115 PDF objects out of 1000 (max. 8388607)
- 78 compressed objects within 1 object stream
+ 127 PDF objects out of 1000 (max. 8388607)
+ 86 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

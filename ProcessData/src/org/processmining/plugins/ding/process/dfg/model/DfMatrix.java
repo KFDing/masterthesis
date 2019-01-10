@@ -25,6 +25,7 @@ public class DfMatrix {
 	final int keyColNum;
 	final int valueColNum;
 	long standardCardinality; 
+	double threshold = ProcessConfiguration.DFG_THRESHOLD;
 	// only initialization of DfMatrix
 	public DfMatrix(){
 		dfMatrix = new HashMap<ArrayList<XEventClass>, ArrayList<Double>>();
@@ -217,7 +218,7 @@ public class DfMatrix {
 			keepPercent = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX) + dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
 			removePercent = dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX);
 			double diffPercent = keepPercent - removePercent;
-			if(diffPercent > 0) {
+			if(diffPercent > threshold) {
 				addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), transform2Cardinality(diffPercent));
 			}
 		}

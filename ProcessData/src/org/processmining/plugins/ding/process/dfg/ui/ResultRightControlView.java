@@ -268,6 +268,10 @@ public class ResultRightControlView extends JPanel {
         buttonPane.add(Box.createRigidArea(new Dimension(10, 0)));
         buttonPane.add(submit_button);
         
+        
+        // here we need a panel to choose the xor block for adding lt-dependency. 
+        // I hope I have a similar panel, so I can copy it ,, check the process tree panel..
+        
         this.add(weightPanel, new Float(50));
         this.add(buttonPane, new Float(10));
         this.add(Box.createRigidArea(new Dimension(50, 100)));

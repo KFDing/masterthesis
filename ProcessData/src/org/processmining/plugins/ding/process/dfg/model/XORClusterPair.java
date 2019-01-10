@@ -207,7 +207,8 @@ public class XORClusterPair<T> {
 				if(!ltConnections.isEmpty())
 					connected = true;
 			}
-			
+			// suddenly, I realize defining the target, it is already fixing the source, and we also choose the situation 
+			// when they can happen together, so no worry.
 		}else {
 			// we need to test the children cluster and find them out, but we need to record the complete branch
 			ltBranchClusterPair =  new ArrayList<XORClusterPair<T>>();

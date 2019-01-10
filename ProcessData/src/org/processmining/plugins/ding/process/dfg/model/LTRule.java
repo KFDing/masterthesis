@@ -17,10 +17,13 @@ public class LTRule<E>{
 	// we should also have a set to mark the original and newAddded nodes
 	// specially for source
 	List<E> newSourceNodes;
-	
+
+	int extIdx = ProcessConfiguration.LT_EXISTING_IDX;
 	int posIdx = ProcessConfiguration.LT_POS_IDX;
 	int negIdx = ProcessConfiguration.LT_NEG_IDX;
 	int num = ProcessConfiguration.LT_IDX_NUM * 2;
+	// it should be decided by the threshold in dfg method..
+	double ltThreshold = ProcessConfiguration.LT_THRESHOLD; 
 	List<Double> connectionValues;
 	boolean supportConnection = false;
 	// mark if this rule is visited, if visited, then we don't need to consider it anymore
@@ -35,6 +38,8 @@ public class LTRule<E>{
 		connectionValues = new ArrayList<Double>();
 		for(int i=0; i< num;i++)
 			connectionValues.add(0.0);
+		// set the existing value for it 
+		connectionValues.set(0, 1.0);
 	}
 	
 	public LTRule(E source, E target) {
@@ -47,6 +52,7 @@ public class LTRule<E>{
 		for(int i=0; i< num;i++)
 			connectionValues.add(0.0);
 		
+		connectionValues.set(0, 1.0);
 		sourceNodes.add(source);
 		targetNodes.add(target);
 		
@@ -97,18 +103,34 @@ public class LTRule<E>{
 		return targetNodes;
 	}
 
+	public Double getConnValue(int idx) {
+		return connectionValues.get(idx);
+	}
+	
+	public void setConnValue(int idx, Double value) {
+		connectionValues.set(idx, value);
+	}
+	
 	// if we add test support connection, we should have the connection index
 	// the cardinality of this connection, which is what we can get from the LTConnection
 	// also, if we change the supported value, what to do then?? 
 	// basically it is just the cardinality, we need to adapt it!! 
+	/**
+	 * this method is based on the weight to test the connection if it is well, or not. To achieve this,
+	 * we need to accept the control parameter to get the weights on it, we need to assign values before 
+	 * here it keep pure and only compare it
+	 * @return
+	 */
+	
 	public void testSupportConnection() {
-		if(connectionValues.get(posIdx)> connectionValues.get(negIdx)) 
+		// this is a naive method to test the connection
+		double currentWeight = connectionValues.get(posIdx) + connectionValues.get(extIdx) - connectionValues.get(negIdx);
+		if(currentWeight > ltThreshold) 
 			supportConnection = true;
 		else
 			supportConnection = false;
 		
 	}
-	
 	
 	public boolean isSupportConnection() {
 		return supportConnection;

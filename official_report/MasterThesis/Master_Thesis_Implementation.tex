@@ -176,6 +176,7 @@ The correlation of xor branches is significant if they always happen together. T
 %% connection support, we can say only on number, when it is over one value, 
 After calculation of the frequency of the coexistence of multiple xor branches in positive and negative event log, we get the supported connection of those xor branches, and define the correlation. 
 \begin{mydef}[Correlation of xor branches]
+	\label{def: supported-connection}
 For two pure xor branches, $XORB_X \prec XORB_Y$, the supported connection is given as \[SC(XORB_X,XORB_Y)= F_{pos}(XORB_X, XORB_Y) -F_{neg}(XORB_X, XORB_Y)\]. If $SC(XORB_X,XORB_Y) > lt-threshold$, then we say $XORB_X$ and $XORB_Y$ have significant correlation.
 \end{mydef}
 % here we argue why they must be directly-follows relation
@@ -229,20 +230,58 @@ With this knowledge, we develop Algorithm \ref{alg: detect-lt} to detect the lon
 	add long-term dependency in petri net\;
 	\caption{General steps to add long-term dependency}
 \end{algorithm}
-The subprogram to generate the set of xor branches is in a brutal way.
+The subprogram to generate the set of xor branches is in a brutal way. It traverses all the possible combinations of each xor branches.
 \begin{algorithm}
 	\SetAlgoLined
 	\label{alg: generate-lt-combination}
-	Given two set of xor block $A={XOR_{A1} ,XOR_{A2}, ...XOR_{Am}}$ and $B={XOR_{B1} ,XOR_{Bn}, ...XOR_{Bn}}$ with $A$ is directly-followed by $B$.
-	create a list to store the xor branches
-	
+	Given two set of xor block $A={XOR_{A1} ,XOR_{A2}, ...XOR_{Am}}$ and $B={XOR_{B1} ,XOR_{B2}, ...XOR_{Bn}}$ with $A$ is directly-followed by $B$.\;
+	create a list to store the xor branches pair\;
+	\While{True}{
+		Generate a set of xor branches from A\;
+		  $B_A={XORB_{X1}, XORB_{X2},...XORB_{Xi}}$, where\;
+		  for any $XORB_{Xk}, XORB_{Xl} \in B_A, XORB_{Xk} \neq XORB_{Xl},$
+		  Their LeastCommonAncestor is And. They can happen together.\;
+		Similarily, generate as set of branches from B\;
+		   $B_B={XORB_{Y1}, XORB_{Y2},...XORB_{Yj}}$, where \;
+		  for any $XORB_{Yk}, XORB_{Yl} \in B_A, XORB_{Yk} \neq XORB_{Yl},$ 
+		  their LeastCommonAncestor is And. They can happen together.\;
+	    \If{no such branch pair $(B_A, B_B)$ into list}{
+	    	Put xor branch pair $(B_A, B_B)$ into list\;
+	    } 
+ 	}
 	\caption{Generate combination of xor branches}
 \end{algorithm}
-% after this, we need to ?? 
+%% after this, we need to test when they have the strong correlation and we should put them together;; If we consider the existing part, then the formula comes to ??? 
+With the definition \ref{def: supported-connection}, if the supported connection on the set pair of xor branches is over a threshold,  then this pair has significant correlation. During the implementation, it comes clear that supported connection only on the positive and negative event log is not enough, since the existing model can keep some directly-follows relations about xor branches which is not approved according to positive and negative event logs. Consequently, when we detect this long-term dependency on those xor branches, it is likely that there are no long-term dependency on those xor branches. It results in an unsound model as shown in Fig , since those xor branches can't get fired to consume the tokens generated from the choices before.
+%% insert one unsound model here and point out the situations. 
+\begin{figure}
+	\includegraphics[width=\textwidth]{PN_tc_and_03_01.png}
+	\caption{Unsound Repaired Model at Transition B1.}
+	\label{fig:unsound_example}
+\end{figure}
+To make the generated Petri net sound, we propose a method to incorporate the existing model on the long-term dependency detection. The definition \ref{def: supported-connection} is rephrased into weight. 
+\begin{mydef}[Rephrased Correlation of xor branch] The correlation for two branches is expressed into, 
+	\[Wlt(XORB_X,XORB_Y)= Wlt{ext}(XORB_X, XORB_Y) + Wlt{pos}(XORB_X, XORB_Y) -Wlt{neg}(XORB_X, XORB_Y)\], where 
+	$W_lt{ext}(XORB_X, XORB_Y)= \frac{1}{\#XORB_Y}$, $\#XORB_Y$ means the number of possible  directly-follows xor branch $XORB_X$. \\ \\
+	$Wlt{pos}(XORB_X, XORB_Y)= \frac{F_{pos}(XORB, XORB_Y)}{F_{pos}(XORB, *)}$, \\
+	$Wlt{neg}(XORB_X, XORB_Y)= \frac{F_{neg}(XORB, XORB_Y)}{F_{neg}(XORB, *)}$, \\	
+\end{mydef}
+With this rephrased definition, to make the model sound, we need to prove, if there is a xor branch $XORB_Y$ in the generated process tree, there must exist one long-term dependency related to it, $\exists XORB_X, Wlt(XORB_X,XORB_Y) > lt_threshold$. We formalize this problem. Else, the model can't be sound!!
+\begin{mytheorem}
+Given a process tree, a pair of xor branch set, $(B_A,B_B)$ with $B_A={XORB_{X1}, XORB_{X2},...XORB_{Xm}}, B_B={XORB_{Y1}, XORB_{Y2},...XORB_{Yn}}$, the obligatory part between $B_A$ and $B_B$ is marked M, it is to prove:: \\
+for one xor branch $XORB_Y$, if $W(M, XORB_Yj) > threshold$, \\ then there exists one $XORB_Xi$ with 
+\[Wlt(XORB_Xi, XORB_Yj)> lt_threshold\]. 
+\end{mytheorem}
+When prove by contradiction, we assume that the opposite proposition is true. If it shows that such an assumption leads to a contradiction, then the original proposition is valid. 
+\begin{mytheorem}
+	for one xor branch $XORB_Y$, if $W(M, XORB_Yj) > threshold$, \\ then there exists no one $XORB_Xi$ with 
+	\[Wlt(XORB_Xi, XORB_Yj)<lt_threshold\]. 
+\end{mytheorem}
+After trying, I can't prove its validity. So I don't know if I should continue this way, or not.. so what to do next ??
 
 \subsection{Add long-term dependency on Petri net}
-After detecting long-term dependency on xor branches from process tree, silent transitions and extra places are added to express those dependency on Petri net. Given, the basic idea is to add places after $XORB_X$ and places before $XORB_Y$, then connect the places by silent transition. Due to the structure of xor branches, situations differ, as listed in the Algorithm \ref{alg: Adding method}.  %% some simple examples are given to address those problem
-\begin{algorithm}
+After detecting long-term dependency on xor branches from process tree, silent transitions and extra places are added to express those dependency on Petri net. Given, the basic idea is to add places after $XORB_X$ and places before $XORB_Y$, then connect the places by silent transition. Due to the structure of xor branches, situations differ, as listed in the Algorithm \ref{alg: Adding method}.  
+\begin{algorithm}[!ht]
 	\SetAlgoLined
 	$XORB_Y$ is dependent on $XORB_X$\;
 	\If{$XORB_X$ is leaf node}{
@@ -272,6 +311,7 @@ After detecting long-term dependency on xor branches from process tree, silent t
 	\caption{Add long-term dependency between pure xor branch}
 	\label{alg: Adding method}
 \end{algorithm}
+%% some simple examples are given to address those problem
 
 \pagebreak
 \bibliography{bibtex2ref.bib}

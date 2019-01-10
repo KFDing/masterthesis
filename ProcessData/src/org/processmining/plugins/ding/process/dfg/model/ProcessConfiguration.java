@@ -38,7 +38,9 @@ public class ProcessConfiguration extends Configuration{
 	public static final String PLACE_PRE_PREFIX = "PlaceBefore";
 	public static final String TRANSITION_POST_PREFIX = "TransitionAfter";
 	public static final String TRANSITION_PRE_PREFIX = "TransitionBefore";
-	
+	// the threshold to keep the dfg working
+	public static double DFG_THRESHOLD = 0.1;
+	public static double LT_THRESHOLD = DFG_THRESHOLD*2;
 	
 	public enum ViewType {
 		ProcessTree, PetriNet, PetriNetWithLTDependency

@@ -118,9 +118,11 @@ public class NewLTDetector {
 						targetCluster = childrenCluster.get(i);
 						pair = generator.findClusterPair(sourceCluster, targetCluster);
 						// we need to reset the pnNodeMap and ruleSet
-						adder.initializeAdder();
-						adder.addLTOnPair(pair);
-						adder.connectSourceWithTarget();
+						if(pair!=null) {
+							adder.initializeAdder();
+							adder.addLTOnPair(pair);
+							adder.connectSourceWithTarget();
+						}
 						sourceCluster = targetCluster;
 						i++;
 					}
@@ -143,19 +145,73 @@ public class NewLTDetector {
 				fillLTConnectionFreq(var, conn);
 			}
 		}
+		// we need one step to change the freq into the weight situations.. So we need to change it here
+		// do it in the adaptValue steps!! 
 	}
 
 	public void  adaptConnectionValue(Set<LTRule<XORCluster<ProcessTreeElement>>> connSet, ControlParameters parameters) {
+		// first to set the weight on connection
+		// if we create a hashMap, and then find all with same target, then it solved the problem
+		Map<String, List<LTRule<XORCluster<ProcessTreeElement>>>> connGroup = new HashMap();
+		for(LTRule<XORCluster<ProcessTreeElement>>  conn: connSet) {
+			// get source String name 
+			String sourceName = "";
+			for(XORCluster<ProcessTreeElement> source: conn.getSources()) {
+				sourceName += source.getLabel();
+			}
+			
+			if(!connGroup.containsKey(sourceName)) {
+				List<LTRule<XORCluster<ProcessTreeElement>>> tmpConnList = new ArrayList<LTRule<XORCluster<ProcessTreeElement>>>();
+				tmpConnList.add(conn);
+				connGroup.put(sourceName, tmpConnList);
+			}else {
+				connGroup.get(sourceName).add(conn);
+			}
+		}
+		
+		// after getting the connGroup, now create the weight for each connSet
+		for(String keyName : connGroup.keySet()) {
+			List<LTRule<XORCluster<ProcessTreeElement>>> tmpConnList = connGroup.get(keyName);
+			// get the weight of them, existing, pos and neg.. into 
+			List<Double> groupSum = getGroupWeight(tmpConnList); ; // new ArrayList<>();
+			// existing weight, because we have all conn, so we can have all branches after this
+			// visit each tmpConnList and then assign the values on it 
+			for(LTRule<XORCluster<ProcessTreeElement>> conn: tmpConnList) {
+				for(int i=0;i<ProcessConfiguration.LT_IDX_NUM;i++) 
+					if(groupSum.get(i)>0)
+						conn.setConnValue(i, conn.getConnValue(i)/ groupSum.get(i));
+					else {
+						conn.setConnValue(i, 0.0);
+					}
+			}
+		}
+		
+		// then adapt the weight on it 
 		// we adpat all the concrete connection, and check its connection 
 		for(LTRule<XORCluster<ProcessTreeElement>>  conn: connSet) {
-			
+			// one to add the control parameter effect
+			conn.adaptValue(ProcessConfiguration.LT_EXISTING_IDX, parameters.getExistWeight());
 			conn.adaptValue(ProcessConfiguration.LT_POS_IDX, parameters.getPosWeight());
 			conn.adaptValue(ProcessConfiguration.LT_NEG_IDX, parameters.getNegWeight());	
 		}
-		
 	}
 	
 	
+	private List<Double> getGroupWeight(List<LTRule<XORCluster<ProcessTreeElement>>> tmpConnList) {
+		// TODO 
+		List<Double> sums = new ArrayList<>();
+		for(int i=0;i<ProcessConfiguration.LT_IDX_NUM;i++)
+			sums.add(0.0);
+		
+		for(LTRule<XORCluster<ProcessTreeElement>> conn: tmpConnList) {
+			for(int i=0;i<ProcessConfiguration.LT_IDX_NUM;i++)
+				sums.set(i, sums.get(i) + conn.getConnValue(i));
+			
+		}
+		return sums;
+	}
+
+
 	// we need one method to test if clusterpair has long-term dependency
 	// if we need to make all the pair list to go and then we find out the xor pair is complete
 	public List<XORClusterPair<ProcessTreeElement>> detectXORClusterLTDependency(List<XORClusterPair<ProcessTreeElement>> clusterPairs){
@@ -194,8 +250,6 @@ public class NewLTDetector {
 				
 				counts.set(1, (double) var.getPosNum());
 				counts.set(2, (double) var.getNegNum());
-				counts.set(ProcessConfiguration.LT_POS_IDX, (double) var.getPosNum());
-				counts.set(ProcessConfiguration.LT_NEG_IDX, (double) var.getNegNum());
 				
 				conn.addConnectionValues(counts);
 			}
