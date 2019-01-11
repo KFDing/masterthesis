@@ -56,4 +56,6 @@ public class ProcessConfiguration extends Configuration{
 	public static String ILP = "ILP";
 	
 	
+	public enum ActionType{AddLTOnPair, RemoveLTOnPair};
+	
 }

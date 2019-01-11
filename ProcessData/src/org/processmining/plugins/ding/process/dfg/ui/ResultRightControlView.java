@@ -51,6 +51,8 @@ public class ResultRightControlView extends JPanel {
 	JRadioButton pnltButton;
 	
 	JButton submit_button;
+	
+	AddPairPanel addPairPanel;
 	protected Color COLOR_BG = new Color(60, 60, 60);
 	protected Color COLOR_BG2 = new Color(120, 120, 120);
 	protected Color COLOR_FG = new Color(30, 30, 30);
@@ -270,11 +272,13 @@ public class ResultRightControlView extends JPanel {
         
         
         // here we need a panel to choose the xor block for adding lt-dependency. 
-        // I hope I have a similar panel, so I can copy it ,, check the process tree panel..
+        addPairPanel = new AddPairPanel();
+        // from addpairPanel
         
         this.add(weightPanel, new Float(50));
-        this.add(buttonPane, new Float(10));
-        this.add(Box.createRigidArea(new Dimension(50, 100)));
+        this.add(buttonPane, new Float(5));
+        this.add(addPairPanel,new Float(40));
+        this.add(Box.createRigidArea(new Dimension(50, 10)));
 	}
 	
 	public ControlParameters getParameters() {
@@ -288,6 +292,10 @@ public class ResultRightControlView extends JPanel {
 	
 	public JButton getSubmitButton() {
 		return submit_button;
+	}
+	
+	public AddPairPanel getAddPairPanel() {
+		return addPairPanel;
 	}
 
 	// create the Slider and JLabel together as one component 

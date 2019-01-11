@@ -62,7 +62,6 @@ public class XORClusterPair<T> {
 		initialize();
 	}
 	
-	
 	/**
 	 * this initialize is used to get the branchPair from source and target cluster
 	 * but when the sBranch and tBranch changes its form, and with xor, we need to take care of this
@@ -120,7 +119,6 @@ public class XORClusterPair<T> {
 					tclusterList.addAll(targetXORCluster.getChildrenCluster());
 				}
 				
-				// tclusterList.addAll(targetXORCluster.getBeginXORList());
 			}
 			
 			// here to use the sclusterList and tClusterList to create new branch pair

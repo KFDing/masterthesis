@@ -1,64 +1,31 @@
-package org.ding.trials.gui;
+package org.processmining.plugins.ding.process.dfg.ui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import java.awt.GridBagLayout;
-import javax.swing.JRadioButton;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import javax.swing.JLabel;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JButton;
-import javax.swing.Box;
-import java.awt.SystemColor;
-import java.awt.Color;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 
-public class AddPair {
-
-	private JFrame frame;
+public class AddPairPanel extends JPanel {
 	JPanel choosePanel;
 	/**
-	 * Launch the application.
+	 * Create the panel.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AddPair window = new AddPair();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the application.
-	 */
-	public AddPair() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 691, 507);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public AddPairPanel() {
+		this.setBounds(100, 100, 691, 507);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		frame.getContentPane().setLayout(gridBagLayout);
+		this.setLayout(gridBagLayout);
 		
 		JRadioButton addAllBtn = new JRadioButton("Add All In Order");
 		addAllBtn.setSelected(true);
@@ -66,9 +33,9 @@ public class AddPair {
 		gbc_addAllBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_addAllBtn.gridx = 0;
 		gbc_addAllBtn.gridy = 0;
-		frame.getContentPane().add(addAllBtn, gbc_addAllBtn);
+		this.add(addAllBtn, gbc_addAllBtn);
 		
-		JRadioButton chooseBtn = new JRadioButton("Add XOR Pair By Choice");
+		final JRadioButton chooseBtn = new JRadioButton("Add XOR Pair By Choice");
 		chooseBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				// if this is selected, then we show the next Component, 
@@ -84,7 +51,7 @@ public class AddPair {
 		gbc_chooseBtn.insets = new Insets(0, 0, 5, 0);
 		gbc_chooseBtn.gridx = 1;
 		gbc_chooseBtn.gridy = 0;
-		frame.getContentPane().add(chooseBtn, gbc_chooseBtn);
+		this.add(chooseBtn, gbc_chooseBtn);
 		
 		choosePanel = new JPanel();
 		choosePanel.setBorder(new TitledBorder(null, "Choose XOR Pair To Add Or Remove", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -93,7 +60,7 @@ public class AddPair {
 		gbc_choosePanel.gridwidth = 2;
 		gbc_choosePanel.gridx = 0;
 		gbc_choosePanel.gridy = 1;
-		frame.getContentPane().add(choosePanel, gbc_choosePanel);
+		this.add(choosePanel, gbc_choosePanel);
 		GridBagLayout gbl_choosePanel = new GridBagLayout();
 		gbl_choosePanel.columnWidths = new int[]{0, 0, 0};
 		gbl_choosePanel.rowHeights = new int[]{0, 37, 0};
@@ -183,6 +150,19 @@ public class AddPair {
 				// it means that each pair should store its places and transitions..
 				// or we just mark the source or the target and then delete them from the 
 				// map we have, yes, it seems a better way, so we don't need to be so solid
+				
+				// how to pass data?? We need to communicate with the main View, so we need to ?? 
+				// we have data as one parameter, and then return data also as a parameter, here, 
+				// will the panel change?? Acutally no!! the structure keeps the same, and that's all.
+				// we will also see the list shoudl be the name of choosing items... 
+				// so they just pass two list of xor block names:: 
+				// source list and target list :: 
+				// Also, we need to have the level of them, and the mark, if they are chosen or not...
+				// A special data structure here?? Right ?? 
+				// if not, we need to pass the list of xorClusterList, 
+				// in this way, it saves the space, but the computation may increase.. But its ok, I would say..
+				
+				
 			}
 		});
 		GridBagConstraints gbc_rmPairBtn = new GridBagConstraints();

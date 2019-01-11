@@ -28,7 +28,7 @@ public class NewXORPairGenerator<T> {
 	List<XORClusterPair<T>> clusterPairList;
 	
 	List<XORCluster<T>> clusterList;
-	Set<LTRule<XORCluster<T>>> connList;
+	List<LTRule<XORCluster<T>>> connList;
 	
 	List<XORCluster<T>> branchList;
 	ProcessTree tree;
@@ -39,14 +39,15 @@ public class NewXORPairGenerator<T> {
 	// 1. first to check all the nodes of process tree, and find the nodes which is the xor 
 	// 2. then generate all the xor ancestors
 	// 3. create xor cluster with all we need to do.. 
+	List<XORCluster<T>> cpList;
 	
-	
-	public void generatePairs(ProcessTree pTree) {
+	public void initialize(ProcessTree pTree) {
 		
 		tree = pTree;
-	    clusterPairList = new ArrayList<XORClusterPair<T>>();
+	    
 		clusterList =  new ArrayList<XORCluster<T>>();
-		connList =  new HashSet<LTRule<XORCluster<T>>>();
+		connList =  new ArrayList<LTRule<XORCluster<T>>>();
+		cpList = new ArrayList<XORCluster<T>>();
 		// do DFS to add pair into the pairs, we also need one stack to record its current state
 		Set<Node> xorSet = getAllXORs(tree);
 		
@@ -57,14 +58,12 @@ public class NewXORPairGenerator<T> {
 		
 		Set<Node> aSet = getAllXORAncestors(xorSet);
 
-		
 		buildCluster(tree.getRoot(), aSet, false);
-		buildClusterPair(tree.getRoot());
-		
+		buildCPList(tree.getRoot());
 	}
 
-	
-	private void buildClusterPair(Node node) {
+	private static int level = 0;
+	private void buildCPList(Node node) {
 		// TODO Auto-generated method stub
 		XORCluster<T> cluster = getCluster(node);
 		
@@ -74,7 +73,7 @@ public class NewXORPairGenerator<T> {
 			for(XORCluster<T> child : childrenCluster) {
 				// still not good effect... Nanan, because one level missed it
 				if(!child.isPairAvailable()) {
-					buildClusterPair((Node) child.getKeyNode());
+					buildCPList((Node) child.getKeyNode());
 				}
 				
 			}
@@ -84,35 +83,89 @@ public class NewXORPairGenerator<T> {
 				if(cluster.getChildrenCluster().size() < 2) {
 					System.out.println("too few xor in sequence to connect it");
 				}else {
-					XORCluster<T> sourceCluster, targetCluster;
-					sourceCluster = childrenCluster.get(0);
-					int i=1;
+					XORCluster<T> tmpCluster ;
+					int i=0;
 					// if there is only one, then what to do ??? we need to keep actually the last node to the next one!!!
 					while(i< childrenCluster.size()) {
-						targetCluster = childrenCluster.get(i);
+						tmpCluster = childrenCluster.get(i);
+						// this is left to the choices later, we don't build all pairs in order at once
+						tmpCluster.setLevel(level);
+						// 
+						cpList.add(tmpCluster);
 						
-						clusterPairList.add(createClusterXORPair(sourceCluster, targetCluster));
-						
-						sourceCluster = targetCluster;
 						i++;
 					}
+					// we only use level in seq that can be combined as pair.. In this order, actually, we have the order of oxor block
+					level++;
 				}
 			}
 			cluster.setPairAvailable(true);
+			
 		}
 	}
+	
+	// we need to check if the pair is valid to build or not...
+	// if they have the same level, // as for if they are used before dependent on the cpList, but not here!!!
+	public boolean checkPairValid(XORCluster<T> source, XORCluster<T> target) {
+		if(source.getLevel() == target.getLevel())
+			if(findClusterIndex(source) < findClusterIndex(target)) {
+				return true;
+			}
+			
+		return false;
+	}
+	
+	private int findClusterIndex(XORCluster<T> source) {
+		// TODO Auto-generated method stub
+		int idx=0;
+		for(XORCluster<T> cluster : cpList) {
+			if(cluster.equals(source))
+				return idx;
+			else
+				idx++;
+		}
+		return -1;
+	}
 
+	// now we have a method to generate a pair list in order, 
+	// we unify the parts to generate the data here... Firstly, we have cpList and we know the order of them
+	// then we check the level of them and then generate the pair here.. That's all
+	public List<XORClusterPair<T>> buildAllPairInOrder(){
+		// after getting cpList, it is sorted in  Depth-first visited to have order.. 
+		// to generate pair, we visit the cpList until the level is not the same, 
+		// until we visit all pair
+		clusterPairList = new ArrayList<XORClusterPair<T>>();
+		XORCluster<T> source, target;
+		int idx = 0;
+		int tmpLevel = 0;
+		while(idx< cpList.size()-1) {
+			source = cpList.get(idx);
+			target = cpList.get(idx+1);
+			if(checkPairValid(source, target)) {
+				// create pair
+				clusterPairList.add(createClusterXORPair(source, target));
+			}else {
+				// different level, they can combine together
+				tmpLevel = target.getLevel();
+			}
+			
+			idx++;	
+		}
+		return clusterPairList;
+	}
 	
 	private XORClusterPair<T> createClusterXORPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
 		// here are only the xor cluster, we need only to create the branch cluster into it 
-		
 		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster, false);
 		connList.addAll(pair.getConnection());
-		
 		return pair;
 	}
 
-	public Set<LTRule<XORCluster<T>>> getAllLTConnection() {
+	public List<XORCluster<T>> getCPList(){
+		return cpList;
+	}
+	
+	public List<LTRule<XORCluster<T>>> getAllLTConnection() {
 		return connList;
 	}
 	
@@ -248,6 +301,49 @@ public class NewXORPairGenerator<T> {
 		return null;
 	}
 	
+	// here we need to create a list available to as the source
+	public List<XORCluster<T>> getAddAvailableSources(){
+		List<XORCluster<T>> sourceList = new ArrayList<XORCluster<T>>();
+		for(XORCluster<T> cluster : cpList) {
+			if(!cluster.isAsSource()) 
+				sourceList.add(cluster);
+		}
+		return sourceList;
+	}
+	
+	// get the list availabel for the target given the source
+	public List<XORCluster<T>> getAddAvailableTargets(XORCluster<T> source){
+		List<XORCluster<T>> targetList = new ArrayList<XORCluster<T>>();
+		for(XORCluster<T> cluster : cpList) {
+			if(!cluster.isAsTarget() && checkPairValid(source, cluster))
+				targetList.add(cluster);
+		}
+		return targetList;
+	}
+	
+	// if they have the availabel source or target to remove it 
+	// here we need to create a list available to as the source
+	// but if we have the same
+	public List<XORCluster<T>> getRMAvailableSources(){
+		List<XORCluster<T>> sourceList = new ArrayList<XORCluster<T>>();
+		// check the pairList and then put the source here,
+		for(XORClusterPair<T> pair : clusterPairList) {
+			sourceList.add(pair.getSourceXORCluster());
+		}
+		return sourceList;
+	}
+	
+	// get the list availabel for the target given the source
+	public List<XORCluster<T>> getRMAvailableTargets(XORCluster<T> source){
+		List<XORCluster<T>> targetList = new ArrayList<XORCluster<T>>();
+		for(XORClusterPair<T> pair : clusterPairList) {
+			if(source.equals(pair.getSourceXORCluster())) {
+				targetList.add(pair.getTargetXORCluster());
+				return targetList;
+			}
+		}
+		return targetList;
+	}
 	
 	
 }

@@ -3,6 +3,8 @@ package org.processmining.plugins.ding.process.dfg.ui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -27,9 +29,14 @@ import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.dialogs.IMdMinin
 import org.processmining.plugins.ding.process.dfg.model.ControlParameters;
 import org.processmining.plugins.ding.process.dfg.model.DfMatrix;
 import org.processmining.plugins.ding.process.dfg.model.DfgProcessResult;
+import org.processmining.plugins.ding.process.dfg.model.LTRule;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ViewType;
+import org.processmining.plugins.ding.process.dfg.model.XORCluster;
+import org.processmining.plugins.ding.process.dfg.model.XORClusterPair;
 import org.processmining.plugins.ding.process.dfg.train.NewLTDetector;
+import org.processmining.plugins.ding.process.dfg.transform.NewXORPairGenerator;
 import org.processmining.processtree.ProcessTree;
+import org.processmining.processtree.ProcessTreeElement;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet.InvalidProcessTreeException;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet.NotYetImplementedException;
@@ -72,6 +79,12 @@ class ResultMainView extends JPanel{
 	ProcessTree pTree = null;
 	AcceptingPetriNet anet = null;
 	AcceptingPetriNet manet = null;
+	
+	// here we put the generator here to initialize the values at first time, when we have it 
+	// then not again!!
+	NewXORPairGenerator<ProcessTreeElement> generator = null;
+	NewLTDetector detector =null;// = new NewLTDetector(pTree, log);
+	
 	
 	ProvidedObjectID ltnetId = null;
 	ProvidedObjectID pTreeId = null;
@@ -122,6 +135,16 @@ class ResultMainView extends JPanel{
 					}          
 			    });
 		
+		// we get control from exposing the JComponent from controlView
+		// if we also expose the addPairPanel Part, then we can have the remove and add performance here?? 
+		// The addPair is only used to show the result, that's all... 
+		AddPairPanel addPairPanel = rightView.getAddPairPanel();
+		// if we expose its structure here, actually, we can get the parameter directly from it..
+		// should we do it ?? Or not ?? We need to decide it maybe here
+		// at first, add all is chosen, but the action can be added here directly.
+		// after it get some movements from addPairPanel, then we need to do it ??
+		
+		
 		this.add(this.leftView, new Float(80));
 		this.add(this.rightView, new Float(20));
 	} 
@@ -165,7 +188,9 @@ class ResultMainView extends JPanel{
 				context.getProvidedObjectManager().changeProvidedObjectObject(markingId, anet.getInitialMarking());
 			}
 		}else if(parameters.getType() == ViewType.PetriNetWithLTDependency) {
+			
 			showPetriNetWithLT();
+			
 			if(ltnetId == null) {
 				ltnetId =context.getProvidedObjectManager().createProvidedObject("Petri net with LT", manet.getNet(), Petrinet.class, context);
 				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking with LT", manet.getInitialMarking(), Marking.class, context);
@@ -191,36 +216,63 @@ class ResultMainView extends JPanel{
 			DfgMiningParameters ptParas = getProcessTreParameters();
 			pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
 
-			// the steps to change is : 
-			/* Initial Process Tree generated
-			 * Check have anet and manet
-			 * Change threshold for a new process tree
-			 * now we want to have the new anet and manet for it
-			 *   ++ we should have each update value for each of them, and then update them?? Somehow?? 
-			 *   ++ because if we change the 
-			 *   the easy way to do it --- generate it each time
-			 */
-			// here we need to use the customized program to add lt dependency on it
-			// LTDependencyDetector detector = new LTDependencyDetector(pTree, log);
-			NewLTDetector detector = new NewLTDetector(pTree, log);
-			PetrinetWithMarkings mnet = detector.buildPetrinetWithLT(log, pTree, parameters);
-			// PetrinetWithMarkings mnet = LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters );
-			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
-
 		}else {
 			if(pTree == null) {
 				DfgMiningParameters ptParas = getProcessTreParameters();
 				pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
 			}	
-			// LTDependencyDetector detector = new LTDependencyDetector(pTree, log);
-			NewLTDetector detector = new NewLTDetector(pTree, log);
-			PetrinetWithMarkings mnet = detector.buildPetrinetWithLT(log, pTree, parameters);//LTDependencyDetector.buildPetrinetWithLT(log, pTree, parameters);
-			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
 			
-		}// we need to set another parameter to store it 
+		}
+		// let it return the acceptionNet, so we don't need to struggle about it here
+		createPNWithLT();
+		manet = detector.getAcceptionPN();
 		
 		leftView.drawResult(context, manet.getNet());
 		leftView.updateUI();
+	}
+	
+	private void createPNWithLT() {
+
+		initialize();
+		// in other mode, we need to define it another function
+		List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
+		List<LTRule<XORCluster<ProcessTreeElement>>> connSet = generator.getAllLTConnection();
+		// generate all the pairs here 
+		detector.addLTOnPairList(clusterPairs, connSet);
+		
+	}
+	
+	// here, given petri net with lt already, the chosen pair to add there already in another action there, 
+	// but we need to adapt the view here
+	private void addPairLTOnPN(XORClusterPair<ProcessTreeElement> pair) {
+		List<XORClusterPair<ProcessTreeElement>> clusterPairs = new ArrayList<>();
+		clusterPairs.add(pair);
+		List<LTRule<XORCluster<ProcessTreeElement>>> connSet = pair.getConnection();
+		
+		detector.addLTOnPairList(clusterPairs, connSet);
+		manet = detector.getAcceptionPN();
+		
+		leftView.drawResult(context, manet.getNet());
+		leftView.updateUI();
+		
+	}
+	
+	// here, given petri net with lt already, the chosen pair to add
+	private void rmPairLTOnPN(PetrinetWithMarkings mnet, XORClusterPair<ProcessTreeElement> pair) {
+		detector.rmLTOnSinglePair(pair);
+		manet = detector.getAcceptionPN();
+		
+		leftView.drawResult(context, manet.getNet());
+		leftView.updateUI();
+	}
+	
+	private void initialize() {
+		
+		generator = new NewXORPairGenerator<ProcessTreeElement>();
+		generator.initialize(pTree);
+		
+		detector = new NewLTDetector(pTree, log, parameters);
+		
 	}
 
 	private boolean isWeightUpdated(ControlParameters para, ControlParameters newPara) {

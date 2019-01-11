@@ -84,7 +84,7 @@ public class LTDependencyDetector {
 		}
 		
 		generator = new NewXORPairGenerator<ProcessTreeElement>();
-	    generator.generatePairs(tree);
+	    generator.initialize(tree);
 	    
 	    List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
 	    if(clusterPairs.isEmpty()) {

@@ -5,16 +5,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
+import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
+import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
-import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.plugins.ding.preprocess.util.Configuration;
 import org.processmining.plugins.ding.preprocess.util.EventLogUtilities;
 import org.processmining.plugins.ding.preprocess.util.LabeledTraceVariant;
@@ -23,7 +24,6 @@ import org.processmining.plugins.ding.process.dfg.model.LTRule;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration;
 import org.processmining.plugins.ding.process.dfg.model.XORCluster;
 import org.processmining.plugins.ding.process.dfg.model.XORClusterPair;
-import org.processmining.plugins.ding.process.dfg.transform.NewXORPairGenerator;
 import org.processmining.processtree.Node;
 import org.processmining.processtree.ProcessTree;
 import org.processmining.processtree.ProcessTreeElement;
@@ -35,109 +35,145 @@ import org.processmining.processtree.conversion.ProcessTree2Petrinet.PetrinetWit
 public class NewLTDetector {
 	ProcessTree tree;
 	XLog log;
-	Map<Node, XEventClass> tlmaps;
-	Map<Node, Transition> tnMap;
-	Petrinet net;
-	NewXORPairGenerator<ProcessTreeElement> generator;
-	Map<String, PetrinetNode> pnNodeMap ;
+	ControlParameters parameters;
+	AcceptingPetriNet manet;
 	
-	List<LTRule<PetrinetNode>> ruleSet;
+	Map<Node, XEventClass> tlmaps;
 	AddLT2Net adder;
-	public NewLTDetector(ProcessTree pTree, XLog xlog) {
+	
+	public NewLTDetector(ProcessTree pTree, XLog xlog, ControlParameters parameters) {
 		// there is no implemented way to clone it
 		tree = pTree;
 		log = xlog;
-		
-	}
-	
-	
-	public PetrinetWithMarkings buildPetrinetWithLT(XLog log, ProcessTree tree, ControlParameters parameters) {
+		this.parameters = parameters;
 		
 		tlmaps = getProcessTree2EventMap(log, tree , null);
 		
-		generator = new NewXORPairGenerator<ProcessTreeElement>();
-	    generator.generatePairs(tree);
-	    
-	    List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
-	    Set<LTRule<XORCluster<ProcessTreeElement>>> connSet = generator.getAllLTConnection();
-	  
+		@SuppressWarnings("deprecation")
+		PetrinetWithMarkings mnet;
+		try {
+			mnet = ProcessTree2Petrinet.convert(tree, true);
+			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
+			
+		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    	Petrinet net = manet.getNet();
+		adder = new AddLT2Net(net, tree);
+	}
+	
+	// if sth changes, we need to create a new object of it, yes, a new object of it
+	
+	public void addLTOnPairList(List<XORClusterPair<ProcessTreeElement>> clusterPairs, 
+			List<LTRule<XORCluster<ProcessTreeElement>>> connSet) {
+		
 	    initializeConnection(connSet);
 	    adaptConnectionValue(connSet, parameters);
 	    
 	    // detector.detectPairWithLTDependency(pairs, parameters);
 	    detectXORClusterLTDependency(clusterPairs);
-	    try {
-	    	@SuppressWarnings("deprecation")
-			PetrinetWithMarkings mnet = ProcessTree2Petrinet.convert(tree, true);
-			net = mnet.petrinet;
-			
-			
-			pnNodeMap = new HashMap<String, PetrinetNode>();
-			ruleSet = new ArrayList<LTRule<PetrinetNode>>();
-			adder = new AddLT2Net(net, tree);
-			// after we get the
-			addLTOnNet(tree.getRoot());
-		    return mnet;
-		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
-			System.out.println("The method transfering the process tree to net is old");
-			e.printStackTrace();
+	    
+	    for(XORClusterPair<ProcessTreeElement> pair: clusterPairs) {
+			addLTOnSinglePair(pair);
 		}
-	    return null;  
-	}
-
-	// after we checked all the pair list, we need to add the dependency on them
-	// nested or not nestes, parallel, or others, but do we need to visit pair again, or not ??
-	public void addLTOnNet(Node node) {
-		// we need to get the cluster with respect to this node
-		XORCluster<ProcessTreeElement> cluster = generator.getCluster(node);
 		
-		if(cluster!=null) {
-			
-			List<XORCluster<ProcessTreeElement>> childrenCluster = cluster.getChildrenCluster();
-			for(XORCluster<ProcessTreeElement> child : childrenCluster) {
-				// we need to make sure if the child is pure branch, then we don't need to go into it 
-				// the assignment of it should be done before
-				if(!child.isLtAvailable()) {
-					addLTOnNet((Node)child.getKeyNode());
-				}
+	}
+	
+	// if we want to add only one pair on petri net, or remove one from petri net, what to do ?
+	public void addLTOnSinglePair(XORClusterPair<ProcessTreeElement> pair) {
+		// but after this, we need to change the as source and as target setting here 
+		pair.getSourceXORCluster().setAsSource(true);
+		pair.getTargetXORCluster().setAsTarget(true);
+		
+		adder.initializeAdder();
+		adder.addLTOnPair(pair);
+		adder.connectSourceWithTarget();
+	}
+	
+	// if we want to remove one pair from petri net
+	public void rmLTOnSinglePair(XORClusterPair<ProcessTreeElement> pair) {
+		// but after this, we need to change the as source and as target setting here 
+		// delete the places and silent transitions which relates to this pair
+		// quite interesting, because remove is not directly after add, so how we could store its info?? 
+		
+		// is it possible that we look for any node with name from source and target
+		// we have the connSet for using, get the source and target things, it helps, I think!! 
+		// source with after, then we delete 
+		
+		// target with before, then delete it, but also the node there..
+		// based on the net and remove it
+		
+		// 1. get the sourceNode at first from this pair
+		XORCluster<ProcessTreeElement> source, target;
+		source = pair.getSourceXORCluster();
+		target = pair.getTargetXORCluster();
+		
+		List<ProcessTreeElement> endNodeList = source.getEndNodeList();
+		
+		Petrinet net = manet.getNet();
+		for(PetrinetNode node: net.getNodes()) {
+			if(containPlace(node, endNodeList, true)) {
+				// if contain place in endNodeList
+				net.removeNode(node);
 			}
-			// after that we come to the small unit of xor, but how about the seq, parallel, the thing else
-			// what to deal them ?? but whatever, we need to find the connection with the nodes in them!! 
 			
-			// if only leaf node is available, now, we need to check its begin and end node list
-			if(cluster.isSeqCluster()) {
-				// here we need to check the xor size in this cluster if it has no xor cluster, we don't need to consider it
-				if(cluster.getChildrenCluster().size() < 2) {
-					System.out.println("too few xor in sequence to connect it");
-				}else {
-					XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
-					sourceCluster = childrenCluster.get(0);
-					int i=1;
-					XORClusterPair<ProcessTreeElement> pair;
-					while(i< childrenCluster.size()) {
-						targetCluster = childrenCluster.get(i);
-						pair = generator.findClusterPair(sourceCluster, targetCluster);
-						// we need to reset the pnNodeMap and ruleSet
-						if(pair!=null) {
-							adder.initializeAdder();
-							adder.addLTOnPair(pair);
-							adder.connectSourceWithTarget();
-						}
-						sourceCluster = targetCluster;
-						i++;
-					}
-					
-				}
-			}
-			cluster.setLtAvailable(true);
 		}
+		
+		List<ProcessTreeElement> beginNodeList = source.getBeginNodeList();
+		for(PetrinetNode node: net.getNodes()) {
+			if(containPlace(node, beginNodeList, false)) {
+				// if contain place in endNodeList
+				net.removeNode(node);
+			}
+		}
+		
+		// now we need to check the arc in the graph, to see if they don't have the inEdge
+		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: net.getEdges()) {
+			if(edge.getSource()!= null && edge.getTarget()!=null){
+				continue;
+			}else {
+				// we need to delete it 
+				net.removeEdge(edge);
+			}
+		}
+		
+		for(PetrinetNode node: net.getNodes()) {
+			if(net.getInEdges(node).isEmpty() || net.getOutEdges(node).isEmpty())
+				System.out.println(node.getLabel());
+		}
+		
+		source.setAsSource(false);
+		target.setAsTarget(false);
+		
 	}
 
+	private boolean containPlace(PetrinetNode pt, List<ProcessTreeElement> nodeList, boolean post) {
+		// TODO if this place is after one the endNodeList, return true
+		String name = pt.getLabel();
+		String prefix;
+		if(post)
+			prefix = ProcessConfiguration.PLACE_POST_PREFIX;
+		else 
+			prefix = ProcessConfiguration.PLACE_PRE_PREFIX;
+		
+		for(ProcessTreeElement node: nodeList) {
+			String nodeName = node.getName();
+			
+			if(name.contains(prefix) && name.contains(nodeName))
+				return true;
+			
+		}
+		return false;
+	}
 
-
-
+	public AcceptingPetriNet getAcceptionPN() {
+		return manet;
+	}
+	
 	// fill the connection with base data from event log 
-	public void initializeConnection(Set<LTRule<XORCluster<ProcessTreeElement>>> connSet) {
+	public void initializeConnection(List<LTRule<XORCluster<ProcessTreeElement>>> connSet) {
 		List<LabeledTraceVariant> variants = EventLogUtilities.getLabeledTraceVariants(log, null);
 		for(LabeledTraceVariant var : variants) {
 			// for each var, we check for each xor pair 
@@ -149,7 +185,7 @@ public class NewLTDetector {
 		// do it in the adaptValue steps!! 
 	}
 
-	public void  adaptConnectionValue(Set<LTRule<XORCluster<ProcessTreeElement>>> connSet, ControlParameters parameters) {
+	public void  adaptConnectionValue(List<LTRule<XORCluster<ProcessTreeElement>>> connSet, ControlParameters parameters) {
 		// first to set the weight on connection
 		// if we create a hashMap, and then find all with same target, then it solved the problem
 		Map<String, List<LTRule<XORCluster<ProcessTreeElement>>>> connGroup = new HashMap();
@@ -261,6 +297,7 @@ public class NewLTDetector {
 		return traceVariant.indexOf(tlmaps.get(keyNode));
 	}
 
+	
 	private Map<Node, XEventClass> getProcessTree2EventMap(XLog xLog, ProcessTree pTree, XEventClassifier classifier) {
 		// TODO generate the transfer from process tree to event classes in log
 		Map<Node, XEventClass> map = new HashMap<Node, XEventClass>();

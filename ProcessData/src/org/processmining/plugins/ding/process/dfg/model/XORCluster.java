@@ -56,6 +56,11 @@ public class XORCluster<T> {
 	// it is visited, we should go deeper into the pure branch cluster and check for this.
 	private boolean ltAvailable = false; //isPureBranchCluster();
 	
+	// asSource and asTarget is designed to add randomly pair into the model
+	private boolean asSource = false;
+	private boolean asTarget = false;
+	private int level = -1;
+	
 	List<XORCluster<T>> endBranchList ;
 
 	public XORCluster(T key){
@@ -377,5 +382,29 @@ public class XORCluster<T> {
 
 	public void setParent(XORCluster<T> parent) {
 		this.parent = parent;
+	}
+
+	public boolean isAsSource() {
+		return asSource;
+	}
+
+	public void setAsSource(boolean asSource) {
+		this.asSource = asSource;
+	}
+
+	public boolean isAsTarget() {
+		return asTarget;
+	}
+
+	public void setAsTarget(boolean asTarget) {
+		this.asTarget = asTarget;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 }
