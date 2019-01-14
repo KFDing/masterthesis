@@ -2,6 +2,9 @@ package org.processmining.plugins.ding.process.dfg.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 
 /**
  * this class is only for storing the cluster pair with xor block, it means we only
@@ -17,6 +20,8 @@ public class XORClusterPair<T> {
 	XORCluster<T> targetXORCluster;
 	boolean inBranch = false;
 	
+	// one method to store the names of new added petri nodde for this pair
+	Map<String, PetrinetNode> pnNodeMap ;
 
 	// we can create branchClusterPair by using SBranch * TBranch
 	// not add them here, but we need to make sure, it has an end	 
@@ -54,11 +59,14 @@ public class XORClusterPair<T> {
 		this.inBranch = inBranch;
 	}
 	
+	
 	public XORClusterPair(XORCluster<T> source, XORCluster<T> target, boolean inBranch){
 		sourceXORCluster = source;
 		targetXORCluster = target;
 		this.inBranch = inBranch;
-		
+//		
+//		source.setAsSource(true);
+//		target.setAsTarget(true);
 		initialize();
 	}
 	
@@ -250,6 +258,14 @@ public class XORClusterPair<T> {
 		// TODO Auto-generated method stub
 		return connected;
 	}
+
+	public void setPNMap(Map<String, PetrinetNode> pnNodeMap) {
+		// TODO Auto-generated method stub
+		this.pnNodeMap = pnNodeMap;
+	}
 	
+	public Map<String, PetrinetNode> getPNMap() {
+		return pnNodeMap;
+	}
 	
 }

@@ -94,6 +94,8 @@ public class ResultRightControlView extends JPanel {
 				// after we choose delete, we delete places and repaint the graph again
 				if(pnltButton.isSelected()) {
 					parameters.setType(ViewType.PetriNetWithLTDependency);
+					addPairPanel.choosePanel.setEnabled(false);
+					addPairPanel.choosePanel.setVisible(false);
 				}
 			}
 		});
@@ -273,9 +275,9 @@ public class ResultRightControlView extends JPanel {
         
         // here we need a panel to choose the xor block for adding lt-dependency. 
         addPairPanel = new AddPairPanel();
-        // from addpairPanel
         
-        this.add(weightPanel, new Float(50));
+        
+        this.add(weightPanel, new Float(40));
         this.add(buttonPane, new Float(5));
         this.add(addPairPanel,new Float(40));
         this.add(Box.createRigidArea(new Dimension(50, 10)));

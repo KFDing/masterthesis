@@ -14,7 +14,6 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
-import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 import org.processmining.plugins.ding.preprocess.util.Configuration;
 import org.processmining.plugins.ding.preprocess.util.EventLogUtilities;
@@ -90,6 +89,7 @@ public class NewLTDetector {
 		adder.initializeAdder();
 		adder.addLTOnPair(pair);
 		adder.connectSourceWithTarget();
+		pair.setPNMap(adder.pnNodeMap);
 	}
 	
 	// if we want to remove one pair from petri net
@@ -104,49 +104,53 @@ public class NewLTDetector {
 		
 		// target with before, then delete it, but also the node there..
 		// based on the net and remove it
-		
+		// also we have adder with pnNode in it, we need to delete it here
 		// 1. get the sourceNode at first from this pair
 		XORCluster<ProcessTreeElement> source, target;
 		source = pair.getSourceXORCluster();
 		target = pair.getTargetXORCluster();
 		
+		
+		Petrinet net = manet.getNet();
+		// get the addned values nad then pnNodeMap remove them form this
+		for(PetrinetNode node: pair.getPNMap().values())
+			net.removeNode(node);
+		
+		pair.getPNMap().clear();
+		
+		source.setAsSource(false);
+		target.setAsTarget(false);
+		/*
 		List<ProcessTreeElement> endNodeList = source.getEndNodeList();
 		
 		Petrinet net = manet.getNet();
 		for(PetrinetNode node: net.getNodes()) {
 			if(containPlace(node, endNodeList, true)) {
-				// if contain place in endNodeList
+				// how to make it delete it uniquely... 
+				// one condition: endNodeList as a branch, showing there..then we need to 
+				// avoid it.. Then how about adding the generated nodes into the pair
+				// if we delete pair, the ndoes are deleted automatically?? 
+				// we don't need to look for it then... We can do it!! 
 				net.removeNode(node);
+				adder.pnNodeMap.remove(node.getLabel());
 			}
 			
 		}
 		
-		List<ProcessTreeElement> beginNodeList = source.getBeginNodeList();
+		List<ProcessTreeElement> beginNodeList = target.getBeginNodeList();
 		for(PetrinetNode node: net.getNodes()) {
 			if(containPlace(node, beginNodeList, false)) {
 				// if contain place in endNodeList
 				net.removeNode(node);
-			}
-		}
-		
-		// now we need to check the arc in the graph, to see if they don't have the inEdge
-		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: net.getEdges()) {
-			if(edge.getSource()!= null && edge.getTarget()!=null){
-				continue;
-			}else {
-				// we need to delete it 
-				net.removeEdge(edge);
+				adder.pnNodeMap.remove(node.getLabel());
 			}
 		}
 		
 		for(PetrinetNode node: net.getNodes()) {
-			if(net.getInEdges(node).isEmpty() || net.getOutEdges(node).isEmpty())
+			if(adder.pnNodeMap.values().contains(node) &&(net.getInEdges(node).isEmpty() || net.getOutEdges(node).isEmpty()))
 				System.out.println(node.getLabel());
 		}
-		
-		source.setAsSource(false);
-		target.setAsTarget(false);
-		
+		*/
 	}
 
 	private boolean containPlace(PetrinetNode pt, List<ProcessTreeElement> nodeList, boolean post) {
@@ -154,9 +158,9 @@ public class NewLTDetector {
 		String name = pt.getLabel();
 		String prefix;
 		if(post)
-			prefix = ProcessConfiguration.PLACE_POST_PREFIX;
+			prefix = ProcessConfiguration.POST_PREFIX;
 		else 
-			prefix = ProcessConfiguration.PLACE_PRE_PREFIX;
+			prefix = ProcessConfiguration.PRE_PREFIX;
 		
 		for(ProcessTreeElement node: nodeList) {
 			String nodeName = node.getName();

@@ -2,7 +2,6 @@ package org.processmining.plugins.ding.process.dfg.model;
 
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ActionType;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ViewType;
-import org.processmining.processtree.ProcessTreeElement;
 
 /**
  * this class is used to create the control parameters, it includes:
@@ -31,8 +30,8 @@ public class ControlParameters {
 	boolean addAllPair; // default value is true, but can be decided by the addPairPanel
 	// do we need to know the pair information?? 
 	// we could have the pair and then check the information
-	XORCluster<ProcessTreeElement> source;
-	XORCluster<ProcessTreeElement> target;
+	Object source;
+	Object target;
 
 	// but to show the choice what to do then?? we need to pass by using the generate.
 	
@@ -112,19 +111,19 @@ public class ControlParameters {
 		addAllPair = true;
 	}
 	
-	public XORCluster<ProcessTreeElement> getSource() {
+	public Object getSource() {
 		return source;
 	}
 
-	public void setSource(XORCluster<ProcessTreeElement> source) {
+	public void setSource(Object source) {
 		this.source = source;
 	}
 
-	public XORCluster<ProcessTreeElement> getTarget() {
+	public Object getTarget() {
 		return target;
 	}
 
-	public void setTarget(XORCluster<ProcessTreeElement> target) {
+	public void setTarget(Object target) {
 		this.target = target;
 	}
 	

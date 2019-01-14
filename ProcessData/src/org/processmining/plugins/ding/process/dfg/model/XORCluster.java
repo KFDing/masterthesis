@@ -310,6 +310,10 @@ public class XORCluster<T> {
 			for(XORCluster<T> child: childrenCluster) {
 				beginNodeList.addAll(child.getBeginNodeList());
 			}
+		}else if(isXORCluster()) {
+			for(XORCluster<T> child: childrenCluster) {
+				beginNodeList.addAll(child.getBeginNodeList());
+			}
 		}
 		
 		return beginNodeList;
@@ -332,6 +336,10 @@ public class XORCluster<T> {
 		}else if(isSeqCluster()) {
 			endNodeList.addAll(childrenCluster.get(childrenCluster.size() -1).getEndNodeList());
 		}else if(isParallelCluster()) {
+			for(XORCluster<T> child: childrenCluster) {
+				endNodeList.addAll(child.getEndNodeList());
+			}
+		}else if(isXORCluster()) {
 			for(XORCluster<T> child: childrenCluster) {
 				endNodeList.addAll(child.getEndNodeList());
 			}

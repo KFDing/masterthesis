@@ -50,7 +50,6 @@ public class AddLT2Net {
 	ProcessTree tree;
 	Map<Node, Transition> tnMap;
 	Map<String, PetrinetNode> pnNodeMap ;
-	
 	public AddLT2Net(Petrinet net, ProcessTree tree) {
 		this.net = net;
 		this.tree = tree;
@@ -66,7 +65,9 @@ public class AddLT2Net {
 		pnNodeMap.clear();
 	}
 	
+	
     public void addLTOnPair(XORClusterPair<ProcessTreeElement> pair) {
+       
 	   XORCluster<ProcessTreeElement> sourceCluster, targetCluster;
 	   sourceCluster = pair.getSourceXORCluster();
 	   targetCluster = pair.getTargetXORCluster();
@@ -243,6 +244,7 @@ public class AddLT2Net {
 		if(!pnNodeMap.containsKey(keyName)) {
 			placeNode = net.addPlace(keyName);
 			// we need to add the silent transition after it
+			
 			pnNodeMap.put(keyName, placeNode);
 		}else
 			placeNode = (Place) pnNodeMap.get(keyName);
@@ -256,6 +258,7 @@ public class AddLT2Net {
 		if(!pnNodeMap.containsKey(transtionName)) {
 			tTransition = net.addTransition(transtionName);
 			tTransition.setInvisible(true);
+			
 			
 			pnNodeMap.put(transtionName, tTransition);
 		}else {

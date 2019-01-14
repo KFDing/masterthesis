@@ -44,7 +44,7 @@ public class NewXORPairGenerator<T> {
 	public void initialize(ProcessTree pTree) {
 		
 		tree = pTree;
-	    
+		clusterPairList = new ArrayList<XORClusterPair<T>>();
 		clusterList =  new ArrayList<XORCluster<T>>();
 		connList =  new ArrayList<LTRule<XORCluster<T>>>();
 		cpList = new ArrayList<XORCluster<T>>();
@@ -134,7 +134,6 @@ public class NewXORPairGenerator<T> {
 		// after getting cpList, it is sorted in  Depth-first visited to have order.. 
 		// to generate pair, we visit the cpList until the level is not the same, 
 		// until we visit all pair
-		clusterPairList = new ArrayList<XORClusterPair<T>>();
 		XORCluster<T> source, target;
 		int idx = 0;
 		int tmpLevel = 0;
@@ -143,7 +142,7 @@ public class NewXORPairGenerator<T> {
 			target = cpList.get(idx+1);
 			if(checkPairValid(source, target)) {
 				// create pair
-				clusterPairList.add(createClusterXORPair(source, target));
+				createClusterXORPair(source, target);
 			}else {
 				// different level, they can combine together
 				tmpLevel = target.getLevel();
@@ -154,9 +153,13 @@ public class NewXORPairGenerator<T> {
 		return clusterPairList;
 	}
 	
-	private XORClusterPair<T> createClusterXORPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
+	public XORClusterPair<T> createClusterXORPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
 		// here are only the xor cluster, we need only to create the branch cluster into it 
+		// if it doens;t include this pair, then we create, else we just return it 
+		
+		
 		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster, false);
+		clusterPairList.add(pair);
 		connList.addAll(pair.getConnection());
 		return pair;
 	}
@@ -327,8 +330,9 @@ public class NewXORPairGenerator<T> {
 	public List<XORCluster<T>> getRMAvailableSources(){
 		List<XORCluster<T>> sourceList = new ArrayList<XORCluster<T>>();
 		// check the pairList and then put the source here,
-		for(XORClusterPair<T> pair : clusterPairList) {
-			sourceList.add(pair.getSourceXORCluster());
+		for(XORCluster<T> cluster : cpList) {
+			if(cluster.isAsSource()) 
+				sourceList.add(cluster);
 		}
 		return sourceList;
 	}
@@ -343,6 +347,24 @@ public class NewXORPairGenerator<T> {
 			}
 		}
 		return targetList;
+	}
+
+	public void resetSourceTargetMark() {
+		// TODO Auto-generated method stub
+		for(XORCluster<T> cluster : cpList) {
+			cluster.setAsSource(false);
+			cluster.setAsTarget(false);
+		}
+		
+	}
+
+	public XORClusterPair<T> getPairBySource(XORCluster<T> source) {
+		for(XORClusterPair<T> pair : clusterPairList) {
+			if(source.equals(pair.getSourceXORCluster())) {
+				return pair;
+			}
+		}
+		return null;
 	}
 	
 	
