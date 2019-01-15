@@ -8,6 +8,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -147,9 +148,17 @@ class ResultMainView extends JPanel{
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO  after this, we need to show all the PN with LT
-				parameters.setAddAllPair(addPairPanel.addAllBtn.isSelected());
+				rightView.getParameters().setType(ViewType.PetriNetWithLTDependency);
+				rightView.getParameters().setAddAllPair(true);
 				addPairPanel.choosePanel.setEnabled(false);
 				addPairPanel.choosePanel.setVisible(false);
+				
+				try {
+					updateMainView(leftView, rightView.getParameters());
+				} catch (ProvidedObjectDeletedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
         
@@ -160,6 +169,9 @@ class ResultMainView extends JPanel{
 				// I think it is better to put them into one Jpanel
 				if(addPairPanel.chooseBtn.isSelected()) {
 					// so it still shows but different color
+					rightView.getParameters().setType(ViewType.PetriNetWithLTDependency);
+					rightView.getParameters().setAddAllPair(false);
+					
 					addPairPanel.choosePanel.setEnabled(true);
 					addPairPanel.choosePanel.setVisible(true);
 					// at same time, we need to reset the petri net into original
@@ -225,7 +237,6 @@ class ResultMainView extends JPanel{
 				// if it already exists, then we don't add it here.. but we already have checked before we have it 
 				// we only show the availabel xor cluster for pair
 				XORClusterPair<ProcessTreeElement> pair = generator.createClusterXORPair(source, target);
-				
 				addPairLTOnPN(pair);
 			}
 		});
@@ -237,14 +248,15 @@ class ResultMainView extends JPanel{
 				parameters.setAction(ActionType.RemoveLTOnPair);
 				int sourceIdx = addPairPanel.getRMSourceIndex();
 				XORCluster<ProcessTreeElement> source =  generator.getRMAvailableSources().get(sourceIdx);
-				// XORCluster<ProcessTreeElement> target = generator.getRMAvailableTargets(source).get(targetIdx);
 				XORClusterPair<ProcessTreeElement> pair = generator.getPairBySource(source);
-				
+//				// remove it form the clusterList in generator
+				generator.getClusterPair().remove(pair);
 				rmPairLTOnPN(pair);
 			}
 		});
         
-		this.add(this.leftView, new Float(80));
+		this.add(this.leftView, new Float(75));
+		this.add(Box.createVerticalGlue(), new Float(3));
 		this.add(this.rightView, new Float(20));
 	} 
 	
@@ -360,22 +372,21 @@ class ResultMainView extends JPanel{
 		
 		// it should show in the graph after chooseBtn..
 		if(generator!=null) {
+			System.out.println("The number of clusterList before reset " + generator.getClusterPair().size());
 			generator.resetSourceTargetMark();
-			
+			System.out.println("The number of clusterList after reset " + generator.getClusterPair().size());
 		}else {
 			generator = new NewXORPairGenerator<ProcessTreeElement>();
 			generator.initialize(pTree);
 			
 		}
-		if(detector == null) {
-			detector = new NewLTDetector(pTree, log, parameters);
-			manet = detector.getAcceptionPN();
-			
-			leftView.drawResult(context, manet);
-			leftView.updateUI();
-		}else {
-			System.out.println("Exception of detector in add single pair");
-		}
+		
+		detector = new NewLTDetector(pTree, log, parameters);
+		manet = detector.getAcceptionPN();
+		
+		leftView.drawResult(context, manet);
+		leftView.updateUI();
+		
 	}
 	// here, given petri net with lt already, the chosen pair to add there already in another action there, 
 	// but we need to adapt the view here
@@ -399,10 +410,12 @@ class ResultMainView extends JPanel{
 	// here, given petri net with lt already, the chosen pair to add
 	private void rmPairLTOnPN( XORClusterPair<ProcessTreeElement> pair) {
 		detector.rmLTOnSinglePair(pair);
+		
 		manet = detector.getAcceptionPN();
 		// after this update the combox list of source and targets
 		addPairPanel.updateAddSource(generator.getAddAvailableSources());
 		addPairPanel.updateRMSource(generator.getRMAvailableSources());
+		addPairPanel.repaint();
 		
 		leftView.drawResult(context, manet);
 		leftView.updateUI();

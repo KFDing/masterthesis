@@ -367,6 +367,12 @@ public class XORCluster<T> {
 		return keyNode.toString();
 	}
 
+	public void testPairAvailable() {
+		// if it is pure branch, then we have pair available true
+		if(isPureBranchCluster())
+			pairAvailable = true;
+	}
+	
 	public boolean isPairAvailable() {
 		return pairAvailable;
 	}

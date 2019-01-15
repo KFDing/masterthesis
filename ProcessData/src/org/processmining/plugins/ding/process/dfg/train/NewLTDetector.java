@@ -94,22 +94,12 @@ public class NewLTDetector {
 	
 	// if we want to remove one pair from petri net
 	public void rmLTOnSinglePair(XORClusterPair<ProcessTreeElement> pair) {
-		// but after this, we need to change the as source and as target setting here 
-		// delete the places and silent transitions which relates to this pair
-		// quite interesting, because remove is not directly after add, so how we could store its info?? 
-		
-		// is it possible that we look for any node with name from source and target
-		// we have the connSet for using, get the source and target things, it helps, I think!! 
-		// source with after, then we delete 
-		
 		// target with before, then delete it, but also the node there..
 		// based on the net and remove it
 		// also we have adder with pnNode in it, we need to delete it here
-		// 1. get the sourceNode at first from this pair
 		XORCluster<ProcessTreeElement> source, target;
 		source = pair.getSourceXORCluster();
 		target = pair.getTargetXORCluster();
-		
 		
 		Petrinet net = manet.getNet();
 		// get the addned values nad then pnNodeMap remove them form this
@@ -120,37 +110,6 @@ public class NewLTDetector {
 		
 		source.setAsSource(false);
 		target.setAsTarget(false);
-		/*
-		List<ProcessTreeElement> endNodeList = source.getEndNodeList();
-		
-		Petrinet net = manet.getNet();
-		for(PetrinetNode node: net.getNodes()) {
-			if(containPlace(node, endNodeList, true)) {
-				// how to make it delete it uniquely... 
-				// one condition: endNodeList as a branch, showing there..then we need to 
-				// avoid it.. Then how about adding the generated nodes into the pair
-				// if we delete pair, the ndoes are deleted automatically?? 
-				// we don't need to look for it then... We can do it!! 
-				net.removeNode(node);
-				adder.pnNodeMap.remove(node.getLabel());
-			}
-			
-		}
-		
-		List<ProcessTreeElement> beginNodeList = target.getBeginNodeList();
-		for(PetrinetNode node: net.getNodes()) {
-			if(containPlace(node, beginNodeList, false)) {
-				// if contain place in endNodeList
-				net.removeNode(node);
-				adder.pnNodeMap.remove(node.getLabel());
-			}
-		}
-		
-		for(PetrinetNode node: net.getNodes()) {
-			if(adder.pnNodeMap.values().contains(node) &&(net.getInEdges(node).isEmpty() || net.getOutEdges(node).isEmpty()))
-				System.out.println(node.getLabel());
-		}
-		*/
 	}
 
 	private boolean containPlace(PetrinetNode pt, List<ProcessTreeElement> nodeList, boolean post) {
@@ -262,6 +221,9 @@ public class NewLTDetector {
 			XORClusterPair<ProcessTreeElement> pair = clusterPairs.get(i);
 			pair.testConnected();
 			if(pair.isComplete()) {
+				System.out.format("This pair with source %s, target %s has no dependency. %n", pair.getSourceXORCluster().getLabel(),
+						pair.getTargetXORCluster().getLabel());
+				
 				clusterPairs.remove(i);
 			}else
 				i++;

@@ -72,10 +72,10 @@ public class NewXORPairGenerator<T> {
 			List<XORCluster<T>> childrenCluster = cluster.getChildrenCluster();
 			for(XORCluster<T> child : childrenCluster) {
 				// still not good effect... Nanan, because one level missed it
+				child.testPairAvailable();
 				if(!child.isPairAvailable()) {
 					buildCPList((Node) child.getKeyNode());
 				}
-				
 			}
 			
 			if(cluster.isSeqCluster()) { // all the elements are available, so we just do use it 
@@ -156,8 +156,6 @@ public class NewXORPairGenerator<T> {
 	public XORClusterPair<T> createClusterXORPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
 		// here are only the xor cluster, we need only to create the branch cluster into it 
 		// if it doens;t include this pair, then we create, else we just return it 
-		
-		
 		XORClusterPair<T> pair = new XORClusterPair<T>(sourceCluster, targetCluster, false);
 		clusterPairList.add(pair);
 		connList.addAll(pair.getConnection());
@@ -355,7 +353,7 @@ public class NewXORPairGenerator<T> {
 			cluster.setAsSource(false);
 			cluster.setAsTarget(false);
 		}
-		
+		clusterPairList.clear();
 	}
 
 	public XORClusterPair<T> getPairBySource(XORCluster<T> source) {

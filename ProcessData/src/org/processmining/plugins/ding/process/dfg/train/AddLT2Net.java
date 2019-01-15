@@ -57,12 +57,12 @@ public class AddLT2Net {
 		tnMap = getProcessTree2NetMap(net, tree, null);
 		
 		ruleSet = new HashSet<LTRule<XORCluster<ProcessTreeElement>>>();
-		pnNodeMap = new HashMap<String, PetrinetNode>();
+		
 	}
 
 	public void initializeAdder() {
 		ruleSet.clear();
-		pnNodeMap.clear();
+		pnNodeMap = new HashMap<String, PetrinetNode>();
 	}
 	
 	

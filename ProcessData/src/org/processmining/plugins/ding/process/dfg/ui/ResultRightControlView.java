@@ -48,13 +48,10 @@ public class ResultRightControlView extends JPanel {
 	RelativeLayout rl;
 	JRadioButton ptButton;
 	JRadioButton pnButton;
-	JRadioButton pnltButton;
 	
 	JButton submit_button;
 	
 	AddPairPanel addPairPanel;
-	protected Color COLOR_BG = new Color(60, 60, 60);
-	protected Color COLOR_BG2 = new Color(120, 120, 120);
 	protected Color COLOR_FG = new Color(30, 30, 30);
 	protected Font smallFont;
 	
@@ -64,7 +61,7 @@ public class ResultRightControlView extends JPanel {
 		rl = new RelativeLayout(RelativeLayout.Y_AXIS);
 		rl.setFill( true );
 		this.setLayout(rl);
-		this.setBackground(COLOR_BG2);
+		
 		
 		
 		ptButton = new JRadioButton("Show Process Tree");
@@ -88,30 +85,14 @@ public class ResultRightControlView extends JPanel {
 			}
 		});
 		
-		pnltButton = new JRadioButton("Show PN With LT");
-		pnltButton.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				// after we choose delete, we delete places and repaint the graph again
-				if(pnltButton.isSelected()) {
-					parameters.setType(ViewType.PetriNetWithLTDependency);
-					addPairPanel.choosePanel.setEnabled(false);
-					addPairPanel.choosePanel.setVisible(false);
-				}
-			}
-		});
-		
 		ButtonGroup typeGroup = new ButtonGroup();
 		
 		typeGroup.add(ptButton);
 		typeGroup.add(pnButton);
-		typeGroup.add(pnltButton);
 		
 		this.add(ptButton, new Float(5));
 		this.add(pnButton, new Float(5));
-		this.add(pnltButton, new Float(5));
 		
-		
-	
 		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 		JPanel weightPanel = new JPanel();
 		weightPanel.setBorder(BorderFactory.createTitledBorder(raisedetched, "Set Weights"));
@@ -244,7 +225,7 @@ public class ResultRightControlView extends JPanel {
         JPanel buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
         buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        buttonPane.setBackground(COLOR_BG2);
+        
         
 		submit_button=new JButton("Submit");    
 		submit_button.setBounds(100,100,140, 40);    
@@ -275,7 +256,6 @@ public class ResultRightControlView extends JPanel {
         
         // here we need a panel to choose the xor block for adding lt-dependency. 
         addPairPanel = new AddPairPanel();
-        
         
         this.add(weightPanel, new Float(40));
         this.add(buttonPane, new Float(5));
@@ -316,18 +296,7 @@ public class ResultRightControlView extends JPanel {
 		final JSlider valueSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
 		valueSlider.setUI(new SlickerSliderUI(existSlider));
 		valueSlider.setValue(0);
-		/*
-		valueSlider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				if (e.getSource() == valueSlider) {
-					// updateThresholdSlider();
-					existLabel.setText(" "+ valueSlider.getValue());
-					// parameters.setExistWeight(existWeight);
-					valueSlider.getParent().dispatchEvent(e);
-				}	
-			}
-		});
-		*/
+		
 		valueSlider.setOpaque(false);
 		valueSlider.setToolTipText("<html>The lower this value, the more<br>"
 				+ "events are shown increasing the detail <br>" + "and complexity of the model.</html>");

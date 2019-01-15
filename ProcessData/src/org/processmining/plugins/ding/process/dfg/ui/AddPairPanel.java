@@ -29,14 +29,13 @@ public class AddPairPanel extends JPanel{
 	JComboBox rmSourceComboBox;
 	JComboBox rmTargetComboBox;
 	
-	
-	// set some values here, so we can return it ?? Or we just put it outside?? 
-	
 	/**
 	 * Create the panel.
 	 */
 	public AddPairPanel() {
 		this.setBounds(100, 100, 691, 507);
+		this.setBorder(new TitledBorder(null, "Add Long-term Dependency on Petri Net", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0};
@@ -53,8 +52,6 @@ public class AddPairPanel extends JPanel{
 		this.add(addAllBtn, gbc_addAllBtn);
 		
 		chooseBtn = new JRadioButton("Add XOR Pair By Choice");
-		
-		
 		ButtonGroup btnGroup = new ButtonGroup();
 		btnGroup.add(addAllBtn);
 		btnGroup.add(chooseBtn);
