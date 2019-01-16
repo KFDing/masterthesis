@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  15 JAN 2019 15:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  16 JAN 2019 14:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -154,7 +154,7 @@ Package: mathrsfs 1996/01/01 Math RSFS package v1.0 (jk)
 \symrsfs=\mathgroup6
 )
 \c@mydef=\count102
-\c@mytheorem=\count103
+\c@myproposition=\count103
 
 (./ProofDifficulty.aux)
 \openout1 = `ProofDifficulty.aux'.
@@ -332,8 +332,15 @@ ight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B
 \OT1/cmr/m/n/10 ))
  []
 
-[2 <./images/PN_tc_and_03_01.png>] [3 <./images/RelationOfThreshold-LTThreshold
-.png>]
+[2 <./images/PN_tc_and_03_01.png>]
+Overfull \hbox (8.15575pt too wide) in paragraph at lines 70--71
+\OT1/cmr/bx/n/10 Proposition 2.2. \OT1/cmr/m/it/10 for one xor branch $\OML/cmm
+/m/it/10 XORB[]$\OT1/cmr/m/it/10 , if $\OML/cmm/m/it/10 W\OT1/cmr/m/n/10 (\OML/
+cmm/m/it/10 M; XORB[]j\OT1/cmr/m/n/10 ) \OML/cmm/m/it/10 > threshold$\OT1/cmr/m
+/it/10 , 
+ []
+
+[3 <./images/RelationOfThreshold-LTThreshold.png>]
 Overfull \hbox (61.79663pt too wide) detected at line 103
 [][]
  []
@@ -345,8 +352,8 @@ LaTeX Warning: There were undefined references.
  ) 
 Here is how much of TeX's memory you used:
  3604 strings out of 494847
- 53225 string characters out of 6179079
- 108489 words of memory out of 5000000
+ 53249 string characters out of 6179079
+ 109509 words of memory out of 5000000
  6870 multiletter control sequences out of 15000+600000
  14306 words of font info for 56 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
@@ -364,7 +371,7 @@ onts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></u
 sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on ProofDifficulty.pdf (4 pages, 240289 bytes).
+Output written on ProofDifficulty.pdf (4 pages, 240363 bytes).
 PDF statistics:
  77 PDF objects out of 1000 (max. 8388607)
  53 compressed objects within 1 object stream

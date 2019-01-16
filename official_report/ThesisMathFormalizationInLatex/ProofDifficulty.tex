@@ -9,7 +9,7 @@
 \usepackage{amssymb}
 \usepackage{mathrsfs }
 \newtheorem{mydef}{Definition}[section]
-\newtheorem{mytheorem}{Theorem}[section]
+\newtheorem{myproposition}{Proposition}[section]
 \newcommand{\mathleft}{\@fleqntrue\@mathmargin0pt}
 
 \title{Master Thesis -- Prove Problem}
@@ -43,11 +43,11 @@ To make the generated Petri net sound, we propose a method to incorporate the ex
 The $F_{pos}(XORB_X, XORB_Y)$ and $F_{neg}(XORB_X, XORB_Y)$ are the frequency of the coexistence of $XORB_X$ and $XORB_Y$, respectively in positive and negative event log.
 
 With this rephrased definition, to make the model sound, we need to prove, if there is a xor branch $XORB_Y$ in the generated process tree, there must exist one long-term dependency related to it, $\exists XORB_X, Wlt(XORB_X,XORB_Y) > lt-threshold$. We formalize this problem. Else, the model can't be sound!!
-\begin{mytheorem}
+\begin{myproposition}
 	Given a process tree, a pair of xor branch set, $(B_A,B_B)$ with $B_A={XORB_{X1}, XORB_{X2},...XORB_{Xm}}, B_B={XORB_{Y1}, XORB_{Y2},...XORB_{Yn}}$, the obligatory part between $B_A$ and $B_B$ is marked M, it is to prove:: \\
-	for one xor branch $XORB_Y$, if $W(M, XORB_Yj) > threshold$, \\ then there exists one $XORB_Xi$ with 
+	$\forall XORB_Y \in B_B$, if $W(M, XORB_Yj) > threshold$, \\ then there exists one $XORB_Xi \in B_A$ with 
 	\[Wlt(XORB_Xi, XORB_Yj)> lt_threshold\]. 
-\end{mytheorem}
+\end{myproposition}
 Given a simplified scenes, it is listed in Fig \ref{fig:simplified-graph-model}, if there exists directly-follows relation of M and Y1, then there must exist one long-term dependency of Xi and Y1. 
 
 \begin{figure}[!h]
@@ -66,20 +66,20 @@ The definition of $W(M, XORB_Yj)$ is reviewed below.
 \end{mydef}
 
 When prove by contradiction, we assume that the opposite proposition is true. If it shows that such an assumption leads to a contradiction, then the original proposition is valid. 
-\begin{mytheorem}
+\begin{myproposition}
 	for one xor branch $XORB_Y$, if $W(M, XORB_Yj) > threshold$, \\ there exists no one $XORB_Xi$ with 
 	\[Wlt(XORB_Xi, XORB_Yj)<lt-threshold\]. 
-\end{mytheorem}
+\end{myproposition}
 
 Or we change to another thinking way to get the relation of threshold and lt-threshold, such that we have the theorem valid. Then we rephrase the question into
-\begin{mytheorem}[Another way of thinking]
+\begin{myproposition}[Another way of thinking]
 	Given a process tree, a pair of xor branch set, $(B_A,B_B)$ with $B_A={XORB_{X1}, XORB_{X2},...XORB_{Xm}}, B_B={XORB_{Y1}, XORB_{Y2},...XORB_{Yn}}$, the obligatory part between $B_A$ and $B_B$ is marked M. If,\\
 	for one xor branch $XORB_Y$, if $W(M, XORB_Yj) > threshold$, \\ there exists one $XORB_Xi$ with 
 	\[Wlt(XORB_Xi, XORB_Yj)> lt-threshold\]
 	What is the relation of threshold and lt-threshold?? 
-\end{mytheorem}
+\end{myproposition}
 If we expand the theorem, we need to prove 
-\begin{mytheorem}[Relation of threshold and lt-threshold]
+\begin{myproposition}[Relation of threshold and lt-threshold]
 	What is the relation of threshold and lt-threshold, to make the following proposition valid. If 
 	\begin{equation*}
 	 \begin{gathered}
@@ -102,6 +102,6 @@ If we expand the theorem, we need to prove
 	 \end{gathered}
 	\end{equation*}	
 $Cardinality(M,Yj|Xi)$ means the frequency of coexistence of M and Yj given Xi in the trace in positive, while $Cardinality(M,Yj|Xi)\prime$ represents the frequency in negative. $Cardinality(M,Y*|Xi)$ is the sum frequency of set ${Y1,..Yj,..Yn}$, it equals to \[Cardinality(M,Y*|Xi) = \sum_{Yi}Cardinality(M,Yj|Xi)\]
-\end{mytheorem}
+\end{myproposition}
 If we set them into zero, there is a lot of existing edges kept into the old method with no evidence in event log to support the connection. 
 \end{document}	

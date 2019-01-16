@@ -170,7 +170,7 @@ The order of xor branch follows the same rule of node in process tree which is e
 The correlation of xor branches is significant if they always happen together. To define it, several concepts are listed at first. 
 \begin{mydef}[Xor branch frequency]
 	Xor branch $XORB_X$ frequency in event log l is $F_{l}(XORB_X)$, the count of traces with the execution of $XORB_X$. \\
-	For multiple xor branches, the frequency in event log l is defined as the count of traces with all the execution of xor branches $XORB_(Xi)$ , written as \[F_{l}(XORB_(X1), XORB_(X2),...,XORB_(Xn))\].
+	For multiple xor branches, the frequency in event log l is defined as the count of traces with all the execution of xor branches $XORB_{Xi}$ , written as \[F_{l}(XORB_{X1}, XORB_{X2},...,XORB_{Xn})\].
 \end{mydef}
 %% correlation means the two always happen together, if one not shown, the other also not?? So the connection support.. how to define them?? 
 %% connection support, we can say only on number, when it is over one value, 
@@ -193,9 +193,9 @@ During the execution of a process model in reality, several choices decide one c
 	\label{def: branches-final-lt}
 	Two set of xor branches ${XORB_{X1}, XORB_{X2}..., XORB_{Xm}}$, ${XORB_{Y1}, XORB_{Y2}..., XORB_{Yn}}$ have long-term dependency, if 
 	\[\forall XORB_{Xi},XORB_{Yj}, XORB_{Xi} \leq XORB_{Yj} \] and
-	\[SC({XORB_{X1}, XORB_{X2}..., XORB_{Xm}}, {XORB_{Y1}, XORB_{Y2}..., XORB_{Yn}}) > threshold  \]
+	\[SC(\{XORB_{X1}, XORB_{X2}..., XORB_{Xm}\}, \{XORB_{Y1}, XORB_{Y2}..., XORB_{Yn}\}) > threshold  \]
 \end{mydef}
-${XORB_{X1}, XORB_{X2}..., XORB_{Xm}}$ depend the execution of ${XORB_{Y1}, XORB_{Y2}..., XORB_{Yn}}$. 
+$\{ XORB_{X1}, XORB_{X2}..., XORB_{Xm} \}$ depend the execution of $\{ XORB_{Y1}, XORB_{Y2}..., XORB_{Yn} \}$. 
 
 
 \section{Algorithm Implementation}

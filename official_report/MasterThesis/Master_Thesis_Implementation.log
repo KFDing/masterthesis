@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  9 JAN 2019 14:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  16 JAN 2019 13:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -408,14 +408,18 @@ Overfull \hbox (0.2056pt too wide) in paragraph at lines 194--195
  []
 
 
-Overfull \hbox (37.01111pt too wide) detected at line 196
-\OML/cmm/m/it/10 SC\OT1/cmr/m/n/10 ([]\OML/cmm/m/it/10 ; []\OT1/cmr/m/n/10 ) \O
-ML/cmm/m/it/10 > threshold
+Overfull \hbox (57.01117pt too wide) detected at line 196
+\OML/cmm/m/it/10 SC\OT1/cmr/m/n/10 (\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 XORB[]; 
+XORB[]:::; XORB[]\OMS/cmsy/m/n/10 g\OML/cmm/m/it/10 ; \OMS/cmsy/m/n/10 f\OML/cm
+m/m/it/10 XORB[]; XORB[]:::; XORB[]\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 ) \OML/cmm
+/m/it/10 > threshold
  []
 
 
-Overfull \hbox (77.9961pt too wide) in paragraph at lines 198--199
-[]$[]$ \OT1/cmr/m/n/10 de-pend the ex-e-cu-tion of $[]$. 
+Overfull \hbox (97.99615pt too wide) in paragraph at lines 198--199
+[]$\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 XORB[]; XORB[]:::; XORB[]\OMS/cmsy/m/n/10
+ g$ \OT1/cmr/m/n/10 de-pend the ex-e-cu-tion of $\OMS/cmsy/m/n/10 f\OML/cmm/m/i
+t/10 XORB[]; XORB[]:::; XORB[]\OMS/cmsy/m/n/10 g$\OT1/cmr/m/n/10 . 
  []
 
 <./images/FD_architecture_detail_02.png, id=42, 711.65875pt x 1277.77374pt>
@@ -497,7 +501,7 @@ live/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on Master_Thesis_Implementation.pdf (13 pages, 399978 bytes).
+Output written on Master_Thesis_Implementation.pdf (13 pages, 400161 bytes).
 PDF statistics:
  127 PDF objects out of 1000 (max. 8388607)
  86 compressed objects within 1 object stream
