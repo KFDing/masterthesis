@@ -35,8 +35,8 @@ During the implementation, it comes clear that supported connection only on the 
 \section{Problem Description}
 To make the generated Petri net sound, we propose a method to incorporate the existing model on the long-term dependency detection. The definition \ref{def: supported-connection} is rephrased into weight. 
 \begin{mydef}[Rephrased Correlation of xor branch] The correlation for two branches is expressed into
-	\[Wlt(XORB_X,XORB_Y)= Wlt{ext}(XORB_X, XORB_Y) + Wlt{pos}(XORB_X, XORB_Y) -Wlt{neg}(XORB_X, XORB_Y)\], where 
-	$W_lt{ext}(XORB_X, XORB_Y)= \frac{1}{\#XORB_Y}$, $\#XORB_Y$ means the number of possible  directly-follows xor branches ${XORB_Y}$ after $XORB_X$. \\ \\
+	\[Wlt(XORB_X,XORB_Y)= Wlt{ext}(XORB_X, XORB_Y) + Wlt{pos}(XORB_X, XORB_Y)\] \[ -Wlt{neg}(XORB_X, XORB_Y)\], where 
+	$W_lt{ext}(XORB_X, XORB_Y)= \frac{1}{|XORB_Y*|}$, $|XORB_{Y*}|$ means the number of possible  directly-follows xor branche set $XORB_{Y*}=\{XORB_{Y1}, XORB_{Y2},...XORB_{Yn} \}$ after $XORB_X$. \\ \\
 	$Wlt{pos}(XORB_X, XORB_Y)= \frac{F_{pos}(XORB_X, XORB_Y)}{F_{pos}(XORB_X, *)}$, \\
 	$Wlt{neg}(XORB_X, XORB_Y)= \frac{F_{neg}(XORB_X, XORB_Y)}{F_{neg}(XORB_X, *)}$, \\	
 \end{mydef}
@@ -48,34 +48,34 @@ With this rephrased definition, to make the model sound, we need to prove, if th
 	$\forall XORB_Y \in B_B$, if $W(M, XORB_Yj) > threshold$, \\ then there exists one $XORB_Xi \in B_A$ with 
 	\[Wlt(XORB_Xi, XORB_Yj)> lt_threshold\]. 
 \end{myproposition}
-Given a simplified scenes, it is listed in Fig \ref{fig:simplified-graph-model}, if there exists directly-follows relation of M and Y1, then there must exist one long-term dependency of Xi and Y1. 
+Given a simplified scenes, it is listed in Fig \ref{fig:simplified-graph-model}. M is an obligatory path from the set $\{X1,X2,..Xm\}$ to $\{Y1,Y2,..Yn\}$. If there exists directly-follows relation of M and Y1, then there must exist one long-term dependency of Xi and Y1. 
 
 \begin{figure}[!h]
 	\includegraphics[width=\textwidth]{RelationOfThreshold-LTThreshold.png}
-	\caption{Unsound Repaired Model at Transition B1.}
+	\caption{Simplified Graph MOdel}
 	\label{fig:simplified-graph-model}
 \end{figure}
 
-The definition of $W(M, XORB_Yj)$ is reviewed below.
+The definition of $W(M, XORB_{Yj})$ is reviewed below.
 \begin{mydef}[Assign new weights to graph $G_{new}$]
 	there are three weights from $G_{pos}$, $G_{neg}$ and $G_{ext}$, the new weight is 
 	\begin{itemize}
-		\item For one directly-follows relation, \[ Weight(E_{G_{new}}(A,B)) = Weight(E_{G_{pos}}(A,B)) + Weight(E_{G_{ext}}(A,B)) - Weight(E_{G_{neg}}(A,B))\]
+		\item For one directly-follows relation, \[ W(E_{G_{new}}(A,B)) = Weight(E_{G_{pos}}(A,B)) + Weight(E_{G_{ext}}(A,B)) - Weight(E_{G_{neg}}(A,B))\]
 		\item Given a directly-follows graph G(L), the weight of each directly-follows relation is defined as \[ Weight(E(A,B)) = \frac{Cardinality(E(A,B))}{Cardinality(E(A,*))}  \] 
 	\end{itemize}
 \end{mydef}
 
 When prove by contradiction, we assume that the opposite proposition is true. If it shows that such an assumption leads to a contradiction, then the original proposition is valid. 
 \begin{myproposition}
-	for one xor branch $XORB_Y$, if $W(M, XORB_Yj) > threshold$, \\ there exists no one $XORB_Xi$ with 
-	\[Wlt(XORB_Xi, XORB_Yj)<lt-threshold\]. 
+	for one xor branch $XORB_Y$, if $W(M, XORB_{Yj}) > threshold$, \\ there exists no one $XORB_{Xi}$ with 
+	\[Wlt(XORB_{Xi}, XORB_{Yj})<\text{lt-threshold}\]. 
 \end{myproposition}
 
 Or we change to another thinking way to get the relation of threshold and lt-threshold, such that we have the theorem valid. Then we rephrase the question into
 \begin{myproposition}[Another way of thinking]
-	Given a process tree, a pair of xor branch set, $(B_A,B_B)$ with $B_A={XORB_{X1}, XORB_{X2},...XORB_{Xm}}, B_B={XORB_{Y1}, XORB_{Y2},...XORB_{Yn}}$, the obligatory part between $B_A$ and $B_B$ is marked M. If,\\
-	for one xor branch $XORB_Y$, if $W(M, XORB_Yj) > threshold$, \\ there exists one $XORB_Xi$ with 
-	\[Wlt(XORB_Xi, XORB_Yj)> lt-threshold\]
+	Given a process tree, a pair of xor branch set, $(B_A,B_B)$ with $B_A=\{XORB_{X1}, XORB_{X2},...XORB_{Xm}\}, B_B=\{XORB_{Y1}, XORB_{Y2},...XORB_{Yn}\}$, the obligatory part between $B_A$ and $B_B$ is marked M. If,\\
+	for one xor branch $XORB_{Yj}$, if $W(M, XORB_{Yj}) > threshold$, \\ there exists one $XORB_Xi$ with 
+	\[Wlt(XORB_{Xi}, XORB_{Yj})> \text{lt-threshold}\]
 	What is the relation of threshold and lt-threshold?? 
 \end{myproposition}
 If we expand the theorem, we need to prove 
@@ -83,25 +83,25 @@ If we expand the theorem, we need to prove
 	What is the relation of threshold and lt-threshold, to make the following proposition valid. If 
 	\begin{equation*}
 	 \begin{gathered}
-		W(M, XORB_Yj)  > threshold \\
-	Weight(E_{G_{new}}(M, XORB_{Yj})) = Weight(E_{G_{pos}}(M, XORB_{Yj})) \\
+		W(M, XORB_{Yj})  > threshold \\
+	W(M, XORB_{Yj}) = Weight(E_{G_{pos}}(M, XORB_{Yj})) \\
 	+ Weight(E_{G_{ext}}(M, XORB_{Yj})) 
-	- Weight(E_{G_{neg}}(M, XORB_{Yj}))  > threshold \\
+	- Weight(E_{G_{neg}}(M, XORB_{Yj})) \\
 	\frac{1}{|Y*|} + \frac{\sum_{Xi}{Cardinality(M,Yj|Xi)}} {\sum_{Xi}{Cardinality(M,Y*|Xi)}}  
-	- \frac{\sum_{Xi}{Cardinality(M,Yj|Xi)\prime}} {\sum_{Xi}{Cardinality(M,Y*|Xi)\prime}} \\
+	- \frac{\sum_{Xi}{Cardinality(M,Yj|Xi)\prime}} {\sum_{Xi}{Cardinality(M,Y*|Xi)\prime} > threshold} \\
 	\text{Then, exist one Yj with}\\
-	Wlt(Xi, Yj)> lt-threshold \\
-	Wlt{ext}(Xi, Yj) + Wlt{pos}(Xi, Yj) -Wlt{neg}(Xi, Yj) > lt-threshold\\
+	Wlt(Xi, Yj)> \text{lt-threshold} \\
+	Wlt{ext}(Xi, Yj) + Wlt{pos}(Xi, Yj) -Wlt{neg}(Xi, Yj) > \text{lt-threshold}\\
 	\frac{1}{|Y*|} + \frac{Cardinality(M,Yj|Xi)} {Cardinality(M,Y*|Xi)}  
-	- \frac{Cardinality(M,Yj|Xi)\prime} {Cardinality(M,Y*|Xi)\prime} > lt-threshold  \\
+	- \frac{Cardinality(M,Yj|Xi)\prime} {Cardinality(M,Y*|Xi)\prime} > \text{lt-threshold}  \\
 	\text{Or \textbf{there is a contradiction when all Yj}}\\
-	Wlt(Xi, Yj)< lt-threshold\\
-	\sum_{Xi} Wlt(Xi, Yj) < |X*|lt-threshold \\
+	Wlt(Xi, Yj)< \text{lt-threshold}\\
+	\sum_{Xi} Wlt(Xi, Yj) < |X*|\bullet \text{lt-threshold} \\
 	\frac{|X*|}{|Y*|} + \sum_{Xi}\frac{Cardinality(M,Yj|Xi)} {Cardinality(M,Y*|Xi)}  
-	- \sum_{Xi}\frac{Cardinality(M,Yj|Xi)\prime} {Cardinality(M,Y*|Xi)\prime} < |X*|lt-threshold  \\
+	- \sum_{Xi}\frac{Cardinality(M,Yj|Xi)\prime} {Cardinality(M,Y*|Xi)\prime} < |X*|\bullet \text{lt-threshold}  \\
 	 \end{gathered}
 	\end{equation*}	
 $Cardinality(M,Yj|Xi)$ means the frequency of coexistence of M and Yj given Xi in the trace in positive, while $Cardinality(M,Yj|Xi)\prime$ represents the frequency in negative. $Cardinality(M,Y*|Xi)$ is the sum frequency of set ${Y1,..Yj,..Yn}$, it equals to \[Cardinality(M,Y*|Xi) = \sum_{Yi}Cardinality(M,Yj|Xi)\]
 \end{myproposition}
 If we set them into zero, there is a lot of existing edges kept into the old method with no evidence in event log to support the connection. 
-\end{document}	
+\end{document}
