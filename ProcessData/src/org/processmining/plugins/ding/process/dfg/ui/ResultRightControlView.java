@@ -4,6 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -14,6 +17,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -21,6 +25,7 @@ import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -48,8 +53,11 @@ public class ResultRightControlView extends JPanel {
 	RelativeLayout rl;
 	JRadioButton ptButton;
 	JRadioButton pnButton;
+	JRadioButton ltpnButton;
 	
 	JButton submit_button;
+	JButton saveModelBtn;
+	JComboBox saveModelCombox;
 	
 	AddPairPanel addPairPanel;
 	protected Color COLOR_FG = new Color(30, 30, 30);
@@ -71,6 +79,8 @@ public class ResultRightControlView extends JPanel {
 				// after we choose delete, we delete places and repaint the graph again
 				if(ptButton.isSelected()) {
 					parameters.setType(ViewType.ProcessTree);
+					// block the choice of add Panel, but how to show it again?? Set not editable
+					addPairPanel.setVisible(false);
 				}
 			}
 		});
@@ -81,17 +91,34 @@ public class ResultRightControlView extends JPanel {
 				// after we choose delete, we delete places and repaint the graph again
 				if(pnButton.isSelected()) {
 					parameters.setType(ViewType.PetriNet);
+					addPairPanel.setVisible(false);
 				}
 			}
 		});
+		
+		ltpnButton = new JRadioButton("Show Petri net with lt");
+		ltpnButton.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				// after we choose delete, we delete places and repaint the graph again
+				if(ltpnButton.isSelected()) {
+					parameters.setType(ViewType.PetriNetWithLTDependency);
+					addPairPanel.setVisible(true);
+					// but then how to store the values here?? We need to change it here, maybe
+				}
+			}
+		});
+		
 		
 		ButtonGroup typeGroup = new ButtonGroup();
 		
 		typeGroup.add(ptButton);
 		typeGroup.add(pnButton);
+		typeGroup.add(ltpnButton);
 		
-		this.add(ptButton, new Float(5));
-		this.add(pnButton, new Float(5));
+		this.add(ptButton, new Float(3));
+		this.add(pnButton, new Float(3));
+		this.add(ltpnButton, new Float(3));
+		
 		
 		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 		JPanel weightPanel = new JPanel();
@@ -204,9 +231,7 @@ public class ResultRightControlView extends JPanel {
 				// TODO Auto-generated method stub
 				double negWeight = 1.0*negSlider.getValue()/ ProcessConfiguration.WEIGHT_VALUE;
 				negValueLabel.setText(" "+ negWeight);
-				parameters.setNegWeight(negWeight);
-					
-					
+				parameters.setNegWeight(negWeight);	
 			}
 		});
 		negSlider.setOpaque(false);
@@ -256,15 +281,43 @@ public class ResultRightControlView extends JPanel {
         
         // here we need a panel to choose the xor block for adding lt-dependency. 
         addPairPanel = new AddPairPanel();
+        addPairPanel.setVisible(false);
         
+        JPanel savePanel = new JPanel();
+        GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		savePanel.setLayout(gridBagLayout);
+		
+		savePanel.setBorder(new TitledBorder(null, "Save Model", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+        saveModelBtn = new JButton("Save Model To ProM");
+		GridBagConstraints gbc_saveModelBtn = new GridBagConstraints();
+		gbc_saveModelBtn.insets = new Insets(0, 0, 0, 5);
+		gbc_saveModelBtn.gridx = 0;
+		gbc_saveModelBtn.gridy = 2;
+		savePanel.add(saveModelBtn, gbc_saveModelBtn);
+		
+		saveModelCombox = new JComboBox(ProcessConfiguration.SaveModelType);
+		GridBagConstraints gbc_saveModelCombox = new GridBagConstraints();
+		gbc_saveModelCombox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_saveModelCombox.gridx = 1;
+		gbc_saveModelCombox.gridy = 2;
+		savePanel.add(saveModelCombox, gbc_saveModelCombox);
+		
         this.add(weightPanel, new Float(40));
         this.add(buttonPane, new Float(5));
         this.add(addPairPanel,new Float(40));
-        this.add(Box.createRigidArea(new Dimension(50, 10)));
+        this.add(savePanel, new Float(5));
+        
 	}
 	
+	public int getSaveModelIndex() {
+		return saveModelCombox.getSelectedIndex();
+	}
 	public ControlParameters getParameters() {
-		
 		return parameters;
 	}
 	

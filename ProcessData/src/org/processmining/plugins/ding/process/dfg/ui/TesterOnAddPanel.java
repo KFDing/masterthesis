@@ -16,7 +16,11 @@ import javax.swing.border.TitledBorder;
 import org.processmining.plugins.ding.process.dfg.model.XORCluster;
 import org.processmining.processtree.ProcessTreeElement;
 
-public class AddPairPanel extends JPanel{
+public class TesterOnAddPanel extends JPanel {
+
+	/**
+	 * Create the panel.
+	 */
 	JRadioButton addAllBtn;
 	JRadioButton  chooseBtn;
 	JPanel choosePanel;
@@ -28,20 +32,21 @@ public class AddPairPanel extends JPanel{
 	JComboBox addTargetComboBox;
 	JComboBox rmSourceComboBox;
 	JComboBox rmTargetComboBox;
-	
+	private JButton saveModelBtn;
+	private JComboBox saveModelCombox;
 	
 	/**
 	 * Create the panel.
 	 */
-	public AddPairPanel() {
+	public TesterOnAddPanel() {
 		this.setBounds(100, 100, 691, 507);
 		this.setBorder(new TitledBorder(null, "Add Long-term Dependency on Petri Net", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		this.setLayout(gridBagLayout);
 		
 		addAllBtn = new JRadioButton("Add All In Order");
@@ -67,6 +72,7 @@ public class AddPairPanel extends JPanel{
 		choosePanel = new JPanel();
 		choosePanel.setBorder(new TitledBorder(null, "Choose XOR Pair To Add Or Remove", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_choosePanel = new GridBagConstraints();
+		gbc_choosePanel.insets = new Insets(0, 0, 5, 0);
 		gbc_choosePanel.fill = GridBagConstraints.BOTH;
 		gbc_choosePanel.gridwidth = 2;
 		gbc_choosePanel.gridx = 0;
@@ -186,10 +192,22 @@ public class AddPairPanel extends JPanel{
 		gbc_rmTargetComBox.gridy = 2;
 		rmPanel.add(rmTargetComboBox, gbc_rmTargetComBox);
 		
+		saveModelBtn = new JButton("Save Model To ProM");
 		
+		GridBagConstraints gbc_saveModelBtn = new GridBagConstraints();
+		gbc_saveModelBtn.insets = new Insets(0, 0, 0, 5);
+		gbc_saveModelBtn.gridx = 0;
+		gbc_saveModelBtn.gridy = 2;
+		add(saveModelBtn, gbc_saveModelBtn);
+		
+		saveModelCombox = new JComboBox();
+		GridBagConstraints gbc_saveModelCombox = new GridBagConstraints();
+		gbc_saveModelCombox.fill = GridBagConstraints.HORIZONTAL;
+		gbc_saveModelCombox.gridx = 1;
+		gbc_saveModelCombox.gridy = 2;
+		add(saveModelCombox, gbc_saveModelCombox);
 	}
 
-	
 	public int getAddSourceIndex() {
 		// TODO Auto-generated method stub
 		return addSourceComboBox.getSelectedIndex();
@@ -258,4 +276,5 @@ public class AddPairPanel extends JPanel{
 
 	
 	
+
 }

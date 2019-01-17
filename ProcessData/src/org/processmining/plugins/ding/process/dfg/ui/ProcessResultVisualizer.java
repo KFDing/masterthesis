@@ -121,9 +121,6 @@ class ResultMainView extends JPanel{
 		dfMatrix.updateCardinality(2, parameters.getNegWeight());
 		
 		showProcessTree();
-		if(pTreeId == null) {
-			pTreeId =context.getProvidedObjectManager().createProvidedObject("Generated Process Tree", pTree, ProcessTree.class, context);
-		}
 		
 		JButton submitButton = rightView.getSubmitButton();
 		
@@ -132,7 +129,6 @@ class ResultMainView extends JPanel{
 						// we need to pass the parameters to MainView, in the mainView, 
 						// it controls to generate the new view
 						try {
-							
 							updateMainView(leftView, rightView.getParameters());
 						} catch (ProvidedObjectDeletedException e1) {
 							// TODO Auto-generated catch block
@@ -255,11 +251,48 @@ class ResultMainView extends JPanel{
 			}
 		});
         
+        rightView.saveModelBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				// if we select it, then we will submit the current model to ProM
+				// there are several types we need to choose,
+				// default it is the petri net with lt
+				int idx = rightView.getSaveModelIndex();
+				try {
+					// get the name for this model or by default of using it ?? 
+					saveModel2ProM(idx);
+				} catch (ProvidedObjectDeletedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+        
+        
 		this.add(this.leftView, new Float(75));
 		this.add(Box.createVerticalGlue(), new Float(3));
 		this.add(this.rightView, new Float(20));
 	} 
 	
+	private void saveModel2ProM(int idx) throws ProvidedObjectDeletedException {
+		// TODO save model to ProM according to the chosen index
+		// every time we should create a new one!! 
+		switch(idx) {
+			case 0: // save petri net with lt
+				
+				ltnetId =context.getProvidedObjectManager().createProvidedObject("Petri net with LT", manet.getNet(), Petrinet.class, context);
+				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking with LT", manet.getInitialMarking(), Marking.class, context);
+				break;
+			case 1: // save petri net without lt
+				
+				netId =context.getProvidedObjectManager().createProvidedObject("Generated Petri net", anet.getNet(), Petrinet.class, context);
+				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking", anet.getInitialMarking(), Marking.class, context);
+				break;
+			case 2: // save process tree
+				pTreeId =context.getProvidedObjectManager().createProvidedObject("Generated Process Tree", pTree, ProcessTree.class, context);
+				break;
+				
+		}
+	}
 
 	public void updateMainView(ResultLeftView leftView, ControlParameters newParameters) throws ProvidedObjectDeletedException{
 		// if there is only type changes, so we don't need to generate it again for the dfMatrix
@@ -277,44 +310,20 @@ class ResultMainView extends JPanel{
 			dfMatrix.updateCardinality(2, parameters.getNegWeight());
 
 		}
-		
 		parameters.setType(newParameters.getType());
-		
+		System.out.println("ViewType: " + parameters.getType());
 		if(parameters.getType() == ViewType.ProcessTree) {
 			showProcessTree();
-			if(pTreeId == null) {
-				pTreeId =context.getProvidedObjectManager().createProvidedObject("Generated Process Tree", pTree, ProcessTree.class, context);
-			}else {
-				context.getProvidedObjectManager().changeProvidedObjectObject(pTreeId, pTree);
-			}
 			// add process tree into result, but we need to keep there only one process tree there
 		}else if(parameters.getType() == ViewType.PetriNet) {
 			showPetriNet();
 			// if we add new, we need to delete the old petri net 
-			if(netId == null) {
-				netId =context.getProvidedObjectManager().createProvidedObject("Generated Petri net", anet.getNet(), Petrinet.class, context);
-				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking", anet.getInitialMarking(), Marking.class, context);
-				
-			}else {
-				context.getProvidedObjectManager().changeProvidedObjectObject(netId, anet.getNet());
-				context.getProvidedObjectManager().changeProvidedObjectObject(markingId, anet.getInitialMarking());
-			}
-		}else if(parameters.getType() == ViewType.PetriNetWithLTDependency) {
 			
+		}else{
 				showPetriNetWithLT();
 				// only it is add all, then we add them all, else we can't have it without the addpairPanel..
 				// anyway, we keep it here
 				addPairPanel.setVisible(true);
-			
-			if(ltnetId == null) {
-				ltnetId =context.getProvidedObjectManager().createProvidedObject("Petri net with LT", manet.getNet(), Petrinet.class, context);
-				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking with LT", manet.getInitialMarking(), Marking.class, context);
-				
-			}else {
-				context.getProvidedObjectManager().changeProvidedObjectObject(ltnetId, manet.getNet());
-				context.getProvidedObjectManager().changeProvidedObjectObject(markingId, manet.getInitialMarking());
-			}
-			
 		}
 			
 	}
