@@ -45,12 +45,24 @@ public class XORCluster<T> {
 	
 	// to record the previous structure, or we only to remember the parents, it's already fine?? 
 	public List<XORCluster<T>> childrenCluster;
-
+    
+	private XORCluster<T> parent;
+	
 	// if it's in xor cluster, it means this is a nested xor cluster.
 	private boolean hasXOR = false;
 	// the available implies if we need to visit children cluster to get the xor list..
-	private boolean available = false;
+	private boolean pairAvailable = false;
+	// this is for the adding of lt dependency; 
+	// it is visited, we should go deeper into the pure branch cluster and check for this.
+	private boolean ltAvailable = false; //isPureBranchCluster();
+	
+	// asSource and asTarget is designed to add randomly pair into the model
+	private boolean asSource = false;
+	private boolean asTarget = false;
+	private int level = -1;
+	
 	List<XORCluster<T>> endBranchList ;
+
 	public XORCluster(T key){
 		keyNode = key;
 		xorList =  new ArrayList<XORCluster<T>>();
@@ -93,7 +105,7 @@ public class XORCluster<T> {
 				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 				beginXORList.addAll(cluster.getBeginXORList());
 			}
-		// my question is should we stop here?? Or somewhere else?? 	
+		// my question is should we stop here?? if we have deeper structure what to do ?	
 		}else if(isXORCluster()) {
 			// we need to deal with other situations, if there is something, 
 			beginXORList.add(this);
@@ -239,11 +251,11 @@ public class XORCluster<T> {
 	// situation is that, if it's xor cluster, then return true
 	// if not, we check the children, direct available, I mean 
 	public void setAvailable(boolean value) {
-		available = value;
+		pairAvailable = value;
 	}
 	
 	public boolean isAvailable() {
-		return available;
+		return pairAvailable;
 	}
 
 	boolean ltVisited=false;
@@ -298,6 +310,10 @@ public class XORCluster<T> {
 			for(XORCluster<T> child: childrenCluster) {
 				beginNodeList.addAll(child.getBeginNodeList());
 			}
+		}else if(isXORCluster()) {
+			for(XORCluster<T> child: childrenCluster) {
+				beginNodeList.addAll(child.getBeginNodeList());
+			}
 		}
 		
 		return beginNodeList;
@@ -323,6 +339,10 @@ public class XORCluster<T> {
 			for(XORCluster<T> child: childrenCluster) {
 				endNodeList.addAll(child.getEndNodeList());
 			}
+		}else if(isXORCluster()) {
+			for(XORCluster<T> child: childrenCluster) {
+				endNodeList.addAll(child.getEndNodeList());
+			}
 		}
 		return endNodeList;
 	}
@@ -345,5 +365,60 @@ public class XORCluster<T> {
 	public String getLabel() {
 		// TODO return the label for this cluster only required when it's xor cluster, need to see later
 		return keyNode.toString();
+	}
+
+	public void testPairAvailable() {
+		// if it is pure branch, then we have pair available true
+		if(isPureBranchCluster())
+			pairAvailable = true;
+	}
+	
+	public boolean isPairAvailable() {
+		return pairAvailable;
+	}
+
+	public void setPairAvailable(boolean pairAvailable) {
+		this.pairAvailable = pairAvailable;
+	}
+
+	public boolean isLtAvailable() {
+		return ltAvailable;
+	}
+
+	public void setLtAvailable(boolean ltAvailable) {
+		this.ltAvailable = ltAvailable;
+	}
+
+	public XORCluster<T> getParent() {
+		// TODO Auto-generated method stub
+		return parent;
+	}
+
+	public void setParent(XORCluster<T> parent) {
+		this.parent = parent;
+	}
+
+	public boolean isAsSource() {
+		return asSource;
+	}
+
+	public void setAsSource(boolean asSource) {
+		this.asSource = asSource;
+	}
+
+	public boolean isAsTarget() {
+		return asTarget;
+	}
+
+	public void setAsTarget(boolean asTarget) {
+		this.asTarget = asTarget;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 }

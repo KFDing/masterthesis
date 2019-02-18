@@ -20,7 +20,7 @@ public class Configuration {
 	public static final int DEFAULT_FIXED_WIDTH_TRACE_COUNT = 5;
 
 	public static String POS_LABEL = "pos_outcome";
-	
+	public static String NEG_LABEL = "neg_outcome";
 	public static String TP_TIME = "throughputime";
 	public static String TOKEN = "token";
 	public static String Tau_CLASS = "tau in log";

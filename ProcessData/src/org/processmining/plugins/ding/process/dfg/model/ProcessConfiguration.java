@@ -34,9 +34,16 @@ public class ProcessConfiguration extends Configuration{
 	public static final String LOOP = "XorLoop";
 	public static final String XOR_BRANCH = "Xor Branch";
 	public static final String NEW_SEQUENCE = "My_New_Seq";
-	public static final String POST_PREFIX = "Place After ";
-	public static final String PRE_PREFIX = "Place Before ";
+	public static final String PLACE_POST_PREFIX = "PlaceAfter";
+	public static final String PLACE_PRE_PREFIX = "PlaceBefore";
+	public static final String TRANSITION_POST_PREFIX = "TransitionAfter";
+	public static final String TRANSITION_PRE_PREFIX = "TransitionBefore";
+	public static final String POST_PREFIX = "After";
+	public static final String PRE_PREFIX = "Before";
 	
+	// the threshold to keep the dfg working
+	public static double DFG_THRESHOLD = 0.0;
+	public static double LT_THRESHOLD = 0.25;
 	
 	public enum ViewType {
 		ProcessTree, PetriNet, PetriNetWithLTDependency
@@ -47,4 +54,13 @@ public class ProcessConfiguration extends Configuration{
 	};
 	
 	public static Color COLOR_BG2 = new Color(120, 120, 120);
+	public static String DECISION_TREE = "Decision Tree";
+	public static String ASSOCIATIOn_RULE = "Association Rule";
+	public static String ILP = "ILP";
+	
+	
+	public enum ActionType{AddLTOnPair, RemoveLTOnPair};
+	
+	public static String[] SaveModelType = {"Petrinet With LT", "Petrinet Without LT", "Process Tree"};
+	
 }

@@ -1,5 +1,6 @@
 package org.processmining.plugins.ding.process.dfg.model;
 
+import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ActionType;
 import org.processmining.plugins.ding.process.dfg.model.ProcessConfiguration.ViewType;
 
 /**
@@ -24,12 +25,23 @@ public class ControlParameters {
 	double posWeight;
 	double negWeight ;
 	ViewType type ;
+	ActionType action;
+	// choose xor pair by manually or add them all
+	boolean addAllPair; // default value is true, but can be decided by the addPairPanel
+	// do we need to know the pair information?? 
+	// we could have the pair and then check the information
+	Object source;
+	Object target;
+
+	// but to show the choice what to do then?? we need to pass by using the generate.
 	
 	public ControlParameters() {
 		existWeight =1.0 ;
 		posWeight = 1.0;
 		negWeight = 1.0;
 		type = ViewType.ProcessTree;
+		
+		addAllPair = true;
 	}
 	
 	public void cloneValues(ControlParameters paras) {
@@ -37,8 +49,27 @@ public class ControlParameters {
 		posWeight = paras.getPosWeight();
 		negWeight = paras.getNegWeight();
 		type = paras.getType();
+		
+		action = paras.getAction();
+		addAllPair = paras.isAddAllPair();
 	}
 	
+	public boolean isAddAllPair() {
+		return addAllPair;
+	}
+
+	public void setAddAllPair(boolean addAllPair) {
+		this.addAllPair = addAllPair;
+	}
+	
+	public void setAction(ActionType action) {
+		this.action = action;
+	}
+	
+	public ActionType getAction() {
+		return action;
+	}
+
 	public ViewType getType() {
 		return type;
 	}
@@ -77,6 +108,23 @@ public class ControlParameters {
 		posWeight = 1.0;
 		negWeight = 1.0;
 		
-	};
+		addAllPair = true;
+	}
+	
+	public Object getSource() {
+		return source;
+	}
+
+	public void setSource(Object source) {
+		this.source = source;
+	}
+
+	public Object getTarget() {
+		return target;
+	}
+
+	public void setTarget(Object target) {
+		this.target = target;
+	}
 	
 }

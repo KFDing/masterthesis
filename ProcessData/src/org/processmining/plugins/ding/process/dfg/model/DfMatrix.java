@@ -25,6 +25,7 @@ public class DfMatrix {
 	final int keyColNum;
 	final int valueColNum;
 	long standardCardinality; 
+	double threshold = ProcessConfiguration.DFG_THRESHOLD;
 	// only initialization of DfMatrix
 	public DfMatrix(){
 		dfMatrix = new HashMap<ArrayList<XEventClass>, ArrayList<Double>>();
@@ -38,6 +39,15 @@ public class DfMatrix {
 	
 	public long getStandardCardinality(Dfg dfg) {
 		return standardCardinality;
+	}
+	// to add the pos and neg dfg together into the data
+	public void addDirectFollowMatrix(Dfg pos_dfg, Dfg neg_dfg) {
+		// use standardCardinality to weight the data there 
+		// are all the situations happen in the pos and neg?? 
+		// if one only appears in pos, the other only apper in neg, it is fine
+		// we need to consider the data from one cardinality and then back to one cardinality..
+		// traces num doesn mean it happen in all those
+		
 	}
 	
 	public void addDirectFollowMatrix(Dfg dfg, int colIdx) {
@@ -184,7 +194,7 @@ public class DfMatrix {
 	public void setValue(ArrayList<XEventClass> dfKey, ArrayList<Double> dfValue2) {
 		@SuppressWarnings("unchecked")
 		ArrayList<Double> dfValue = (ArrayList<Double>) getValue(dfKey);
-		System.out.println(dfValue.get(3));
+		// System.out.println(dfValue.get(3));
 		// we can only change on the dfValue
 		for(int i=0; i< valueColNum; i++) {
 			// System.out.println("id " + i+ dfValue2.get(3));
@@ -217,7 +227,7 @@ public class DfMatrix {
 			keepPercent = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX) + dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
 			removePercent = dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX);
 			double diffPercent = keepPercent - removePercent;
-			if(diffPercent > 0) {
+			if(diffPercent > threshold) {
 				addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), transform2Cardinality(diffPercent));
 			}
 		}

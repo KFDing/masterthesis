@@ -4,5 +4,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/PreprocessData"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?project=ProcessData&amp;ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=ivysettings.xml&amp;loadSettingsOnDemand=false&amp;ivyUserDir=&amp;propertyFiles="/>
+	<classpathentry kind="lib" path="/home/dkf/ProcessMining/programs/referencecodes/weka/weka-3-8-3/weka.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

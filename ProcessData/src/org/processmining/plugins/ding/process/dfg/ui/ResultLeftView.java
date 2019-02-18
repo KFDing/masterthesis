@@ -2,13 +2,13 @@ package org.processmining.plugins.ding.process.dfg.ui;
 
 import javax.swing.JPanel;
 
+import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.framework.plugin.PluginContext;
-import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
-import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
 import org.processmining.plugins.ding.process.dfg.util.GraphvizProcessTree;
 import org.processmining.plugins.ding.process.dfg.util.GraphvizProcessTree.NotYetImplementedException;
 import org.processmining.plugins.graphviz.visualisation.DotPanel;
+import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizPetriNet;
 import org.processmining.processtree.ProcessTree;
 
 public class ResultLeftView extends JPanel {
@@ -39,15 +39,23 @@ public class ResultLeftView extends JPanel {
 		}
 	}
 	
-	public void drawResult(PluginContext context, Petrinet net) {
+	public void drawResult(PluginContext context, AcceptingPetriNet anet) {
 		
 		this.removeAll();
+		ProMJGraphVisualizer.instance();
+		/*
 		ProMJGraphPanel pGraphPanel = ProMJGraphVisualizer.instance().visualizeGraph(context, net);
 		// pGraphPanel.getGraph().setEditable(false);
+		
 		pGraphPanel.setVisible(true);
 		pGraphPanel.validate();
 		
 		this.add(pGraphPanel, new Float(100));
+		*/
+		graphPanel = new DotPanel(GraphvizPetriNet.convert(anet));
+		graphPanel.setVisible(true);
+		graphPanel.validate();
+		this.add(graphPanel, new Float(100));
 		
 	}
 	

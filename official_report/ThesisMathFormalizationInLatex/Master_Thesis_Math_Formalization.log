@@ -1,0 +1,616 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  7 JAN 2019 15:54
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**Master_Thesis_Math_Formalization.tex
+(./Master_Thesis_Math_Formalization.tex
+LaTeX2e <2017-04-15>
+Babel <3.18> and hyphenation patterns for 7 language(s) loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 99.
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 67.
+\captionmargin=\dimen105
+\captionmargin@=\dimen106
+\captionwidth=\dimen107
+\caption@tempdima=\dimen108
+\caption@indent=\dimen109
+\caption@parindent=\dimen110
+\caption@hangindent=\dimen111
+)
+\c@ContinuedFloat=\count87
+)
+(/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
+\c@subfigure=\count88
+\c@subtable=\count89
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty
+Package: amsthm 2017/10/31 v2.20.4
+\thm@style=\toks15
+\thm@bodyfont=\toks16
+\thm@headfont=\toks17
+\thm@notefont=\toks18
+\thm@headpunct=\toks19
+\thm@preskip=\skip43
+\thm@postskip=\skip44
+\thm@headsep=\skip45
+\dth@everypar=\toks20
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\@emptytoks=\toks21
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2017/09/02 v2.17a AMS math features
+\@mathmargin=\skip46
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks22
+\ex@=\dimen112
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen113
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count90
+LaTeX Info: Redefining \frac on input line 213.
+\uproot@=\count91
+\leftroot@=\count92
+LaTeX Info: Redefining \overline on input line 375.
+\classnum@=\count93
+\DOTSCASE@=\count94
+LaTeX Info: Redefining \ldots on input line 472.
+LaTeX Info: Redefining \dots on input line 475.
+LaTeX Info: Redefining \cdots on input line 596.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen114
+LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
+\macc@depth=\count95
+\c@MaxMatrixCols=\count96
+\dotsspace@=\muskip10
+\c@parentequation=\count97
+\dspbrk@lvl=\count98
+\tag@help=\toks23
+\row@=\count99
+\column@=\count100
+\maxfields@=\count101
+\andhelp@=\toks24
+\eqnshift@=\dimen115
+\alignsep@=\dimen116
+\tagshift@=\dimen117
+\tagwidth@=\dimen118
+\totwidth@=\dimen119
+\lineht@=\dimen120
+\@envbody=\toks25
+\multlinegap=\skip47
+\multlinetaggap=\skip48
+\mathdisplay@stack=\toks26
+LaTeX Info: Redefining \[ on input line 2817.
+LaTeX Info: Redefining \] on input line 2818.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+)
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/mathrsfs.sty
+Package: mathrsfs 1996/01/01 Math RSFS package v1.0 (jk)
+\symrsfs=\mathgroup6
+)
+(/usr/share/texlive/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
+Package: algorithm2e 2017/07/18 v5.2 algorithms environments
+\c@AlgoLine=\count102
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\algocf@hangindent=\skip49
+
+(/usr/share/texlive/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count103
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/relsize/relsize.sty
+Package: relsize 2013/03/29 ver 4.1
+)
+\skiptotal=\skip50
+\skiplinenumber=\skip51
+\skiprule=\skip52
+\skiphlne=\skip53
+\skiptext=\skip54
+\skiplength=\skip55
+\algomargin=\skip56
+\skipalgocfslide=\skip57
+\algowidth=\dimen121
+\inoutsize=\dimen122
+\inoutindent=\dimen123
+\interspacetitleruled=\dimen124
+\interspacealgoruled=\dimen125
+\interspacetitleboxruled=\dimen126
+\algocf@ruledwidth=\skip58
+\algocf@inoutbox=\box28
+\algocf@inputbox=\box29
+\AlCapSkip=\skip59
+\AlCapHSkip=\skip60
+\algoskipindent=\skip61
+\algocf@nlbox=\box30
+\algocf@hangingbox=\box31
+\algocf@untilbox=\box32
+\algocf@skipuntil=\skip62
+\algocf@capbox=\box33
+\algocf@lcaptionbox=\skip63
+\algoheightruledefault=\skip64
+\algoheightrule=\skip65
+\algotitleheightruledefault=\skip66
+\algotitleheightrule=\skip67
+\c@algocfline=\count104
+\c@algocfproc=\count105
+\c@algocf=\count106
+\algocf@algoframe=\box34
+\algocf@algobox=\box35
+)
+\c@mydef=\count107
+\c@mytheorem=\count108
+
+(./Master_Thesis_Math_Formalization.aux)
+\openout1 = `Master_Thesis_Math_Formalization.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count109
+\scratchdimen=\dimen127
+\scratchbox=\box36
+\nofMPsegments=\count110
+\nofMParguments=\count111
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count112
+\MPscratchDim=\dimen128
+\MPnumerator=\count113
+\makeMPintoPDFobject=\count114
+\everyMPtoPDFconversion=\toks28
+) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
+)))
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2018/01/21 v0.26 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 456.
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Try loading font information for U+msa on input line 22.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 22.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 22.
+
+(/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
+File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
+)
+<./images/FD00_approach_blackbox.png, id=1, 629.35126pt x 404.51125pt>
+File: ./images/FD00_approach_blackbox.png Graphic file (type png)
+<use ./images/FD00_approach_blackbox.png>
+Package pdftex.def Info: ./images/FD00_approach_blackbox.png  used on input lin
+e 39.
+(pdftex.def)             Requested size: 345.0pt x 221.74736pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 52.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 52.
+ [2 <./images/FD00_approach_blackbox.png>]
+Overfull \hbox (88.57639pt too wide) detected at line 74
+\OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\O
+ML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 
+(\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) +
+ \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\
+OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 We
+ight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B
+\OT1/cmr/m/n/10 ))
+ []
+
+
+Overfull \hbox (104.94693pt too wide) detected at line 76
+\OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10
+ (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10
+ (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 ))
+ + \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n
+/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10
+ Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/
+10 A\OT1/cmr/m/n/10 ))
+ []
+
+
+Overfull \hbox (85.58585pt too wide) detected at line 78
+\OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (
+\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (
+\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) + \
+OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\
+OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Weigh
+t\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1
+/cmr/m/n/10 ))
+ []
+
+[3]
+<./images/PN06_Seq_2_xor_notnested.png, id=27, 1234.6125pt x 312.16624pt>
+File: ./images/PN06_Seq_2_xor_notnested.png Graphic file (type png)
+<use ./images/PN06_Seq_2_xor_notnested.png>
+Package pdftex.def Info: ./images/PN06_Seq_2_xor_notnested.png  used on input l
+ine 89.
+(pdftex.def)             Requested size: 345.0pt x 87.2297pt.
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 97.
+ [4 <./images/PN06_Seq_2_xor_notnested.png>]
+<./images/PT_PN_corresponding_01_seq_PN.png, id=34, 326.21875pt x 58.2175pt>
+File: ./images/PT_PN_corresponding_01_seq_PN.png Graphic file (type png)
+<use ./images/PT_PN_corresponding_01_seq_PN.png>
+Package pdftex.def Info: ./images/PT_PN_corresponding_01_seq_PN.png  used on in
+put line 141.
+(pdftex.def)             Requested size: 155.24895pt x 27.7069pt.
+<./images/PT_PN_corresponding_02_xor_PN.png, id=35, 224.84pt x 73.27374pt>
+File: ./images/PT_PN_corresponding_02_xor_PN.png Graphic file (type png)
+<use ./images/PT_PN_corresponding_02_xor_PN.png>
+Package pdftex.def Info: ./images/PT_PN_corresponding_02_xor_PN.png  used on in
+put line 148.
+(pdftex.def)             Requested size: 155.24895pt x 50.59692pt.
+<./images/PT_PN_corresponding_03_and_PN.png, id=36, 385.44pt x 73.27374pt>
+File: ./images/PT_PN_corresponding_03_and_PN.png Graphic file (type png)
+<use ./images/PT_PN_corresponding_03_and_PN.png>
+Package pdftex.def Info: ./images/PT_PN_corresponding_03_and_PN.png  used on in
+put line 155.
+(pdftex.def)             Requested size: 155.24895pt x 29.51357pt.
+<./images/PT_PN_corresponding_04_loop_PN.png, id=37, 224.84pt x 78.2925pt>
+File: ./images/PT_PN_corresponding_04_loop_PN.png Graphic file (type png)
+<use ./images/PT_PN_corresponding_04_loop_PN.png>
+Package pdftex.def Info: ./images/PT_PN_corresponding_04_loop_PN.png  used on i
+nput line 162.
+(pdftex.def)             Requested size: 155.24895pt x 54.06248pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Overfull \hbox (26.78815pt too wide) in paragraph at lines 175--176
+[]\OT1/cmr/m/it/10 if $\OML/cmm/m/it/10 Q \OT1/cmr/m/n/10 =\U/msa/m/n/10 ^^H \O
+T1/cmr/m/n/10 (\OML/cmm/m/it/10 Q[]; Q[]; ::Q[]\OT1/cmr/m/n/10 )$\OT1/cmr/m/it/
+10 , the sub-trees have loop re-la-tion and $\OML/cmm/m/it/10 Q[]; Q[]; ::Q[] w
+ith n \OMS/cmsy/m/n/10 ^^U
+ []
+
+<./images/PT01_Not_Nested_Overview.png, id=38, 1774.63pt x 410.53375pt>
+File: ./images/PT01_Not_Nested_Overview.png Graphic file (type png)
+<use ./images/PT01_Not_Nested_Overview.png>
+Package pdftex.def Info: ./images/PT01_Not_Nested_Overview.png  used on input l
+ine 181.
+(pdftex.def)             Requested size: 345.0pt x 79.80632pt.
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 189--190
+
+ []
+
+[6 <./images/PT_PN_corresponding_01_seq_PN.png> <./images/PT_PN_corresponding_0
+2_xor_PN.png> <./images/PT_PN_corresponding_03_and_PN.png> <./images/PT_PN_corr
+esponding_04_loop_PN.png> <./images/PT01_Not_Nested_Overview.png>]
+<./images/PT02_xor_nested_and_pure.png, id=51, 499.8675pt x 263.98625pt>
+File: ./images/PT02_xor_nested_and_pure.png Graphic file (type png)
+<use ./images/PT02_xor_nested_and_pure.png>
+Package pdftex.def Info: ./images/PT02_xor_nested_and_pure.png  used on input l
+ine 197.
+(pdftex.def)             Requested size: 345.0pt x 182.20306pt.
+
+Overfull \hbox (8.07004pt too wide) in paragraph at lines 203--204
+\OT1/cmr/bx/n/10 Definition 2.11 \OT1/cmr/m/n/10 (Or-der of xor block)\OT1/cmr/
+bx/n/10 . $\OML/cmm/m/it/10 XOR[]$ \OT1/cmr/m/it/10 is be-fore $\OML/cmm/m/it/1
+0 xor[]$\OT1/cmr/m/it/10 , writ-ten in $\OML/cmm/m/it/10 XOR[] \OMS/cmsy/m/n/10
+ ^^^
+ []
+
+<./images/PT03_xor_in_loop.png, id=52, 729.72626pt x 281.05pt>
+File: ./images/PT03_xor_in_loop.png Graphic file (type png)
+<use ./images/PT03_xor_in_loop.png>
+Package pdftex.def Info: ./images/PT03_xor_in_loop.png  used on input line 207.
+
+(pdftex.def)             Requested size: 345.0pt x 132.87401pt.
+
+Overfull \hbox (0.5004pt too wide) in paragraph at lines 205--212
+[]\OT1/cmr/m/n/10 Consider the model in Fig-ure 4[], we have xor or-der block, 
+$\OML/cmm/m/it/10 Xor\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Seq\OT1/cmr/m/n/10 (\OML
+/cmm/m/it/10 z; o\OT1/cmr/m/n/10 )\OML/cmm/m/it/10 ; m\OT1/cmr/m/n/10 ) \OMS/cm
+sy/m/n/10 ^^^
+ []
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Overfull \hbox (85.41098pt too wide) in paragraph at lines 213--214
+\OT1/cmr/bx/n/10 Definition 2.12 \OT1/cmr/m/n/10 (XOR Pair)\OT1/cmr/bx/n/10 . $
+\OML/cmm/m/it/10 xor[]$ \OT1/cmr/m/it/10 and $\OML/cmm/m/it/10 xor[]$ \OT1/cmr/
+m/it/10 is an xor pair, writ-ten in XOR[]Pair($\OML/cmm/m/it/10 XOR[]; XOR[]$\O
+T1/cmr/m/it/10 ),
+ []
+
+[7 <./images/PT02_xor_nested_and_pure.png>]
+Overfull \hbox (2.23883pt too wide) in paragraph at lines 240--241
+\OT1/cmr/bx/n/10 Definition 2.17 \OT1/cmr/m/n/10 (Long-term de-pen-dency in xor
+ branches)\OT1/cmr/bx/n/10 . \OT1/cmr/m/it/10 Xor branch $\OML/cmm/m/it/10 XORB
+[]$
+ []
+
+[8 <./images/PT03_xor_in_loop.png>]
+<./images/FD_architecture_detail_02.png, id=64, 711.65875pt x 1277.77374pt>
+File: ./images/FD_architecture_detail_02.png Graphic file (type png)
+<use ./images/FD_architecture_detail_02.png>
+Package pdftex.def Info: ./images/FD_architecture_detail_02.png  used on input 
+line 247.
+(pdftex.def)             Requested size: 344.9912pt x 549.99742pt.
+
+
+LaTeX Warning: Float too large for page by 54.69742pt on input line 250.
+
+<./images/PT08_xor_branches.png, id=65, 911.405pt x 202.7575pt>
+File: ./images/PT08_xor_branches.png Graphic file (type png)
+<use ./images/PT08_xor_branches.png>
+Package pdftex.def Info: ./images/PT08_xor_branches.png  used on input line 275
+.
+(pdftex.def)             Requested size: 345.0pt x 76.75163pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[9] [10 <./images/FD_architecture_detail_02.png>]
+<./images/PT06_Seq_3_xor_notnested.png, id=74, 1036.87375pt x 201.75375pt>
+File: ./images/PT06_Seq_3_xor_notnested.png Graphic file (type png)
+<use ./images/PT06_Seq_3_xor_notnested.png>
+Package pdftex.def Info: ./images/PT06_Seq_3_xor_notnested.png  used on input l
+ine 290.
+(pdftex.def)             Requested size: 345.0pt x 67.12999pt.
+<./images/PN06_Seq_3_xor_notnested.png, id=75, 1521.685pt x 215.80624pt>
+File: ./images/PN06_Seq_3_xor_notnested.png Graphic file (type png)
+<use ./images/PN06_Seq_3_xor_notnested.png>
+Package pdftex.def Info: ./images/PN06_Seq_3_xor_notnested.png  used on input l
+ine 297.
+(pdftex.def)             Requested size: 345.0pt x 48.9264pt.
+ [11 <./images/PT08_xor_branches.png> <./images/PT06_Seq_3_xor_notnested.png> <
+./images/PN06_Seq_3_xor_notnested.png>]
+<./images/PT09_seq_xor_nested.png, id=79, 1031.855pt x 303.1325pt>
+File: ./images/PT09_seq_xor_nested.png Graphic file (type png)
+<use ./images/PT09_seq_xor_nested.png>
+Package pdftex.def Info: ./images/PT09_seq_xor_nested.png  used on input line 3
+12.
+(pdftex.def)             Requested size: 345.0pt x 101.35228pt.
+
+Overfull \hbox (6.55637pt too wide) in paragraph at lines 316--317
+\OT1/cmr/m/n/10 So, in the model given by Fig-ure 10[], for xor block Xor(A,Seq
+(B1,Xor(B2,B3),B4)),
+ []
+
+<./images/PT07_And_4_xor_notnested.png, id=80, 1300.86pt x 241.90375pt>
+File: ./images/PT07_And_4_xor_notnested.png Graphic file (type png)
+<use ./images/PT07_And_4_xor_notnested.png>
+Package pdftex.def Info: ./images/PT07_And_4_xor_notnested.png  used on input l
+ine 330.
+(pdftex.def)             Requested size: 345.0pt x 64.15216pt.
+<./images/PN07_And_4_xor_notnested.png, id=81, 1525.7pt x 491.8375pt>
+File: ./images/PN07_And_4_xor_notnested.png Graphic file (type png)
+<use ./images/PN07_And_4_xor_notnested.png>
+Package pdftex.def Info: ./images/PN07_And_4_xor_notnested.png  used on input l
+ine 337.
+(pdftex.def)             Requested size: 345.0pt x 111.214pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./images/PT10_NestedXorInParallel_01.png, id=82, 357.335pt x 208.78pt>
+File: ./images/PT10_NestedXorInParallel_01.png Graphic file (type png)
+<use ./images/PT10_NestedXorInParallel_01.png>
+Package pdftex.def Info: ./images/PT10_NestedXorInParallel_01.png  used on inpu
+t line 352.
+(pdftex.def)             Requested size: 345.0pt x 201.58292pt.
+<./images/PN10_NestedXorInParallel_01.png, id=83, 673.51625pt x 304.13625pt>
+File: ./images/PN10_NestedXorInParallel_01.png Graphic file (type png)
+<use ./images/PN10_NestedXorInParallel_01.png>
+Package pdftex.def Info: ./images/PN10_NestedXorInParallel_01.png  used on inpu
+t line 359.
+(pdftex.def)             Requested size: 345.0pt x 155.78961pt.
+<./images/PN10_NestedXorInParallel_02.png, id=84, 673.51625pt x 350.30875pt>
+File: ./images/PN10_NestedXorInParallel_02.png Graphic file (type png)
+<use ./images/PN10_NestedXorInParallel_02.png>
+Package pdftex.def Info: ./images/PN10_NestedXorInParallel_02.png  used on inpu
+t line 366.
+(pdftex.def)             Requested size: 345.0pt x 179.44084pt.
+
+LaTeX Warning: Float too large for page by 61.81337pt on input line 372.
+
+[12 <./images/PT09_seq_xor_nested.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Overfull \hbox (11.66737pt too wide) in paragraph at lines 375--377
+\OT1/cmr/m/n/10 For xor branch And(Xor(D1,D2), Xor(E1,E2)), there are two xor b
+lock Xor(D1,D2)
+ []
+
+[13 <./images/PT07_And_4_xor_notnested.png> <./images/PN07_And_4_xor_notnested.
+png>]
+Overfull \hbox (2.94519pt too wide) in paragraph at lines 393--394
+[]\OT1/cmr/m/n/10 Only con-sid-er-ing the Xor-Pair(Xor(S1,S2) , Xor(D1,D2)), Xo
+r-Pair(Xor(S1,S2)
+ []
+
+[14] (./Master_Thesis_Math_Formalization.bbl [15]) [16] [17 <./images/PT10_Nest
+edXorInParallel_01.png> <./images/PN10_NestedXorInParallel_01.png> <./images/PN
+10_NestedXorInParallel_02.png>] (./Master_Thesis_Math_Formalization.aux) ) 
+Here is how much of TeX's memory you used:
+ 4726 strings out of 494847
+ 73674 string characters out of 6179079
+ 138249 words of memory out of 5000000
+ 7953 multiletter control sequences out of 15000+600000
+ 13755 words of font info for 55 fonts, out of 8000000 for 9000
+ 59 hyphenation exceptions out of 8191
+ 41i,15n,39p,916b,448s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbo
+ls/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbol
+s/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/rsfs/rsfs10.pfb>
+
+Output written on Master_Thesis_Math_Formalization.pdf (17 pages, 589233 bytes)
+.
+PDF statistics:
+ 181 PDF objects out of 1000 (max. 8388607)
+ 109 compressed objects within 2 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 96 words of extra memory for PDF output out of 10000 (max. 10000000)
+
