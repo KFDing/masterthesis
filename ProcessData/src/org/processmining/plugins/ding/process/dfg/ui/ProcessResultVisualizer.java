@@ -302,16 +302,23 @@ class ResultMainView extends JPanel{
 		// we don't need to do it 
 		// if we need to create new Dfg ?? 
 		updateAll =  isWeightUpdated(parameters, newParameters);
+		System.out.println("Parameter before update: " + parameters.getExistWeight()+":"+parameters.getPosWeight()+":"+ parameters.getNegWeight());
+
+		System.out.println("New Parameter before update: " + newParameters.getExistWeight()+":"+newParameters.getPosWeight()+":"+ newParameters.getNegWeight());
+		
 		if(updateAll) {
+			
 			parameters.cloneValues(newParameters);
+			System.out.println("Parameter before update: " + parameters.getExistWeight()+":"+parameters.getPosWeight()+":"+ parameters.getNegWeight());
+
 			// System.out.println("neg after update is "+ parameters.getNegWeight());
 			dfMatrix.updateCardinality(0, parameters.getExistWeight());
 			dfMatrix.updateCardinality(1, parameters.getPosWeight());
 			dfMatrix.updateCardinality(2, parameters.getNegWeight());
 
 		}
-		parameters.setType(newParameters.getType());
-		System.out.println("ViewType: " + parameters.getType());
+		// parameters.setType(newParameters.getType());
+		// System.out.println("ViewType: " + parameters.getType());
 		if(parameters.getType() == ViewType.ProcessTree) {
 			showProcessTree();
 			// add process tree into result, but we need to keep there only one process tree there
