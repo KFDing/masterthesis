@@ -76,12 +76,13 @@ public class PN2DfgTransform {
 		int idx = 0;
 		for(int i=0;i<ntransitions.size(); i++) {
 			// here how to transform transition into XEventClass?? 
-			String key =((org.processmining.models.graphbased.directed.petrinet.elements.Transition)nt[i]).getLabel();
+			org.processmining.models.graphbased.directed.petrinet.elements.Transition transition = (org.processmining.models.graphbased.directed.petrinet.elements.Transition) nt[i];
+			String key =transition.getLabel();
 			// different situations here, key can be "", which is tau, so we need to limit it
-			if(key.length()>0 && !key.contains("tau")) {
+			if(key.length()>0 && !transition.isInvisible()) {
 				XEventClass eventClass = new XEventClass(key, idx++); // or we need to assign them later.. whatever, only concrete events matter
 				eventClassMap.put(key, eventClass);
-				// dfg.addActivity(eventClass); // here to add only the non- tau activity
+				dfg.addActivity(eventClass); // here to add only the non- tau activity
 			}
 		}
 		addStartEnd(dfg, ts, startStates, acceptingStates);

@@ -147,7 +147,6 @@ class ResultMainView extends JPanel{
 				rightView.getParameters().setType(ViewType.PetriNetWithLTDependency);
 				rightView.getParameters().setAddAllPair(true);
 				addPairPanel.choosePanel.setEnabled(false);
-				addPairPanel.choosePanel.setVisible(false);
 				
 				try {
 					updateMainView(leftView, rightView.getParameters());
@@ -169,7 +168,7 @@ class ResultMainView extends JPanel{
 					rightView.getParameters().setAddAllPair(false);
 					
 					addPairPanel.choosePanel.setEnabled(true);
-					addPairPanel.choosePanel.setVisible(true);
+					// addPairPanel.choosePanel.setVisible(true);
 					// at same time, we need to reset the petri net into original
 					// we need to update the source of add and remove, but one thing is to reset them again
 					
@@ -317,7 +316,9 @@ class ResultMainView extends JPanel{
 			dfMatrix.updateCardinality(2, parameters.getNegWeight());
 
 		}
-		// parameters.setType(newParameters.getType());
+
+	
+		parameters.setType(newParameters.getType());
 		// System.out.println("ViewType: " + parameters.getType());
 		if(parameters.getType() == ViewType.ProcessTree) {
 			showProcessTree();
@@ -330,7 +331,7 @@ class ResultMainView extends JPanel{
 				showPetriNetWithLT();
 				// only it is add all, then we add them all, else we can't have it without the addpairPanel..
 				// anyway, we keep it here
-				addPairPanel.setVisible(true);
+				addPairPanel.setPanelEnabled(addPairPanel, true);
 		}
 			
 	}

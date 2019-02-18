@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  16 JAN 2019 14:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  18 JAN 2019 17:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -153,37 +153,92 @@ Package: amssymb 2013/01/14 v3.01 AMS font symbols
 Package: mathrsfs 1996/01/01 Math RSFS package v1.0 (jk)
 \symrsfs=\mathgroup6
 )
-\c@mydef=\count102
-\c@myproposition=\count103
+(/usr/share/texlive/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
+Package: algorithm2e 2017/07/18 v5.2 algorithms environments
+\c@AlgoLine=\count102
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+\algocf@hangindent=\skip49
+
+(/usr/share/texlive/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count103
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/relsize/relsize.sty
+Package: relsize 2013/03/29 ver 4.1
+)
+\skiptotal=\skip50
+\skiplinenumber=\skip51
+\skiprule=\skip52
+\skiphlne=\skip53
+\skiptext=\skip54
+\skiplength=\skip55
+\algomargin=\skip56
+\skipalgocfslide=\skip57
+\algowidth=\dimen121
+\inoutsize=\dimen122
+\inoutindent=\dimen123
+\interspacetitleruled=\dimen124
+\interspacealgoruled=\dimen125
+\interspacetitleboxruled=\dimen126
+\algocf@ruledwidth=\skip58
+\algocf@inoutbox=\box28
+\algocf@inputbox=\box29
+\AlCapSkip=\skip59
+\AlCapHSkip=\skip60
+\algoskipindent=\skip61
+\algocf@nlbox=\box30
+\algocf@hangingbox=\box31
+\algocf@untilbox=\box32
+\algocf@skipuntil=\skip62
+\algocf@capbox=\box33
+\algocf@lcaptionbox=\skip63
+\algoheightruledefault=\skip64
+\algoheightrule=\skip65
+\algotitleheightruledefault=\skip66
+\algotitleheightrule=\skip67
+\c@algocfline=\count104
+\c@algocfproc=\count105
+\c@algocf=\count106
+\algocf@algoframe=\box34
+\algocf@algobox=\box35
+)
+\c@mydef=\count107
+\c@myproposition=\count108
 
 (./ProofDifficulty.aux)
 \openout1 = `ProofDifficulty.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count104
-\scratchdimen=\dimen121
-\scratchbox=\box28
-\nofMPsegments=\count105
-\nofMParguments=\count106
+\scratchcounter=\count109
+\scratchdimen=\dimen127
+\scratchbox=\box36
+\nofMPsegments=\count110
+\nofMParguments=\count111
 \everyMPshowfont=\toks27
-\MPscratchCnt=\count107
-\MPscratchDim=\dimen122
-\MPnumerator=\count108
-\makeMPintoPDFobject=\count109
+\MPscratchCnt=\count112
+\MPscratchDim=\dimen128
+\MPnumerator=\count113
+\makeMPintoPDFobject=\count114
 \everyMPtoPDFconversion=\toks28
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -243,17 +298,17 @@ e
 ))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 19.
+LaTeX Font Info:    Try loading font information for U+msa on input line 20.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 19.
+LaTeX Font Info:    Try loading font information for U+msb on input line 20.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 19.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 20.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
@@ -261,7 +316,7 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 <./images/PN_tc_and_03_01.png, id=1, 1483.5425pt x 545.03625pt>
 File: ./images/PN_tc_and_03_01.png Graphic file (type png)
 <use ./images/PN_tc_and_03_01.png>
-Package pdftex.def Info: ./images/PN_tc_and_03_01.png  used on input line 31.
+Package pdftex.def Info: ./images/PN_tc_and_03_01.png  used on input line 32.
 (pdftex.def)             Requested size: 345.0pt x 126.74457pt.
 
 
@@ -269,112 +324,202 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 LaTeX Warning: Reference `def: supported-connection' on page 1 undefined on inp
-ut line 36.
+ut line 37.
 
 
-Overfull \hbox (163.55547pt too wide) detected at line 38
+Overfull \hbox (31.15785pt too wide) detected at line 39
 \OML/cmm/m/it/10 Wlt\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/
 n/10 ) = \OML/cmm/m/it/10 Wlt[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]
 \OT1/cmr/m/n/10 ) + \OML/cmm/m/it/10 Wlt[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XOR
-B[]; XORB[]\OT1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Wlt[]\OT1/cm
-r/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n/10 )
+B[]; XORB[]\OT1/cmr/m/n/10 )
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 38--42
+Overfull \hbox (49.25746pt too wide) in paragraph at lines 39--43
+\OT1/cmr/m/it/10 of pos-si-ble directly-follows xor branche set $\OML/cmm/m/it/
+10 XORB[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 XORB[]; XORB[]; 
+:::XORB[]\OMS/cmsy/m/n/10 g$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 39--43
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 38--42
+Underfull \hbox (badness 10000) in paragraph at lines 39--43
 
  []
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (6.89934pt too wide) in paragraph at lines 43--44
+Overfull \hbox (6.89934pt too wide) in paragraph at lines 44--45
 []\OT1/cmr/m/n/10 The $\OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XO
 RB[]; XORB[]\OT1/cmr/m/n/10 )$ and $\OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/c
 mm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n/10 )$ are the fre-quency
  []
 
 
-Overfull \hbox (17.12938pt too wide) in paragraph at lines 47--49
+Overfull \hbox (17.12938pt too wide) in paragraph at lines 48--50
 \OML/cmm/m/it/10 B[] \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 ; B[] \OT1/cmr/m/n/10
  = []$\OT1/cmr/m/it/10 ,
  []
 
-<./images/RelationOfThreshold-LTThreshold.png, id=18, 291.0875pt x 175.65625pt>
+<./images/RelationOfThreshold-LTThreshold.png, id=16, 291.0875pt x 175.65625pt>
 
 File: ./images/RelationOfThreshold-LTThreshold.png Graphic file (type png)
 <use ./images/RelationOfThreshold-LTThreshold.png>
 Package pdftex.def Info: ./images/RelationOfThreshold-LTThreshold.png  used on 
-input line 54.
+input line 55.
 (pdftex.def)             Requested size: 345.0pt x 208.2053pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 63.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 64.
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 63.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 64.
 
-Overfull \hbox (88.57639pt too wide) detected at line 63
-\OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\O
-ML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 
-(\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) +
- \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\
-OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 We
-ight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B
-\OT1/cmr/m/n/10 ))
+Overfull \hbox (65.97383pt too wide) detected at line 64
+\OML/cmm/m/it/10 W\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cm
+m/m/it/10 A; B\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML
+/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) + \OML
+/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/c
+mm/m/it/10 A; B\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Weight\
+OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/
+cmr/m/n/10 ))
  []
 
 [2 <./images/PN_tc_and_03_01.png>]
-Overfull \hbox (8.15575pt too wide) in paragraph at lines 70--71
+Overfull \hbox (7.17882pt too wide) in paragraph at lines 71--72
 \OT1/cmr/bx/n/10 Proposition 2.2. \OT1/cmr/m/it/10 for one xor branch $\OML/cmm
 /m/it/10 XORB[]$\OT1/cmr/m/it/10 , if $\OML/cmm/m/it/10 W\OT1/cmr/m/n/10 (\OML/
-cmm/m/it/10 M; XORB[]j\OT1/cmr/m/n/10 ) \OML/cmm/m/it/10 > threshold$\OT1/cmr/m
-/it/10 , 
+cmm/m/it/10 M; XORB[]\OT1/cmr/m/n/10 ) \OML/cmm/m/it/10 > threshold$\OT1/cmr/m/
+it/10 , 
  []
 
 [3 <./images/RelationOfThreshold-LTThreshold.png>]
-Overfull \hbox (61.79663pt too wide) detected at line 103
+Overfull \hbox (57.89896pt too wide) detected at line 104
 [][]
  []
 
-[4] (./ProofDifficulty.aux)
+[4]
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 111.
+<./images/LT_Seq_01_Original.png, id=33, 404.51125pt x 121.45375pt>
+File: ./images/LT_Seq_01_Original.png Graphic file (type png)
+<use ./images/LT_Seq_01_Original.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Original.png  used on input line 15
+6.
+(pdftex.def)             Requested size: 345.0pt x 103.58641pt.
+<./images/LT_Seq_01_SetCases.png, id=34, 483.8075pt x 92.345pt>
+File: ./images/LT_Seq_01_SetCases.png Graphic file (type png)
+<use ./images/LT_Seq_01_SetCases.png>
+Package pdftex.def Info: ./images/LT_Seq_01_SetCases.png  used on input line 16
+4.
+(pdftex.def)             Requested size: 345.0pt x 65.85284pt.
+ [5 <./images/LT_Seq_01_Original.png> <./images/LT_Seq_01_SetCases.png>]
+<./images/LT_ControlPlace_01.png, id=41, 675.52374pt x 392.46625pt>
+File: ./images/LT_ControlPlace_01.png Graphic file (type png)
+<use ./images/LT_ControlPlace_01.png>
+Package pdftex.def Info: ./images/LT_ControlPlace_01.png  used on input line 17
+6.
+(pdftex.def)             Requested size: 345.0pt x 200.44258pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<./images/LT_Seq_01_Case_01.png, id=42, 404.51125pt x 131.49126pt>
+File: ./images/LT_Seq_01_Case_01.png Graphic file (type png)
+<use ./images/LT_Seq_01_Case_01.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Case_01.png  used on input line 184
+.
+(pdftex.def)             Requested size: 345.0pt x 112.1473pt.
+
+Overfull \hbox (15.05629pt too wide) in paragraph at lines 180--188
+[]\OT1/cmr/m/n/10 In the sit-u-a-tion b.1, given long-term de-pen-dency, LT(\OM
+S/cmsy/m/n/10 f\OT1/cmr/m/n/10 A\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 )=\OMS/cmsy/m
+/n/10 f\OT1/cmr/m/n/10 D\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 , LT(\OMS/cmsy/m/n/10
+ f\OT1/cmr/m/n/10 B\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 )=\OMS/cmsy/m/n/10 f\OT1/c
+mr/m/n/10 E\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 .
+ []
+
+[6]
+<./images/LT_Seq_01_Case_02.png, id=47, 404.51125pt x 161.60374pt>
+File: ./images/LT_Seq_01_Case_02.png Graphic file (type png)
+<use ./images/LT_Seq_01_Case_02.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Case_02.png  used on input line 191
+.
+(pdftex.def)             Requested size: 345.0pt x 137.82988pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[7 <./images/LT_ControlPlace_01.png> <./images/LT_Seq_01_Case_01.png>]
+Overfull \hbox (74.50102pt too wide) in paragraph at lines 198--201
+\OT1/cmr/m/n/10 de-pen-dency, LT(\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 S1\OMS/cmsy/
+m/n/10 g\OT1/cmr/m/n/10 )=\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 B1,C1\OMS/cmsy/m/n/
+10 g\OT1/cmr/m/n/10 , LT(\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 S1\OMS/cmsy/m/n/10 g
+\OT1/cmr/m/n/10 )=\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 B1,C2\OMS/cmsy/m/n/10 g \OT
+1/cmr/m/n/10 , LT(\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 S2\OMS/cmsy/m/n/10 g\OT1/cm
+r/m/n/10 )=\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 B1,C2\OMS/cmsy/m/n/10 g\OT1/cmr/m/
+n/10 , LT(\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 S2\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10
+ )=\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 B2,C2\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 ,
+ []
+
+
+Overfull \hbox (23.44533pt too wide) in paragraph at lines 198--201
+\OT1/cmr/m/n/10 LT(\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 B1,C1\OMS/cmsy/m/n/10 g\OT
+1/cmr/m/n/10 )=\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 T1\OMS/cmsy/m/n/10 g\OT1/cmr/m
+/n/10 , LT(\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 B2,C1\OMS/cmsy/m/n/10 g\OT1/cmr/m/
+n/10 )=\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 T1\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 , 
+LT(\OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 B2,C2\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 )=\
+OMS/cmsy/m/n/10 f\OT1/cmr/m/n/10 T2\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 , LT(\OMS/
+cmsy/m/n/10 f\OT1/cmr/m/n/10 B2,C2\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 )=\OMS/cmsy
+/m/n/10 f\OT1/cmr/m/n/10 T1\OMS/cmsy/m/n/10 g\OT1/cmr/m/n/10 .
+ []
+
+<./images/LT_And_Case_01.png, id=54, 790.955pt x 236.885pt>
+File: ./images/LT_And_Case_01.png Graphic file (type png)
+<use ./images/LT_And_Case_01.png>
+Package pdftex.def Info: ./images/LT_And_Case_01.png  used on input line 207.
+(pdftex.def)             Requested size: 345.0pt x 103.32607pt.
+[8 <./images/LT_Seq_01_Case_02.png> <./images/LT_And_Case_01.png>] [9]
+(./ProofDifficulty.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3604 strings out of 494847
- 53249 string characters out of 6179079
- 109509 words of memory out of 5000000
- 6870 multiletter control sequences out of 15000+600000
- 14306 words of font info for 56 fonts, out of 8000000 for 9000
+ 4650 strings out of 494847
+ 70567 string characters out of 6179079
+ 138056 words of memory out of 5000000
+ 7890 multiletter control sequences out of 15000+600000
+ 15222 words of font info for 59 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 41i,8n,39p,607b,257s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,12n,39p,717b,463s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/
-texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/typ
-e1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on ProofDifficulty.pdf (4 pages, 240363 bytes).
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on ProofDifficulty.pdf (9 pages, 358694 bytes).
 PDF statistics:
- 77 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
+ 114 PDF objects out of 1000 (max. 8388607)
+ 71 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
