@@ -40,6 +40,15 @@ public class DfMatrix {
 	public long getStandardCardinality(Dfg dfg) {
 		return standardCardinality;
 	}
+	// to add the pos and neg dfg together into the data
+	public void addDirectFollowMatrix(Dfg pos_dfg, Dfg neg_dfg) {
+		// use standardCardinality to weight the data there 
+		// are all the situations happen in the pos and neg?? 
+		// if one only appears in pos, the other only apper in neg, it is fine
+		// we need to consider the data from one cardinality and then back to one cardinality..
+		// traces num doesn mean it happen in all those
+		
+	}
 	
 	public void addDirectFollowMatrix(Dfg dfg, int colIdx) {
 		/*

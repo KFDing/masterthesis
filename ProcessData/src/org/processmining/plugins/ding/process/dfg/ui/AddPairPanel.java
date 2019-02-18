@@ -1,5 +1,6 @@
 package org.processmining.plugins.ding.process.dfg.ui;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
 import org.processmining.plugins.ding.process.dfg.model.XORCluster;
@@ -28,6 +30,7 @@ public class AddPairPanel extends JPanel{
 	JComboBox addTargetComboBox;
 	JComboBox rmSourceComboBox;
 	JComboBox rmTargetComboBox;
+	private JRadioButton rdbtnNewRadioButton_2;
 	
 	
 	/**
@@ -44,25 +47,43 @@ public class AddPairPanel extends JPanel{
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		this.setLayout(gridBagLayout);
 		
+		JPanel selectPanel = new JPanel();
+		GridBagConstraints gbc_selectPanel = new GridBagConstraints();
+		gbc_selectPanel.fill = GridBagConstraints.BOTH;
+		gbc_selectPanel.gridwidth = 2;
+		gbc_selectPanel.gridx = 0;
+		gbc_selectPanel.gridy = 0;
+		this.add(selectPanel, gbc_selectPanel);
+		
+		selectPanel.setBorder(new TitledBorder(null, "Select Add Method ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagLayout gbl_select = new GridBagLayout();
+		gbl_select.columnWidths = new int[]{0, 0, 0};
+		gbl_select.rowHeights = new int[] {0, 0, 10, 0};
+		gbl_select.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_select.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		selectPanel.setLayout(gbl_select);
+		
 		addAllBtn = new JRadioButton("Add All In Order");
-		addAllBtn.setSelected(true);
+		addAllBtn.setVerticalAlignment(SwingConstants.TOP);
 		GridBagConstraints gbc_addAllBtn = new GridBagConstraints();
+		gbc_addAllBtn.anchor = GridBagConstraints.LINE_START;
 		gbc_addAllBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_addAllBtn.gridx = 0;
 		gbc_addAllBtn.gridy = 0;
-		this.add(addAllBtn, gbc_addAllBtn);
+		selectPanel.add(addAllBtn, gbc_addAllBtn);
+		
 		
 		chooseBtn = new JRadioButton("Add XOR Pair By Choice");
+		GridBagConstraints gbc_chooseBtn = new GridBagConstraints();
+		gbc_chooseBtn.anchor = GridBagConstraints.LINE_START;
+		gbc_chooseBtn.insets = new Insets(0, 0, 5, 0);
+		gbc_chooseBtn.gridx = 0;
+		gbc_chooseBtn.gridy = 1;
+		selectPanel.add(chooseBtn, gbc_chooseBtn);
+		
 		ButtonGroup btnGroup = new ButtonGroup();
 		btnGroup.add(addAllBtn);
 		btnGroup.add(chooseBtn);
-		
-		
-		GridBagConstraints gbc_chooseBtn = new GridBagConstraints();
-		gbc_chooseBtn.insets = new Insets(0, 0, 5, 0);
-		gbc_chooseBtn.gridx = 1;
-		gbc_chooseBtn.gridy = 0;
-		this.add(chooseBtn, gbc_chooseBtn);
 		
 		choosePanel = new JPanel();
 		choosePanel.setBorder(new TitledBorder(null, "Choose XOR Pair To Add Or Remove", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -106,7 +127,6 @@ public class AddPairPanel extends JPanel{
 		JLabel addSourceLabel = new JLabel("Choose Source");
 		GridBagConstraints gbc_addSourceLabel = new GridBagConstraints();
 		gbc_addSourceLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_addSourceLabel.anchor = GridBagConstraints.EAST;
 		gbc_addSourceLabel.gridx = 0;
 		gbc_addSourceLabel.gridy = 1;
 		addPanel.add(addSourceLabel, gbc_addSourceLabel);
@@ -189,6 +209,18 @@ public class AddPairPanel extends JPanel{
 		
 	}
 
+	public void setPanelEnabled(JPanel panel, Boolean isEnabled) {
+	    panel.setEnabled(isEnabled);
+
+	    Component[] components = panel.getComponents();
+	    
+	    for (Component component : components) {
+	        if (component instanceof JPanel) {
+	            setPanelEnabled((JPanel) component, isEnabled);
+	        }
+	        component.setEnabled(isEnabled);
+	    }
+	}
 	
 	public int getAddSourceIndex() {
 		// TODO Auto-generated method stub

@@ -42,7 +42,7 @@ public class ProcessConfiguration extends Configuration{
 	public static final String PRE_PREFIX = "Before";
 	
 	// the threshold to keep the dfg working
-	public static double DFG_THRESHOLD = 0.5;
+	public static double DFG_THRESHOLD = 0.0;
 	public static double LT_THRESHOLD = 0.25;
 	
 	public enum ViewType {
