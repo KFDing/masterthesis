@@ -39,13 +39,14 @@ public class NewLTDetector {
 	
 	Map<Node, XEventClass> tlmaps;
 	AddLT2Net adder;
+	long traceNum =0;
 	
-	public NewLTDetector(ProcessTree pTree, XLog xlog, ControlParameters parameters) {
+	public NewLTDetector(ProcessTree pTree, XLog xlog, ControlParameters parameters, long tNum) {
 		// there is no implemented way to clone it
 		tree = pTree;
 		log = xlog;
 		this.parameters = parameters;
-		
+		traceNum = tNum;
 		tlmaps = getProcessTree2EventMap(log, tree , null);
 		
 		@SuppressWarnings("deprecation")
@@ -67,7 +68,11 @@ public class NewLTDetector {
 	
 	public void addLTOnPairList(List<XORClusterPair<ProcessTreeElement>> clusterPairs, 
 			List<LTRule<XORCluster<ProcessTreeElement>>> connSet) {
-		
+		// one mistake here, if we use all the connSet, then wehen adaptConnectionValue
+		// it can't make sure we have the right connSet, 
+		// on each clusterPair, we do it??  initializeConnection and then adapthConnectionValue
+		// by ?? 
+		// 
 	    initializeConnection(connSet);
 	    adaptConnectionValue(connSet, parameters);
 	    
@@ -80,6 +85,24 @@ public class NewLTDetector {
 		
 	}
 	
+	public void addLTOnPairList(List<XORClusterPair<ProcessTreeElement>> clusterPairs) {
+		// for each cluster pair we initialize connection and adaptConnectionValue
+		for(XORClusterPair<ProcessTreeElement> pair: clusterPairs) {
+			List<LTRule<XORCluster<ProcessTreeElement>>> connSet = pair.getConnection();
+			initializeConnection(connSet); // from log, stays the same
+			
+			adaptConnectionValueForPair(connSet, parameters);
+		}
+		 
+		
+	}
+	private void adaptConnectionValueForPair(List<LTRule<XORCluster<ProcessTreeElement>>> connSet,
+			ControlParameters parameters2) {
+		// TODO connSet is only for one pair, so if we use it, it can be used directly..
+		// 
+		
+	}
+
 	// if we want to add only one pair on petri net, or remove one from petri net, what to do ?
 	public void addLTOnSinglePair(XORClusterPair<ProcessTreeElement> pair) {
 		// but after this, we need to change the as source and as target setting here 
@@ -171,14 +194,19 @@ public class NewLTDetector {
 		// after getting the connGroup, now create the weight for each connSet
 		for(String keyName : connGroup.keySet()) {
 			List<LTRule<XORCluster<ProcessTreeElement>>> tmpConnList = connGroup.get(keyName);
-			// get the weight of them, existing, pos and neg.. into 
+			// get the weight of them, existing, pos and neg.. into
+			// one consideration is if we also put the total traces num as one standardCardinality?? 
+			// If we put total traces num, then it address the whole situations.
+			// like what we have done before it.. IF we only focus separately, some situation happen
+			// which violates the noise in data, if we use standardCardinality, then we have?? 
+			// 
 			List<Double> groupSum = getGroupWeight(tmpConnList); ; // new ArrayList<>();
 			// existing weight, because we have all conn, so we can have all branches after this
 			// visit each tmpConnList and then assign the values on it 
 			for(LTRule<XORCluster<ProcessTreeElement>> conn: tmpConnList) {
 				for(int i=0;i<ProcessConfiguration.LT_IDX_NUM;i++) 
 					if(groupSum.get(i)>0)
-						conn.setConnValue(i, conn.getConnValue(i)/ groupSum.get(i));
+						conn.setConnValue(i, 1.0*conn.getConnValue(i)/ groupSum.get(i));
 					else {
 						conn.setConnValue(i, 0.0);
 					}
@@ -199,6 +227,7 @@ public class NewLTDetector {
 	private List<Double> getGroupWeight(List<LTRule<XORCluster<ProcessTreeElement>>> tmpConnList) {
 		// TODO 
 		List<Double> sums = new ArrayList<>();
+		
 		for(int i=0;i<ProcessConfiguration.LT_IDX_NUM;i++)
 			sums.add(0.0);
 		
@@ -207,6 +236,16 @@ public class NewLTDetector {
 				sums.set(i, sums.get(i) + conn.getConnValue(i));
 			
 		}
+		sums.set(1, sums.get(1)+sums.get(2));
+		sums.set(2, sums.get(1));
+		/*
+		 * Here some thing not rightm because if we consider the whole effect, 
+		 * we use the trace num but we then need to find all xor branches in the model
+		 * and then divide it 
+		sums.add((double) tmpConnList.size());
+		sums.add((double) traceNum);
+		sums.add((double) traceNum);
+		*/
 		return sums;
 	}
 

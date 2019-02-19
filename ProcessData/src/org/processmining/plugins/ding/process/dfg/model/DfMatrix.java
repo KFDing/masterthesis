@@ -37,17 +37,8 @@ public class DfMatrix {
 		standardCardinality = cardiality;
 	}
 	
-	public long getStandardCardinality(Dfg dfg) {
+	public long getStandardCardinality() {
 		return standardCardinality;
-	}
-	// to add the pos and neg dfg together into the data
-	public void addDirectFollowMatrix(Dfg pos_dfg, Dfg neg_dfg) {
-		// use standardCardinality to weight the data there 
-		// are all the situations happen in the pos and neg?? 
-		// if one only appears in pos, the other only apper in neg, it is fine
-		// we need to consider the data from one cardinality and then back to one cardinality..
-		// traces num doesn mean it happen in all those
-		
 	}
 	
 	public void addDirectFollowMatrix(Dfg dfg, int colIdx) {
@@ -65,7 +56,13 @@ public class DfMatrix {
 			
 			// we need to get the percent of source->target in all source->* 
 			// so firstly we need to get the all source cardinality?? but how about the existing ones?? how to compare it ??
-			double percent = 1.0*cardinality / getOutEdgesCardinality(dfg, source);
+			double denomial = 1 ;
+			if(colIdx == 0) {
+				denomial = getOutEdgesCardinality(dfg, source);
+			}else
+				denomial = standardCardinality;
+			
+			double percent = 1.0*cardinality / denomial;
 			addMatrixItem(source, target, percent, colIdx);
 		}
 		
@@ -77,7 +74,14 @@ public class DfMatrix {
 			// addMatrixItemWithCheck( originalPoint, startEventClass, cardinality, colIdx);
 			// for the startEvent, we can't count the use the directfollow edge, because it begins from the first position
 			// then we need to count all the start activity and then get the percent to it
-			double percent = 1.0 * cardinality / getStartEventCardinality(dfg);
+			double denomial = 1 ;
+			if(colIdx == 0) {
+				denomial = getStartEventCardinality(dfg);
+			}else
+				denomial = standardCardinality;
+			
+			
+			double percent = 1.0 * cardinality / denomial;
 			
 			addMatrixItem( originalPoint, startEventClass, percent, colIdx);
 		}
@@ -86,7 +90,13 @@ public class DfMatrix {
 		for(XEventClass endEventClass : dfg.getEndActivities()) {
 			long cardinality = dfg.getEndActivityCardinality(endEventClass);
 			// addMatrixItemWithCheck( endEventClass, endPoint, cardinality, colIdx);
-			double percent = 1.0 * cardinality / getEndEventCardinality(dfg);
+			double denomial = 1 ;
+			if(colIdx == 0) {
+				denomial = getEndEventCardinality(dfg);
+			}else
+				denomial = standardCardinality;
+			
+			double percent = 1.0 * cardinality / denomial;
 			addMatrixItem( endEventClass, endPoint, percent, colIdx);
 		}
 	}

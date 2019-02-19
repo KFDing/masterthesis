@@ -40,12 +40,12 @@ public class IncorporateNeg2Dfg {
 		XLog2Dfg ld = new XLog2Dfg();
 		Dfg pos_dfg = ld.log2Dfg(context, pos_log);
 		Dfg neg_dfg = ld.log2Dfg(context, neg_log);
-		
+		int num = XLogInfoFactory.createLogInfo(log).getNumberOfTraces();
 		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
-		DfMatrix dfMatrix = createDfMatrix(dfg, pos_dfg, neg_dfg);
+		DfMatrix dfMatrix = createDfMatrix(dfg, pos_dfg, neg_dfg, num);
 		
-		int num = XLogInfoFactory.createLogInfo(pos_log).getNumberOfTraces();
-		dfMatrix.setStandardCardinality(num);
+		// int num = XLogInfoFactory.createLogInfo(pos_log).getNumberOfTraces();
+		// dfMatrix.setStandardCardinality(num);
 
 		return dfMatrix;
 	}
@@ -63,9 +63,9 @@ public class IncorporateNeg2Dfg {
 		XLog2Dfg ld = new XLog2Dfg();
 		Dfg pos_dfg = ld.log2Dfg(context, pos_log);
 		Dfg neg_dfg = ld.log2Dfg(context, neg_log);
-		
+		int num = XLogInfoFactory.createLogInfo(log).getNumberOfTraces();
 		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
-		DfMatrix dfMatrix = createDfMatrix(dfg, pos_dfg, neg_dfg);
+		DfMatrix dfMatrix = createDfMatrix(dfg, pos_dfg, neg_dfg, num);
 		
 		// now we need to adjust the complete the features it has. 
 		// 1. accept the threshold adjust on the result panel
@@ -105,10 +105,11 @@ public class IncorporateNeg2Dfg {
 		return new Object[] {new_dfg, new_dfg1, new_dfg2, new_dfg3};
 	}
 	
-	public static DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg) {
+	public static DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg, int num) {
 		// here we need to update the codes for accepting double percent 
 		
 		DfMatrix dfMatrix = new DfMatrix();
+		dfMatrix.setStandardCardinality(num);
 		// here we don't need magical number, but they should exist, or zero
 		dfMatrix.addDirectFollowMatrix( dfg, 0);
 		// one problem here is about the single direct follow relation, it doesn't show here

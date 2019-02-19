@@ -300,15 +300,13 @@ class ResultMainView extends JPanel{
 		// with the new ones, if sth changes, so we need to generate them again? If not changes, then 
 		// we don't need to do it 
 		// if we need to create new Dfg ?? 
+		addPairPanel.addAllBtn.setSelected(true);
 		updateAll =  isWeightUpdated(parameters, newParameters);
-		System.out.println("Parameter before update: " + parameters.getExistWeight()+":"+parameters.getPosWeight()+":"+ parameters.getNegWeight());
-
-		System.out.println("New Parameter before update: " + newParameters.getExistWeight()+":"+newParameters.getPosWeight()+":"+ newParameters.getNegWeight());
 		
 		if(updateAll) {
 			
 			parameters.cloneValues(newParameters);
-			System.out.println("Parameter before update: " + parameters.getExistWeight()+":"+parameters.getPosWeight()+":"+ parameters.getNegWeight());
+			// System.out.println("Parameter before update: " + parameters.getExistWeight()+":"+parameters.getPosWeight()+":"+ parameters.getNegWeight());
 
 			// System.out.println("neg after update is "+ parameters.getNegWeight());
 			dfMatrix.updateCardinality(0, parameters.getExistWeight());
@@ -341,6 +339,7 @@ class ResultMainView extends JPanel{
 		// TODO input is process tree and output is the petri net with long-term dependency
 		// one way is to generate the process tree, because we need it all the time
 		// but if we generate the petri net without lt, we can choose it 
+		
 		if(updateAll) {
 			dfg =  dfMatrix.buildDfs();
 			// I think I should change something about it, which could remember the result from before
@@ -367,7 +366,7 @@ class ResultMainView extends JPanel{
 		generator = new NewXORPairGenerator<ProcessTreeElement>();
 		generator.initialize(pTree);
 		
-		detector = new NewLTDetector(pTree, log, parameters);
+		detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
 		
 	}
 	private void createPNWithLT() {
@@ -398,7 +397,7 @@ class ResultMainView extends JPanel{
 			
 		}
 		
-		detector = new NewLTDetector(pTree, log, parameters);
+		detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
 		manet = detector.getAcceptionPN();
 		
 		leftView.drawResult(context, manet);

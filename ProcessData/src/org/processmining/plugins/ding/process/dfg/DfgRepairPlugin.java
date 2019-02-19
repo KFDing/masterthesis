@@ -62,8 +62,8 @@ public class DfgRepairPlugin {
 		Dfg neg_dfg = ld.log2Dfg(context, neg_log);
 		
 		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
-		DfMatrix dfMatrix = IncorporateNeg2Dfg.createDfMatrix(dfg, pos_dfg, neg_dfg);
-		dfMatrix.setStandardCardinality(num);
+		DfMatrix dfMatrix = IncorporateNeg2Dfg.createDfMatrix(dfg, pos_dfg, neg_dfg, num);
+		
 		
 		return new DfgProcessResult(log, dfMatrix);
 	}	
