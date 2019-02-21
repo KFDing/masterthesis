@@ -42,13 +42,14 @@ public class AddPairPanel extends JPanel{
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 1.0, Double.MIN_VALUE};
 		this.setLayout(gridBagLayout);
 		
 		JPanel selectPanel = new JPanel();
 		GridBagConstraints gbc_selectPanel = new GridBagConstraints();
+		gbc_selectPanel.insets = new Insets(0, 0, 5, 0);
 		gbc_selectPanel.fill = GridBagConstraints.BOTH;
 		gbc_selectPanel.gridwidth = 2;
 		gbc_selectPanel.gridx = 0;
@@ -88,6 +89,7 @@ public class AddPairPanel extends JPanel{
 		choosePanel = new JPanel();
 		choosePanel.setBorder(new TitledBorder(null, "Choose XOR Pair To Add Or Remove", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_choosePanel = new GridBagConstraints();
+		gbc_choosePanel.insets = new Insets(0, 0, 5, 0);
 		gbc_choosePanel.fill = GridBagConstraints.BOTH;
 		gbc_choosePanel.gridwidth = 2;
 		gbc_choosePanel.gridx = 0;

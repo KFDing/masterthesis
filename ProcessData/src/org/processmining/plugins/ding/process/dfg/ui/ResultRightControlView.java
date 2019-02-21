@@ -17,6 +17,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -61,6 +62,11 @@ public class ResultRightControlView extends JPanel {
 	JComboBox saveModelCombox;
 
 	AddPairPanel addPairPanel;
+	
+	private JPanel showConfusionMatrixPanel;
+	JCheckBox withoutLTCBox;
+	JCheckBox withLTCBox;
+	
 	protected Color COLOR_FG = new Color(30, 30, 30);
 	protected Font smallFont;
 
@@ -302,11 +308,43 @@ public class ResultRightControlView extends JPanel {
 		gbc_saveModelCombox.gridy = 2;
 		savePanel.add(saveModelCombox, gbc_saveModelCombox);
 
-		this.add(weightPanel, new Float(40));
+		showConfusionMatrixPanel = new JPanel();
+		showConfusionMatrixPanel.setBorder(new TitledBorder(null, "Show Confusion Matrix Evaluation ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_showConfusionMatrixPanel = new GridBagConstraints();
+		gbc_showConfusionMatrixPanel.insets = new Insets(0, 0, 0, 5);
+		gbc_showConfusionMatrixPanel.fill = GridBagConstraints.BOTH;
+		gbc_showConfusionMatrixPanel.gridx = 0;
+		gbc_showConfusionMatrixPanel.gridy = 2;
+		
+		GridBagLayout gbl_showConfusionMatrixPanel = new GridBagLayout();
+		gbl_showConfusionMatrixPanel.columnWidths = new int[]{0, 0, 0};
+		gbl_showConfusionMatrixPanel.rowHeights = new int[]{0, 0, 10, 0};
+		gbl_showConfusionMatrixPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
+		gbl_showConfusionMatrixPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		showConfusionMatrixPanel.setLayout(gbl_showConfusionMatrixPanel);
+		
+		withoutLTCBox = new JCheckBox("Show Confusion Matrix For Model Without LT");
+		withoutLTCBox.setVerticalAlignment(SwingConstants.TOP);
+		GridBagConstraints gbc_checkBox = new GridBagConstraints();
+		gbc_checkBox.anchor = GridBagConstraints.LINE_START;
+		gbc_checkBox.insets = new Insets(0, 0, 5, 5);
+		gbc_checkBox.gridx = 0;
+		gbc_checkBox.gridy = 0;
+		showConfusionMatrixPanel.add(withoutLTCBox, gbc_checkBox);
+		
+		withLTCBox = new JCheckBox("Show Confusion Matrix For Model With LT");
+		GridBagConstraints gbc_withLTCBox = new GridBagConstraints();
+		gbc_withLTCBox.anchor = GridBagConstraints.LINE_START;
+		gbc_withLTCBox.insets = new Insets(0, 0, 5, 0);
+		gbc_withLTCBox.gridx = 0;
+		gbc_withLTCBox.gridy = 1;
+		showConfusionMatrixPanel.add(withLTCBox, gbc_withLTCBox);
+		
+		this.add(weightPanel, new Float(30));
 		this.add(buttonPane, new Float(5));
 		this.add(addPairPanel, new Float(40));
 		this.add(savePanel, new Float(5));
-
+		this.add(showConfusionMatrixPanel,  new Float(10));
 	}
 
 	public int getSaveModelIndex() {

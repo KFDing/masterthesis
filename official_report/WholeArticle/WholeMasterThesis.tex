@@ -30,8 +30,10 @@ In comparison to current technologies, the methods proposed in this articles pro
 \end{abstract}
 \pagebreak
 \section{Introduction}
-In this section, we give the problem, but extend the old writing. 
-\\
+%In this section, we give the problem, but extend the old writing. 
+Process Mining supports the analysis of business processes on three fields: process discovery, conformance checking and process enhancement\cite{van2011process}. Process discovery techniques focus on deriving process models from event logs of the information system, aiming to improve the understanding of real business process. Conformance checking analyzes the deviations between process models and observed behavior of its execution. Enhancement adapts and improves process models according to the data of real process.
+
+Goal Mining is proposed by 
 
 Section description. The next sections are organized in the following order. Firstly, related work is given and compared. Secondly, our methods are introduced and formal definitions are given. In Implementation Section, the details of algorithms are given. Later, we evaluate our methods with simulated data and real data respectively and list the results. At last, a conclusion on the algorithms is provided. 
 
@@ -45,6 +47,8 @@ I did some introduction, it is proven that in some cases, we can't deal with it.
 Another way to avoid this problem is to add duplicated events, but the problem stays the same, so if we want to keep the model fit, we add new event for the discovered long-term dependency, the original, we keep it in the model?? But it is not precise!!! It allows too many choices there, but the model is sound, because we add events on model, we produce and consume tokens from duplicated events, and consumes it later.. Still, it is not so right. But if we choose the events before, we decides the events later, it's true... helps a little... 
 
 How to prove it ?? By induction. 
+We use  process  trees as one internal result in  our  approach in two factors: (1) they are sound by construction, and can be transferred into sound Petri net models; (2) they are block-structured. which benefits the detection of exclusive relations in model.
+
 \begin{itemize}
 	\item the original model is sound
 	\item after adding one long-term dependency by duplicating the event, we make sure
@@ -83,15 +87,28 @@ Some tests are given, one is simulated data, and also some examples are given to
 It's about 3 pages or 4 pages with graphs. 
 
 \section{Related Work}
+
 Related work, we give examples of new-generated model of Inductive Miner, Alpha Miner, <In which cases, it gives better results. > 
 Then, repair model, 
 Fahland's methods,  
 Anna's methods,
+Enhancing process models to improve business performance: A methodology and case studies, TO change model by adding constraints on it... 
+
+TO incorporate the negative instances into process model generation, is totally used in that, but it is based on the alignment, not on the traces.  Some summary from them, is already ok. 
+Which I think it 
 
 To incorporate the negative information, simulated data are used, to limit the choices of going..
+
+Compared to this, our approach is innovative mainly in the following aspects. 
+\begin{itemize}
+	\item Incorporate the negative information into model repair. Unlike the methods mentioned before
+	\item Analyze the long-term dependency in the model to provide a preciser result. 
+\end{itemize}
 
 It is about 2 pages!!
 \section{Conclusion}
 One page is enough. 
 %% 1 + 1-2 + 12 + 6-8 + 4-5 + 2-3 + 1 + 1-2 =  28-34 pages. It's ok..
+\bibliography{ThesisReferences.bib}
+\bibliographystyle{ieeetr}
 \end{document}
