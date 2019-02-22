@@ -5,4 +5,24 @@ W.~Van Der~Aalst, {\em Process mining: discovery, conformance and enhancement
   of business processes}, vol.~2.
 \newblock Springer, 2011.
 
+\bibitem{ghasemi2016process}
+M.~Ghasemi and D.~Amyot, ``Process mining in healthcare: a systematised
+  literature review,'' 2016.
+
+\bibitem{fahland2015model}
+D.~Fahland and W.~M. van~der Aalst, ``Model repair—aligning process models to
+  reality,'' {\em Information Systems}, vol.~47, pp.~220--243, 2015.
+
+\bibitem{leemans2013discovering}
+S.~J. Leemans, D.~Fahland, and W.~M. van~der Aalst, ``Discovering
+  block-structured process models from event logs-a constructive approach,'' in
+  {\em International conference on applications and theory of Petri nets and
+  concurrency}, pp.~311--329, Springer, 2013.
+
+\bibitem{leemans2014discovering}
+S.~J. Leemans, D.~Fahland, and W.~M. van~der Aalst, ``Discovering
+  block-structured process models from incomplete event logs,'' in {\em
+  International Conference on Applications and Theory of Petri Nets and
+  Concurrency}, pp.~91--110, Springer, 2014.
+
 \end{thebibliography}

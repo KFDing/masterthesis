@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  21 FEB 2019 18:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  22 FEB 2019 19:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -210,35 +210,36 @@ Package: relsize 2013/03/29 ver 4.1
 )
 \c@mydef=\count107
 \c@mytheorem=\count108
+\c@myproposition=\count109
 
 (./WholeMasterThesis.aux)
 \openout1 = `WholeMasterThesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
+LaTeX Font Info:    ... okay on input line 31.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count109
+\scratchcounter=\count110
 \scratchdimen=\dimen127
 \scratchbox=\box36
-\nofMPsegments=\count110
-\nofMParguments=\count111
+\nofMPsegments=\count111
+\nofMParguments=\count112
 \everyMPshowfont=\toks27
-\MPscratchCnt=\count112
+\MPscratchCnt=\count113
 \MPscratchDim=\dimen128
-\MPnumerator=\count113
-\makeMPintoPDFobject=\count114
+\MPnumerator=\count114
+\makeMPintoPDFobject=\count115
 \everyMPtoPDFconversion=\toks28
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -298,54 +299,369 @@ e
 ))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 22.
+LaTeX Font Info:    Try loading font information for U+msa on input line 32.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 22.
+LaTeX Font Info:    Try loading font information for U+msb on input line 32.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 22.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 32.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 53.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
+
+LaTeX Warning: Citation `Fahland' on page 3 undefined on input line 75.
+
+
+LaTeX Warning: Citation `Dees' on page 3 undefined on input line 75.
+
+
+LaTeX Warning: Citation `Anja' on page 3 undefined on input line 75.
+
+<./images/P04_modelchange_a.png, id=15, 246.9225pt x 81.30376pt>
+File: ./images/P04_modelchange_a.png Graphic file (type png)
+<use ./images/P04_modelchange_a.png>
+Package pdftex.def Info: ./images/P04_modelchange_a.png  used on input line 81.
+
+(pdftex.def)             Requested size: 110.40253pt x 36.35187pt.
+<./images/P05_modelchange_b.png, id=17, 246.9225pt x 124.465pt>
+File: ./images/P05_modelchange_b.png Graphic file (type png)
+<use ./images/P05_modelchange_b.png>
+Package pdftex.def Info: ./images/P05_modelchange_b.png  used on input line 88.
+
+(pdftex.def)             Requested size: 110.40253pt x 55.64978pt.
+<./images/P04_modelchange_c.png, id=18, 236.885pt x 63.23625pt>
+File: ./images/P04_modelchange_c.png Graphic file (type png)
+<use ./images/P04_modelchange_c.png>
+Package pdftex.def Info: ./images/P04_modelchange_c.png  used on input line 95.
+
+(pdftex.def)             Requested size: 110.40253pt x 29.47112pt.
+[3 <./images/P04_modelchange_a.png> <./images/P05_modelchange_b.png> <./images/
+P04_modelchange_c.png>]
+
+LaTeX Warning: Citation `Dees' on page 4 undefined on input line 111.
+
+
+LaTeX Warning: Citation `Anja' on page 4 undefined on input line 111.
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 126.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 53.
- [2]
-(./WholeMasterThesis.bbl [3]) [4] (./WholeMasterThesis.aux) ) 
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 126.
+ [4]
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 143.
+ [5]
+Overfull \hbox (88.57639pt too wide) detected at line 165
+\OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\O
+ML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 
+(\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) +
+ \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\
+OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 We
+ight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B
+\OT1/cmr/m/n/10 ))
+ []
+
+
+Overfull \hbox (104.94693pt too wide) detected at line 167
+\OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10
+ (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10
+ (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 ))
+ + \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n
+/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10
+ Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/
+10 A\OT1/cmr/m/n/10 ))
+ []
+
+
+Overfull \hbox (85.58585pt too wide) detected at line 169
+\OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (
+\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (
+\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) + \
+OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\
+OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Weigh
+t\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1
+/cmr/m/n/10 ))
+ []
+
+<./images/PN06_Seq_2_xor_notnested.png, id=37, 1234.6125pt x 312.16624pt>
+File: ./images/PN06_Seq_2_xor_notnested.png Graphic file (type png)
+<use ./images/PN06_Seq_2_xor_notnested.png>
+Package pdftex.def Info: ./images/PN06_Seq_2_xor_notnested.png  used on input l
+ine 180.
+(pdftex.def)             Requested size: 345.0pt x 87.2297pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[6] [7 <./images/PN06_Seq_2_xor_notnested.png>]
+
+LaTeX Warning: Citation `vanderAalst:2016:PMD:2948762' on page 8 undefined on i
+nput line 227.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 235--236
+
+ []
+
+<./images/PT02_xor_nested_and_pure.png, id=48, 499.8675pt x 263.98625pt>
+File: ./images/PT02_xor_nested_and_pure.png Graphic file (type png)
+<use ./images/PT02_xor_nested_and_pure.png>
+Package pdftex.def Info: ./images/PT02_xor_nested_and_pure.png  used on input l
+ine 244.
+(pdftex.def)             Requested size: 345.0pt x 182.20306pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[8]
+Overfull \hbox (2.89983pt too wide) detected at line 271
+\OML/cmm/m/it/10 SC\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n
+/10 ) = \OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT
+1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/c
+mm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n/10 )
+ []
+
+[9 <./images/PT02_xor_nested_and_pure.png>] [10]
+<./images/LT_Seq_01_Original.png, id=59, 404.51125pt x 121.45375pt>
+File: ./images/LT_Seq_01_Original.png Graphic file (type png)
+<use ./images/LT_Seq_01_Original.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Original.png  used on input line 33
+3.
+(pdftex.def)             Requested size: 345.0pt x 103.58641pt.
+ [11 <./images/LT_Seq_01_Original.png>]
+Overfull \hbox (7.47571pt too wide) in paragraph at lines 350--353
+\OML/cmm/m/it/10 LT[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 A; B
+\OMS/cmsy/m/n/10 g\OML/cmm/m/it/10 ; LT[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\
+OML/cmm/m/it/10 D; E\OMS/cmsy/m/n/10 g$ $\OML/cmm/m/it/10 LT[] \OT1/cmr/m/n/10 
+= \OML/cmm/m/it/10 XORB[]$ \OT1/cmr/m/n/10 and $\OML/cmm/m/it/10 LT[] \OT1/cmr/
+m/n/10 = \OML/cmm/m/it/10 XORB[]; \OMS/cmsy/m/n/10 j\OML/cmm/m/it/10 LT\OMS/cms
+y/m/n/10 j \OML/cmm/m/it/10 <
+ []
+
+
+Overfull \hbox (7.47571pt too wide) in paragraph at lines 353--356
+\OML/cmm/m/it/10 LT[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 A; B
+\OMS/cmsy/m/n/10 g\OML/cmm/m/it/10 ; LT[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\
+OML/cmm/m/it/10 D; E\OMS/cmsy/m/n/10 g$ $\OML/cmm/m/it/10 LT[] \OT1/cmr/m/n/10 
+= \OML/cmm/m/it/10 XORB[]$ \OT1/cmr/m/n/10 and $\OML/cmm/m/it/10 LT[] \OT1/cmr/
+m/n/10 = \OML/cmm/m/it/10 XORB[]; \OMS/cmsy/m/n/10 j\OML/cmm/m/it/10 LT\OMS/cms
+y/m/n/10 j \OML/cmm/m/it/10 <
+ []
+
+[12]
+<./images/LT_Seq_01_Silent_01.png, id=67, 404.51125pt x 161.60374pt>
+File: ./images/LT_Seq_01_Silent_01.png Graphic file (type png)
+<use ./images/LT_Seq_01_Silent_01.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Silent_01.png  used on input line 3
+85.
+(pdftex.def)             Requested size: 345.0pt x 137.82988pt.
+<./images/LT_Seq_01_Silent_03.png, id=68, 404.51125pt x 131.49126pt>
+File: ./images/LT_Seq_01_Silent_03.png Graphic file (type png)
+<use ./images/LT_Seq_01_Silent_03.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Silent_03.png  used on input line 3
+92.
+(pdftex.def)             Requested size: 345.0pt x 112.1473pt.
+<./images/LT_Seq_01_Silent_02.png, id=69, 404.51125pt x 157.58875pt>
+File: ./images/LT_Seq_01_Silent_02.png Graphic file (type png)
+<use ./images/LT_Seq_01_Silent_02.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Silent_02.png  used on input line 3
+99.
+(pdftex.def)             Requested size: 345.0pt x 134.40552pt.
+
+
+Package caption Warning: \label without proper reference on input line 393.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig:seq-2-silent-2' on page 13 undefined on input lin
+e 407.
+
+
+Package caption Warning: \label without proper reference on input line 400.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig:seq-2-silent-3' on page 13 undefined on input lin
+e 407.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<./images/LT_Seq_01_FullDuplicated.png, id=70, 409.53pt x 372.39125pt>
+File: ./images/LT_Seq_01_FullDuplicated.png Graphic file (type png)
+<use ./images/LT_Seq_01_FullDuplicated.png>
+Package pdftex.def Info: ./images/LT_Seq_01_FullDuplicated.png  used on input l
+ine 412.
+(pdftex.def)             Requested size: 345.0pt x 313.73271pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<./images/LT_Seq_01_SemiDuplicated.png, id=71, 404.51125pt x 266.9975pt>
+File: ./images/LT_Seq_01_SemiDuplicated.png Graphic file (type png)
+<use ./images/LT_Seq_01_SemiDuplicated.png>
+Package pdftex.def Info: ./images/LT_Seq_01_SemiDuplicated.png  used on input l
+ine 424.
+(pdftex.def)             Requested size: 345.0pt x 227.71892pt.
+<./images/LT_Seq_01_SemiDuplicated_Problem2.png, id=72, 404.51125pt x 216.81pt>
+
+File: ./images/LT_Seq_01_SemiDuplicated_Problem2.png Graphic file (type png)
+<use ./images/LT_Seq_01_SemiDuplicated_Problem2.png>
+Package pdftex.def Info: ./images/LT_Seq_01_SemiDuplicated_Problem2.png  used o
+n input line 431.
+(pdftex.def)             Requested size: 345.0pt x 184.91461pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[13] [14 <./images/LT_Seq_01_Silent_01.png> <./images/LT_Seq_01_Silent_03.png> 
+<./images/LT_Seq_01_Silent_02.png>]
+Overfull \hbox (26.8028pt too wide) detected at line 448
+\OML/cmm/m/it/10 Wlt\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/
+n/10 ) = \OML/cmm/m/it/10 Wlt[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]
+\OT1/cmr/m/n/10 ) + \OML/cmm/m/it/10 Wlt[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XOR
+B[]; XORB[]\OT1/cmr/m/n/10 )
+ []
+
+[15 <./images/LT_Seq_01_FullDuplicated.png>] [16 <./images/LT_Seq_01_SemiDuplic
+ated.png> <./images/LT_Seq_01_SemiDuplicated_Problem2.png>]
+Overfull \hbox (49.25746pt too wide) in paragraph at lines 448--452
+\OT1/cmr/m/it/10 of pos-si-ble directly-follows xor branche set $\OML/cmm/m/it/
+10 XORB[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 XORB[]; XORB[]; 
+:::XORB[]\OMS/cmsy/m/n/10 g$
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 448--452
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 448--452
+
+ []
+
+
+Overfull \hbox (6.89934pt too wide) in paragraph at lines 453--454
+[]\OT1/cmr/m/n/10 The $\OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XO
+RB[]; XORB[]\OT1/cmr/m/n/10 )$ and $\OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/c
+mm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n/10 )$ are the fre-quency
+ []
+
+
+Overfull \hbox (17.12938pt too wide) in paragraph at lines 457--459
+\OML/cmm/m/it/10 B[] \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 ; B[] \OT1/cmr/m/n/10
+ = []$\OT1/cmr/m/it/10 ,
+ []
+
+<./images/RelationOfThreshold-LTThreshold.png, id=92, 291.0875pt x 175.65625pt>
+
+File: ./images/RelationOfThreshold-LTThreshold.png Graphic file (type png)
+<use ./images/RelationOfThreshold-LTThreshold.png>
+Package pdftex.def Info: ./images/RelationOfThreshold-LTThreshold.png  used on 
+input line 464.
+(pdftex.def)             Requested size: 345.0pt x 208.2053pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+Overfull \hbox (65.97383pt too wide) detected at line 473
+\OML/cmm/m/it/10 W\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cm
+m/m/it/10 A; B\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML
+/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) + \OML
+/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/c
+mm/m/it/10 A; B\OT1/cmr/m/n/10 )) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 Weight\
+OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/
+cmr/m/n/10 ))
+ []
+
+
+Overfull \hbox (7.17882pt too wide) in paragraph at lines 480--481
+\OT1/cmr/bx/n/10 Proposition 7.2. \OT1/cmr/m/it/10 for one xor branch $\OML/cmm
+/m/it/10 XORB[]$\OT1/cmr/m/it/10 , if $\OML/cmm/m/it/10 W\OT1/cmr/m/n/10 (\OML/
+cmm/m/it/10 M; XORB[]\OT1/cmr/m/n/10 ) \OML/cmm/m/it/10 > threshold$\OT1/cmr/m/
+it/10 , 
+ []
+
+[17]
+Overfull \hbox (57.89896pt too wide) detected at line 513
+[][]
+ []
+
+[18 <./images/RelationOfThreshold-LTThreshold.png>] [19]
+File: ./images/LT_Seq_01_Silent_03.png Graphic file (type png)
+<use ./images/LT_Seq_01_Silent_03.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Silent_03.png  used on input line 5
+32.
+(pdftex.def)             Requested size: 345.0pt x 112.1473pt.
+<./images/LT_Seq_01_Silent_03_AfterAddition.png, id=107, 404.51125pt x 204.765p
+t>
+File: ./images/LT_Seq_01_Silent_03_AfterAddition.png Graphic file (type png)
+<use ./images/LT_Seq_01_Silent_03_AfterAddition.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Silent_03_AfterAddition.png  used o
+n input line 539.
+(pdftex.def)             Requested size: 345.0pt x 174.64157pt.
+<./images/LT_Seq_01_Silent_02_AfterAddition.png, id=108, 404.51125pt x 181.6787
+6pt>
+File: ./images/LT_Seq_01_Silent_02_AfterAddition.png Graphic file (type png)
+<use ./images/LT_Seq_01_Silent_02_AfterAddition.png>
+Package pdftex.def Info: ./images/LT_Seq_01_Silent_02_AfterAddition.png  used o
+n input line 546.
+(pdftex.def)             Requested size: 345.0pt x 154.9516pt.
+
+
+LaTeX Warning: Float too large for page by 3.74046pt on input line 552.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+(./WholeMasterThesis.bbl
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ” in font cmr10!
+) [20] [21 <./images/LT_Seq_01_Silent_03_AfterAddition.png> <./images/LT_Seq_01
+_Silent_02_AfterAddition.png>] (./WholeMasterThesis.aux)
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 4576 strings out of 494847
- 68640 string characters out of 6179079
- 133929 words of memory out of 5000000
- 7825 multiletter control sequences out of 15000+600000
- 13138 words of font info for 53 fonts, out of 8000000 for 9000
+ 4721 strings out of 494847
+ 72909 string characters out of 6179079
+ 136813 words of memory out of 5000000
+ 7951 multiletter control sequences out of 15000+600000
+ 15220 words of font info for 59 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 41i,6n,38p,570b,239s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on WholeMasterThesis.pdf (4 pages, 120944 bytes).
+ 41i,8n,39p,898b,448s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmbxti10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/rsfs/rsfs10.pfb>
+Output written on WholeMasterThesis.pdf (21 pages, 383633 bytes).
 PDF statistics:
- 57 PDF objects out of 1000 (max. 8388607)
- 40 compressed objects within 1 object stream
+ 178 PDF objects out of 1000 (max. 8388607)
+ 106 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 76 words of extra memory for PDF output out of 10000 (max. 10000000)
 
