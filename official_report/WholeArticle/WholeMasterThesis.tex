@@ -118,14 +118,12 @@ This paper tries to provide a solution for it. The reminder is organized in the 
 %  from Fahland's method to Dees's Anja's
 % To incorporate the negative instances into model
 %  of Stijin Goedertier, and the methods later, two or three
-
 %% Now comes to my methods
 Process enhancement focuses to extend or improve an existing process model by using actual event log\cite{van2011process}. Besides extending the model with more data perspectives, repair is another type of enhancement. It modifies the model to reflect observed behavior while keeping the model as similar as possible to original model.
 
 In \cite{fahland2012repairing}, model repair is firstly introduced into process enhancement. By using conformance checking, the deviations of alignment are detected. The consecutive log moves is collected in the form of subtraces at specific location Q. Later, the subtraces are grouped into sublog that share the same location Q for subprocess discovery. In the earlier version in \cite{fahland2012repairing}, the sublogs are obtained in a greedy way, while in \cite{fahland2015model}, sublogs are gathered by using ILP miner to guarantee the fitness. Additional Subprocesses and loops are introduced into the existing model to ensure the fitness, which also brings variants of execution paths into the model. 
 
 Later, compared to \cite{fahland2012repairing, fahland2015model}, where all deviations are incorporated in model repair, \cite{dees2017enhancing} considers model performance into model repair. An observation instance is built to represent the type of log moves given trace and  KPI. Subsequently, a classification tree will be constructed from the set of observation instances to cluster traces of event log. Then, the techniques in \cite{fahland2015model} are applied into event log with positive traces to repair model. 
-
 
 
 As described above, the state-of-the-art repair techniques are based only on positive instances, meanwhile the negative instances are neglected. Without negative instances, it is difficult to balance the fitness and precision of those model. Few researches give a try on incorporating negative information into process discovery. \cite{goedertier2009robust}  analyzes the available events set before and after one position and generates artificial negative events based on the complement of those event sets. Next, Inductive Logic Programming is applied to detect the preconditions for each activity. Those preconditions are then converted to petri net after applying a pruning and post-process step. 
