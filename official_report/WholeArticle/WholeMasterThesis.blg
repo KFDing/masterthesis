@@ -3,50 +3,47 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: WholeMasterThesis.aux
 The style file: ieeetr.bst
 Database file #1: ThesisReferences.bib.bib
-Warning--I didn't find a database entry for "Fahland"
-Warning--I didn't find a database entry for "Dees"
-Warning--I didn't find a database entry for "Anja"
 Warning--I didn't find a database entry for "vanderAalst:2016:PMD:2948762"
 Warning--empty journal in ghasemi2016process
-You've used 5 entries,
+You've used 10 entries,
             1876 wiz_defined-function locations,
-            513 strings with 4415 characters,
-and the built_in function-call counts, 1345 in all, are:
-= -- 133
-> -- 42
+            538 strings with 5412 characters,
+and the built_in function-call counts, 3215 in all, are:
+= -- 330
+> -- 100
 < -- 0
-+ -- 16
-- -- 11
-* -- 86
-:= -- 187
-add.period$ -- 6
-call.type$ -- 5
-change.case$ -- 4
++ -- 37
+- -- 27
+* -- 215
+:= -- 425
+add.period$ -- 11
+call.type$ -- 10
+change.case$ -- 9
 chr.to.int$ -- 0
-cite$ -- 6
-duplicate$ -- 74
-empty$ -- 140
-format.name$ -- 11
-if$ -- 330
+cite$ -- 11
+duplicate$ -- 175
+empty$ -- 317
+format.name$ -- 27
+if$ -- 795
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 6
-newline$ -- 19
-num.names$ -- 5
-pop$ -- 25
+int.to.str$ -- 10
+missing$ -- 11
+newline$ -- 34
+num.names$ -- 10
+pop$ -- 45
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 46
+skip$ -- 125
 stack$ -- 0
-substring$ -- 91
-swap$ -- 26
+substring$ -- 267
+swap$ -- 75
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 14
-width$ -- 6
-write$ -- 49
-(There were 5 warnings)
+while$ -- 34
+width$ -- 12
+write$ -- 101
+(There were 2 warnings)

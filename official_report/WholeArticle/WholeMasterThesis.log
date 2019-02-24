@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  22 FEB 2019 19:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  24 FEB 2019 18:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -315,54 +315,40 @@ LaTeX Font Info:    Try loading font information for U+rsfs on input line 32.
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
-
-LaTeX Warning: Citation `Fahland' on page 3 undefined on input line 75.
-
-
-LaTeX Warning: Citation `Dees' on page 3 undefined on input line 75.
-
-
-LaTeX Warning: Citation `Anja' on page 3 undefined on input line 75.
-
-<./images/P04_modelchange_a.png, id=15, 246.9225pt x 81.30376pt>
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+<./images/P04_modelchange_a.png, id=21, 246.9225pt x 81.30376pt>
 File: ./images/P04_modelchange_a.png Graphic file (type png)
 <use ./images/P04_modelchange_a.png>
-Package pdftex.def Info: ./images/P04_modelchange_a.png  used on input line 81.
+Package pdftex.def Info: ./images/P04_modelchange_a.png  used on input line 84.
 
 (pdftex.def)             Requested size: 110.40253pt x 36.35187pt.
-<./images/P05_modelchange_b.png, id=17, 246.9225pt x 124.465pt>
+<./images/P05_modelchange_b.png, id=23, 246.9225pt x 124.465pt>
 File: ./images/P05_modelchange_b.png Graphic file (type png)
 <use ./images/P05_modelchange_b.png>
-Package pdftex.def Info: ./images/P05_modelchange_b.png  used on input line 88.
+Package pdftex.def Info: ./images/P05_modelchange_b.png  used on input line 91.
 
 (pdftex.def)             Requested size: 110.40253pt x 55.64978pt.
-<./images/P04_modelchange_c.png, id=18, 236.885pt x 63.23625pt>
+<./images/P04_modelchange_c.png, id=24, 236.885pt x 63.23625pt>
 File: ./images/P04_modelchange_c.png Graphic file (type png)
 <use ./images/P04_modelchange_c.png>
-Package pdftex.def Info: ./images/P04_modelchange_c.png  used on input line 95.
+Package pdftex.def Info: ./images/P04_modelchange_c.png  used on input line 98.
 
 (pdftex.def)             Requested size: 110.40253pt x 29.47112pt.
-[3 <./images/P04_modelchange_a.png> <./images/P05_modelchange_b.png> <./images/
-P04_modelchange_c.png>]
+ [4 <./images/P04_modelchange_a.png> <./images/P05_modelchange_b.png> <./images
+/P04_modelchange_c.png>]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 139.
 
-LaTeX Warning: Citation `Dees' on page 4 undefined on input line 111.
-
-
-LaTeX Warning: Citation `Anja' on page 4 undefined on input line 111.
-
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 126.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 126.
- [4]
-LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 143.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 139.
  [5]
-Overfull \hbox (88.57639pt too wide) detected at line 165
+LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 155.
+ [6]
+Overfull \hbox (88.57639pt too wide) detected at line 177
 \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\O
 ML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 
 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) +
@@ -373,7 +359,7 @@ ight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B
  []
 
 
-Overfull \hbox (104.94693pt too wide) detected at line 167
+Overfull \hbox (104.94693pt too wide) detected at line 179
 \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10
  (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10
  (\OML/cmm/m/it/10 Start[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 ))
@@ -384,7 +370,7 @@ Overfull \hbox (104.94693pt too wide) detected at line 167
  []
 
 
-Overfull \hbox (85.58585pt too wide) detected at line 169
+Overfull \hbox (85.58585pt too wide) detected at line 181
 \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (
 \OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (
 \OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1/cmr/m/n/10 )) + \
@@ -394,51 +380,51 @@ t\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 End[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A\OT1
 /cmr/m/n/10 ))
  []
 
-<./images/PN06_Seq_2_xor_notnested.png, id=37, 1234.6125pt x 312.16624pt>
+<./images/PN06_Seq_2_xor_notnested.png, id=40, 1234.6125pt x 312.16624pt>
 File: ./images/PN06_Seq_2_xor_notnested.png Graphic file (type png)
 <use ./images/PN06_Seq_2_xor_notnested.png>
 Package pdftex.def Info: ./images/PN06_Seq_2_xor_notnested.png  used on input l
-ine 180.
+ine 192.
 (pdftex.def)             Requested size: 345.0pt x 87.2297pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[6] [7 <./images/PN06_Seq_2_xor_notnested.png>]
+[7]
 
 LaTeX Warning: Citation `vanderAalst:2016:PMD:2948762' on page 8 undefined on i
-nput line 227.
+nput line 239.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 235--236
+[8 <./images/PN06_Seq_2_xor_notnested.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 247--248
 
  []
 
-<./images/PT02_xor_nested_and_pure.png, id=48, 499.8675pt x 263.98625pt>
+<./images/PT02_xor_nested_and_pure.png, id=51, 499.8675pt x 263.98625pt>
 File: ./images/PT02_xor_nested_and_pure.png Graphic file (type png)
 <use ./images/PT02_xor_nested_and_pure.png>
 Package pdftex.def Info: ./images/PT02_xor_nested_and_pure.png  used on input l
-ine 244.
+ine 256.
 (pdftex.def)             Requested size: 345.0pt x 182.20306pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[8]
-Overfull \hbox (2.89983pt too wide) detected at line 271
+[9]
+Overfull \hbox (2.89983pt too wide) detected at line 283
 \OML/cmm/m/it/10 SC\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n
 /10 ) = \OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT
 1/cmr/m/n/10 ) \OMS/cmsy/m/n/10 ^^@ \OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/c
 mm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n/10 )
  []
 
-[9 <./images/PT02_xor_nested_and_pure.png>] [10]
-<./images/LT_Seq_01_Original.png, id=59, 404.51125pt x 121.45375pt>
+[10 <./images/PT02_xor_nested_and_pure.png>] [11]
+<./images/LT_Seq_01_Original.png, id=62, 404.51125pt x 121.45375pt>
 File: ./images/LT_Seq_01_Original.png Graphic file (type png)
 <use ./images/LT_Seq_01_Original.png>
-Package pdftex.def Info: ./images/LT_Seq_01_Original.png  used on input line 33
-3.
+Package pdftex.def Info: ./images/LT_Seq_01_Original.png  used on input line 34
+5.
 (pdftex.def)             Requested size: 345.0pt x 103.58641pt.
- [11 <./images/LT_Seq_01_Original.png>]
-Overfull \hbox (7.47571pt too wide) in paragraph at lines 350--353
+ [12 <./images/LT_Seq_01_Original.png>]
+Overfull \hbox (7.47571pt too wide) in paragraph at lines 362--365
 \OML/cmm/m/it/10 LT[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 A; B
 \OMS/cmsy/m/n/10 g\OML/cmm/m/it/10 ; LT[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\
 OML/cmm/m/it/10 D; E\OMS/cmsy/m/n/10 g$ $\OML/cmm/m/it/10 LT[] \OT1/cmr/m/n/10 
@@ -448,7 +434,7 @@ y/m/n/10 j \OML/cmm/m/it/10 <
  []
 
 
-Overfull \hbox (7.47571pt too wide) in paragraph at lines 353--356
+Overfull \hbox (7.47571pt too wide) in paragraph at lines 365--368
 \OML/cmm/m/it/10 LT[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 A; B
 \OMS/cmsy/m/n/10 g\OML/cmm/m/it/10 ; LT[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\
 OML/cmm/m/it/10 D; E\OMS/cmsy/m/n/10 g$ $\OML/cmm/m/it/10 LT[] \OT1/cmr/m/n/10 
@@ -457,122 +443,122 @@ m/n/10 = \OML/cmm/m/it/10 XORB[]; \OMS/cmsy/m/n/10 j\OML/cmm/m/it/10 LT\OMS/cms
 y/m/n/10 j \OML/cmm/m/it/10 <
  []
 
-[12]
-<./images/LT_Seq_01_Silent_01.png, id=67, 404.51125pt x 161.60374pt>
+[13]
+<./images/LT_Seq_01_Silent_01.png, id=71, 404.51125pt x 161.60374pt>
 File: ./images/LT_Seq_01_Silent_01.png Graphic file (type png)
 <use ./images/LT_Seq_01_Silent_01.png>
 Package pdftex.def Info: ./images/LT_Seq_01_Silent_01.png  used on input line 3
-85.
+97.
 (pdftex.def)             Requested size: 345.0pt x 137.82988pt.
-<./images/LT_Seq_01_Silent_03.png, id=68, 404.51125pt x 131.49126pt>
+<./images/LT_Seq_01_Silent_03.png, id=72, 404.51125pt x 131.49126pt>
 File: ./images/LT_Seq_01_Silent_03.png Graphic file (type png)
 <use ./images/LT_Seq_01_Silent_03.png>
-Package pdftex.def Info: ./images/LT_Seq_01_Silent_03.png  used on input line 3
-92.
+Package pdftex.def Info: ./images/LT_Seq_01_Silent_03.png  used on input line 4
+04.
 (pdftex.def)             Requested size: 345.0pt x 112.1473pt.
-<./images/LT_Seq_01_Silent_02.png, id=69, 404.51125pt x 157.58875pt>
+<./images/LT_Seq_01_Silent_02.png, id=73, 404.51125pt x 157.58875pt>
 File: ./images/LT_Seq_01_Silent_02.png Graphic file (type png)
 <use ./images/LT_Seq_01_Silent_02.png>
-Package pdftex.def Info: ./images/LT_Seq_01_Silent_02.png  used on input line 3
-99.
+Package pdftex.def Info: ./images/LT_Seq_01_Silent_02.png  used on input line 4
+11.
 (pdftex.def)             Requested size: 345.0pt x 134.40552pt.
 
 
-Package caption Warning: \label without proper reference on input line 393.
+Package caption Warning: \label without proper reference on input line 405.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig:seq-2-silent-2' on page 13 undefined on input lin
-e 407.
+LaTeX Warning: Reference `fig:seq-2-silent-2' on page 14 undefined on input lin
+e 419.
 
 
-Package caption Warning: \label without proper reference on input line 400.
+Package caption Warning: \label without proper reference on input line 412.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig:seq-2-silent-3' on page 13 undefined on input lin
-e 407.
+LaTeX Warning: Reference `fig:seq-2-silent-3' on page 14 undefined on input lin
+e 419.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./images/LT_Seq_01_FullDuplicated.png, id=70, 409.53pt x 372.39125pt>
+<./images/LT_Seq_01_FullDuplicated.png, id=74, 409.53pt x 372.39125pt>
 File: ./images/LT_Seq_01_FullDuplicated.png Graphic file (type png)
 <use ./images/LT_Seq_01_FullDuplicated.png>
 Package pdftex.def Info: ./images/LT_Seq_01_FullDuplicated.png  used on input l
-ine 412.
+ine 424.
 (pdftex.def)             Requested size: 345.0pt x 313.73271pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./images/LT_Seq_01_SemiDuplicated.png, id=71, 404.51125pt x 266.9975pt>
+<./images/LT_Seq_01_SemiDuplicated.png, id=75, 404.51125pt x 266.9975pt>
 File: ./images/LT_Seq_01_SemiDuplicated.png Graphic file (type png)
 <use ./images/LT_Seq_01_SemiDuplicated.png>
 Package pdftex.def Info: ./images/LT_Seq_01_SemiDuplicated.png  used on input l
-ine 424.
+ine 436.
 (pdftex.def)             Requested size: 345.0pt x 227.71892pt.
-<./images/LT_Seq_01_SemiDuplicated_Problem2.png, id=72, 404.51125pt x 216.81pt>
+<./images/LT_Seq_01_SemiDuplicated_Problem2.png, id=76, 404.51125pt x 216.81pt>
 
 File: ./images/LT_Seq_01_SemiDuplicated_Problem2.png Graphic file (type png)
 <use ./images/LT_Seq_01_SemiDuplicated_Problem2.png>
 Package pdftex.def Info: ./images/LT_Seq_01_SemiDuplicated_Problem2.png  used o
-n input line 431.
+n input line 443.
 (pdftex.def)             Requested size: 345.0pt x 184.91461pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[13] [14 <./images/LT_Seq_01_Silent_01.png> <./images/LT_Seq_01_Silent_03.png> 
+[14] [15 <./images/LT_Seq_01_Silent_01.png> <./images/LT_Seq_01_Silent_03.png> 
 <./images/LT_Seq_01_Silent_02.png>]
-Overfull \hbox (26.8028pt too wide) detected at line 448
+Overfull \hbox (26.8028pt too wide) detected at line 460
 \OML/cmm/m/it/10 Wlt\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/
 n/10 ) = \OML/cmm/m/it/10 Wlt[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XORB[]; XORB[]
 \OT1/cmr/m/n/10 ) + \OML/cmm/m/it/10 Wlt[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XOR
 B[]; XORB[]\OT1/cmr/m/n/10 )
  []
 
-[15 <./images/LT_Seq_01_FullDuplicated.png>] [16 <./images/LT_Seq_01_SemiDuplic
+[16 <./images/LT_Seq_01_FullDuplicated.png>] [17 <./images/LT_Seq_01_SemiDuplic
 ated.png> <./images/LT_Seq_01_SemiDuplicated_Problem2.png>]
-Overfull \hbox (49.25746pt too wide) in paragraph at lines 448--452
+Overfull \hbox (49.25746pt too wide) in paragraph at lines 460--464
 \OT1/cmr/m/it/10 of pos-si-ble directly-follows xor branche set $\OML/cmm/m/it/
 10 XORB[] \OT1/cmr/m/n/10 = \OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 XORB[]; XORB[]; 
 :::XORB[]\OMS/cmsy/m/n/10 g$
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 448--452
+Underfull \hbox (badness 10000) in paragraph at lines 460--464
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 448--452
+Underfull \hbox (badness 10000) in paragraph at lines 460--464
 
  []
 
 
-Overfull \hbox (6.89934pt too wide) in paragraph at lines 453--454
+Overfull \hbox (6.89934pt too wide) in paragraph at lines 465--466
 []\OT1/cmr/m/n/10 The $\OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 XO
 RB[]; XORB[]\OT1/cmr/m/n/10 )$ and $\OML/cmm/m/it/10 F[]\OT1/cmr/m/n/10 (\OML/c
 mm/m/it/10 XORB[]; XORB[]\OT1/cmr/m/n/10 )$ are the fre-quency
  []
 
 
-Overfull \hbox (17.12938pt too wide) in paragraph at lines 457--459
+Overfull \hbox (17.12938pt too wide) in paragraph at lines 469--471
 \OML/cmm/m/it/10 B[] \OT1/cmr/m/n/10 = []\OML/cmm/m/it/10 ; B[] \OT1/cmr/m/n/10
  = []$\OT1/cmr/m/it/10 ,
  []
 
-<./images/RelationOfThreshold-LTThreshold.png, id=92, 291.0875pt x 175.65625pt>
+<./images/RelationOfThreshold-LTThreshold.png, id=95, 291.0875pt x 175.65625pt>
 
 File: ./images/RelationOfThreshold-LTThreshold.png Graphic file (type png)
 <use ./images/RelationOfThreshold-LTThreshold.png>
 Package pdftex.def Info: ./images/RelationOfThreshold-LTThreshold.png  used on 
-input line 464.
+input line 476.
 (pdftex.def)             Requested size: 345.0pt x 208.2053pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (65.97383pt too wide) detected at line 473
+Overfull \hbox (65.97383pt too wide) detected at line 485
 \OML/cmm/m/it/10 W\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cm
 m/m/it/10 A; B\OT1/cmr/m/n/10 )) = \OML/cmm/m/it/10 Weight\OT1/cmr/m/n/10 (\OML
 /cmm/m/it/10 E[]\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 A; B\OT1/cmr/m/n/10 )) + \OML
@@ -583,63 +569,64 @@ cmr/m/n/10 ))
  []
 
 
-Overfull \hbox (7.17882pt too wide) in paragraph at lines 480--481
+Overfull \hbox (7.17882pt too wide) in paragraph at lines 492--493
 \OT1/cmr/bx/n/10 Proposition 7.2. \OT1/cmr/m/it/10 for one xor branch $\OML/cmm
 /m/it/10 XORB[]$\OT1/cmr/m/it/10 , if $\OML/cmm/m/it/10 W\OT1/cmr/m/n/10 (\OML/
 cmm/m/it/10 M; XORB[]\OT1/cmr/m/n/10 ) \OML/cmm/m/it/10 > threshold$\OT1/cmr/m/
 it/10 , 
  []
 
-[17]
-Overfull \hbox (57.89896pt too wide) detected at line 513
+[18]
+Overfull \hbox (57.89896pt too wide) detected at line 525
 [][]
  []
 
-[18 <./images/RelationOfThreshold-LTThreshold.png>] [19]
+[19 <./images/RelationOfThreshold-LTThreshold.png>] [20]
 File: ./images/LT_Seq_01_Silent_03.png Graphic file (type png)
 <use ./images/LT_Seq_01_Silent_03.png>
 Package pdftex.def Info: ./images/LT_Seq_01_Silent_03.png  used on input line 5
-32.
+44.
 (pdftex.def)             Requested size: 345.0pt x 112.1473pt.
-<./images/LT_Seq_01_Silent_03_AfterAddition.png, id=107, 404.51125pt x 204.765p
+<./images/LT_Seq_01_Silent_03_AfterAddition.png, id=110, 404.51125pt x 204.765p
 t>
 File: ./images/LT_Seq_01_Silent_03_AfterAddition.png Graphic file (type png)
 <use ./images/LT_Seq_01_Silent_03_AfterAddition.png>
 Package pdftex.def Info: ./images/LT_Seq_01_Silent_03_AfterAddition.png  used o
-n input line 539.
+n input line 551.
 (pdftex.def)             Requested size: 345.0pt x 174.64157pt.
-<./images/LT_Seq_01_Silent_02_AfterAddition.png, id=108, 404.51125pt x 181.6787
+<./images/LT_Seq_01_Silent_02_AfterAddition.png, id=111, 404.51125pt x 181.6787
 6pt>
 File: ./images/LT_Seq_01_Silent_02_AfterAddition.png Graphic file (type png)
 <use ./images/LT_Seq_01_Silent_02_AfterAddition.png>
 Package pdftex.def Info: ./images/LT_Seq_01_Silent_02_AfterAddition.png  used o
-n input line 546.
+n input line 558.
 (pdftex.def)             Requested size: 345.0pt x 154.9516pt.
 
 
-LaTeX Warning: Float too large for page by 3.74046pt on input line 552.
+LaTeX Warning: Float too large for page by 3.74046pt on input line 564.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(./WholeMasterThesis.bbl
+(./WholeMasterThesis.bbl [21]
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ” in font cmr10!
-) [20] [21 <./images/LT_Seq_01_Silent_03_AfterAddition.png> <./images/LT_Seq_01
-_Silent_02_AfterAddition.png>] (./WholeMasterThesis.aux)
+) [22] [23 <./images/LT_Seq_01_Silent_03_AfterAddition.png> <./images/LT_Seq_01
+_Silent_02_AfterAddition.png>]
+(./WholeMasterThesis.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 4721 strings out of 494847
- 72909 string characters out of 6179079
- 136813 words of memory out of 5000000
- 7951 multiletter control sequences out of 15000+600000
+ 4724 strings out of 494847
+ 73006 string characters out of 6179079
+ 136831 words of memory out of 5000000
+ 7954 multiletter control sequences out of 15000+600000
  15220 words of font info for 59 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 41i,8n,39p,898b,448s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,8n,39p,1192b,448s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texli
@@ -658,10 +645,10 @@ e/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf
 -dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-
 dist/fonts/type1/public/rsfs/rsfs10.pfb>
-Output written on WholeMasterThesis.pdf (21 pages, 383633 bytes).
+Output written on WholeMasterThesis.pdf (23 pages, 388487 bytes).
 PDF statistics:
- 178 PDF objects out of 1000 (max. 8388607)
- 106 compressed objects within 2 object streams
+ 184 PDF objects out of 1000 (max. 8388607)
+ 110 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  76 words of extra memory for PDF output out of 10000 (max. 10000000)
 

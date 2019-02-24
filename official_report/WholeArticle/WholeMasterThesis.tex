@@ -65,14 +65,17 @@ In comparison to current technologies, the methods proposed in this articles pro
 %% 
 Research in process mining has gained much interest over the past decade\cite{van2011process,ghasemi2016process}. The objective of process mining is to support the analysis of business process and provide valuable insights on processes. According to \cite{van2011process}, techniques of process mining are divided into three categories: process discovery, conformance checking and process enhancement. Process discovery techniques focus on deriving process models from event logs of the information system, aiming to improve the understanding of real business process. Conformance checking analyzes the deviations between process models and observed behavior of its execution. Enhancement adapts and improves existing process models by extending the model with more data perspectives or repairing the existing model to better reflect observed behaviors. 
 
-Due to the increasing availability of detailed event logs of information systems, process mining techniques have recently enabled wider applications of process mining in organizations around the world\cite{van2011process}. After applying process discovery  on the information system, a process model is fixed for organizations to guide the execution of business. However, with time in real life, deviations appear because of business process changes, or operational exceptions. Enhancement is important, because of??? 
+Due to the increasing availability of detailed event logs of information systems, process mining techniques have recently enabled wider applications of process mining in organizations around the world\cite{van2011process}. After applying process discovery  on the information system, a process model is fixed for organizations to guide the execution of business. However,in real life, business processes often encounter exceptional situations where it is necessary to execute process differing from the predefined model. The organizations need to adapt the existing process model to reflect the reality. Basically, one can apply process discovery techniques again to obtain a new model from event log. Yet, the discovered model tend to have less similarity with the original model\cite{fahland2012repairing}. As shown in \cite{fahland2012repairing}, there is a need to change an existing model similar to the original model while replaying the current process execution. Here comes the model repair. 
+
+Model repair belongs to process enhancement and stands between process discovery and conformance checking. It analyzes the workflow deviations between event log  and process model, and fix the deviations by adding sub processes on the model. As known, business in organizations is goal-oriented and aims to have high performance according to a set of Key Performance Indicators(KPIs), for example, average conversion time for the sales, payment error rate for the finance. However, there are little research on applying the process mining with consideration of performance\cite{ghasemi2016process}.  It points the contribution of \cite{dees2017enhancing} to combine performance into process mining. In \cite{dees2017enhancing}, the event log is firstly divided into positive instances and negative instances with respect to specific KPIs. Then, the positive instances are used to repair the model. In this way, negative instances are simply ignored, which results in a model with less precision. % we need to prove that only considering the workflow model fail in some situations. Then we propose our methods to incorporate KPIs into model repair. 
+
 
 As an example, there is an model presented in Figure \ref{fig:model_examples} (a), where A is followed directly by B. During its execution in real life, an event log is generated: 
 \[{ <A, B> }^{55}  , {<B, A>}^{105} \] 
-When considering KPI performance, the event log is divided into a positive and a negative set: 
+When considering KPIs performance, the  log is divided into a positive and a negative set: 
 \[ Positive \;  examples: { <A, B> }^{5}  , {<B, A>}^{100} \] 
 \[ Negative \; examples: { <A, B> }^{50}  , {<B, A>}^{5} \]  
-After applying current model repair techniques in \cite{Fahland}, the process model is repaired using all examples. A can be skipped and duplicated later in a self-loop. In \cite{Dees}\cite{Anja} methods, only the positive examples are taken for the model repair. Yet, since both $<A,B> and <B,A>$ contributes to good performance,  the repaired model keeps the same like in Figure \ref{fig:model_examples}(b).
+After applying current model repair techniques in \cite{fahland2015model}, the process model is repaired using all examples. A can be skipped and duplicated later in a self-loop. In \cite{dees2017enhancing} methods, only the positive examples are taken for the model repair. Yet, since both $<A,B> and <B,A>$ contributes to good performance,  the repaired model keeps the same like in Figure \ref{fig:model_examples}(b).
 
 \begin{figure}[h]
 	\centering
@@ -101,23 +104,35 @@ After applying current model repair techniques in \cite{Fahland}, the process mo
 	\label{fig:model_examples}
 \end{figure}
 
-However, it's obvious that $<A,B>$ often leads to bad performance and therefore should be excluded. The Figure \ref{fig:model_examples}(c) shows the expected model with incorporating the negative information. This model reinforces positive examples and avoids negative examples, which provides us a more accurate view of the business process.
+However, it's obvious that $<A,B>$ often leads to bad performance and therefore should be excluded. The Figure \ref{fig:model_examples}(c) shows the expected model with incorporating the negative information. This model reinforces positive examples and avoids negative instances, which provides us a more accurate view of the business process.
 
-Section description. The next sections are organized in the following order. Firstly, related work is given and compared. Secondly, our methods are introduced and formal definitions are given. In Implementation Section, the details of algorithms are given. Later, we evaluate our methods with simulated data and real data respectively and list the results. At last, a conclusion on the algorithms is provided. 
+The demand to repair model with incorporating negative instances appears. The concrete problem showing with demand is as follows. Given an input of one existing process model M, an event log L and KPIs, how  to improve current process enhancement techniques by incorporating negative information within process model repair, and generate a process model to enforce the positive instances while blocking the negative instance. Therefore, the repaired model provides a better way to understand and execute the real business process.
 
-It is about 1 page!!
+
+This paper tries to provide a solution for it. The reminder is organized in the following order. Section 2 recalls the basic notions on process mining and list the preliminary to solve the problem. The next section lists our methods are introduced and formal definitions are given. In Implementation Section, the details of algorithms are given. Later, we evaluate our methods with simulated data and real data respectively and list the results. Subsequently, the discussion on this paper is presented. At last section, a conclusion is drawn on the paper. 
+
 \section{Related Work}
-%% summary of some papers, 
-\cite{fahland2015model} uses conformance checking to find and position the deviations between the existing model and observed behavior in the event log. Later, loops and subprocess are added to eliminate the deviation and improve the fitness along with removing infrequent transitions at the last step. Later in \cite{Dees} \cite{Anja}, KPI performance is also considered besides fitness. In their methods, the model is repaired by using the positive examples with good KPI outcomes. However, the state-of-the-art model repair methods only consider the positive information which benefits the good performance, but leave out the impact from negative information. This usually results in a less precise model, which can be shown in the following example.
+% About enhancement
+% About the model repair
+%  model enhancement of 
+%  from Fahland's method to Dees's Anja's
+% To incorporate the negative instances into model
+%  of Stijin Goedertier, and the methods later, two or three
 
-Related work, we give examples of new-generated model of Inductive Miner, Alpha Miner, <In which cases, it gives better results. > 
-Then, repair model, 
-Fahland's methods,  
-Anna's methods,
-Enhancing process models to improve business performance: A methodology and case studies, TO change model by adding constraints on it... 
+%% Now comes to my methods
+Process enhancement focuses to extend or improve an existing process model by using actual event log\cite{van2011process}. Besides extending the model with more data perspectives, repair is another type of enhancement. It modifies the model to reflect observed behavior while keeping the model as similar as possible to original model.
 
-TO incorporate the negative instances into process model generation, is totally used in that, but it is based on the alignment, not on the traces.  Some summary from them, is already ok. 
-Which I think it 
+In \cite{fahland2012repairing}, model repair is firstly introduced into process enhancement. By using conformance checking, the deviations of alignment are detected. The consecutive log moves is collected in the form of subtraces at specific location Q. Later, the subtraces are grouped into sublog that share the same location Q for subprocess discovery. In the earlier version in \cite{fahland2012repairing}, the sublogs are obtained in a greedy way, while in \cite{fahland2015model}, sublogs are gathered by using ILP miner to guarantee the fitness. Additional Subprocesses and loops are introduced into the existing model to ensure the fitness, which also brings variants of execution paths into the model. 
+
+Later, compared to \cite{fahland2012repairing, fahland2015model}, where all deviations are incorporated in model repair, \cite{dees2017enhancing} considers model performance into model repair. An observation instance is built to represent the type of log moves given trace and  KPI. Subsequently, a classification tree will be constructed from the set of observation instances to cluster traces of event log. Then, the techniques in \cite{fahland2015model} are applied into event log with positive traces to repair model. 
+
+
+
+As described above, the state-of-the-art repair techniques are based only on positive instances, meanwhile the negative instances are neglected. Without negative instances, it is difficult to balance the fitness and precision of those model. Few researches give a try on incorporating negative information into process discovery. \cite{goedertier2009robust}  analyzes the available events set before and after one position and generates artificial negative events based on the complement of those event sets. Next, Inductive Logic Programming is applied to detect the preconditions for each activity. Those preconditions are then converted to petri net after applying a pruning and post-process step. 
+
+Similar work on model discovery based on negative information are published later. In \cite{vanden2014determining}, the author improves the method by assigning weights on artificial events with respect to unmatching window, in order to offer generalization on model. \cite{ponce2016incorporating} presents a supervised approach based on SMT to incorporate negative information for model discovery. 
+
+However, the field of model repair which considers the negative information is new. 
 
 To incorporate the negative information, simulated data are used, to limit the choices of going..
 
@@ -128,7 +143,7 @@ Compared to this, our approach is innovative mainly in the following aspects.
 	\item Analyze Model on Trace level. All activities constituting a trace are considered. 
 \end{itemize}
 
-It is about 2 pages!!
+
 
 \section{Preliminary}
 %% Preliminaries:: 
@@ -612,6 +627,7 @@ It's about 3 pages or 4 pages with graphs.
 %% 
 One page is enough. 
 %% 1 + 1-2 + 12 + 6-8 + 4-5 + 2-3 + 1 + 1-2 =  28-34 pages. It's ok..
+\pagebreak
 \bibliography{ThesisReferences.bib}
 \bibliographystyle{ieeetr}
 \end{document}
