@@ -16,6 +16,7 @@ public class BaselineConnection extends AbstractStrongReferencingConnection {
 	public final static String RESULT = "Filtered result";
 	
 	public final static String BASELINE_PN = "BaseLine Petrinet";
+	public static final String CM_RESULT = "Confusion Result";
 	
 
     public BaselineConnection(XLog log, MiningParameters parameters, Petrinet net) {

@@ -30,7 +30,6 @@ public class AddPairPanel extends JPanel{
 	JComboBox addTargetComboBox;
 	JComboBox rmSourceComboBox;
 	JComboBox rmTargetComboBox;
-	private JRadioButton rdbtnNewRadioButton_2;
 	
 	
 	/**

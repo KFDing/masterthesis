@@ -29,6 +29,7 @@ import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.DfgMiningParameters;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.IMdProcessTree;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.dialogs.IMdMiningDialog;
+import org.processmining.plugins.ding.preprocess.baseline.EvaluateResult;
 import org.processmining.plugins.ding.process.dfg.model.ControlParameters;
 import org.processmining.plugins.ding.process.dfg.model.DfMatrix;
 import org.processmining.plugins.ding.process.dfg.model.DfgProcessResult;
@@ -266,6 +267,21 @@ class ResultMainView extends JPanel{
 			}
 		});
         
+        rightView.showCMBtn.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// show the confusion matrix into leftView, we can call the draw method from leftview
+				String title =  "Ext: " + parameters.getExistWeight()+ " ; Pos: " + parameters.getPosWeight() + " ; Neg: "+ parameters.getNegWeight();
+				if(parameters.getType() == ViewType.PetriNet )
+					title += "; Without LT";
+				else if(parameters.getType() == ViewType.PetriNetWithLTDependency){
+					title += "; with LT";
+				}
+				// for the confusion_matrix I'd like to use the log variants for saving computation time
+				ArrayList<Integer> confusion_matrix = EvaluateResult.naiveCheckPN(log, anet.getNet(), anet.getInitialMarking());
+				leftView.addConfusionMatrixView(confusion_matrix, title);
+			}
+		});
         
 		this.add(this.leftView, new Float(75));
 		this.add(Box.createVerticalGlue(), new Float(3));
@@ -358,6 +374,7 @@ class ResultMainView extends JPanel{
 		createPNWithLT();
 		manet = detector.getAcceptionPN();
 		
+		rightView.showCMBtn.setEnabled(true);
 		leftView.drawResult(context, manet);
 		leftView.updateUI();
 	}
@@ -468,7 +485,7 @@ class ResultMainView extends JPanel{
 			DfgMiningParameters ptParas = getProcessTreParameters();
 			pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
 		}
-		
+		rightView.showCMBtn.setEnabled(false);
 		leftView.drawResult(pTree);
 		leftView.updateUI();
 	}
@@ -507,7 +524,7 @@ class ResultMainView extends JPanel{
 			}
 				
 		}
-		
+		rightView.showCMBtn.setEnabled(true);
 		leftView.drawResult(context, anet);
 		leftView.updateUI();
 	}

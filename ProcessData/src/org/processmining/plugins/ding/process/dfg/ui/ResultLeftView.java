@@ -1,9 +1,12 @@
 package org.processmining.plugins.ding.process.dfg.ui;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 
 import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.framework.plugin.PluginContext;
@@ -14,22 +17,34 @@ import org.processmining.plugins.graphviz.visualisation.DotPanel;
 import org.processmining.plugins.inductiveVisualMiner.plugins.GraphvizPetriNet;
 import org.processmining.processtree.ProcessTree;
 
-public class ResultLeftView extends JPanel {
+public class ResultLeftView extends JPanel{
 	private static final long serialVersionUID = 2L;
 	// to make the layout stable, not remove all the component 
-	JPanel graphPanel; 
-	JDesktopPane showCMPanel;
+	JPanel showGraphPanel; 
+	DesktopScrollPane showCMPanel;
 	boolean drawDfg = true;
-	
+	JDesktopPane cmDesktopPane;
+	JPanel graphPanel;
 	
 	// only show the dfg, one is for initialization, one is only to update the view
 	public ResultLeftView() {
-		RelativeLayout rLayout = new RelativeLayout(RelativeLayout.X_AXIS);
+		RelativeLayout rLayout = new RelativeLayout(RelativeLayout.Y_AXIS);
 		rLayout.setFill( true );
 		this.setLayout(rLayout);
 		
-		add(graphPanel, new Float(80));
-		add(showCMPanel, new Float(20));
+		
+		showGraphPanel = new JPanel(new BorderLayout());
+		showGraphPanel.setBorder(new TitledBorder("Generated Model"));
+		
+		cmDesktopPane = new JDesktopPane();
+		cmDesktopPane.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
+		
+		showCMPanel = new DesktopScrollPane(cmDesktopPane);
+		showCMPanel.setBorder(new TitledBorder("Result In Confusion Matrix"));
+		
+		
+		add(showGraphPanel, new Float(70));
+		add(showCMPanel, new Float(30));
 		
 	}
 
@@ -37,31 +52,25 @@ public class ResultLeftView extends JPanel {
 	// we can always show the confusion matrix in our method, it provides better result on it
 	// how to organize the result from them?? we have the relative Layout, so we can put one JPanel under the graphPanel 
 	// confusion matrix panel..
-	// showCMPanel is drawn when it is called and there are alwats confusion_matrix added to it..
-	// it is calculated only 
-	public void drawConfusionMatrix() {
-		showCMPanel = new JDesktopPane();
-		
-		showCMPanel.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
-		
-		// we need to draw it, 
-	}
 	
 	
 	// create an internal frame
-	private void createFrame() {
+	public void addConfusionMatrixView(ArrayList<Integer> confusion_matrix, String title) {
 		// TODO if we want to createFrame, we need to make sure that we have confusion_matrix
-		String title = "Ext: 1.0; Pos: 1.0; Neg: 1.0";
-		ArrayList<Integer> confusion_matrix = new ArrayList<>();
+		// we need to input the title and confusion matrix for it 
+		// for the calculation it is ok
+		/*
+		title = "Ext: 1.0; Pos: 1.0; Neg: 1.0";
+		confusion_matrix = new ArrayList<>();
 		confusion_matrix.add(100);
 		confusion_matrix.add(10);
 		confusion_matrix.add(50);
 		confusion_matrix.add(100);
-		
+		*/
 		CMInternalFrame cmFrame = new CMInternalFrame(title, confusion_matrix);
 		cmFrame.setVisible(true);
 		
-		showCMPanel.add(cmFrame);
+		cmDesktopPane.add(cmFrame);
 		
 		try {
 			cmFrame.setSelected(true);
@@ -72,12 +81,15 @@ public class ResultLeftView extends JPanel {
 	}
 	
 	public void drawResult(ProcessTree pt) {
-		this.remove(graphPanel);
+		if(graphPanel !=null)
+			showGraphPanel.remove(graphPanel);
+		
 		try {
 			graphPanel = new DotPanel(GraphvizProcessTree.convert(pt));
 			graphPanel.setVisible(true);
 			graphPanel.validate();
 			
+			showGraphPanel.add(graphPanel);
 		} catch (NotYetImplementedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,16 +98,43 @@ public class ResultLeftView extends JPanel {
 	
 	public void drawResult(PluginContext context, AcceptingPetriNet anet) {
 		
-		this.remove(graphPanel);
+		if(graphPanel !=null)
+			showGraphPanel.remove(graphPanel);
+		
 		ProMJGraphVisualizer.instance();
 		
 		graphPanel = new DotPanel(GraphvizPetriNet.convert(anet));
 		graphPanel.setVisible(true);
 		graphPanel.validate();
-		this.add(graphPanel, new Float(100));
-		this.add(showCMPanel, new Float(20));
 		
+		showGraphPanel.add(graphPanel);
 	}
 	
 	
+
+	private static void createAndShowGUI() {
+        //Make sure we have nice window decorations.
+        JFrame.setDefaultLookAndFeelDecorated(true);
+
+        //Create and set up the window.
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 500);
+        frame.setLocationRelativeTo(null);
+
+        ResultLeftView view = new ResultLeftView();
+        frame.setContentPane(view);
+        //Display the window.
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
+        //creating and showing this application's GUI.
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createAndShowGUI();
+            }
+        });
+    }
 }

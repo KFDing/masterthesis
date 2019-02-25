@@ -1,6 +1,7 @@
 package org.processmining.plugins.ding.preprocess.baseline;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
+import org.processmining.framework.connections.ConnectionCannotBeObtained;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
@@ -45,23 +47,18 @@ public class EvaluateResult {
 	 */
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Petrinet Naive CC No Marking",  requiredParameterLabels = { 0,1})
-	public ArrayList<Integer> naiveCheckPN(UIPluginContext context, XLog log, AcceptingPetriNet anet ) { // Marking 
-		return naiveCheckPN(context, log, anet.getNet(), anet.getInitialMarking());
+	public ArrayList<Integer> naiveCheckPNPlugin(UIPluginContext context, XLog log, AcceptingPetriNet anet ) { // Marking 
+		return naiveCheckPNPlugin(context, log, anet.getNet(), anet.getInitialMarking());
 	}
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Petrinet Naive Conformance Checking",  requiredParameterLabels = { 0,1,2})
-	public ArrayList<Integer> naiveCheckPN(UIPluginContext context, XLog log, Petrinet net, Marking marking ) { // Marking 
+	public ArrayList<Integer> naiveCheckPNPlugin(UIPluginContext context, XLog log, Petrinet net, Marking marking ) { // Marking 
 		// given log, should we first to organize them into variants and then do such stuff??? 
 		// not really, because anyway we need to check one trace by another...How about we store such trace variants,
 		// and compare them, if they matches, so we know if they get matched , or not 
 		// we need to build the mapping for transitions and event log classifier\
-		ArrayList<Integer> confusion_matrix = new ArrayList<Integer>();
-		for(int i =0 ; i< Configuration.CONFUSION_MATRIX_SIZE;i++) {
-			confusion_matrix.add(0);
-		}
-		/*
-		MiningParameters parameters = null;
+		
 		Collection<BaselineConnection> connections;
 		try {
 			connections =  context.getConnectionManager().getConnections(BaselineConnection.class, context, log);
@@ -71,12 +68,28 @@ public class EvaluateResult {
 						// && connection.getObjectWithRole(BaselineConnection.LOG).equals(log)
 						&& ((Petrinet)connection.getObjectWithRole(BaselineConnection.PN)).equals(net) 
 						) {
-					parameters = connection.getObjectWithRole(BaselineConnection.MINING_PARAMETERS);
+					return connection.getObjectWithRole(BaselineConnection.CM_RESULT);
 				}
 			}
 		}catch (ConnectionCannotBeObtained e) {
 		}
-		*/
+		
+		
+		return naiveCheckPN(log, net, marking);
+		
+	}
+	
+	
+	public static ArrayList<Integer> naiveCheckPN(XLog log, Petrinet net, Marking marking ) { // Marking 
+		// given log, should we first to organize them into variants and then do such stuff??? 
+		// not really, because anyway we need to check one trace by another...How about we store such trace variants,
+		// and compare them, if they matches, so we know if they get matched , or not 
+		// we need to build the mapping for transitions and event log classifier\
+		ArrayList<Integer> confusion_matrix = new ArrayList<Integer>();
+		for(int i =0 ; i< Configuration.CONFUSION_MATRIX_SIZE;i++) {
+			confusion_matrix.add(0);
+		}
+		
 		XEventClassifier classifier =null; //  = parameters.getClassifier();  // = net.getAttributeMap().get("XEventClassifier");
 		// main problem is the mapping from event, how should we do ?? 
 		Map<XEventClass, Transition> maps = EventLogUtilities.getEventTransitionMap(log, net , classifier);
@@ -112,6 +125,5 @@ public class EvaluateResult {
 		}
 		return confusion_matrix;
 	}
-	
 	
 }

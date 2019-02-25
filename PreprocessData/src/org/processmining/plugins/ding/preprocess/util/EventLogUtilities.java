@@ -150,9 +150,17 @@ public class EventLogUtilities {
 	 * @param classifier 
 	 * @return
 	 */
+	public static List<LabeledTraceVariant> variants ;
 	public static List<LabeledTraceVariant> getLabeledTraceVariants( XLog log, XEventClassifier classifier) {
 		
-		List<LabeledTraceVariant> variants = new ArrayList<LabeledTraceVariant>();
+		if(variants == null) {
+			variants = new ArrayList<LabeledTraceVariant>();
+			System.out.println("First time to create variant");
+		}
+		else { 
+			System.out.println("Other time to use variant");
+			return variants;
+		}
 		XEventClass eventClass = null;
 		XLogInfo info = XLogInfoFactory.createLogInfo(log);
 	

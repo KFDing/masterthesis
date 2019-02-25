@@ -17,7 +17,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -64,8 +63,7 @@ public class ResultRightControlView extends JPanel {
 	AddPairPanel addPairPanel;
 	
 	private JPanel showConfusionMatrixPanel;
-	JCheckBox withoutLTCBox;
-	JCheckBox withLTCBox;
+	JButton showCMBtn ;
 	
 	protected Color COLOR_FG = new Color(30, 30, 30);
 	protected Font smallFont;
@@ -323,28 +321,18 @@ public class ResultRightControlView extends JPanel {
 		gbl_showConfusionMatrixPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		showConfusionMatrixPanel.setLayout(gbl_showConfusionMatrixPanel);
 		
-		withoutLTCBox = new JCheckBox("Show Confusion Matrix For Model Without LT");
-		withoutLTCBox.setVerticalAlignment(SwingConstants.TOP);
-		GridBagConstraints gbc_checkBox = new GridBagConstraints();
-		gbc_checkBox.anchor = GridBagConstraints.LINE_START;
-		gbc_checkBox.insets = new Insets(0, 0, 5, 5);
-		gbc_checkBox.gridx = 0;
-		gbc_checkBox.gridy = 0;
-		showConfusionMatrixPanel.add(withoutLTCBox, gbc_checkBox);
-		
-		withLTCBox = new JCheckBox("Show Confusion Matrix For Model With LT");
-		GridBagConstraints gbc_withLTCBox = new GridBagConstraints();
-		gbc_withLTCBox.anchor = GridBagConstraints.LINE_START;
-		gbc_withLTCBox.insets = new Insets(0, 0, 5, 0);
-		gbc_withLTCBox.gridx = 0;
-		gbc_withLTCBox.gridy = 1;
-		showConfusionMatrixPanel.add(withLTCBox, gbc_withLTCBox);
+		showCMBtn = new JButton("Show Confusion Matrix");
+		// how to pass the action to outside ?? we can expose this btn
+		// showCMBtn.setActionCommand("new");
+		// showCMBtn.addActionListener(this);
+		showConfusionMatrixPanel.add(showCMBtn);
 		
 		this.add(weightPanel, new Float(30));
 		this.add(buttonPane, new Float(5));
 		this.add(addPairPanel, new Float(40));
+		this.add(showConfusionMatrixPanel,  new Float(5));
 		this.add(savePanel, new Float(5));
-		this.add(showConfusionMatrixPanel,  new Float(10));
+		
 	}
 
 	public int getSaveModelIndex() {
