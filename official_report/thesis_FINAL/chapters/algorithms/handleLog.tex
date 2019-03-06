@@ -1,0 +1,20 @@
+\begin{algorithmic}
+\Require given $PN = (P,T,F)$
+\Function{mapStrat}{log $\Log$, boolean $mapLogMoves$}
+    \State $\Gamma \gets$ \Call{align}{$\Log$}
+    \State $(\Log_p)_{p\in P} \gets$ \Call{handleLog}{$\Gamma$, $mapLogMoves$}
+    \State \Return $(\Log_p)_{p\in P}$
+\EndFunction
+\Function{handleLog}{alignments $\Gamma$, boolean $mapLogMoves$}
+    \State $\forall p\in P: \Log_p \gets \{\}$
+    \ForAll{$\gamma \in \Gamma$}
+        \State $(lmt^p)_{p\in P} \gets$ \Call{handleTrace}{$\gamma$, $mapLogMoves$}
+        \ForAll{$p\in P$}
+            \If{$|lmt^p| \neq 0$}
+                \State $\Log_p \gets \Log_p \cup \{lmt^p\}$
+            \EndIf
+        \EndFor
+    \EndFor
+    \State \Return $(\Log_p)_{p\in P}$
+\EndFunction
+\end{algorithmic}

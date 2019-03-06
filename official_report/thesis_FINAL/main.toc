@@ -1,0 +1,16 @@
+\contentsline {chapter}{Abstract}{iii}{chapter*.1}
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
+\contentsline {chapter}{\numberline {2}Preliminaries}{5}{chapter.2}
+\contentsline {chapter}{\numberline {3}Approach}{9}{chapter.3}
+\contentsline {section}{\numberline {3.1}Locally mapping the log}{9}{section.3.1}
+\contentsline {section}{\numberline {3.2}Extracting Interactions}{12}{section.3.2}
+\contentsline {section}{\numberline {3.3}Time intervals}{14}{section.3.3}
+\contentsline {section}{\numberline {3.4}Tying it all together}{16}{section.3.4}
+\contentsline {chapter}{\numberline {4}Implementation}{19}{chapter.4}
+\contentsline {chapter}{\numberline {5}Evaluation}{23}{chapter.5}
+\contentsline {section}{\numberline {5.1}Synthetic log}{23}{section.5.1}
+\contentsline {section}{\numberline {5.2}Performance}{26}{section.5.2}
+\contentsline {section}{\numberline {5.3}Real-life log}{27}{section.5.3}
+\contentsline {chapter}{\numberline {6}Related Work}{33}{chapter.6}
+\contentsline {chapter}{\numberline {7}Conclusion}{35}{chapter.7}
+\contentsline {chapter}{Bibliography}{38}{chapter*.30}

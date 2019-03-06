@@ -1,0 +1,28 @@
+\begin{algorithmic}
+\Require given $PN=(P,T,F)$ and place $p\in P$
+\Function{extractInteractions}{locally mapped case $lmc$}
+    \State $\CIS \gets \{\}$
+    \State $\IIS \gets \{\}$
+    \State $\var{upTimes} \gets new(stack)$ \Comment{or $new(queue)$}
+    \For{$i = 1 : |\hat{lmc}|$}
+        \State $(e,t) \gets \hat{lmc}_i$
+        \If{$t \in \post p$}
+            \If{$empty(\var{upTimes})$}
+                \State $\IIS \gets \IIS \cup (\missup,(e,t))$
+            \Else
+                \State $(e^\prime, t^\prime) \gets remove(\var{upTimes})$
+                \State $\CIS \gets \CIS \cup ((e^\prime, t^\prime), (e,t))$
+            \EndIf
+        \EndIf
+        \If{$t \in{\pre p}$}
+            \State $add(upTimes, (e,t))$
+        \EndIf
+    \EndFor
+    \If{not $empty(\var{upTimes})$}
+        \ForAll{$(e,t) \in \var{upTimes}$}
+            \State $\IIS \gets \IIS \cup ((e,t), \missdown)$
+        \EndFor
+    \EndIf
+    \State \Return $(\CIS, \IIS)$
+\EndFunction
+\end{algorithmic}

@@ -1,0 +1,36 @@
+\begin{algorithmic}
+\Require given $PN = (P,T,F,l)$
+\State $\forall p\in P: lmc_p \gets$ new locally mapped case
+\State $\forall p\in P: \hat{lmc}_p \gets \langle \rangle$
+\State $M \gets$ new empty marking
+\State $\var{lastMappedTime}: P \nrightarrow Time$
+\Function{mapStrat}{alignment $\gamma$, boolean $\var{mapLogMoves}$}
+    \For{$i = 1 : |\gamma|$}
+        \If{$\gamma_i = (e,t) \wedge activity(a) = l(t)$} \Comment{sync move}
+            \State \Call{handleTransition}{$e$, $t$}
+        \ElsIf{$\gamma_i = (e, \gg)$} \Comment{log move}
+            \If{$\var{mapLogMoves} \wedge \exists t\in T: l(t) = activity(e)$}
+                \State \Call{handleTransition}{$e$, $t$}
+            \EndIf
+        \ElsIf{$\gamma_i = (\gg, t) \wedge l(t) = \tau$} \Comment{inv move}
+            \If{$M[t\rangle$}
+                \State $enabledAt \gets \max\{ \var{lastMappedTime}(p)| p\in \pre t \}$
+                \State $e_{\tau} \gets$ new unique event
+                \State $activity(e_{\tau}) \gets l_{\tau}(t)$
+                \State $time(e_{\tau}) \gets enabledAt$
+               \State \Call{handleTransition}{$e_{\tau}$, $t$}
+            \EndIf
+        \EndIf
+    \EndFor
+    \State \Return $(lmc_p)_{p\in P}$
+\EndFunction
+\Function{handleTransition}{event $e$, transition $t$}
+    \State $M \gets (M \setminus \pre t) \uplus \post t$
+    \ForAll{$p \in {\pre t \cup \post t}$}
+        \State $\hat{lmc}_p \gets \hat{lmc}_p \cdot (e,t)$
+        \If{$p \in \post t$}
+            \State $\var{lastMappedTime}(p) \gets time(e)$    
+        \EndIf
+    \EndFor
+\EndFunction
+\end{algorithmic}
