@@ -119,7 +119,7 @@ public class AttributeLogFilter_UI extends BorderPanel {
 	 * @param filter
 	 */
 	@SuppressWarnings("unchecked")
-	protected void getFilterValues(AttributeLogFilter filter) {
+	public void getFilterValues(AttributeLogFilter filter) {
 		filter.attribute_include = attribute_filter_include_box.isSelected();
 		filter.attribute_filterOn = (String) attribute_filter_filter_on.getSelectedItem();
 		filter.attribute_key = (String) attribute_filter_log_attributes.getSelectedItem();

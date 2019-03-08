@@ -35,8 +35,9 @@ public class ProcessConfiguration extends Configuration{
 	public static final String NEW_SEQUENCE = "My_New_Seq";
 	public static final String PLACE_POST_PREFIX = "PlaceAfter";
 	public static final String PLACE_PRE_PREFIX = "PlaceBefore";
-	public static final String TRANSITION_POST_PREFIX = "TransitionAfter";
-	public static final String TRANSITION_PRE_PREFIX = "TransitionBefore";
+	public static final String TRANSITION_TAU_PREFIX = "Tau";
+	public static final String TRANSITION_POST_PREFIX = TRANSITION_TAU_PREFIX+"TransitionAfter";
+	public static final String TRANSITION_PRE_PREFIX = TRANSITION_TAU_PREFIX+"TransitionBefore";
 	public static final String POST_PREFIX = "After";
 	public static final String PRE_PREFIX = "Before";
 	

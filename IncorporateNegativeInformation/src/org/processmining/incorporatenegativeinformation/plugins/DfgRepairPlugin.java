@@ -2,6 +2,7 @@ package org.processmining.incorporatenegativeinformation.plugins;
 
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
+import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
@@ -9,6 +10,7 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.incorporatenegativeinformation.algorithms.IncorporateNeg2Dfg;
 import org.processmining.incorporatenegativeinformation.algorithms.PN2DfgTransform;
+import org.processmining.incorporatenegativeinformation.help.NetUtilities;
 import org.processmining.incorporatenegativeinformation.models.DfMatrix;
 import org.processmining.incorporatenegativeinformation.models.DfgProcessResult;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
@@ -30,7 +32,8 @@ import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
  * @author dkf
  *
  */
-
+@Plugin(name = "Repair Model by Kefang", returnLabels = {"DfgProcess Result"}, 
+returnTypes = {DfgProcessResult.class}, parameterLabels = { "XLog","Existing Petri Net","Initial Marking"})
 public class DfgRepairPlugin {
 	/*
 	@Plugin(name = "Repair Model by Kefang", returnLabels = {"DfMatrix"}, 
@@ -42,10 +45,24 @@ public class DfgRepairPlugin {
 	}
 	*/
 	
-	@Plugin(name = "Repair Model by Kefang", returnLabels = {"DfgProcess Result"}, 
-			   returnTypes = {DfgProcessResult.class}, parameterLabels = { "XLog","Existing Petri Net","Initial Marking"})
-	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "Repair Model By Dfg-- With Marking",  requiredParameterLabels = { 0 , 1 , 2})
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "kfding1010@gmail.com")
+	@PluginVariant(variantLabel = "Repair Model By Dfg For AcceptingPetriNet",  requiredParameterLabels = { 0 , 1 })
+	public DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net) throws ConnectionCannotBeObtained {
+		Marking marking = NetUtilities.guessInitialMarking(net);
+		// here we extract marking from petri net
+		return transformPn2Dfg(context,log, net, marking);
+	}
+	
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "kfding1010@gmail.com")
+	@PluginVariant(variantLabel = "Repair Model By Dfg Without Marking",  requiredParameterLabels = { 0 , 1 })
+	public DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, AcceptingPetriNet anet) throws ConnectionCannotBeObtained {
+		Marking marking = anet.getInitialMarking();
+		// here we extract marking from petri net
+		return transformPn2Dfg(context,log, anet.getNet(), marking);
+	}
+	
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "kfding1010@gmail.com")
+	@PluginVariant(variantLabel = "Repair Model By Dfg Wirh Marking",  requiredParameterLabels = { 0 , 1 , 2})
 	public DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
 		// -- transform Petri net into Dfg
 		

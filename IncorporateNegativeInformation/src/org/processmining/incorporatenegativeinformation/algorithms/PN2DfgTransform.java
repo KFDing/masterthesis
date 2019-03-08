@@ -42,26 +42,26 @@ public class PN2DfgTransform {
 			return null;
 		}
 		ReachabilityGraph ts = (ReachabilityGraph) result[0];
-		
+		// ReachabilitySet rs = (ReachabilitySet)result[1];
 		// there is also the initial state, I will see which it represents
 		StartStateSet startStates =  (StartStateSet) result[2];
 		AcceptStateSet acceptingStates = (AcceptStateSet) result[3];
 		
-		Collection<org.processmining.models.graphbased.directed.petrinet.elements.Transition> ntransitions =  net.getTransitions();
-		Object[] nt = ntransitions.toArray();
 		Dfg dfg = new DfgImpl(); // here to change to delet the tau transition
+		
 		eventClassMap = new HashMap<String, XEventClass>();
+		
 		int idx = 0;
-		for(int i=0;i<ntransitions.size(); i++) {
-			// here how to transform transition into XEventClass?? 
-			org.processmining.models.graphbased.directed.petrinet.elements.Transition transition = (org.processmining.models.graphbased.directed.petrinet.elements.Transition) nt[i];
-			String key =transition.getLabel();
-			// different situations here, key can be "", which is tau, so we need to limit it
-			if(key.length()>0 && !transition.isInvisible()) {
+		for(org.processmining.models.graphbased.directed.petrinet.elements.Transition pTransition : net.getTransitions()) {
+			// build two maps... 
+			if(!pTransition.isInvisible()) {
+				String key =pTransition.getLabel();
 				XEventClass eventClass = new XEventClass(key, idx++); // or we need to assign them later.. whatever, only concrete events matter
-				eventClassMap.put(key, eventClass);
 				dfg.addActivity(eventClass); // here to add only the non- tau activity
+				eventClassMap.put(key, eventClass);
+				
 			}
+			
 		}
 		addStartEnd(dfg, ts, startStates, acceptingStates);
 		
@@ -71,6 +71,7 @@ public class PN2DfgTransform {
 		return dfg;
 	}
 	
+
 	public static void addStartEnd(Dfg dfg, ReachabilityGraph rg,StartStateSet startStates, AcceptStateSet acceptingStates) {
 		
 		for(Object sid: startStates) {
@@ -105,7 +106,14 @@ public class PN2DfgTransform {
 			}
 		}
 	}
-	
+	/**
+	 * we have modification to deal with silent transitions. We need to find out the silent transition t. 
+	 * something, not so nice to check, I'd like to say.. 
+	 * [S1]--> [tau, specific for one branch to connect?? ]-->[T1], specific connection for it
+	 * so we connect the S1-->T1, and create the directly follows relation
+	 * @param dfg
+	 * @param rg
+	 */
 	public static void addDirectFollow(Dfg dfg, ReachabilityGraph rg) {
 		// look it from the root, I think,it is a root, then do breadth search,
 		// parent, and then check the children edges, one edge, one df relation
@@ -124,33 +132,15 @@ public class PN2DfgTransform {
 			out_ts = rg.getOutEdges(s);
 			// after we get all the transitions from initial state, we go deep??
 			for(Transition in_t: in_ts) {
+				if(isTau(in_t))
+					continue;
 				for(Transition out_t: out_ts) {
-					// if the incoming activity is tau
-					if(isTau(in_t)) {
-						// trace back to the last state and get the non_tau Edges.
-						Collection<Transition> pre_tau = getNonTauTransition(rg, in_t,true);
-						// get a collection of all previous events
-						
-						if(pre_tau.isEmpty()) {
-							// we may reach the initial state, then we do nothing, just go to next state
-							break;
-						}else {
-							for(Transition pre_t : pre_tau) {
-								addDf(dfg, pre_t, out_t);
-							}
-						}
-					}else {
-						if(!isTau(out_t)) {
-							// add the df into dfg
-							addDf(dfg, in_t, out_t);
-						}
-						// if it is tau, then we don't do anything, because for the pre_tau, it could find it
-					}
+					if(!isTau(out_t))
+						addDf(dfg, in_t, out_t);
 				}
 			}
 			
 		}
-		
 	}
 
 	// hide the transform details into this function
@@ -160,6 +150,7 @@ public class PN2DfgTransform {
 		target = eventClassMap.get(out_t.getLabel());
 		dfg.addDirectlyFollowsEdge(source, target, 1);
 	}
+	
 	
 	
 	private static Collection<Transition> getNonTauTransition(ReachabilityGraph rg, Transition tau, boolean b) {
@@ -201,7 +192,9 @@ public class PN2DfgTransform {
 		}
 	}
 	private static boolean isTau(Transition t) {
-		return t.getLabel().isEmpty() || t.getLabel().contains("tau");
+		if(eventClassMap.containsKey(t.getLabel()))
+			return false;
+		return true;
 	}
 	
 	public static void setCardinality(Dfg dfg, long cardinality) {

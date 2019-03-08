@@ -1,5 +1,6 @@
 package org.processmining.incorporatenegativeinformation.help;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,23 +24,31 @@ import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetFactor
 import org.processmining.models.semantics.petrinet.Marking;
 public class NetUtilities {
 	
+	public static Marking guessInitialMarking(Petrinet net) {
+		// TODO Auto-generated method stub
+		List<Place> place = getStartPlace(net);
+		Marking iniMarking = new Marking();
+		iniMarking.addAll(place);
+		return iniMarking;
+	}
 	
-	public static Place getStartPlace(Petrinet net) {
+	public static List<Place> getStartPlace(Petrinet net) {
 		// first we get all the places if one place has no preset edges
 		// then it is the startPlace
 		Collection<Place> places = net.getPlaces();
-		Place p, startp = null;
+		Place p = null;
+		List<Place> startp = new ArrayList<>();
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preset = null;
 		Iterator<Place> pIterator = places.iterator();
 		while(pIterator.hasNext()) {
 			p = pIterator.next();
 			preset = net.getInEdges(p);
 			if(preset.size() < 1) {
-				startp =  p;
+				startp.add(p);
 			}
 		}
 		// if there is no start position, then we create one
-		if(startp == null) {
+		if(startp.isEmpty()) {
 			System.out.println("There is no Start Place and create start place");
 			// and also the Arc to it 
 			// Place pstart = net.addPlace("Start");
@@ -47,21 +56,22 @@ public class NetUtilities {
 		return startp;
 	}
 	
-	public static Place getEndPlace(Petrinet net) {
+	public static List<Place> getEndPlace(Petrinet net) {
 		// firstly to get all places, if one place has no postset edges, then
 		// it is the endPlace
 		Collection<Place> places = net.getPlaces();
-		Place p, endp = null;
+		Place p;
+		List<Place> endp = new ArrayList<>();
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postset = null;
 		Iterator<Place> pIterator = places.iterator();
 		while(pIterator.hasNext()) {
 			p = pIterator.next();
 			postset = net.getOutEdges(p);
 			if(postset.size() < 1) {
-				endp = p;
+				endp.add(p);
 			}
 		}
-		if(endp == null) {
+		if(endp.isEmpty()) {
 			System.out.println("There is no End Place and create end place");
 			// and also the Arc to it 
 		}
@@ -180,7 +190,7 @@ public class NetUtilities {
     	// set a token at first place... Na, we need to check it from another code
     	// this doesn't include the token stuff. Maybe we should include it.
     	if(marking == null || marking.size()<1) {
-    		Place splace = NetUtilities.getStartPlace(net);
+    		Place splace = NetUtilities.getStartPlace(net).get(0);
     		splace.getAttributeMap().put(Configuration.TOKEN, 1);
     	}else {
     		// we use initial marking and get the places. 
@@ -229,7 +239,7 @@ public class NetUtilities {
 			}
 			
 		}
-    	Place eplace = NetUtilities.getEndPlace(net);
+    	Place eplace = NetUtilities.getEndPlace(net).get(0);
     	
     	int tnum = (Integer)eplace.getAttributeMap().get(Configuration.TOKEN);
     	if(tnum == 1) {

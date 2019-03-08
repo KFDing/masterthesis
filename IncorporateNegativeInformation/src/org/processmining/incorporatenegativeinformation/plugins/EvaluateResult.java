@@ -46,13 +46,20 @@ public class EvaluateResult {
 	 * @param marking
 	 * @return
 	 */
-	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
-	@PluginVariant(variantLabel = "Petrinet Naive CC No Marking",  requiredParameterLabels = { 0,1})
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
+	@PluginVariant(variantLabel = "Petrinet Naive CC with AcceptingPetriNet",  requiredParameterLabels = { 0,1})
 	public ArrayList<Integer> naiveCheckPNPlugin(UIPluginContext context, XLog log, AcceptingPetriNet anet ) { // Marking 
 		return naiveCheckPNPlugin(context, log, anet.getNet(), anet.getInitialMarking());
 	}
 	
-	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
+	@PluginVariant(variantLabel = "Petrinet Naive CC No Marking",  requiredParameterLabels = { 0, 1})
+	public ArrayList<Integer> naiveCheckPNPlugin(UIPluginContext context, XLog log, Petrinet net ) { // Marking 
+		Marking marking = NetUtilities.guessInitialMarking(net);
+		return naiveCheckPNPlugin(context, log, net, marking);
+	}
+	
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive Conformance Checking",  requiredParameterLabels = { 0,1,2})
 	public ArrayList<Integer> naiveCheckPNPlugin(UIPluginContext context, XLog log, Petrinet net, Marking marking ) { // Marking 
 		// given log, should we first to organize them into variants and then do such stuff??? 

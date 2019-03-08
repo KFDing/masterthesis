@@ -25,14 +25,35 @@ public class AttributeLogFilter {
 	
 	public XLog log;
 
+	public AttributeLogFilter() {
+		setDefaultValues();
+	}
+	
 	public AttributeLogFilter(XLog log) {
 		this.log = log;
 		setDefaultValues();
 	}
+	
+	public AttributeLogFilter(String filterOn, String key, Set<String> values) {
+		attribute_filterOn = filterOn;
+		attribute_key = key;
+		attribute_values.addAll(values);
+	}
+	
+	public void setAttributeKey(String key) {
+		attribute_key = key;
+	}
 
+	public void setFilterOn(String filterOn) {
+		attribute_filterOn = filterOn;
+	}
+	
+	public void setAttributeValue(Set<String> values) {
+		attribute_values.addAll(values);
+	}
+	
 	public void setDefaultValues() {
 		this.attribute_filterOn = NONE;
-		
 	}
 
 	public boolean satisfies(XAttributeMap attributes) {
