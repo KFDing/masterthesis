@@ -14,10 +14,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.deckfour.xes.classification.XEventClass;
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
+import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
-import org.processmining.incorporatenegativeinformation.help.TSGenerator;
+import org.processmining.incorporatenegativeinformation.help.RepairTSGenerator;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.transitionsystem.AcceptStateSet;
 import org.processmining.models.graphbased.directed.transitionsystem.ReachabilityGraph;
@@ -34,8 +34,8 @@ import org.processmining.plugins.InductiveMiner.dfgOnly.DfgImpl;
 public class PN2DfgTransform {
 	static Map<String, XEventClass> eventClassMap ;
 	
-	public static Dfg transformPN2Dfg(UIPluginContext context,Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
-		TSGenerator tsGenerator = new TSGenerator();
+	public static Dfg transformPN2Dfg(PluginContext context,Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
+		RepairTSGenerator tsGenerator = new RepairTSGenerator();
 		Object[] result = tsGenerator.calculateTS(context, net, marking);
 		if(result == null) {
 			System.out.println("The result goes wrong of transition system");

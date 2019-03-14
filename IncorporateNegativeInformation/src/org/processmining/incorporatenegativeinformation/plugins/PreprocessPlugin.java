@@ -44,8 +44,8 @@ import org.processmining.incorporatenegativeinformation.parameters.LabelParamete
 
 @Plugin(
 		name = "Label Event Log",
-		parameterLabels = {"Event log", "Petrinet"}, 
-		returnLabels = { "Laleled Log"},
+		parameterLabels = {"Event log"}, 
+		returnLabels = { "Labeled Log"},
 		returnTypes = {XLog.class}, 
 		userAccessible = true,
 		help = "add additional label information into the event log "

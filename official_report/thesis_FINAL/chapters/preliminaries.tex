@@ -1,96 +1,166 @@
-This chapter uses definitions adapted from \cite{van2013process, hompes2015detecting, baier2015matching} to give a background of the formalization of event logs, Petri nets and alignments. First off, some basic mathematical foundations are required.
+\subsection{Definitions Related To Dfg-Method}
+In this part, we provides concepts related to the dfg-method which is based on directly-follows graph. A directly-follows graph as used in \cite{leemans2013discovering}, represents the directly-follows relation of activities in event log. For instance, if there are traces of $\langle ...,A,B,... \rangle$ in event log, one edge (A,B) is added into directly-follows graph. By cutting directly-follows graph under different conditions, Inductive Miner\cite{leemans2013discovering,leemans2014discovering} discovers a process model. Unlike this process, we adapt Inductive Miner to repair model by using existing model, and event log with labels.
 
-\begin{definition}[Tuples]
-For sets $X_1, X_2, \ldots, X_n$, $t \in X_1 \times X_2 \times \ldots \times X_n$ is an $n$-tuple. For $1\le i\le n$, $t_i$ is the projection on the $i$th element in the tuple.
+\begin{definition}[Cardinality in directly-follows graph]
+	Given a directly-follows graph G(L) derived from an event log L, the cardinality of each directly-follows relation in G(L) is defined as:  
+	\begin{itemize}
+		\item $Cardinality(E(A,B))$ is the frequency of traces with $\langle ...,A,B,... \rangle$. 
+		\item Start node A cardinality $Cardinality(Start(A))$ is the frequency of traces with begin node A.
+		\item End node B cardinality $Cardinality(End(A))$ is the frequency of traces with end node B.
+	\end{itemize}	
 \end{definition}
+From the positive and negative event log, we can get directly-follows graphs, respectively $G(L_{pos})$ and $G(L_{neg})$. Each edge of  $G(L_{pos})$ and $G(L_{neg})$ has a cardinality to represent the strength of this directly-follows relation. 
+However, when the existing model is transformed into  directly-follows graph $G(L_{ext})$, there is no point to assign cardinality on each edge. So we just set 1 to cardinality of each edge. 
 
-\begin{definition}[Functions]
-For sets $X$ and $Y$, $f:X\to Y$ is a total function and $g: X\nrightarrow Y$ is a partial function. The domain of a function is the set of elements it is defined on, so $dom(f) = X$ and $dom(g) \subseteq X$ because a partial function does not have to be defined on every element. All elements in the domain are mapped to an element in the target set $Y$.
+%To incorporate all information from  $G(L_pos)$, $G(L_neg)$ and $G(L_ext)$, a data structure is defined directly-follows matrix. 
+To incorporate all information from  $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$, we define  weight for each directly-follows relation in graph. 
+\begin{definition}[Weight of directly-follows relation]
+	Given a directly-follows graph G(L), the weight of each directly-follows relation is defined as \[ Weight(E(A,B)) = \frac{Cardinality(E(A,B))}{Cardinality(E(A,*))}  \] 
+	for start activities A, we have 
+	\[ Weight(Start(A)) = \frac{Cardinality(Start(A))}{Cardinality(Start(*))} \]
+	Similarly for end activities B, we have
+	\[ Weight(End(B)) = \frac{Cardinality(End(B))}{Cardinality(End(*))} \]
+	E(A,*) means all edges with source A, E(*,B) means all edges with target B, Start(*) represents all start nodes, and End(*) represents all end nodes.
 \end{definition}
+After defining the weights of each directly-follows relation, for each directly-follows relation, there are three weights from $G_{pos}$, $G_{neg}$ and $G_{ext}$. The following strategy assigns new weight to directly-follows relation to new generated directly-follows graph $G_{new}$.
+\begin{definition}[Assign new weights to graph $G_{new}$]
+	there are three weights from $G_{pos}$, $G_{neg}$ and $G_{ext}$, the new weight is 
+	\begin{itemize}
+		\item For one directly-follows relation, \[ Weight(E_{G_{new}}(A,B)) = Weight(E_{G_{pos}}(A,B)) + Weight(E_{G_{ext}}(A,B)) - Weight(E_{G_{neg}}(A,B))\]
+		\item For start activities A, we have 
+		\[ Weight(Start_{G_{new}}(A)) = Weight(Start_{G_{pos}}(A)) + Weight(Start_{G_{ext}}(A)) - Weight(Start_{G_{neg}}(A)) \]
+		\item For end activities B, we have
+		\[ Weight(End_{G_{new}}(A)) = Weight(End_{G_{pos}}(A)) + Weight(End_{G_{ext}}(A)) - Weight(End_{G_{neg}}(A)) \]
+	\end{itemize}
+\end{definition}
+After assigning all the weight to directly-follows relation in $G_{new}$, we filter out all directly-follows relation in $G_{new}$ with weight less than 0. 
+Then, we transform the $G_{new}$ into process tree bu using Inductive Miner for the next stage.
 
-\begin{definition}[Powerset]
-For a set $X$, $\mathcal{P}(X)=\set{S}{S \subseteq X}$ denotes the set of all subsets of $X$.
-\end{definition}
+\subsection{Definitions Related To Add Long-term Dependency}
+\textit{Example 1} Consider event log L with labels \[L =[\langle A,C,E \rangle^{50,pos}, \langle B,C,D \rangle^{50,pos}, \langle A,C,D \rangle^{50,neg}]. \] $\langle A,C,E \rangle^{50,pos}$ means there are 10 traces $\langle A,C,E \rangle$ labeled as positive in event log. Similarly, $\langle A,C,D \rangle^{50,neg}$ represents there are $\langle A,C,D \rangle$ traces at number 50 in event log which have negative labels. 
 
-\begin{definition}[Multiset]
-For a set $X$, a multiset $B:X\to \mathbb{N}_0$ over $X$ is a set with duplicates. $B(x)$ gives the frequency of $x$ in $B$. Multisets use square brackets e.g. $B_1=[a,a,b,c,c,c,c]=[a^2,b,c^4], B_2=[a,d]$. They overload the typical set operations $B_1 \uplus B_2 = [a^3,b,c^4,d], B_1 \cap B_2 = [a]$ and $B_1 \setminus B_2 = [a,b,c^4]$. The set of all multisets over $X$ is $\mathcal{B}(X)$.
-\end{definition}
-
-\begin{definition}[Sequences]
-For any set $X$, $\sigma = \langle \sigma_1, \sigma_2, \ldots, \sigma_n \rangle \in X^*$ is a finite sequence over $X$ of length $|\sigma|=n$. $set(\sigma) = \set{x\in X}{\exists 1 \le i \le |\sigma|: \sigma_i = x}$ is the set of distinct elements in the sequence $\sigma$.
-Two sequences $\sigma, \sigma^\prime \in X^*$ can be concatenated to $\sigma \cdot \sigma^\prime$, e.g. $\langle a,b \rangle \cdot \langle c \rangle = \langle a, b, c \rangle$.
-Any (partial) function $f:X \nrightarrow Y$ to some set $Y$ can be applied to a sequence over $X$ recursively as follows. $f(\langle \rangle) = \langle \rangle$ and for $x\in X$ and $\sigma \in X^*$: 
-$$f(\langle x \rangle \cdot \sigma) = \begin{cases}
-f(\sigma) & \text{if } x\notin dom(f)\\
-\langle f(x) \rangle \cdot f(\sigma) & \text{if } x \in dom(f)
-\end{cases}$$
-A sequence over $X$ can also be projected onto a subset $Q\subseteq X$ recursively. So $\langle \rangle \restriction_Q = \langle \rangle$ and for $x\in X$ and $\sigma \in X^*$: $$(\langle x \rangle \cdot \sigma)\restriction_Q = \begin{cases}
-\sigma\restriction_Q & \text{if } x\notin Q\\
-\langle x \rangle \cdot \sigma\restriction_Q & \text{if } x \in Q
-\end{cases}$$
-Sequences over tuples $\sigma \in (X_1 \times \ldots \times X_m)^*$ can be projected to a sequence over $X_i$ ($1\le i\le m$) with $\sigma \restriction_i$.
-\end{definition}
-
-\begin{definition}[Logic]
-For a set $X$ and a formula $\phi:X\to \mathcal{B}$, $\forall x\in X: \phi(x)$ requires $\phi$ to hold for all $x$, $\exists x\in X: \phi(x)$ requires $\phi$ to hold for at least one $x$ and $\exists!\ x\in X : \phi(x)$ requires $\phi$ to hold for exactly one $x$. For two formulas $\phi$ and $\psi$, $\phi \wedge \psi$ requires both to hold, $\phi \vee \psi$ requires at least one to hold and $\phi \XOR \psi$ requires exactly one of them to hold.
-\end{definition}
-
-The recording of events during process execution is the basis of all process mining activities. Recorded events are always associated with an activity and a time. Other attributes are optional.
-\begin{definition}[Event]
-Let $\E$ denote the universe of all possible events. The set $ATE$ contains all possible event attribute names. For an event $e \in \mathcal{E}$ and attribute name $n\in ATE$, $n(e)$ is the value of attribute $n$ of event $e$. If $e$ does not have attribute $n$, $n(e)=\bot$. $\Univ A$ denotes the universe of all activities. The event attributes $activity:\mathcal{E}\to \Univ A$ and $time: \E \to Time$ are always defined.
-\end{definition}
-For readability, we write events together with their activity in the superscript like $e^{activity(e)}$.
-Traces are a chronologically ordered sequence of such events and belong to a case along with possible further case attributes. Since events are considered to be unique, there cannot be any duplicates in a trace.
-\begin{definition}[Trace]
-A trace $\sigma = \langle e_1, e_2, \ldots, e_n \rangle \in \mathcal{E}^*$ is a finite sequence of events without duplicates, i.e. $\forall 1\le i < j\le n: e_i \neq e_j$. The events are non-strictly ordered by their time attribute, i.e. $\forall 1\le i < j\le n: time(e_i) \le time(e_j) $.
-\end{definition}
-Like an event, a case is a unique object with attributes, one of which being the associated trace.
-\begin{definition}[Case]
-Let $\C$ denote the universe of all possible cases. The set $ATT$ contains all possible case attribute names. For a case $c\in \C$ and attribute name $n \in ATT$, $n(c)$ is the value of attribute $n$. If $c$ does not have attribute $n$, $n(c) = \bot$. The attribute $trace(c)=\hat{c}\in \mathcal{E}^*$ is always defined. $\hat{c}$ will be used as a shorthand for the associated trace of a case.
-\end{definition}
-An event log is a collection of cases.
-\begin{definition}[Event log]
-Let $\Log \subseteq \C$. $\Log$ is an event log if every event in the log is unique, i.e. $\forall c,c^\prime \in \Log: c\neq c^\prime \implies set(\hat{c}) \cap set(\hat{c}^\prime) = \emptyset$. The universe of event logs is $\Univ L$.
-\end{definition}
-
-As a notation for process models, we use (labeled) Petri nets. Observe that, since different process notations (like BPMN models) can be converted between each other, this is not a restriction.
-\begin{definition}[Labeled Petri net]
-A (labeled) Petri net is a tuple $PN=(P,T,F,l)$ consisting of the set of places $P$, set of transitions $T$ with $P \cap T = \emptyset$, a flow relation $F\subseteq (P \times T) \cup (T \times P)$ and a labeling function $l:T \to \Univ A \cup \{ \tau \}$, with $\tau \notin \Univ A$. The labeling function maps each visible transition to an activity in $\Univ A$. Transitions $t\in T$ mapped to $\tau$ are called silent or invisible. They are unobservable. The sets $T^l=\set{t\in T}{l(t)\neq \tau}$ and $T^{\tau}=\set{t\in T}{l(t)=\tau}$ partition the transitions into those labeled with an activity and the silent ones.
-\end{definition}
-To be able to refer to adjacent nodes more easily, the preset and postset are defined. For places they contain transitions and for transitions places.
-\begin{definition}[Preset, postset]
-Let $PN=(P,T,F,l)$ be a Petri net. For every node $n\in P \cup T$, $n^\bullet=\{m | (n, m) \in F\}$ is the postset and $^{\bullet}n=\{m | (m, n) \in F\}$ the preset of $n$.
-\end{definition}
-A marking describes the state of a Petri net, represented by a distribution of tokens on the places.
-\begin{definition}[Marking]
-Let $PN=(P,T,F,l)$ be a Petri net. A marking $M\in \mathcal{B}(P)$ is a multiset of places. For every $p\in P$, $M(p)$ is the number of tokens on place $p$. A transition $t\in T$ is enabled in a marking $M$, written $M[t \rangle$, if each place in $\pre t$ has at least one token. The transition execution $M[t \rangle M^\prime$ results in the marking $M^\prime = (M \setminus \pre t) \uplus \post t$ where one token is removed from every place in the preset and one is added to every place in the postset.
-\end{definition}
-To make a Petri net executable, an initial marking which describes the initial distribution of tokens and a final marking which describes a valid completion states are required.
-\begin{definition}[System net]
-A system net $SN=(PN,M_i,M_f)$ is a Petri net $PN=(P,T,F,l)$ with an initial marking $M_i$ and final marking $M_f$. A valid firing sequence on $SN$ is a sequence of transitions $\sigma \in T^*$ such that $\forall 1\le j \le |\sigma| : M_{j-1}[\sigma_j \rangle M_{j}$ with $M_0=M_i$ and $M_{|\sigma|}=M_f$ where every transition execution was enabled.
-\end{definition}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=.6\textwidth]{figures/preliminaries/simplenet.png}
-    \caption{A simple Petri net}
-    \label{fig:simplenet}
+After applying the dfg-algorithm, a model as shown in Figure \ref{fig:pn_without_lt_exm01} is discovered. In event log L, B and D has long-term dependency, and A is expected to support only the execution of E, since $<A,C,D>$ is negative and $<A,C,E>$ is positive. However, the model doesn't express those constraints.
+\begin{figure}[h!]
+	\includegraphics[width=\textwidth]{figures/preliminaries/PN06_Seq_2_xor_notnested.png}
+	\caption{Process model generated from dfg-algorithm}
+	\label{fig:pn_without_lt_exm01}
 \end{figure}
+Obviously, long-term dependency relates the choices structure in process model, such as exclusive choice, loop and or structure. Due to the complexity of or and loop structure, only the long-term dependency in exclusive choice is considered. 
 
-\begin{figure}
-    \centering
-    $\gamma_1=\bigalignment{4}{$e_{11}$ & $e_{12}$ & $e_{13}$ & \doublegg}{b & a & c & }{\doublegg & a & c & b}{ & t1 & t3 & t4}$ and $\gamma_2=\bigalignment{3}{$e_{21}$ & \doublegg & $e_{22}$}{a & & b}{a & $\tau$ & b}{t1 & t2 & t4}$
-    \caption{Two example alignments for $\hat{c}_1 = \langle e_{11}^b, e_{12}^a, e_{13}^c \rangle$ and $\hat{c}_2 = \langle e_{21}^a, e_{22}^b \rangle$}
-    \label{fig:simplealign}
-\end{figure}
-For replaying a (possibly unfitting) trace on a system net which might contain silent transitions or multiple transitions with the same label (duplicate transitions) alignments from \cite{van2012replaying} are being used.
-\begin{definition}[Alignment]
-Let $SN=(PN, M_i, M_f)$ be a system net and $c\in \C$ a case. An alignment $\gamma \in (\E \cup \{\gg\}) \times(T \cup \{ \gg \}) \setminus \{(\gg,\gg)\}$ is a sequence of so-called moves such that $\gamma\restriction_1\restriction_{\E} = \hat c$ and $\gamma\restriction_2\restriction_T$ is a valid firing sequence on $SN$. And for every $1\le i \le |\gamma|$:
+The inputs for this algorithm are,
 \begin{itemize}
-    \item $\gamma_i = (e,t)$ with $e\in \E$, $t\in T$ is called a move in both and if $activity(e) = l(t)$ it is called a synchronous move,
-    \item $\gamma_i = (e,\gg)$ with $e\in \E$ is called a log move,
-    \item $\gamma_i = (\gg, t)$ with $t\in T$ is called a model move and if $l(t) = \tau$ it is called an invisible move.
+	\item Repaired model in process tree
+	\item Event log with positive and negative labels
 \end{itemize}
-Since there may be multiple valid alignments, a cost function is used to rank them and return the optimal one. The standard cost function, which is often used, gives sync moves and invisible moves cost $0$ and move on model/log cost $1$. A move on both which is not a synchronous move gets a cost of $\infty$ since it is usually not wanted. For the cost of the whole alignment, the costs for all moves are summed up.
+The output of this algorithm is: 
+\begin{itemize}
+	\item Repaired model in petri net with long-term dependency
+\end{itemize}
+%%if now, we only consider the repaired process tree model, then we don't have problems to make the weights of dfg and long-term dependency unified. But we have it from the existing model, because of existing factor. 
+%% Now we have the firstly-repaired model, if we want to create long-term dependency, we also have the 3 weights:: 
+%% Ext_Wlt(Si, Tj), but when our negative factor affects, we need to unify them!!To prove it!!! 
+
+Process tree, as one input for the algorithm, is one common model to interpret business process in process mining. It's a block-structured tree. To specify the process tree with respect to long-term dependency, the following definitions are in need. Firstly, the definitions related to tree are reviewed.
+\begin{definition}[Tree]
+	Let $ \mathscr{E} $ be a finite set of entities, a tree is a collection of entities called nodes, which are connected by edges. A tree T is,
+	
+	\begin{itemize}
+		\item t, with  $t\in \mathscr{E}$, t has no outgoing edges
+		\item $t(T_1,T_2,...,T_n)$, with $t\in \mathscr{E}, i,n\in \mathbb{N}, i \leq n ,T_i$ is a tree.
+	\end{itemize}
 \end{definition}
-Figure \ref{fig:simplealign} shows two example alignments for the traces $\hat{c}_1 = \langle e_{11}^b, e_{12}^a, e_{13}^c \rangle$ and $\hat{c}_2 = \langle e_{21}^a, e_{22}^b \rangle$ on the model given in Figure \ref{fig:simplenet}. The top row contains events together with their $activity$ and the bottom row transitions together with their label to make it more readable. The alignments provide a path through the model even for unfitting traces like $\hat{c}_1$ or traces which require the execution of invisible transitions like $\hat{c}_2$.
+$T_i$ is a child or subtree of $t(T_1,T_2,...,T_n)$, $t(T_1,T_2,...,T_n)$ is one parent of $T_i$, which can be expressed in $P(t(T_1,T_2,...,T_n),T_i)$. The root of tree is the node without any parent; A tree has only one root. A leaf node is the node which has no children nodes.\\
+For a node in a tree, its ancestor and descendant are defined as:
+\begin{definition}[Ancestor Relation Anc(A,t)]
+	An ancestor of a node t in a tree is a node A, written as $ Anc(A,t) \Rightarrow True$, if those conditions hold,  
+	\begin{itemize}
+		\item A is a parent of t, written as $ P(A,t) \Rightarrow True$, or
+		\item $\exists t_1,t_2..t_n,n\in \mathscr{E}, i < n, P(A,t_1)\land P(t_i,t_{i+1}) \land P(t_n,t) \Rightarrow True $
+	\end{itemize}
+\end{definition}
+The ancestor of root is empty, while leaf nodes has no descendants. Based on this, we define the ancestors set of a node s. 
+\begin{definition}[Ancestors of a node a]
+	The ancestors set of a node s, Ancestors(s), is defined as: \[ Ancestors(A)=\{t|Anc(t,s) \Rightarrow True \} \]
+\end{definition}
+Accordingly, descendant relation is given for node t and node s, Des(s,t). If node s is the ancestor of t, then t is a descent of s. $Anc(s,t) \Rightarrow Dec(t,s)$; The set of descendants of node t is Descendants(t).
+\begin{definition}[Least Common Ancestor]
+	A least common ancestor for node $s$ and node $t$ in a tree is a node n, where 
+	\[Anc(n,s) \land Anc(n,t) \land \exists! m Anc(n,m) \land Anc(m,s) \land Anc(m,t) \]
+\end{definition}
+
+In process tree, all the leaves are activities in business process, and the middle nodes are operators which represents the relations of all its children nodes\cite{vanderAalst:2016:PMD:2948762,leemans2013discovering}. This paper uses four operators in context of long-term dependency. The four relations.  $\{\rightarrow, \times, \land, \circlearrowright\}$ are considered. 
+
+Next, we only focus on exclusive xor structure on long-term dependency. As known, long-term dependency is associated with choices. In xor block, it means the choices of each xor branch in xor block. For sake of convenience, we define the xor branch.
+
+$Q= \times(Q_1 , Q_2 ,.. Q_n)$, $Q_i$ is one xor branch with respect to Q, rewritten as $XORB_{Q_i}$ to represent one xor branch $Q_i$ in xor block, and record it $XORB_{Q_i} \in XOR_{Q}$. For each branch, there exists the begin and end nodes to represent the beginning and end execution of this branch, which is written respectively as Begin($XORB_{Q_i}$) and End($XORB_{Q_i}$).
+
+%% but the structure of xor branch, do we need to think of right now?? we need to think of it 
+For convenience of analysis, two properties of xor block, purity and nestedness are demonstrated to express the different structures of xor block according to its branches.
+\begin{definition}[XOR Purity and XOR Nestedness] The xor block purity and nestedness are defined as following: \\
+	\begin{itemize}
+		\item A xor block $XOR_Q$ is pure if and only $\forall XORB_X \in XOR_Q, XORB_X $ has no xor block descent, which is named as pure xor branch. Else,
+		\item A xor block $XOR_Q$ is nested if $ \exists XOR_X, Anc(XOR_Q, XOR_X) \rightarrow True  $. Similarly, this xor branch with xor block is nested.
+	\end{itemize}
+\end{definition}
+%% change the graph for whole explaination!!
+In the Figure\ref {fig:xor_nested_branch_variants}, xor block Xor(c1,c2) are pure and not nested, since all the xor branches are leaf node, but xor block Xor(a,Seq(b,Xor(c1,c2))) is impure and nested with Xor(c1,c2). 
+\begin{figure}[h!]
+	\includegraphics[width=\textwidth]{figures/preliminaries/PT02_xor_nested_and_pure.png}
+	\caption{XOR branch variants}
+	\label{fig:xor_nested_branch_variants}
+\end{figure}
+
+%% xor branch, the dependency between them, then how about the dependency on that part, does it exist in the xor block, so we can define it ??
+%% the full completeness is also dependency, but sth different, 
+%% for arbitrary two xor branches, if they are long-term dependency?? Can I decide, or not ?? I can decide it!! But in the specific way, if they are in a pair, they are ok, else, not !!! 
+%% but it goes far, so only write down what I have achieved, but in their thinking way, why in my way?? 
+%% given two branch, and they have order, just complexity of implementation, then we only consider the directly ones!!  
+
+Long-term dependency researches on the dependency of choices in xor block, with observation, actually on the pure xor branch, because nested xor branch has multiple choices, which affect the execution of later process. For two arbitrary pure xor branches, to have long-term dependency, they firstly need to satisfy the conditions: (1) they have an order;(2) they have significant correlation.
+The order of xor branch follows the same rule of node in process tree which is explained in the following.
+\begin{definition}[Order of nodes in process tree]
+	Node $X$ is before node $Y$, written in $X \prec Y$, if $X$ is always executed before $Y$.  In the aspect of process tree structure, $X \prec Y$, if the least common ancestor of $X$ and $Y$ is a sequential node, and $X$ positions before $Y$.
+\end{definition} 
+%% how to define the correlation fo xor branches, if they always happen together
+The correlation of xor branches is significant if they always happen together. To define it, several concepts are listed at first. 
+\begin{definition}[Xor branch frequency]
+	Xor branch $XORB_X$ frequency in event log l is $F_{l}(XORB_X)$, the count of traces with the execution of $XORB_X$. \\
+	For multiple xor branches, the frequency in event log l is defined as the count of traces with all the execution of xor branches $XORB_{Xi}$ , written as \[F_{l}(XORB_{X1}, XORB_{X2},...,XORB_{Xn})\].
+\end{definition}
+%% correlation means the two always happen together, if one not shown, the other also not?? So the connection support.. how to define them?? 
+%% connection support, we can say only on number, when it is over one value, 
+After calculation of the frequency of the coexistence of multiple xor branches in positive and negative event log, we get the supported connection of those xor branches, and define the correlation. 
+\begin{definition}[Correlation of xor branches]
+	\label{def: supported-connection}
+	For two pure xor branches, $XORB_X \prec XORB_Y$, the supported connection is given as \[SC(XORB_X,XORB_Y)= F_{pos}(XORB_X, XORB_Y) -F_{neg}(XORB_X, XORB_Y)\]. If $SC(XORB_X,XORB_Y) > lt-threshold$, then we say $XORB_X$ and $XORB_Y$ have significant correlation.
+\end{definition}
+
+I did some introduction, it is proven that in some cases, we can't deal with it. When the $XORB\_S \neq LT\_S || XORB\_T \neq LT\_T$.
+
+Another way to avoid this problem is to add duplicated events, but the problem stays the same, so if we want to keep the model fit, we add new event for the discovered long-term dependency, the original, we keep it in the model?? But it is not precise!!! It allows too many choices there, but the model is sound, because we add events on model, we produce and consume tokens from duplicated events, and consumes it later.. Still, it is not so right. But if we choose the events before, we decides the events later, it's true... helps a little... 
+
+How to prove it ?? By induction. 
+We use  process  trees as one internal result in  our  approach in two factors: (1) they are sound by construction, and can be transferred into sound Petri net models; (2) they are block-structured. which benefits the detection of exclusive relations in model.
+
+\begin{itemize}
+	\item the original model is sound
+	\item after adding one long-term dependency by duplicating the event, we make sure
+	 \\ duplicated events are added into the xor branches, if it's chosen, then it consumes one token, at this xor branches, then it produces two tokens, one of which is put back again into the 
+	 To prove the added places and duplicated events between two xor branches will not violate the soundness of model. 
+	 \item 
+	 \begin{itemize}
+	 	\item adding duplicated events of one long-term dependency does not violate the soundness of model. 
+	 	
+	 	\item To connect the source and target  of long-term dependency which are the duplicated events will not violate the soundness.
+	 	\\ One extra place is added to connect the source and target. After executing the source, one token is generated in this place; Due to long-term dependency, only this target is triggered by this token and it consumes this token. No extra token is introduced into this model, so the model keeps sound. 
+	 	
+	 \end{itemize}
+	 
+	 \item While keeping the original event in the model,  the model is with less precision.  
+	 \\ 
+	 So I want to solve this problem, and make it preciser by considering the original events into model... 
+	 One drawback exists there, still... If we use the old and then the 
+\end{itemize}
+
+It's about 12 pages. But one problem, some basic information, we forget to give .. Maybe, we can put the related work later!!!
+

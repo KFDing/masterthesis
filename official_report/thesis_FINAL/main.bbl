@@ -1,123 +1,56 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{1}
 
-\bibitem{adriansyah2015measuring}
-Arya Adriansyah, Jorge Munoz-Gama, Josep Carmona, Boudewijn~F van Dongen, and
-  Wil~MP van~der Aalst.
-\newblock Measuring precision of modeled behavior.
-\newblock {\em Information systems and e-Business Management}, 13(1):37--67,
-  2015.
+\bibitem{carmona2014process}
+Josep Carmona and Jordi Cortadella.
+\newblock Process discovery algorithms using numerical abstract domains.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
+  26(12):3064--3076, 2014.
 
-\bibitem{baier2015matching}
-Thomas Baier, Claudio Di~Ciccio, Jan Mendling, and Mathias Weske.
-\newblock Matching of events and activities-an approach using declarative
-  modeling constraints.
-\newblock In {\em International Conference on Enterprise, Business-Process and
-  Information Systems Modeling}, pages 119--134. Springer, 2015.
-
-\bibitem{bose2011handling}
-RP~Jagadeesh~Chandra Bose, W.M.P. van~der Aalst, Indr{\.e} {\v{Z}}liobait{\.e},
-  and Mykola Pechenizkiy.
-\newblock Handling concept drift in process mining.
-\newblock In {\em International Conference on Advanced Information Systems
-  Engineering}, pages 391--405. Springer, 2011.
-
-\bibitem{buijs2012role}
-Joos~C.A.M. Buijs, Boudewijn~F Van~Dongen, and W.M.P. van Der~Aalst.
-\newblock On the role of fitness, precision, generalization and simplicity in
-  process discovery.
+\bibitem{dees2017enhancing}
+Marcus Dees, Massimiliano de~Leoni, and Felix Mannhardt.
+\newblock Enhancing process models to improve business performance: a
+  methodology and case studies.
 \newblock In {\em OTM Confederated International Conferences" On the Move to
-  Meaningful Internet Systems"}, pages 305--322. Springer, 2012.
+  Meaningful Internet Systems"}, pages 232--251. Springer, 2017.
 
-\bibitem{de2016general}
-Massimiliano De~Leoni, W.M.P. van~der Aalst, and Marcus Dees.
-\newblock A general process mining framework for correlating, predicting and
-  clustering dynamic behavior based on event logs.
-\newblock {\em Information Systems}, 56:235--257, 2016.
+\bibitem{fahland2012repairing}
+Dirk Fahland and Wil~MP van~der Aalst.
+\newblock Repairing process models to reflect reality.
+\newblock In {\em International Conference on Business Process Management},
+  pages 229--245. Springer, 2012.
 
-\bibitem{hompes2015detecting}
-B.F.A. Hompes, Joos~C.A.M. Buijs, W.M.P. van~der Aalst, P.M. Dixit, and
-  Johannes Buurman.
-\newblock Detecting changes in process behavior using comparative case
-  clustering.
-\newblock In {\em International Symposium on Data-Driven Process Discovery and
-  Analysis}, pages 54--75. Springer, 2015.
+\bibitem{fahland2015model}
+Dirk Fahland and Wil~MP van~der Aalst.
+\newblock Model repair—aligning process models to reality.
+\newblock {\em Information Systems}, 47:220--243, 2015.
 
-\bibitem{lee2018recomposing}
-Wai Lam~Jonathan Lee, H.M.W. Verbeek, Jorge Munoz-Gama, W.M.P. van~der Aalst,
-  and Marcos Sep{\'u}lveda.
-\newblock Recomposing conformance: Closing the circle on decomposed
-  alignment-based conformance checking in process mining.
-\newblock {\em Information Sciences}, 466:55--91, 2018.
+\bibitem{ghasemi2016process}
+Mahdi Ghasemi and Daniel Amyot.
+\newblock Process mining in healthcare: a systematised literature review.
+\newblock 2016.
 
-\bibitem{scalelogs}
-S.J.J.~(Sander) Leemans.
-\newblock A collection of artificial event logs to test process discovery and
-  conformance checking techniques, 2017.
+\bibitem{goedertier2009robust}
+Stijn Goedertier, David Martens, Jan Vanthienen, and Bart Baesens.
+\newblock Robust process discovery with artificial negative events.
+\newblock {\em Journal of Machine Learning Research}, 10(Jun):1305--1340, 2009.
 
-\bibitem{mannhardt2015multi}
-Felix Mannhardt, Massimiliano De~Leoni, and Hajo~A Reijers.
-\newblock The multi-perspective process explorer.
-\newblock {\em BPM (Demos)}, 1418:130--134, 2015.
+\bibitem{ponce2016incorporating}
+Hernan Ponce-de Le{\'o}n, Josep Carmona, and Seppe~KLM vanden Broucke.
+\newblock Incorporating negative information in process discovery.
+\newblock In {\em International Conference on Business Process Management},
+  pages 126--143. Springer, 2016.
 
-\bibitem{mannhardt2016balanced}
-Felix Mannhardt, Massimiliano De~Leoni, Hajo~A Reijers, and W.M.P. van~der
-  Aalst.
-\newblock Balanced multi-perspective checking of process conformance.
-\newblock {\em Computing}, 98(4):407--437, 2016.
+\bibitem{van2011process}
+Wil Van Der~Aalst.
+\newblock {\em Process mining: discovery, conformance and enhancement of
+  business processes}, volume~2.
+\newblock Springer, 2011.
 
-\bibitem{manoj15capturing}
-M.V. Manoj~Kumar, Likewin Thomas, and B~Annappa.
-\newblock Capturing the sudden concept drift in process mining.
-\newblock {\em Algorithms \& Theories for the Analysis of Event Data (ATAED'15,
-  Brussels, Belgium, June 22-23, 2015)}, page 132, 2015.
-
-\bibitem{munoz2016conformance}
-Jorge Munoz-Gama et~al.
-\newblock {\em Conformance checking and diagnosis in process mining}.
-\newblock Springer, 2016.
-
-\bibitem{van2013decomposing}
-W.M.P. van~der Aalst.
-\newblock Decomposing petri nets for process mining: A generic approach.
-\newblock {\em Distributed and Parallel Databases}, 31(4):471--507, 2013.
-
-\bibitem{van2013process}
-W.M.P. van~der Aalst.
-\newblock Process mining in the large: a tutorial.
-\newblock In {\em European Business Intelligence Summer School}, pages 33--76.
-  Springer, 2013.
-
-\bibitem{van2015extracting}
-W.M.P. van~der Aalst.
-\newblock Extracting event data from databases to unleash process mining.
-\newblock In {\em BPM-Driving innovation in a digital world}, pages 105--128.
-  Springer, 2015.
-
-\bibitem{van2016process}
-W.M.P. van~der Aalst.
-\newblock {\em Process mining: data science in action}.
-\newblock Springer, 2016.
-
-\bibitem{van2018discovering}
-W.M.P. van~der Aalst.
-\newblock Discovering the “glue” connecting activities.
-\newblock In {\em It's All About Coordination}, pages 1--20. Springer, 2018.
-
-\bibitem{van2012replaying}
-W.M.P. van~der Aalst, Arya Adriansyah, and Boudewijn van Dongen.
-\newblock Replaying history on process models for conformance checking and
-  performance analysis.
-\newblock {\em Wiley Interdisciplinary Reviews: Data Mining and Knowledge
-  Discovery}, 2(2):182--192, 2012.
-
-\bibitem{bpi2012log}
-B.F. Van~Dongen.
-\newblock Bpi challenge 2012, 2012.
-
-\bibitem{verbeek2017divide}
-H.M.W. Verbeek, W.M.P. van~der Aalst, and J~Munoz-Gama.
-\newblock Divide and conquer: A tool framework for supporting decomposed
-  discovery in process mining.
-\newblock {\em The Computer Journal}, 60(11):1649--1674, 2017.
+\bibitem{vanden2014determining}
+Seppe~KLM vanden Broucke, Jochen De~Weerdt, Jan Vanthienen, and Bart Baesens.
+\newblock Determining process model precision and generalization with weighted
+  artificial negative events.
+\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
+  26(8):1877--1889, 2014.
 
 \end{thebibliography}

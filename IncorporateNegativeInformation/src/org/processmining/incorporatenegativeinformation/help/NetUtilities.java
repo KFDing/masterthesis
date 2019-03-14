@@ -32,6 +32,13 @@ public class NetUtilities {
 		return iniMarking;
 	}
 	
+	public static Marking guessFinalMarking(Petrinet net) {
+		// TODO Auto-generated method stub
+		List<Place> place = getEndPlace(net);
+		Marking finalMarking = new Marking();
+		finalMarking.addAll(place);
+		return finalMarking;
+	}
 	public static List<Place> getStartPlace(Petrinet net) {
 		// first we get all the places if one place has no preset edges
 		// then it is the startPlace

@@ -227,7 +227,7 @@ public class DfMatrix {
 	 *    -- if pos + existing > neg, we keep it??? Else, we leave it out?? 
 	 * @param dfg
 	 */
-	public Dfg buildDfs() {
+	public Dfg buildDfg() {
 		Dfg dfg = new DfgImpl();
 		// read of each item in dfMatrix 
 		double keepPercent, removePercent;

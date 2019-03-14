@@ -361,7 +361,7 @@ class ResultMainView extends JPanel{
 		// but if we generate the petri net without lt, we can choose it 
 		
 		if(updateAll) {
-			dfg =  dfMatrix.buildDfs();
+			dfg =  dfMatrix.buildDfg();
 			// I think I should change something about it, which could remember the result from before
 			// so I could put the Dfg, ProcessTree and Petri net in the class
 			DfgMiningParameters ptParas = getProcessTreParameters();
@@ -480,7 +480,7 @@ class ResultMainView extends JPanel{
 	
 	private void showProcessTree() {
 		if(updateAll) {
-			dfg =  dfMatrix.buildDfs();
+			dfg =  dfMatrix.buildDfg();
 			// I think I should change something about it, which could remember the result from before
 			// so I could put the Dfg, ProcessTree and Petri net in the class
 			DfgMiningParameters ptParas = getProcessTreParameters();
@@ -498,7 +498,7 @@ class ResultMainView extends JPanel{
 	private void showPetriNet() {
 		
 		if(updateAll) {
-			dfg =  dfMatrix.buildDfs();
+			dfg =  dfMatrix.buildDfg();
 			// I think I should change something about it, which could remember the result from before
 			// so I could put the Dfg, ProcessTree and Petri net in the class
 			DfgMiningParameters ptParas = getProcessTreParameters();

@@ -47,7 +47,7 @@ public class DfgRepairPlugin {
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "kfding1010@gmail.com")
 	@PluginVariant(variantLabel = "Repair Model By Dfg For AcceptingPetriNet",  requiredParameterLabels = { 0 , 1 })
-	public DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net) throws ConnectionCannotBeObtained {
+	public static DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net) throws ConnectionCannotBeObtained {
 		Marking marking = NetUtilities.guessInitialMarking(net);
 		// here we extract marking from petri net
 		return transformPn2Dfg(context,log, net, marking);
@@ -55,7 +55,7 @@ public class DfgRepairPlugin {
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "kfding1010@gmail.com")
 	@PluginVariant(variantLabel = "Repair Model By Dfg Without Marking",  requiredParameterLabels = { 0 , 1 })
-	public DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, AcceptingPetriNet anet) throws ConnectionCannotBeObtained {
+	public static DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, AcceptingPetriNet anet) throws ConnectionCannotBeObtained {
 		Marking marking = anet.getInitialMarking();
 		// here we extract marking from petri net
 		return transformPn2Dfg(context,log, anet.getNet(), marking);
@@ -63,7 +63,7 @@ public class DfgRepairPlugin {
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "kfding1010@gmail.com")
 	@PluginVariant(variantLabel = "Repair Model By Dfg Wirh Marking",  requiredParameterLabels = { 0 , 1 , 2})
-	public DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
+	public static DfgProcessResult transformPn2Dfg(UIPluginContext context, XLog log, Petrinet net, Marking marking) throws ConnectionCannotBeObtained {
 		// -- transform Petri net into Dfg
 		
 		Dfg dfg = PN2DfgTransform.transformPN2Dfg(context, net, marking);

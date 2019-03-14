@@ -38,12 +38,15 @@
 %using a shared counter tied to the section numbering
 \RequirePackage{textcomp}
 \RequirePackage{hyperref}
-\RequirePackage{amsmath, amsthm, amssymb}
+\RequirePackage{amsmath, amsthm, amssymb,mathrsfs, array}
 \RequirePackage[capitalize]{cleveref}
 
+%%make the chapters separate from each other
+%\RequirePackage{graphicx}
+%\graphicspath{{figures/}{../figures/}}
+%\RequirePackage{subfiles}
 
-
-\theoremstyle{definition} % change the font type for theorem-like environments to not use italics (default).
+\theoremstyle{definition} % change the\underline{\underline{}} font type for theorem-like environments to not use italics (default).
 
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{proposition}[theorem]{Proposition}
@@ -81,40 +84,44 @@
                             \end{tikzpicture}
                         
 							\centering
+							\vspace{3cm}
 							
-							The present work was submitted to the chair of Process and Data Science
-							
-							\Large
-							
-							\vspace{2cm}
-							
-							\gHeader
-							
-							\vspace{2cm}
-						
 							\hrule
 							\vspace{0.5cm}
-									
+							
 							{
-							\huge
+								\huge
 								\textbf{\gTitle}
 							}
 							
 							\vspace{0.5cm}
 							\hrule
 							
+							\vspace{2cm}
+							 
+							\textbf{\LARGE{\gHeader}}
+							
+							\vspace{2cm}
+							\emph{Author :}
+							\textbf{\Large{\gAuthor}}
+						
 							\vspace{1.5cm}
 							
-							\gAuthor
+							\emph{Supervisor :} 
+							\textbf{{\gSupervisor}}
 							
 							\vspace{1.5cm}
+							\begin{tabular}{@{}>{\itshape}rl@{}}
+								Registration date:  & 2018-11-15 \\
+								Submission date:    & 2019-03-12 
+							\end{tabular}
 							
-							supervised by \par
-							\gSupervisor
+							\vspace{2cm}
+							This work is submitted to the institute \\
+							\vspace{0.5cm}
+							\textbf{{\gInstitution}} \par
+							\vspace{2cm}
 							
-							\vfill
-							\gInstitution \par
-							\today
 						\end{titlepage}
 					}
 
