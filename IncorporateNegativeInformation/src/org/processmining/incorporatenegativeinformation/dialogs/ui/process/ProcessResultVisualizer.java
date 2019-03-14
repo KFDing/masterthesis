@@ -400,6 +400,9 @@ class ResultMainView extends JPanel{
 		// generate all the pairs here 
 		detector.addLTOnPairList(clusterPairs, connSet);
 		
+		// after this we can delete silent transition to make model simpler
+		// but do we need it, or not?? 
+		
 	}
 	protected void resetPNWithLT() {
 		// TODO reset PN with LT, it is we show the graph without any lt

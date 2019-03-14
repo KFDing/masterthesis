@@ -9,9 +9,9 @@ import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
+import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
@@ -48,20 +48,20 @@ public class EvaluateResult {
 	 */
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive CC with AcceptingPetriNet",  requiredParameterLabels = { 0,1})
-	public ArrayList<Integer> naiveCheckPNPlugin(UIPluginContext context, XLog log, AcceptingPetriNet anet ) { // Marking 
+	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, AcceptingPetriNet anet ) { // Marking 
 		return naiveCheckPNPlugin(context, log, anet.getNet(), anet.getInitialMarking());
 	}
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive CC No Marking",  requiredParameterLabels = { 0, 1})
-	public ArrayList<Integer> naiveCheckPNPlugin(UIPluginContext context, XLog log, Petrinet net ) { // Marking 
+	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, Petrinet net ) { // Marking 
 		Marking marking = NetUtilities.guessInitialMarking(net);
 		return naiveCheckPNPlugin(context, log, net, marking);
 	}
 	
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive Conformance Checking",  requiredParameterLabels = { 0,1,2})
-	public ArrayList<Integer> naiveCheckPNPlugin(UIPluginContext context, XLog log, Petrinet net, Marking marking ) { // Marking 
+	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, Petrinet net, Marking marking ) { // Marking 
 		// given log, should we first to organize them into variants and then do such stuff??? 
 		// not really, because anyway we need to check one trace by another...How about we store such trace variants,
 		// and compare them, if they matches, so we know if they get matched , or not 

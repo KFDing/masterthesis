@@ -253,7 +253,9 @@ public class NetUtilities {
     		eplace.getAttributeMap().put(Configuration.TOKEN, tnum-1);
 
 		}else {
-		// for each transition, check the preset places of it the tokens number is greater than one?? 
+		// for each transition, check the preset places of it the tokens number is greater than one??
+			// to have the naive evaluation checking, hope it is efficient
+			
 			if(isTokenMissing(eplace,net, 0))
 				return false;
 			else {

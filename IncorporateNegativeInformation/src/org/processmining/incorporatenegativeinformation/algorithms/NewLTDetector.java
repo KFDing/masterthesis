@@ -82,25 +82,14 @@ public class NewLTDetector {
 			addLTOnSinglePair(pair);
 		}
 		
+	    Petrinet dnet = deleteSilentTransition(manet.getNet());
+	    manet.init(dnet);
 	}
 	
-	public void addLTOnPairList(List<XORClusterPair<ProcessTreeElement>> clusterPairs) {
-		// for each cluster pair we initialize connection and adaptConnectionValue
-		for(XORClusterPair<ProcessTreeElement> pair: clusterPairs) {
-			List<LTRule<XORCluster<ProcessTreeElement>>> connSet = pair.getConnection();
-			initializeConnection(connSet); // from log, stays the same
-			
-			adaptConnectionValueForPair(connSet, parameters);
-		}
-		 
-		
+	public Petrinet deleteSilentTransition(Petrinet net) {
+		return SilentTransitionDeletor.deleteForSeq(net);
 	}
-	private void adaptConnectionValueForPair(List<LTRule<XORCluster<ProcessTreeElement>>> connSet,
-			ControlParameters parameters2) {
-		// TODO connSet is only for one pair, so if we use it, it can be used directly..
-		// 
-		
-	}
+	
 
 	// if we want to add only one pair on petri net, or remove one from petri net, what to do ?
 	public void addLTOnSinglePair(XORClusterPair<ProcessTreeElement> pair) {
