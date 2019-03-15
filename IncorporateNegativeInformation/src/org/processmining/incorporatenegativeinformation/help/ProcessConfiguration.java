@@ -46,7 +46,7 @@ public class ProcessConfiguration extends Configuration{
 	public static double LT_THRESHOLD = 0.25;
 	
 	public enum ViewType {
-		ProcessTree, PetriNet, PetriNetWithLTDependency
+		ProcessTree, PetriNet, PetriNetWithLTDependency, ReducedPetriNet
 	};
 
 	public enum StructureType {
@@ -61,6 +61,6 @@ public class ProcessConfiguration extends Configuration{
 	
 	public enum ActionType{AddLTOnPair, RemoveLTOnPair};
 	
-	public static String[] SaveModelType = {"Petrinet With LT", "Petrinet Without LT", "Process Tree"};
+	public static String[] SaveModelType = {"Reduced Petrinet with LT","Petrinet With LT", "Petrinet Without LT", "Process Tree"};
 	
 }

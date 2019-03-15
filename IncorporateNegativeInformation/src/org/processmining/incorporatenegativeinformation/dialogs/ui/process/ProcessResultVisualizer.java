@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
+import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetFactory;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
@@ -86,7 +87,7 @@ class ResultMainView extends JPanel{
 	ProcessTree pTree = null;
 	AcceptingPetriNet anet = null;
 	AcceptingPetriNet manet = null;
-	
+	AcceptingPetriNet danet = null;
 	// here we put the generator here to initialize the values at first time, when we have it 
 	// then not again!!
 	NewXORPairGenerator<ProcessTreeElement> generator = null;
@@ -94,9 +95,11 @@ class ResultMainView extends JPanel{
 	
 	
 	ProvidedObjectID ltnetId = null;
+	ProvidedObjectID rnetId = null;
 	ProvidedObjectID pTreeId = null;
 	ProvidedObjectID netId = null;
 	ProvidedObjectID markingId = null;
+	ProvidedObjectID rmarkingId = null;
 	boolean updateAll = true;
 	
 	
@@ -145,16 +148,13 @@ class ResultMainView extends JPanel{
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO  after this, we need to show all the PN with LT
-				rightView.getParameters().setType(ViewType.PetriNetWithLTDependency);
 				rightView.getParameters().setAddAllPair(true);
 				addPairPanel.choosePanel.setEnabled(false);
+				if(rightView.getParameters().getType() == ViewType.PetriNetWithLTDependency)
+					showPetriNetWithLT();
+				else if(rightView.getParameters().getType() == ViewType.ReducedPetriNet)
+					showReducedPetriNet();
 				
-				try {
-					updateMainView(leftView, rightView.getParameters());
-				} catch (ProvidedObjectDeletedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 			}
 		});
         
@@ -280,6 +280,9 @@ class ResultMainView extends JPanel{
 				else if(parameters.getType() == ViewType.PetriNetWithLTDependency){
 					title += "; with LT";
 					confusion_matrix  = EvaluateResult.naiveCheckPN(log, manet.getNet(), manet.getInitialMarking());
+				}else if(parameters.getType() == ViewType.ReducedPetriNet){
+					title += "; Reduced with LT";
+					confusion_matrix  = EvaluateResult.naiveCheckPN(log, danet.getNet(), danet.getInitialMarking());
 				}
 				// for the confusion_matrix I'd like to use the log variants for saving computation time
 				// here one bug hiiden, we have two net, one is with LT, one without LT, so we need to test them here
@@ -296,20 +299,26 @@ class ResultMainView extends JPanel{
 		// TODO save model to ProM according to the chosen index
 		// every time we should create a new one!! 
 		switch(idx) {
-			case 0: // save petri net with lt
+			case 0: // save petri net without lt
+				
+				rnetId =context.getProvidedObjectManager().createProvidedObject("Reduced Petri net with LT", danet.getNet(), Petrinet.class, context);
+				rmarkingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking", danet.getInitialMarking(), Marking.class, context);
+				break;	
+			case 1: // save petri net with lt
 				
 				ltnetId =context.getProvidedObjectManager().createProvidedObject("Petri net with LT", manet.getNet(), Petrinet.class, context);
 				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking with LT", manet.getInitialMarking(), Marking.class, context);
 				break;
-			case 1: // save petri net without lt
+			case 2: // save petri net without lt
 				
 				netId =context.getProvidedObjectManager().createProvidedObject("Generated Petri net", anet.getNet(), Petrinet.class, context);
 				markingId =context.getProvidedObjectManager().createProvidedObject("Initial Marking", anet.getInitialMarking(), Marking.class, context);
 				break;
-			case 2: // save process tree
+				
+			case 3: // save process tree
 				pTreeId =context.getProvidedObjectManager().createProvidedObject("Generated Process Tree", pTree, ProcessTree.class, context);
 				break;
-				
+			
 		}
 	}
 
@@ -345,21 +354,62 @@ class ResultMainView extends JPanel{
 			showPetriNet();
 			// if we add new, we need to delete the old petri net 
 			
-		}else{
+		}else if(parameters.getType() == ViewType.PetriNetWithLTDependency){
 				showPetriNetWithLT();
 				// only it is add all, then we add them all, else we can't have it without the addpairPanel..
 				// anyway, we keep it here
 				addPairPanel.setPanelEnabled(addPairPanel, true);
+		}else if(parameters.getType() == ViewType.ReducedPetriNet) {
+			// show the reduced petri net
+			showReducedPetriNet();
+			
+			addPairPanel.setPanelEnabled(addPairPanel, true);
 		}
 			
 	}
 	
+	private void showReducedPetriNet() {
+		// TODO show the petri net with petri net after reducing silent transition
+		// do you expect to recover them again?? Not really, I think... I don't want to review them again
+		// I want to save time for it, but if we always delete it after, we can recover it, 
+		// so another parameters in detectors
+		
+		if(updateAll) {
+			dfg =  dfMatrix.buildDfg();
+			// I think I should change something about it, which could remember the result from before
+			// so I could put the Dfg, ProcessTree and Petri net in the class
+			DfgMiningParameters ptParas = getProcessTreParameters();
+			pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+
+		}else {
+			if(pTree == null) {
+				DfgMiningParameters ptParas = getProcessTreParameters();
+				pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+			}	
+			if(manet == null) {
+				// if this is empty, we create it
+				createPNWithLT();
+				manet = detector.getAcceptionPN();
+				
+			}
+		}
+		// we accept the manet and generate a new one to show them here
+		// the net is already with 
+		// if we put the deletion there, what to do them?? acutally it is like reduced 
+		Petrinet dnet  = detector.getReducedPetriNet();
+		danet = AcceptingPetriNetFactory.createAcceptingPetriNet(dnet);
+		
+		rightView.showCMBtn.setEnabled(true);
+		leftView.drawResult(context, danet);
+		leftView.updateUI();
+		
+	}
+
 	@SuppressWarnings("deprecation")
 	private void showPetriNetWithLT() {
 		// TODO input is process tree and output is the petri net with long-term dependency
 		// one way is to generate the process tree, because we need it all the time
 		// but if we generate the petri net without lt, we can choose it 
-		
 		if(updateAll) {
 			dfg =  dfMatrix.buildDfg();
 			// I think I should change something about it, which could remember the result from before
@@ -438,12 +488,21 @@ class ResultMainView extends JPanel{
 		detector.addLTOnPairList(clusterPairs, connSet);
 		manet = detector.getAcceptionPN();
 		
+		
 		addPairPanel.updateAddSource(generator.getAddAvailableSources());
 		addPairPanel.updateRMSource(generator.getRMAvailableSources());
 		addPairPanel.repaint();
 		
-		leftView.drawResult(context, manet);
-		leftView.updateUI();
+		if(parameters.getType() == ViewType.PetriNetWithLTDependency) {
+			leftView.drawResult(context, manet);
+			leftView.updateUI();
+		}else if(parameters.getType() == ViewType.ReducedPetriNet) {
+			Petrinet dnet  = detector.getReducedPetriNet();
+			danet = AcceptingPetriNetFactory.createAcceptingPetriNet(dnet);
+			
+			leftView.drawResult(context, danet);
+			leftView.updateUI();
+		}
 		
 	}
 	
@@ -457,8 +516,17 @@ class ResultMainView extends JPanel{
 		addPairPanel.updateRMSource(generator.getRMAvailableSources());
 		addPairPanel.repaint();
 		
-		leftView.drawResult(context, manet);
-		leftView.updateUI();
+		if(parameters.getType() == ViewType.PetriNetWithLTDependency) {
+			leftView.drawResult(context, manet);
+			leftView.updateUI();
+		}else if(parameters.getType() == ViewType.ReducedPetriNet) {
+			Petrinet dnet  = detector.getReducedPetriNet();
+			danet = AcceptingPetriNetFactory.createAcceptingPetriNet(dnet);
+			
+			leftView.drawResult(context, danet);
+			leftView.updateUI();
+		}
+		
 	}
 	
 	// but one thing, when we chose source, the target should update accordingly.

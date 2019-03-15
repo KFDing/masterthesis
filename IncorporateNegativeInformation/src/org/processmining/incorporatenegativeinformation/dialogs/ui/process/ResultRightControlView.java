@@ -55,6 +55,7 @@ public class ResultRightControlView extends JPanel {
 	JRadioButton ptButton;
 	JRadioButton pnButton;
 	JRadioButton ltpnButton;
+	JRadioButton rpnButton;
 
 	JButton submit_button;
 	JButton saveModelBtn;
@@ -110,16 +111,32 @@ public class ResultRightControlView extends JPanel {
 				}
 			}
 		});
+		
+		// here add one more choices to reduce silent transition after this model generation
+		rpnButton = new JRadioButton("Show Petri net with LT After Reducing Silent Transition");
+		rpnButton.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				// after we choose delete, we delete places and repaint the graph again
+				if (rpnButton.isSelected()) {
+					parameters.setType(ViewType.ReducedPetriNet);
+					addPairPanel.setPanelEnabled(addPairPanel, true);
+					// but then how to store the values here?? We need to change it here, maybe
+				}
+			}
+		});
 
 		ButtonGroup typeGroup = new ButtonGroup();
 
 		typeGroup.add(ptButton);
 		typeGroup.add(pnButton);
 		typeGroup.add(ltpnButton);
+		typeGroup.add(rpnButton);
 
 		this.add(ptButton, new Float(3));
 		this.add(pnButton, new Float(3));
 		this.add(ltpnButton, new Float(3));
+		this.add(rpnButton, new Float(3));
+		
 
 		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 		JPanel weightPanel = new JPanel();
@@ -243,9 +260,9 @@ public class ResultRightControlView extends JPanel {
 		negPanel.add(negSlider);
 		negPanel.add(negValueLabel);
 
-		weightPanel.add(existPanel, new Float(30));
-		weightPanel.add(posPanel, new Float(30));
-		weightPanel.add(negPanel, new Float(30));
+		weightPanel.add(existPanel, new Float(20));
+		weightPanel.add(posPanel, new Float(20));
+		weightPanel.add(negPanel, new Float(20));
 
 		// add the submit and reset button panel
 		JPanel buttonPane = new JPanel();

@@ -35,7 +35,7 @@ public class NewLTDetector {
 	XLog log;
 	ControlParameters parameters;
 	AcceptingPetriNet manet;
-	
+	Petrinet dnet = null;
 	Map<Node, XEventClass> tlmaps;
 	AddLT2Net adder;
 	long traceNum =0;
@@ -81,9 +81,13 @@ public class NewLTDetector {
 	    for(XORClusterPair<ProcessTreeElement> pair: clusterPairs) {
 			addLTOnSinglePair(pair);
 		}
-		
-	    Petrinet dnet = deleteSilentTransition(manet.getNet());
-	    manet.init(dnet);
+	    // we put the deletion here
+		/*
+	    if(parameters.getType() == ViewType.ReducedPetriNet) {
+			 dnet = deleteSilentTransition(manet.getNet());
+		}
+		*/
+	      
 	}
 	
 	public Petrinet deleteSilentTransition(Petrinet net) {
@@ -142,6 +146,11 @@ public class NewLTDetector {
 		return false;
 	}
 
+	public Petrinet getReducedPetriNet() {
+		dnet = deleteSilentTransition(manet.getNet());
+		return dnet;
+	}
+	
 	public AcceptingPetriNet getAcceptionPN() {
 		return manet;
 	}
