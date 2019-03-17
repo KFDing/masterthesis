@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{carmona2014process}
 Josep Carmona and Jordi Cortadella.
@@ -45,6 +45,13 @@ Wil Van Der~Aalst.
 \newblock {\em Process mining: discovery, conformance and enhancement of
   business processes}, volume~2.
 \newblock Springer, 2011.
+
+\bibitem{van2008process}
+Jan Martijn~EM Van~der Werf, Boudewijn~F van Dongen, Cor~AJ Hurkens, and
+  Alexander Serebrenik.
+\newblock Process discovery using integer linear programming.
+\newblock In {\em International conference on applications and theory of petri
+  nets}, pages 368--387. Springer, 2008.
 
 \bibitem{vanden2014determining}
 Seppe~KLM vanden Broucke, Jochen De~Weerdt, Jan Vanthienen, and Bart Baesens.

@@ -41,6 +41,8 @@
 \RequirePackage{amsmath, amsthm, amssymb,mathrsfs, array}
 \RequirePackage[capitalize]{cleveref}
 
+%% allow more lines into one lines
+\RequirePackage{makecell}
 %%make the chapters separate from each other
 %\RequirePackage{graphicx}
 %\graphicspath{{figures/}{../figures/}}
@@ -76,7 +78,6 @@
 \newcommand{\gSupervisor}{Super Visor}
 \newcommand{\gInstitution}{RWTH Aachen}
 
-
 \newcommand{\tpage}{
 						\begin{titlepage}
 						    \begin{tikzpicture}[remember picture,overlay]
@@ -100,23 +101,22 @@
 							\vspace{2cm}
 							 
 							\textbf{\LARGE{\gHeader}}
-							
-							\vspace{2cm}
-							\emph{Author :}
-							\textbf{\Large{\gAuthor}}
 						
-							\vspace{1.5cm}
+							\vspace{3cm}
 							
-							\emph{Supervisor :} 
-							\textbf{{\gSupervisor}}
-							
-							\vspace{1.5cm}
 							\begin{tabular}{@{}>{\itshape}rl@{}}
-								Registration date:  & 2018-11-15 \\
-								Submission date:    & 2019-03-12 
+								\emph{Author :} & 	\textbf{\Large{\gAuthor}} \\
+								\rule{0pt}{8ex} 
+								\emph{Supervisor :} & 
+								\makecell[l]{ \gSupervisor} \\
+								
+								\rule{0pt}{15ex} 
+								Registration date :  & 2018-11-15 \\
+								\rule{0pt}{4ex}  
+								Submission date :    & 2019-03-12 
 							\end{tabular}
 							
-							\vspace{2cm}
+							\vspace{1.5cm}
 							This work is submitted to the institute \\
 							\vspace{0.5cm}
 							\textbf{{\gInstitution}} \par

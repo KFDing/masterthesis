@@ -6,6 +6,7 @@ Due to the increasing availability of detailed event logs of information systems
 
 Model repair belongs to process enhancement and stands between process discovery and conformance checking. It analyzes the workflow deviations between event log  and process model, and fix the deviations by adding sub processes on the model. As known, business in organizations is goal-oriented and aims to have high performance according to a set of Key Performance Indicators(KPIs), for example, average conversion time for the sales, payment error rate for the finance. However, there are little research on applying the process mining with consideration of performance\cite{ghasemi2016process}.  It points the contribution of \cite{dees2017enhancing} to combine performance into process mining. In \cite{dees2017enhancing}, the event log is firstly divided into positive instances and negative instances with respect to specific KPIs. Then, the positive instances are used to repair the model. In this way, negative instances are simply ignored, which results in a model with less precision. % we need to prove that only considering the workflow model fail in some situations. Then we propose our methods to incorporate KPIs into model repair. 
 
+%% Motivation 
 
 As an example, there is an model presented in Figure \ref{fig:model_examples} (a), where A is followed directly by B. During its execution in real life, an event log is generated: 
 \[{ <A, B> }^{55}  , {<B, A>}^{105} \] 
@@ -45,6 +46,8 @@ However, it's obvious that $<A,B>$ often leads to bad performance and therefore 
 
 The demand to repair model with incorporating negative instances appears. The concrete problem showing with demand is as follows. Given an input of one existing process model M, an event log L and KPIs, how  to improve current process enhancement techniques by incorporating negative information within process model repair, and generate a process model to enforce the positive instances while blocking the negative instance. Therefore, the repaired model provides a better way to understand and execute the real business process.
 
+
+%% Problem definition
 
 This paper tries to provide a solution for it. The reminder is organized in the following order. Section 2 recalls the basic notions on process mining and list the preliminary to solve the problem. The next section lists our methods are introduced and formal definitions are given. In Implementation Section, the details of algorithms are given. Later, we evaluate our methods with simulated data and real data respectively and list the results. Subsequently, the discussion on this paper is presented. At last section, a conclusion is drawn on the paper. 
 
