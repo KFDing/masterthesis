@@ -1,5 +1,48 @@
-This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: main.aux
 The style file: plain.bst
 Database file #1: references.bib
 Warning--empty journal in ghasemi2016process
+You've used 17 entries,
+            2118 wiz_defined-function locations,
+            599 strings with 7176 characters,
+and the built_in function-call counts, 7102 in all, are:
+= -- 743
+> -- 295
+< -- 9
++ -- 115
+- -- 98
+* -- 487
+:= -- 1096
+add.period$ -- 59
+call.type$ -- 17
+change.case$ -- 99
+chr.to.int$ -- 0
+cite$ -- 18
+duplicate$ -- 284
+empty$ -- 564
+format.name$ -- 98
+if$ -- 1555
+int.to.chr$ -- 0
+int.to.str$ -- 17
+missing$ -- 18
+newline$ -- 88
+num.names$ -- 34
+pop$ -- 115
+preamble$ -- 1
+purify$ -- 83
+quote$ -- 0
+skip$ -- 211
+stack$ -- 0
+substring$ -- 540
+swap$ -- 96
+text.length$ -- 9
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 66
+warning$ -- 1
+while$ -- 72
+width$ -- 19
+write$ -- 195
 (There was 1 warning)

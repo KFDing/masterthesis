@@ -20,5 +20,6 @@
        <dependency org="prom" name="InductiveVisualMiner" rev="latest" changing="true" transitive="false" />
        <dependency org="prom" name="InductiveMinerDeprecated" rev="latest" changing="true" transitive="true" /> 
      	<dependency org="prom" name="TransitionSystems" rev="latest" changing="true" transitive="true" />
+     	<dependency org="prom" name="ModelRepair" rev="latest" changing="true" transitive="true" />
     </dependencies>
 </ivy-module>

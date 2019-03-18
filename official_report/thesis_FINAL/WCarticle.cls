@@ -113,7 +113,7 @@
 								\rule{0pt}{15ex} 
 								Registration date :  & 2018-11-15 \\
 								\rule{0pt}{4ex}  
-								Submission date :    & 2019-03-12 
+								Submission date :    & 2019-??-?? 
 							\end{tabular}
 							
 							\vspace{1.5cm}
