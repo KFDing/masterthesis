@@ -16,23 +16,27 @@
 \tpage
 \pagestyle{plain}
 %%% TOC
-
+\iffalse
 \chapter*{Acknowledgments}\addcontentsline{toc}{chapter}{Aknowledgement}
 The acknowledgments and the people to thank go here, don't forget to include your project advice. 
+
 
 %\begin{abstract}
 \chapter*{Abstract} \addcontentsline{toc}{chapter}{Abstract}
 \input{chapters/abstract.tex}
 %\end{abstract}
 
+
 \tableofcontents
 \listoffigures
 \listoftables
+\fi
 %\setcounter{page}{1}
 \cleardoublepage
 %%% Begin document
 \pagestyle{fancy}
 
+\iffalse
 \chapter{Introduction} \label{chap:intro}\pagenumbering{arabic}
 \input{chapters/introduction.tex}
 
@@ -41,16 +45,22 @@ The acknowledgments and the people to thank go here, don't forget to include you
 \input{chapters/background.tex}
 
 
-\iffalse
-\chapter{Preliminaries} \label{chap:prelim}
-\input{chapters/preliminaries.tex}
 
-\chapter{Approach} \label{chap:appr}
-\input{chapters/concept.tex}
+\chapter{Preliminary} \label{chap:prelim}\pagenumbering{arabic}
+\input{chapters/preliminary.tex}
+
+
+\chapter{Algorithm} \label{chap:alg}
+\input{chapters/algorithm.tex}
+\fi
+
+\chapter{Preliminary} \label{chap:prelim}\pagenumbering{arabic}
+\input{chapters/preliminary.tex}
 
 \chapter{Implementation} \label{chap:impl}
 \input{chapters/implementation.tex}
 
+\iffalse
 \chapter{Evaluation} \label{chap:eval}
 \input{chapters/evaluation.tex}
 

@@ -1,55 +1,14 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{1}
 
-\bibitem{bergenthum2007process}
-Robin Bergenthum, J{\"o}rg Desel, Robert Lorenz, and Sebastian Mauser.
-\newblock Process mining based on regions of languages.
-\newblock In {\em International Conference on Business Process Management},
-  pages 375--383. Springer, 2007.
+\bibitem{Buijs2012OnTR}
+Joos C. A.~M. Buijs, Boudewijn~F. van Dongen, and Wil M.~P. van~der Aalst.
+\newblock On the role of fitness, precision, generalization and simplicity in
+  process discovery.
+\newblock In {\em OTM Conferences}, 2012.
 
-\bibitem{carmona2014process}
-Josep Carmona and Jordi Cortadella.
-\newblock Process discovery algorithms using numerical abstract domains.
-\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
-  26(12):3064--3076, 2014.
-
-\bibitem{cortadella1995synthesizing}
-Jordi Cortadella, Michael Kishinevsky, Luciano Lavagno, and Alex Yakovlev.
-\newblock Synthesizing petri nets from state-based models.
-\newblock In {\em Proceedings of IEEE International Conference on Computer
-  Aided Design (ICCAD)}, pages 164--171. IEEE, 1995.
-
-\bibitem{de2007genetic}
-Ana Karla~A de~Medeiros, Anton~JMM Weijters, and Wil~MP van~der Aalst.
-\newblock Genetic process mining: an experimental evaluation.
-\newblock {\em Data Mining and Knowledge Discovery}, 14(2):245--304, 2007.
-
-\bibitem{dees2017enhancing}
-Marcus Dees, Massimiliano de~Leoni, and Felix Mannhardt.
-\newblock Enhancing process models to improve business performance: a
-  methodology and case studies.
-\newblock In {\em OTM Confederated International Conferences" On the Move to
-  Meaningful Internet Systems"}, pages 232--251. Springer, 2017.
-
-\bibitem{fahland2012repairing}
-Dirk Fahland and Wil~MP van~der Aalst.
-\newblock Repairing process models to reflect reality.
-\newblock In {\em International Conference on Business Process Management},
-  pages 229--245. Springer, 2012.
-
-\bibitem{fahland2015model}
-Dirk Fahland and Wil~MP van~der Aalst.
-\newblock Model repair—aligning process models to reality.
-\newblock {\em Information Systems}, 47:220--243, 2015.
-
-\bibitem{ghasemi2016process}
-Mahdi Ghasemi and Daniel Amyot.
-\newblock Process mining in healthcare: a systematised literature review.
-\newblock 2016.
-
-\bibitem{goedertier2009robust}
-Stijn Goedertier, David Martens, Jan Vanthienen, and Bart Baesens.
-\newblock Robust process discovery with artificial negative events.
-\newblock {\em Journal of Machine Learning Research}, 10(Jun):1305--1340, 2009.
+\bibitem{MyPlugin}
+Kefang Ding.
+\newblock Incorporatenegativeinformation.
 
 \bibitem{leemans2013discovering}
 Sander~JJ Leemans, Dirk Fahland, and Wil~MP van~der Aalst.
@@ -58,49 +17,24 @@ Sander~JJ Leemans, Dirk Fahland, and Wil~MP van~der Aalst.
 \newblock In {\em International conference on applications and theory of Petri
   nets and concurrency}, pages 311--329. Springer, 2013.
 
-\bibitem{ponce2016incorporating}
-Hernan Ponce-de Le{\'o}n, Josep Carmona, and Seppe~KLM vanden Broucke.
-\newblock Incorporating negative information in process discovery.
-\newblock In {\em International Conference on Business Process Management},
-  pages 126--143. Springer, 2016.
+\bibitem{ProM}
+Eindhoven Technical University. ©~2010. Process Mining~Group.
+\newblock Prom introduction.
 
-\bibitem{van2011process}
-Wil Van Der~Aalst.
-\newblock {\em Process mining: discovery, conformance and enhancement of
-  business processes}, volume~2.
-\newblock Springer, 2011.
+\bibitem{van2016data}
+Wil Van~der Aalst.
+\newblock Data science in action.
+\newblock In {\em Process Mining}, pages 3--23. Springer, 2016.
+
+\bibitem{vanderAalst:2016:PMD:2948762}
+Wil van~der Aalst.
+\newblock {\em Process Mining: Data Science in Action}.
+\newblock Springer Publishing Company, Incorporated, 2nd edition, 2016.
 
 \bibitem{van2004workflow}
 Wil Van~der Aalst, Ton Weijters, and Laura Maruster.
 \newblock Workflow mining: Discovering process models from event logs.
 \newblock {\em IEEE Transactions on Knowledge and Data Engineering},
   16(9):1128--1142, 2004.
-
-\bibitem{van2008process}
-Jan Martijn~EM Van~der Werf, Boudewijn~F van Dongen, Cor~AJ Hurkens, and
-  Alexander Serebrenik.
-\newblock Process discovery using integer linear programming.
-\newblock In {\em International conference on applications and theory of petri
-  nets}, pages 368--387. Springer, 2008.
-
-\bibitem{van2009process}
-Boudewijn~F Van~Dongen, AK~Alves De~Medeiros, and Lijie Wen.
-\newblock Process mining: Overview and outlook of petri net discovery
-  algorithms.
-\newblock In {\em Transactions on Petri Nets and Other Models of Concurrency
-  II}, pages 225--242. Springer, 2009.
-
-\bibitem{vanden2014determining}
-Seppe~KLM vanden Broucke, Jochen De~Weerdt, Jan Vanthienen, and Bart Baesens.
-\newblock Determining process model precision and generalization with weighted
-  artificial negative events.
-\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
-  26(8):1877--1889, 2014.
-
-\bibitem{weijters2003rediscovering}
-Anton~JMM Weijters and Wil~MP Van~der Aalst.
-\newblock Rediscovering workflow models from event-based data using little
-  thumb.
-\newblock {\em Integrated Computer-Aided Engineering}, 10(2):151--162, 2003.
 
 \end{thebibliography}

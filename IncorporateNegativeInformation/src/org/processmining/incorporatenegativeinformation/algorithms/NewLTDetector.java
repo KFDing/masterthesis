@@ -81,12 +81,6 @@ public class NewLTDetector {
 	    for(XORClusterPair<ProcessTreeElement> pair: clusterPairs) {
 			addLTOnSinglePair(pair);
 		}
-	    // we put the deletion here
-		/*
-	    if(parameters.getType() == ViewType.ReducedPetriNet) {
-			 dnet = deleteSilentTransition(manet.getNet());
-		}
-		*/
 	      
 	}
 	

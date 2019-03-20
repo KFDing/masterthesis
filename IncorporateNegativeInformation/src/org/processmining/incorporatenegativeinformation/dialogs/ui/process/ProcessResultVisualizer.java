@@ -223,7 +223,9 @@ class ResultMainView extends JPanel{
 			
 			public void actionPerformed(ActionEvent e) {
 				// TODO if it is pressed, then we need to set the values of controlparameters
+				parameters.cloneValues(rightView.getParameters());
 				parameters.setAction(ActionType.AddLTOnPair);
+				
 				int sourceIdx = addPairPanel.getAddSourceIndex();
 				int targetIdx = addPairPanel.getAddTargetIndex();
 				// System.out.println("Index to add the values on it :" + sourceIdx + "target Idx : "+ targetIdx );
@@ -240,7 +242,7 @@ class ResultMainView extends JPanel{
         addPairPanel.rmPairBtn.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				
+				parameters.cloneValues(rightView.getParameters());
 				parameters.setAction(ActionType.RemoveLTOnPair);
 				int sourceIdx = addPairPanel.getRMSourceIndex();
 				XORCluster<ProcessTreeElement> source =  generator.getRMAvailableSources().get(sourceIdx);

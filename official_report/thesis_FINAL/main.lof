@@ -1,3 +1,9 @@
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces example for model change under model repair\relax }}{2}{figure.caption.6}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Semantics of process tree operators w.r.t. Petri net\relax }}{3}{figure.caption.6}
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Inductive Miner Parameter Setting\relax }}{6}{figure.caption.7}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Generated Petri net without long-term dependency\relax }}{6}{figure.caption.8}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Petri Net with long-term dependency \relax }}{7}{figure.caption.9}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Petri net with selected long-term dependency\relax }}{8}{figure.caption.10}
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Petri net after reducing the silent transitions\relax }}{8}{figure.caption.11}
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Generated Process Tree Model\relax }}{9}{figure.caption.12}

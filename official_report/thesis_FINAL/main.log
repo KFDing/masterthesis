@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  18 MAR 2019 14:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  20 MAR 2019 14:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1577,7 +1577,7 @@ Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.15}).
 
 \c@lstlisting=\count171
-<figures/logo/pads_logo_text.jpg, id=35, 1594.95876pt x 379.4175pt>
+<figures/logo/pads_logo_text.jpg, id=63, 1594.95876pt x 379.4175pt>
 File: figures/logo/pads_logo_text.jpg Graphic file (type jpg)
 <use figures/logo/pads_logo_text.jpg>
 Package pdftex.def Info: figures/logo/pads_logo_text.jpg  used on input line 16
@@ -1630,54 +1630,64 @@ File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 ext.jpg>]
 [2
 
-] [3] [4
-
-] (./chapters/abstract.tex) [5] [6
-
-] (./main.toc)
-\tf@toc=\write5
-\openout5 = `main.toc'.
-
- [7] [8
-
-] (./main.lof)
-\tf@lof=\write6
-\openout6 = `main.lof'.
-
-[9] [10
-
-] (./main.lot)
-\tf@lot=\write7
-\openout7 = `main.lot'.
-
- [11] [12
-
 ]
 Chapter 1.
-(./chapters/introduction.tex
-Underfull \vbox (badness 1052) has occurred while \output is active []
-
- [1
+(./chapters/preliminary.tex [1
 
 ]
-<figures/introduction/PN_modelchange_a.png, id=125, 246.9225pt x 81.30376pt>
-File: figures/introduction/PN_modelchange_a.png Graphic file (type png)
-<use figures/introduction/PN_modelchange_a.png>
-Package pdftex.def Info: figures/introduction/PN_modelchange_a.png  used on inp
-ut line 23.
-(pdftex.def)             Requested size: 136.57635pt x 44.96902pt.
-<figures/introduction/PN_modelchange_b.png, id=127, 312.16624pt x 111.41624pt>
-File: figures/introduction/PN_modelchange_b.png Graphic file (type png)
-<use figures/introduction/PN_modelchange_b.png>
-Package pdftex.def Info: figures/introduction/PN_modelchange_b.png  used on inp
-ut line 30.
-(pdftex.def)             Requested size: 136.57635pt x 48.74619pt.
-<figures/introduction/PN_modelchange_c.png, id=128, 236.885pt x 63.23625pt>
-File: figures/introduction/PN_modelchange_c.png Graphic file (type png)
-<use figures/introduction/PN_modelchange_c.png>
-Package pdftex.def Info: figures/introduction/PN_modelchange_c.png  used on inp
-ut line 37.
-(pdftex.def)             Requested size: 136.57635pt x 36.45993pt.
+<figures/preliminary/PN06_Seq_2_xor_notnested.png, id=91, 1234.6125pt x 312.166
+24pt>
+File: figures/preliminary/PN06_Seq_2_xor_notnested.png Graphic file (type png)
+<use figures/preliminary/PN06_Seq_2_xor_notnested.png>
+Package pdftex.def Info: figures/preliminary/PN06_Seq_2_xor_notnested.png  used
+ on input line 29.
+(pdftex.def)             Requested size: 192.0548pt x 48.55673pt.
+<figures/preliminary/PT06_Seq_2_xor_notnested.png, id=92, 621.32124pt x 210.787
+5pt>
+File: figures/preliminary/PT06_Seq_2_xor_notnested.png Graphic file (type png)
+<use figures/preliminary/PT06_Seq_2_xor_notnested.png>
+Package pdftex.def Info: figures/preliminary/PT06_Seq_2_xor_notnested.png  used
+ on input line 36.
+(pdftex.def)             Requested size: 192.0548pt x 65.15369pt.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 47.
+ (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+<figures/preliminary/PT_PN_corresponding_01_seq_PN.png, id=100, 326.21875pt x 5
+8.2175pt>
+File: figures/preliminary/PT_PN_corresponding_01_seq_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_01_seq_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_01_seq_PN.png 
+ used on input line 57.
+(pdftex.def)             Requested size: 192.0548pt x 34.27518pt.
+<figures/preliminary/PT_PN_corresponding_02_xor_PN.png, id=102, 224.84pt x 73.2
+7374pt>
+File: figures/preliminary/PT_PN_corresponding_02_xor_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_02_xor_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_02_xor_PN.png 
+ used on input line 64.
+(pdftex.def)             Requested size: 192.0548pt x 62.59154pt.
+<figures/preliminary/PT_PN_corresponding_03_and_PN.png, id=103, 385.44pt x 73.2
+7374pt>
+File: figures/preliminary/PT_PN_corresponding_03_and_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_03_and_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_03_and_PN.png 
+ used on input line 71.
+(pdftex.def)             Requested size: 192.0548pt x 36.51042pt.
+<figures/preliminary/PT_PN_corresponding_04_loop_PN.png, id=104, 224.84pt x 78.
+2925pt>
+File: figures/preliminary/PT_PN_corresponding_04_loop_PN.png Graphic file (type
+ png)
+<use figures/preliminary/PT_PN_corresponding_04_loop_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_04_loop_PN.png
+  used on input line 78.
+(pdftex.def)             Requested size: 192.0548pt x 66.87865pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1685,41 +1695,102 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[2 <./figures/introduction/PN_modelchange_a.png> <./figures/introduction/PN_mod
-elchange_b.png> <./figures/introduction/PN_modelchange_c.png>]) [3] [4
-
-]
+[2 <./figures/preliminary/PN06_Seq_2_xor_notnested.png> <./figures/preliminary/
+PT06_Seq_2_xor_notnested.png>]) [3 <./figures/preliminary/PT_PN_corresponding_0
+1_seq_PN.png> <./figures/preliminary/PT_PN_corresponding_02_xor_PN.png> <./figu
+res/preliminary/PT_PN_corresponding_03_and_PN.png> <./figures/preliminary/PT_PN
+_corresponding_04_loop_PN.png>] [4]
 Chapter 2.
-(./chapters/background.tex [5]) (./main.bbl [6] [7
+(./chapters/implementation.tex
+<figures/implementation/dfg-IM-setting.png, id=146, 400.49625pt x 143.53625pt>
+File: figures/implementation/dfg-IM-setting.png Graphic file (type png)
+<use figures/implementation/dfg-IM-setting.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-setting.png  used on inp
+ut line 31.
+(pdftex.def)             Requested size: 300.37144pt x 107.65192pt.
+<figures/implementation/dfg-IM-pn-without-lt.png, id=148, 1308.89pt x 744.7825p
+t>
+File: figures/implementation/dfg-IM-pn-without-lt.png Graphic file (type png)
+<use figures/implementation/dfg-IM-pn-without-lt.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-without-lt.png  used 
+on input line 38.
+(pdftex.def)             Requested size: 426.79135pt x 242.84695pt.
+ [5
 
-]) [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 66.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 66.
+] [6 <./figures/implementation/dfg-IM-setting.png> <./figures/implementation/df
+g-IM-pn-without-lt.png>]
+<figures/implementation/dfg-IM-pn-with-lt.png, id=166, 811.03pt x 548.0475pt>
+File: figures/implementation/dfg-IM-pn-with-lt.png Graphic file (type png)
+<use figures/implementation/dfg-IM-pn-with-lt.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt.png  used on 
+input line 50.
+(pdftex.def)             Requested size: 426.79135pt x 288.4066pt.
+<figures/implementation/dfg-IM-pn-with-lt-manual.png, id=169, 1381.16pt x 855.1
+95pt>
+File: figures/implementation/dfg-IM-pn-with-lt-manual.png Graphic file (type pn
+g)
+<use figures/implementation/dfg-IM-pn-with-lt-manual.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-manual.png  u
+sed on input line 58.
+(pdftex.def)             Requested size: 426.79135pt x 264.25952pt.
+<figures/implementation/dfg-IM-pn-with-lt-reduced.png, id=172, 1374.13374pt x 6
+62.475pt>
+File: figures/implementation/dfg-IM-pn-with-lt-reduced.png Graphic file (type p
+ng)
+<use figures/implementation/dfg-IM-pn-with-lt-reduced.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-reduced.png  
+used on input line 67.
+(pdftex.def)             Requested size: 426.79135pt x 205.74925pt.
+ [7 <./figures/implementation/dfg-IM-pn-with-lt.png>] [8 <./figures/implementat
+ion/dfg-IM-pn-with-lt-manual.png> <./figures/implementation/dfg-IM-pn-with-lt-r
+educed.png>]
+<figures/implementation/dfg-IM-confusionmatrix.png, id=186, 959.585pt x 213.798
+75pt>
+File: figures/implementation/dfg-IM-confusionmatrix.png Graphic file (type png)
+
+<use figures/implementation/dfg-IM-confusionmatrix.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-confusionmatrix.png  use
+d on input line 78.
+(pdftex.def)             Requested size: 426.79135pt x 95.08957pt.
+)
+(./main.bbl [9 <./figures/implementation/dfg-IM-confusionmatrix.png>] [10
+
+])
+[11]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 76.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 76.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 66.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 66.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 76.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 76.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 3C7687014B8EA6095671EFFECA6D6305;373.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 66.
+(rerunfilecheck)             Checksum: 1FC9B69BF4A5C9EC2EA8D3910681BA91;933.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 76.
  ) 
 Here is how much of TeX's memory you used:
- 35197 strings out of 494847
- 822197 string characters out of 6179079
- 1020332 words of memory out of 5000000
- 37841 multiletter control sequences out of 15000+600000
- 51718 words of font info for 46 fonts, out of 8000000 for 9000
+ 35290 strings out of 494847
+ 825702 string characters out of 6179079
+ 1023332 words of memory out of 5000000
+ 37930 multiletter control sequences out of 15000+600000
+ 62351 words of font info for 50 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 76i,13n,121p,1205b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share
-/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm
-/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texm
-f/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.
-pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb>
-Output written on main.pdf (20 pages, 926785 bytes).
+ 76i,13n,121p,855b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
+ips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
+/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ma
+thex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}</usr/share/texmf/f
+onts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.
+pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts
+/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb>
+</usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1
+/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/sha
+re/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/
+lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (13 pages, 1362798 bytes).
 PDF statistics:
- 243 PDF objects out of 1000 (max. 8388607)
- 205 compressed objects within 3 object streams
+ 266 PDF objects out of 1000 (max. 8388607)
+ 217 compressed objects within 3 object streams
  50 named destinations out of 1000 (max. 500000)
- 89 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 190 words of extra memory for PDF output out of 10000 (max. 10000000)
 
