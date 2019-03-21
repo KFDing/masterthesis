@@ -101,7 +101,15 @@ A the start, the event log $L$ is scanned to extract the directly follows relati
  The directly-follows relation $a > b$ is satisfied iff there is a trace $\sigma\ where, \sigma(i)=a \ and \ \sigma(i+1)=b$.
  A directly-follows graph of an event log $L$ is $G(L) = (A, F, A_{start}, A_{end}) $ where $A$ is the set of activities in L, $F={(a,b) \in A \times A | a >_L b} $ is the directly-follows relation, $A_{start}, A_{end}$ are the set of start and end activities respectively.
 \end{definition}
-
+The frequency information of the directly-follows relation is called cardinality and defined below.
+\begin{definition}[Cardinality in directly-follows graph]
+Given a directly-follows graph G(L) derived from an event log L, the cardinality of each directly-follows relation in G(L) is :  
+	\begin{itemize}
+		\item $Cardinality(E(A,B))$ is the frequency of traces with $\langle ...,A,B,... \rangle$. 
+		\item Start node A cardinality $Cardinality(Start(A))$ is the frequency of traces with begin node A.
+		\item End node B cardinality $Cardinality(End(A))$ is the frequency of traces with end node B.
+	\end{itemize}	
+\end{definition}
 \subsection{Split Log Into Sublogs}
 Based on the directly-follows graph, it finds the most prominent cut which is applied afterwards to split the event log into smaller sublogs. Cuts compose of \emph{exclusive-choice cut, sequence cut, parallel cut and redo-loop cut} which correspond to the process tree operators $ \{\rightarrow, \times, \land, \circlearrowright \}$. They are selected in the following order. A maximal exclusive-choice cut is firstly tried to split the directly-follows graph; if it is not available, then a maximal sequence cut, a  maximal parallel cut and a redo-loop cut are applied in sequence. Sublogs are created due to this available operator. Meanwhile, this operator is used to build the process tree. 
 

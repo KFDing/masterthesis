@@ -75,11 +75,13 @@
 \newcommand{\gHeader}{Bachelor thesis}
 \newcommand{\gTitle}{Fancy long name for something incredibly useless}
 \newcommand{\gAuthor}{Author Name}
-\newcommand{\gSupervisor}{Super Visor}
+\newcommand{\gSupervisor}{Supervisor}
+\newcommand{\gExaminer}{Examiners}
 \newcommand{\gInstitution}{RWTH Aachen}
 
-\newcommand{\tpage}{
+\newcommand{\tpage}{ 
 						\begin{titlepage}
+							\sffamily
 						    \begin{tikzpicture}[remember picture,overlay]
                             \node[anchor=north east,inner sep=0pt] at (current page.north east) {\includegraphics[scale=.225]{figures/logo/pads_logo_text.jpg}};
                             \end{tikzpicture}
@@ -102,20 +104,26 @@
 							 
 							\textbf{\LARGE{\gHeader}}
 						
-							\vspace{3cm}
+							\vspace{1.5cm}
 							
 							\begin{tabular}{@{}>{\itshape}rl@{}}
 								\emph{Author :} & 	\textbf{\Large{\gAuthor}} \\
-								\rule{0pt}{8ex} 
+								\rule{0pt}{15ex} 
+								
 								\emph{Supervisor :} & 
 								\makecell[l]{ \gSupervisor} \\
 								
+								\rule{0pt}{8ex} 
+								\emph{Examiners :} & 
+								\makecell[l]{ \gExaminer} \\
+								
 								\rule{0pt}{15ex} 
-								Registration date :  & 2018-11-15 \\
+								\emph{Registration date :}  & 2018-11-15 \\
 								\rule{0pt}{4ex}  
-								Submission date :    & 2019-??-?? 
-							\end{tabular}
+								\emph{Submission date :}    & 2019-04-08 
 							
+							\end{tabular}
+						
 							\vspace{1.5cm}
 							This work is submitted to the institute \\
 							\vspace{0.5cm}

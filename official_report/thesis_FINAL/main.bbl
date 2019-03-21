@@ -1,40 +1,10 @@
 \begin{thebibliography}{1}
 
-\bibitem{Buijs2012OnTR}
-Joos C. A.~M. Buijs, Boudewijn~F. van Dongen, and Wil M.~P. van~der Aalst.
-\newblock On the role of fitness, precision, generalization and simplicity in
-  process discovery.
-\newblock In {\em OTM Conferences}, 2012.
-
-\bibitem{MyPlugin}
-Kefang Ding.
-\newblock Incorporatenegativeinformation.
-
 \bibitem{leemans2013discovering}
 Sander~JJ Leemans, Dirk Fahland, and Wil~MP van~der Aalst.
 \newblock Discovering block-structured process models from event logs-a
   constructive approach.
 \newblock In {\em International conference on applications and theory of Petri
   nets and concurrency}, pages 311--329. Springer, 2013.
-
-\bibitem{ProM}
-Eindhoven Technical University. ©~2010. Process Mining~Group.
-\newblock Prom introduction.
-
-\bibitem{van2016data}
-Wil Van~der Aalst.
-\newblock Data science in action.
-\newblock In {\em Process Mining}, pages 3--23. Springer, 2016.
-
-\bibitem{vanderAalst:2016:PMD:2948762}
-Wil van~der Aalst.
-\newblock {\em Process Mining: Data Science in Action}.
-\newblock Springer Publishing Company, Incorporated, 2nd edition, 2016.
-
-\bibitem{van2004workflow}
-Wil Van~der Aalst, Ton Weijters, and Laura Maruster.
-\newblock Workflow mining: Discovering process models from event logs.
-\newblock {\em IEEE Transactions on Knowledge and Data Engineering},
-  16(9):1128--1142, 2004.
 
 \end{thebibliography}

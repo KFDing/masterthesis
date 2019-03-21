@@ -1,12 +1,13 @@
 \documentclass[a4paper,11pt,twoside,openright]{WCarticle}
 
 
-\renewcommand{\gTitle}{Model Repair by Incorporating Negative Instances In Process Enhancement}
+\renewcommand{\gTitle}{Model Repair by Incorporating Negative Instances  In Process Enhancement}
 \renewcommand{\gAuthor}{Kefang Ding}
 \renewcommand{\gHeader}{Master Thesis}
-\renewcommand{\gSupervisor}{Prof. Wil M.P. van der Aalst \\ 
-	Prof. Thomas Rose \\
+\renewcommand{\gSupervisor}{
     Dr. Sebastiaan J. van Zelst}
+\renewcommand{\gExaminer}{Prof. Wil M.P. van der Aalst \\ 
+	Prof. Thomas Rose }
 \renewcommand{\gInstitution}{PADS RWTH University}
 
 \begin{document}
@@ -16,7 +17,7 @@
 \tpage
 \pagestyle{plain}
 %%% TOC
-\iffalse
+
 \chapter*{Acknowledgments}\addcontentsline{toc}{chapter}{Aknowledgement}
 The acknowledgments and the people to thank go here, don't forget to include your project advice. 
 
@@ -26,7 +27,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 \input{chapters/abstract.tex}
 %\end{abstract}
 
-
+\iffalse
 \tableofcontents
 \listoffigures
 \listoftables
@@ -50,15 +51,14 @@ The acknowledgments and the people to thank go here, don't forget to include you
 \input{chapters/preliminary.tex}
 
 
-\chapter{Algorithm} \label{chap:alg}
-\input{chapters/algorithm.tex}
-\fi
 
-\chapter{Preliminary} \label{chap:prelim}\pagenumbering{arabic}
-\input{chapters/preliminary.tex}
 
 \chapter{Implementation} \label{chap:impl}
 \input{chapters/implementation.tex}
+\fi
+
+\chapter{Algorithm} \label{chap:alg}
+\input{chapters/algorithm.tex}
 
 \iffalse
 \chapter{Evaluation} \label{chap:eval}
