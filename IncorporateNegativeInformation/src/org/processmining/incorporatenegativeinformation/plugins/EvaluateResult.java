@@ -93,11 +93,15 @@ public class EvaluateResult {
 		// not really, because anyway we need to check one trace by another...How about we store such trace variants,
 		// and compare them, if they matches, so we know if they get matched , or not 
 		// we need to build the mapping for transitions and event log classifier\
+		
 		ArrayList<Integer> confusion_matrix = new ArrayList<Integer>();
 		for(int i =0 ; i< Configuration.CONFUSION_MATRIX_SIZE;i++) {
 			confusion_matrix.add(0);
 		}
 		
+		if(marking == null || marking.size()<1) {
+    		marking = NetUtilities.guessInitialMarking(net);
+    	}
 		XEventClassifier classifier =null; //  = parameters.getClassifier();  // = net.getAttributeMap().get("XEventClassifier");
 		// main problem is the mapping from event, how should we do ?? 
 		Map<XEventClass, Transition> maps = EventLogUtilities.getEventTransitionMap(log, net , classifier);

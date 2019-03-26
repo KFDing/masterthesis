@@ -32,7 +32,7 @@ public class ModelRepairTest {
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Test Jar for repair",  requiredParameterLabels = { 0, 1})
 	public Object[] repair(PluginContext context, XLog log, AcceptingPetriNet anet) {
-		
+		// ILPMiner
 		// Marking initMarking = NetUtilities.guessInitialMarking(net);
 		// Marking finalMarking = NetUtilities.guessFinalMarking(net);
 		RepairConfiguration config =  new RepairConfiguration();

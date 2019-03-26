@@ -113,6 +113,7 @@ public class EventLogUtilities {
 	 * @param log
 	 * @return variants information, a new class to contain it ..
 	 */
+	
 	public static List<TraceVariant> getTraceVariants( XLog log) {
 		
 		List<TraceVariant> variants = new ArrayList<TraceVariant>();
@@ -152,17 +153,19 @@ public class EventLogUtilities {
 	 * @param classifier 
 	 * @return
 	 */
-	public static List<LabeledTraceVariant> variants ;
+	// public static List<LabeledTraceVariant> lvariants ;
 	public static List<LabeledTraceVariant> getLabeledTraceVariants( XLog log, XEventClassifier classifier) {
-		
-		if(variants == null) {
-			variants = new ArrayList<LabeledTraceVariant>();
-			System.out.println("First time to create variant");
+		/*
+		if(toChange || lvariants == null) {
+			lvariants = new ArrayList<LabeledTraceVariant>();
+			System.out.println("First time to create labled variant");
 		}
 		else { 
-			System.out.println("Other time to use variant");
-			return variants;
+			System.out.println("Other time to use labeled variant");
+			return lvariants;
 		}
+		*/
+		List<LabeledTraceVariant> lvariants = new ArrayList<LabeledTraceVariant>();
 		XEventClass eventClass = null;
 		XLogInfo info = XLogInfoFactory.createLogInfo(log);
 	
@@ -184,20 +187,20 @@ public class EventLogUtilities {
 				}
 				
 				int i = 0;
-				for(; i< variants.size();i++) {
+				for(; i< lvariants.size();i++) {
 					// how to add the new variant into list
-					if((variants.get(i).getTraceVariant()).equals(toTraceClass)) {
-						variants.get(i).addTrace(trace, idx, isPos);
+					if((lvariants.get(i).getTraceVariant()).equals(toTraceClass)) {
+						lvariants.get(i).addTrace(trace, idx, isPos);
 						// it should add also information on the trace
 						break;
 					}
 				}
-				if (i==variants.size()) {
+				if (i==lvariants.size()) {
 					// not found in it, then we need to add it into the list
-					variants.add(new LabeledTraceVariant(toTraceClass,trace, idx, isPos));
+					lvariants.add(new LabeledTraceVariant(toTraceClass,trace, idx, isPos));
 				}	
 			}
-		return variants;
+		return lvariants;
 	}
 	
 	public static void assignVariantLabel(TraceVariant variant, String attr_name, Boolean is_true) {
