@@ -166,6 +166,11 @@ public class NewXORPairGenerator<T> {
 		return cpList;
 	}
 	
+	public List<XORCluster<T>> getClusterList(){
+		return clusterList;
+	}
+	
+	
 	public List<LTRule<XORCluster<T>>> getAllLTConnection() {
 		return connList;
 	}

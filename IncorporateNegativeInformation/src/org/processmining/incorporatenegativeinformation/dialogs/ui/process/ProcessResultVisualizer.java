@@ -450,7 +450,7 @@ class ResultMainView extends JPanel{
 		List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
 		List<LTRule<XORCluster<ProcessTreeElement>>> connSet = generator.getAllLTConnection();
 		// generate all the pairs here 
-		detector.addLTOnPairList(clusterPairs, connSet);
+		detector.addLTOnPairList(clusterPairs, connSet, generator.getClusterList());
 		
 		// after this we can delete silent transition to make model simpler
 		// but do we need it, or not?? 
@@ -487,7 +487,7 @@ class ResultMainView extends JPanel{
 		clusterPairs.add(pair);
 		List<LTRule<XORCluster<ProcessTreeElement>>> connSet = pair.getConnection();
 		
-		detector.addLTOnPairList(clusterPairs, connSet);
+		detector.addLTOnPairList(clusterPairs, connSet, generator.getClusterList());
 		manet = detector.getAcceptionPN();
 		
 		

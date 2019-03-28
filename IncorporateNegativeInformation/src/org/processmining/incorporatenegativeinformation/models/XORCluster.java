@@ -261,12 +261,7 @@ public class XORCluster<T> {
 	}
 
 	boolean ltVisited=false;
-	
-
 	public boolean isLtVisited() {
-		// this is visited only when it is a NotNXORCluster
-		if(isNotNXORCluster())
-			ltVisited = true;
 		return ltVisited;
 	}
 
