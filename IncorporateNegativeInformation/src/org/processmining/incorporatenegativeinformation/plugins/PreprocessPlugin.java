@@ -30,6 +30,7 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
+import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.framework.util.ui.wizard.ListWizard;
@@ -152,7 +153,7 @@ public class PreprocessPlugin {
 	 */
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Extract Pos Data from Log",  requiredParameterLabels = { 0})
-	public XLog extractPosData(UIPluginContext context, XLog log) {
+	public XLog extractPosData(PluginContext context, XLog log) {
 		// but we need to set parameters for it.. Then we can use it
 		// -- create an interface to choose the data only from positive 
 		// or from the complement of positive
@@ -162,9 +163,9 @@ public class PreprocessPlugin {
 		boolean only_pos = true;
 		int neg_count = 0, pos_count=0;
 		if(only_pos) {
-			Iterator liter = pos_log.iterator();
+			Iterator<XTrace> liter = pos_log.iterator();
 			while(liter.hasNext()) {
-				XTrace trace = (XTrace) liter.next();
+				XTrace trace =  liter.next();
 				if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
 					XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
 					if(!attr.getValue()) {
@@ -184,7 +185,7 @@ public class PreprocessPlugin {
 		
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
 	@PluginVariant(variantLabel = "Extract Pos Complement Data from Log",  requiredParameterLabels = { 0})
-	public XLog extractPosComplementData(UIPluginContext context, XLog log) {
+	public XLog extractPosComplementData(PluginContext context, XLog log) {
 		// but we need to set parameters for it.. Then we can use it
 		// -- create an interface to choose the data only from positive 
 		// or from the complement of positive
@@ -203,6 +204,14 @@ public class PreprocessPlugin {
 			    "Inane information",
 			    JOptionPane.INFORMATION_MESSAGE);
 		return pos_log;
+	}
+	
+	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com", uiLabel = UITopiaVariant.USEVARIANT)
+	@PluginVariant(variantLabel = "Sample Event Log",  requiredParameterLabels = { 0})
+	public XLog sampleLog(PluginContext context, XLog log) {
+		// we need to generate one daolog to set the parameters for the log sampling
+		int num = 50;
+		return EventLogUtilities.sampleLog(log, num)[0];
 	}
 	
 }

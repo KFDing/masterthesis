@@ -13,12 +13,14 @@ import java.util.Map;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
 import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XAttributeDiscrete;
+import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -243,13 +245,13 @@ public class EventLogUtilities {
 			// timestamp from one event> .. Literal 
 			Date start_time = null, end_time = null, current_time;  
 			XEvent event;
-			Iterator titer = trace.iterator();
+			Iterator<XEvent> titer = trace.iterator();
 			if(titer.hasNext()) {
-				event =  (XEvent) titer.next();
+				event =   titer.next();
 				start_time = end_time =  XUtils.getTimestamp(event);
 			}
 			while (titer.hasNext()) {
-				event =  (XEvent) titer.next();
+				event =   titer.next();
 				current_time= XUtils.getTimestamp(event);
 				 if(current_time.before(start_time))
 					 start_time = current_time;
@@ -300,13 +302,62 @@ public class EventLogUtilities {
 
 	public static void deleteVariantFromLog(TraceVariant var, XLog log) {
 		// delete var from log, now don't sure about the effect if we only delete tracelist
-		Iterator liter = var.getTrace_list().iterator();
+		Iterator<XTrace> liter = var.getTrace_list().iterator();
 		while(liter.hasNext()) {
-			XTrace trace = (XTrace) liter.next();
+			XTrace trace = liter.next();
 			log.remove(trace);
 			liter.remove();
 		}
 		// how about the traceVariant ??? 
 	}
 
+	/**
+	 * this method sample the log file with a certain number, as the training set, or test set.
+	 * @param log
+	 * @param number the number to sample the whole log. 
+	 * 		If number >= log.size, then all is output;
+	 * 		If number =0, then generate the number number set of sampled one
+	 * 		if number <0, nothing is done, simply exception throw out, but we can test it before it 
+	 * @return Sampled data to keep, the other data in log
+	 */
+	public static XLog[] sampleLog(XLog log, int number) {
+		
+		XLog slog = EventLogUtilities.clonePureLog(log, " sampled");
+		XLog dlog = EventLogUtilities.clonePureLog(log, " not sampled");
+		// sample the index for the traces
+		List<Integer> sIdx = SamplingUtilities.sample(log.size(), number);
+		int i=0;
+		for(XTrace trace: log) {
+			
+			if(sIdx.contains(i)) {
+				slog.add((XTrace) trace.clone());
+			}else {
+				dlog.add((XTrace) trace.clone());
+			}
+			i++;
+		}
+		
+		return new XLog[] {slog, dlog};
+	}
+	/**
+	 * sample the log in percentage of the whole size.
+	 * @param log
+	 * @param percentage 0<=percentage<=1
+	 * @returnerc
+	 */
+	public static XLog[] sampleLog(XLog log, double percentage) {
+		// convert percentage to num
+		int num = (int) (log.size() * percentage);
+		return sampleLog(log, num);
+	}
+	
+	
+	public static XLog clonePureLog(XLog log, String suffix) {
+		XFactory factory = XFactoryRegistry.instance().currentDefault();
+		XLog newLog = factory.createLog((XAttributeMap) log.getAttributes().clone());
+		XConceptExtension.instance().assignName(newLog,
+				XConceptExtension.instance().extractName(log) + suffix);
+		
+		return newLog;
+	}
 }

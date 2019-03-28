@@ -7,9 +7,15 @@ import java.util.Random;
 public class SamplingUtilities {
 	// one function to generate a sublist of index w.r.t. probability
 	public static List<Integer> sample(int bound, double prob){
+		
+		int num = (int)(prob*bound);
+		return sample(bound, num);
+	}
+	
+	public static List<Integer> sample(int bound, int num){
 		ArrayList<Integer> idx_list = new ArrayList<>();
 		Random random = new Random();
-		int index, num = (int)(prob*bound);
+		int index;
 		while(num>0) {
 			index = random.nextInt(bound);
 			if(!idx_list.contains(index)) { // random.nextDouble()< prob && 
@@ -22,8 +28,7 @@ public class SamplingUtilities {
 	}
 	
 	public static void main(String[] agrs) {
-		
-		List data = SamplingUtilities.sample(10, 0.62);
+		List<Integer> data = SamplingUtilities.sample(10, 0.62);
 		System.out.println(data);
 	}
 }

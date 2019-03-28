@@ -22,6 +22,7 @@ import org.processmining.incorporatenegativeinformation.models.XORClusterPair;
 import org.processmining.incorporatenegativeinformation.parameters.ControlParameters;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
+import org.processmining.processtree.Block;
 import org.processmining.processtree.Node;
 import org.processmining.processtree.ProcessTree;
 import org.processmining.processtree.ProcessTreeElement;
@@ -29,6 +30,7 @@ import org.processmining.processtree.conversion.ProcessTree2Petrinet;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet.InvalidProcessTreeException;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet.NotYetImplementedException;
 import org.processmining.processtree.conversion.ProcessTree2Petrinet.PetrinetWithMarkings;
+
 
 public class NewLTDetector {
 	ProcessTree tree;
@@ -271,6 +273,30 @@ public class NewLTDetector {
 		XORCluster<ProcessTreeElement> source = conn.getSources().get(0);
 		XORCluster<ProcessTreeElement> target = conn.getTargets().get(0);
 		
+		
+		//  right now, we need to fill the var with the connection from a tree.
+		// how to make sure that they have connection?? By which way we can do it ?? 
+		// specially for the silent transitions.. for this 
+		
+		// with the help of tree, firstly we think it of only branches?? 
+		// if so we need to add extra places to make it look better, it is my first thought!!
+		// --- we visit the source of conn in the tree, 
+		//  --- if it is inside the traceVariant, we get the xor branch set in the tree.
+		//    +++ remember it is a set
+		// --- about the target, if it is also in the traceVariant, then nice!! 
+		// --- but sth could happen, the order of them might change,
+		// --- so compare their order.
+		// --- or, we just seek it from the place we find the source node!! 
+		
+		// if source and target both executed in traceVariant, then get its order...They should have the order
+		// but when some traces have noise, the order can change!! So, we need to get the order of them in the tree.
+		// or we align the trace on process tree, on the alignment, it has all model moves, then find the place for it
+		// if, really, the situations get complexer... noise on the trace, we can't have the perfect alignment, 
+		// what to do then?? We just consider the right one!! 
+		
+		
+		
+		
 		sourceIdx = findNodeIndex(source.getBeginNodeList().get(0), traceVariant);
 		if(sourceIdx!=-1) {
 			targetIdx = findNodeIndex(target.getBeginNodeList().get(0), traceVariant);
@@ -286,6 +312,67 @@ public class NewLTDetector {
 				conn.addConnectionValues(counts);
 			}
 		}
+	}
+	// create one address to record the node in tree place!! The path to tree?? But we have the parents, still could get it
+	// in the tree, but how to compare them, talk it later...
+	// could we get an order of block and keyNose in a tree??
+	class Address{
+		
+	}
+	// given one process tree, we need to check if one keyNode is already executed in traceVariant, or not!! 
+	private int findNodeIdxInTree(ProcessTree tree, ProcessTreeElement source, ProcessTreeElement target, List<XEventClass> traceVariant) {
+		// if the keyNode is tau
+		
+		if(source.getClass().getSimpleName().equals(ProcessConfiguration.TRANSITION_TAU_PREFIX) ||
+				target.getClass().getSimpleName().equals(ProcessConfiguration.TRANSITION_TAU_PREFIX)) {
+			// we need to get the positions of tree for them.. but we need to firstly make sure 
+			// that the traceVariant need it 
+		}else {
+			// we still need to find out the path to root
+			List<Node> parents = getAncestors((Node) source);
+		}
+		
+		return -1;
+	}
+	
+	// to make sure it need one silent transition!! for the execution! For case with silent transitions!!
+	private boolean findInPathTree(ProcessTreeElement keyNode, Block block, int tIdx, List<XEventClass> traceVariant, int vIdx) {
+		List<Node> subNodes = block.getChildren();
+		Node branch = subNodes.get(tIdx);
+		if(isSameNode(branch, keyNode)) {
+			// and we find the next branch of block contains the traceVariant vIdx, immediately
+			// 
+			if(tIdx< subNodes.size()) {
+				if(findInPathTree(keyNode, block, tIdx, traceVariant, vIdx+1)) {
+					
+				}
+			}
+		}
+		return false;
+	}
+	
+	public List<Node> getAncestors(Node node){
+		List<Node> parentList = new ArrayList<Node>();
+		// parentList.add(node);
+		Collection<Block> parent = node.getParents();
+		while(!parentList.containsAll(parent)) {
+			parentList.addAll(parent);
+			
+			List<Block> tmpParents = new ArrayList<Block>();
+			for(Block block: parent) {
+				tmpParents.addAll(block.getParents());
+			}
+			parent = tmpParents;
+			
+			if(parent.isEmpty())
+				break;
+		}
+		return parentList;
+	}
+	
+	private boolean isSameNode(Node node, ProcessTreeElement keyNode) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	private int findNodeIndex(ProcessTreeElement keyNode, List<XEventClass> traceVariant) {

@@ -316,6 +316,12 @@ public class XORCluster<T> {
 			for(XORCluster<T> child: childrenCluster) {
 				beginNodeList.addAll(child.getBeginNodeList());
 			}
+		}else if(isLoopCluster()){
+			// here we can not give out the beginNode for loop!!
+			// but we can add new silent transition before it and represent this branch
+			// and also a end node to represent it!!
+			// then we avoid this situation for it 
+			beginNodeList.addAll(childrenCluster.get(0).getBeginNodeList());
 		}
 		
 		return beginNodeList;
@@ -328,6 +334,8 @@ public class XORCluster<T> {
 	// if we meet one parallel, then we record its seq branch, but until we reach the leaf node, that's how it works
 	// yes, we need to remember all things relative to xor structure
 	
+	
+
 	// for pure branch, there is the End node list
 	List<T> endNodeList;
 	public List<T> getEndNodeList() {
@@ -345,6 +353,10 @@ public class XORCluster<T> {
 			for(XORCluster<T> child: childrenCluster) {
 				endNodeList.addAll(child.getEndNodeList());
 			}
+		}else if(isLoopCluster()){
+			
+			endNodeList.addAll(childrenCluster.get(0).getEndNodeList());
+			
 		}
 		return endNodeList;
 	}
@@ -353,6 +365,13 @@ public class XORCluster<T> {
 		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR))
 			return true;
 		
+		return false;
+	}
+	
+	private boolean isLoopCluster() {
+		// TODO if it is a loop cluster
+		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.LOOP))
+			return true;
 		return false;
 	}
 	
