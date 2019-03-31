@@ -1,52 +1,8 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
 The style file: plain.bst
 Database file #1: references.bib
 Repeated entry---line 198 of file references.bib
  : @inproceedings{leemans2013discovering
  :                                      ,
 I'm skipping whatever remains of this entry
-Warning--empty journal in ghasemi2016process
-You've used 11 entries,
-            2118 wiz_defined-function locations,
-            562 strings with 5860 characters,
-and the built_in function-call counts, 4308 in all, are:
-= -- 450
-> -- 166
-< -- 6
-+ -- 65
-- -- 54
-* -- 283
-:= -- 672
-add.period$ -- 38
-call.type$ -- 11
-change.case$ -- 59
-chr.to.int$ -- 0
-cite$ -- 12
-duplicate$ -- 178
-empty$ -- 353
-format.name$ -- 54
-if$ -- 944
-int.to.chr$ -- 0
-int.to.str$ -- 11
-missing$ -- 12
-newline$ -- 58
-num.names$ -- 22
-pop$ -- 72
-preamble$ -- 1
-purify$ -- 49
-quote$ -- 0
-skip$ -- 129
-stack$ -- 0
-substring$ -- 320
-swap$ -- 56
-text.length$ -- 6
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 42
-warning$ -- 1
-while$ -- 45
-width$ -- 13
-write$ -- 126
 (There was 1 error message)
