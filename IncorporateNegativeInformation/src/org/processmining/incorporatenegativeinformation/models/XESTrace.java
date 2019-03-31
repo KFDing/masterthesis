@@ -33,15 +33,15 @@ import com.google.common.collect.Ordering;
 import com.google.common.primitives.Ints;
 
 public class XESTrace extends AbstractCollection<Event> implements Trace<Event> {
-	
+
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yy");
 	private static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("dd.MM.yy HH:mm");
-	
+
 	private static final int MAX_TRACE_SIZE = 1000000;
 
 	private final Map<XEvent, Color> colorMap;
 	private final XEventClassifier classifier;
-	
+
 	private final XTrace xesTrace;
 	private final String extraInfo;
 
@@ -50,7 +50,7 @@ public class XESTrace extends AbstractCollection<Event> implements Trace<Event> 
 	}
 
 	public XESTrace(XTrace xesTrace, XEventClassifier classifier, Map<XEvent, Color> colorMap) {
-		this(xesTrace, classifier, colorMap, ProMTraceView.EMPTY_LABEL);		
+		this(xesTrace, classifier, colorMap, ProMTraceView.EMPTY_LABEL);
 	}
 
 	public XESTrace(XTrace xesTrace, XEventClassifier classifier, Map<XEvent, Color> colorMap, String extraInfo) {
@@ -58,12 +58,12 @@ public class XESTrace extends AbstractCollection<Event> implements Trace<Event> 
 		this.classifier = classifier;
 		this.colorMap = colorMap;
 		if (xesTrace.size() > MAX_TRACE_SIZE) {
-			this.extraInfo = extraInfo.concat(" limited to the first "+MAX_TRACE_SIZE+" events");
+			this.extraInfo = extraInfo.concat(" limited to the first " + MAX_TRACE_SIZE + " events");
 		} else {
 			this.extraInfo = extraInfo;
 		}
 	}
-	
+
 	public final int size() {
 		return Math.min(xesTrace.size(), MAX_TRACE_SIZE);
 	}
@@ -93,7 +93,7 @@ public class XESTrace extends AbstractCollection<Event> implements Trace<Event> 
 		String bottomLabel = null;
 		String bottomLabel2 = null;
 		String topLabel = null;
-		
+
 		Date time = XTimeExtension.instance().extractTimestamp(e);
 		String resource = XOrganizationalExtension.instance().extractResource(e);
 		String transition = XLifecycleExtension.instance().extractTransition(e);
@@ -113,15 +113,15 @@ public class XESTrace extends AbstractCollection<Event> implements Trace<Event> 
 				topLabelBuilder.append(" (");
 				topLabelBuilder.append(resource);
 				topLabelBuilder.append(")");
-			} 
-			
+			}
+
 			if (transition != null) {
 				topLabelBuilder.append(" [");
 				topLabelBuilder.append(transition);
 				topLabelBuilder.append("]");
 			}
 
-			topLabel = (topLabelBuilder.length() > 0) ? topLabelBuilder.toString() : ProMTraceView.EMPTY_LABEL;			
+			topLabel = (topLabelBuilder.length() > 0) ? topLabelBuilder.toString() : ProMTraceView.EMPTY_LABEL;
 		}
 
 		Iterable<XAttribute> attributeToDisplay = Iterables.filter(e.getAttributes().values(),
@@ -130,7 +130,8 @@ public class XESTrace extends AbstractCollection<Event> implements Trace<Event> 
 					public boolean apply(XAttribute a) {
 						return !(a.getExtension() instanceof XConceptExtension
 								|| a.getExtension() instanceof XTimeExtension
-								|| a.getExtension() instanceof XOrganizationalExtension || a.getExtension() instanceof XLifecycleExtension);
+								|| a.getExtension() instanceof XOrganizationalExtension
+								|| a.getExtension() instanceof XLifecycleExtension);
 					}
 				});
 		List<XAttribute> selectedAttributes = Ordering.from(new Comparator<XAttribute>() {
@@ -140,7 +141,7 @@ public class XESTrace extends AbstractCollection<Event> implements Trace<Event> 
 				String s2 = o2.getKey() + o2.toString();
 				return Ints.compare(s1.length(), s2.length());
 			}
-			
+
 		}).leastOf(attributeToDisplay, 2);
 		Iterator<XAttribute> iter = selectedAttributes.iterator();
 		if (iter.hasNext()) {
@@ -152,7 +153,8 @@ public class XESTrace extends AbstractCollection<Event> implements Trace<Event> 
 			bottomLabel2 = a.getKey() + "=" + a.toString();
 		}
 
-		return new XESEvent(e.getID(), color == null ? Color.LIGHT_GRAY : color, label, topLabel, bottomLabel, bottomLabel2);
+		return new XESEvent(e.getID(), color == null ? Color.LIGHT_GRAY : color, label, topLabel, bottomLabel,
+				bottomLabel2);
 	}
 
 	private static final boolean isTimeUnset(Calendar cal) {

@@ -5,26 +5,21 @@ import java.util.List;
 
 import org.processmining.incorporatenegativeinformation.help.ProcessConfiguration;
 
-
 /**
- * this class is used to represent the structure of seq, parallel, loop for xor structure, 
- * not sure about the xor big branch, what to do ?? I need to organize it !! 
- * attributes::
- *   -- keyNode:  to store the element from process tree
- *   -- xor structure list :: 
- *   -- the begin and end xor structure for it
- *   
- *      ++ begin and end xor structure::  
- *         -- seq: the first and end xor structure
- *         -- parallel: the xor from all branches 
- *         -- xor: we need to merge it and still we need to have the begin and end parts
- *   -- the previous process element structure of it 
- *   
- * methods:: 
- *   -- assign and get the xor begin and end,set them
- *   -- create pair combinations of it 
- *   -- if it is xor, we need to merge them, or we create the xor structure to use them??
- *      [consider it later]   
+ * this class is used to represent the structure of seq, parallel, loop for xor
+ * structure, not sure about the xor big branch, what to do ?? I need to
+ * organize it !! attributes:: -- keyNode: to store the element from process
+ * tree -- xor structure list :: -- the begin and end xor structure for it
+ * 
+ * ++ begin and end xor structure:: -- seq: the first and end xor structure --
+ * parallel: the xor from all branches -- xor: we need to merge it and still we
+ * need to have the begin and end parts -- the previous process element
+ * structure of it
+ * 
+ * methods:: -- assign and get the xor begin and end,set them -- create pair
+ * combinations of it -- if it is xor, we need to merge them, or we create the
+ * xor structure to use them?? [consider it later]
+ * 
  * @author dkf
  *
  */
@@ -36,20 +31,21 @@ public class XORCluster<T> {
 	// if in seq or parallel, there are a lot, then we need to use list to store them 
 	// but anyway, we could use the branches of one list, but lost the structure information
 	/**
-	 * if it is one nested xor, then to to define its beginXORList and endXORList?? 
-	 * for one leaf node, we can only create its branch and put them in parallel, 
-	 * if we use xor structure, we can have different xor list, which is possible..That's true..
-	 * but xor pair is one xor structure S to T, if we use the e, what to do ?? 
-	 * if we have branch list here, but how do we give them an order here?? 
+	 * if it is one nested xor, then to to define its beginXORList and
+	 * endXORList?? for one leaf node, we can only create its branch and put
+	 * them in parallel, if we use xor structure, we can have different xor
+	 * list, which is possible..That's true.. but xor pair is one xor structure
+	 * S to T, if we use the e, what to do ?? if we have branch list here, but
+	 * how do we give them an order here??
 	 */
 	private List<XORCluster<T>> beginXORList;
 	private List<XORCluster<T>> endXORList;
-	
+
 	// to record the previous structure, or we only to remember the parents, it's already fine?? 
 	public List<XORCluster<T>> childrenCluster;
-    
+
 	private XORCluster<T> parent;
-	
+
 	// if it's in xor cluster, it means this is a nested xor cluster.
 	private boolean hasXOR = false;
 	// the available implies if we need to visit children cluster to get the xor list..
@@ -57,23 +53,23 @@ public class XORCluster<T> {
 	// this is for the adding of lt dependency; 
 	// it is visited, we should go deeper into the pure branch cluster and check for this.
 	private boolean ltAvailable = false; //isPureBranchCluster();
-	
+
 	// asSource and asTarget is designed to add randomly pair into the model
 	private boolean asSource = false;
 	private boolean asTarget = false;
 	private int level = -1;
-	
-	List<XORCluster<T>> endBranchList ;
 
-	public XORCluster(T key){
+	List<XORCluster<T>> endBranchList;
+
+	public XORCluster(T key) {
 		keyNode = key;
-		xorList =  new ArrayList<XORCluster<T>>();
+		xorList = new ArrayList<XORCluster<T>>();
 		beginXORList = new ArrayList<XORCluster<T>>();
 		endXORList = new ArrayList<XORCluster<T>>();
-		
+
 		endBranchList = new ArrayList<XORCluster<T>>();
 	}
-	
+
 	public T getKeyNode() {
 		return keyNode;
 	}
@@ -85,40 +81,39 @@ public class XORCluster<T> {
 	public List<XORCluster<T>> getXorList() {
 		return xorList;
 	}
-	
+
 	public List<XORCluster<T>> getBeginXORList() {
 		// here maybe some problem, actually 
-		if(!beginXORList.isEmpty())
+		if (!beginXORList.isEmpty())
 			return beginXORList;
-		if(isPureBranchCluster()) {
+		if (isPureBranchCluster()) {
 			beginXORList.add(this);
-		}else if(isSeqCluster()) {
+		} else if (isSeqCluster()) {
 			// even if there are some elements in seq, but we're not sure about the sequence, so we can't do it 
 			// we just go to the first childrenCluster
 			XORCluster<T> cluster = childrenCluster.get(0);
-				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
+			// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 			beginXORList.addAll(cluster.getBeginXORList());
-			
-		}else if(isParallelCluster()) {
+
+		} else if (isParallelCluster()) {
 			// beginXORList can be inferred from the xorList?? Right?? 
 			// we really need to consider about the sequence and other stuffs here!! 
 			// ok they can be across of them selfs, what we need is to get it from the childen parts
-			for(XORCluster<T> cluster: childrenCluster) {
+			for (XORCluster<T> cluster : childrenCluster) {
 				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 				beginXORList.addAll(cluster.getBeginXORList());
 			}
-		// my question is should we stop here?? if we have deeper structure what to do ?	
-		}else if(isXORCluster()) {
+			// my question is should we stop here?? if we have deeper structure what to do ?	
+		} else if (isXORCluster()) {
 			// we need to deal with other situations, if there is something, 
 			beginXORList.add(this);
-			
-		}else {
+
+		} else {
 			System.out.println("in loop situation, not go deeper");
 		}
 		return beginXORList;
 	}
 
-	
 	public void setBeginXORList(List<XORCluster<T>> beginXORList) {
 		this.beginXORList = beginXORList;
 	}
@@ -126,73 +121,70 @@ public class XORCluster<T> {
 	public void addBeginXORList(XORCluster<T> xorS) {
 		beginXORList.add(xorS);
 	}
-	
-	
+
 	public List<XORCluster<T>> getEndXORBranch() {
-		
-		if(!endBranchList.isEmpty())
+
+		if (!endBranchList.isEmpty())
 			return endBranchList;
 		// in nested end, we are going to do this, else not like this
 		// something interesting because, we add something more, which is not like this..
-		if(isPureBranchCluster()) {
+		if (isPureBranchCluster()) {
 			endBranchList.add(this);
-		}else if(isSeqCluster()) {
+		} else if (isSeqCluster()) {
 			XORCluster<T> cluster = childrenCluster.get(childrenCluster.size() - 1);
 			// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 			endBranchList.addAll(cluster.getEndXORBranch());
-			
-		}else if(isParallelCluster()) {
+
+		} else if (isParallelCluster()) {
 			// beginXORList can be inferred from the xorList?? Right?? 
 			// we really need to consider about the sequence and other stuffs here!! 
 			// ok they can be across of them selfs, what we need is to get it from the childen parts
-			for(XORCluster<T> cluster: childrenCluster) {
+			for (XORCluster<T> cluster : childrenCluster) {
 				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 				endBranchList.addAll(cluster.getEndXORBranch());
 			}
-			
-		}else if(isNotNXORCluster()){
+
+		} else if (isNotNXORCluster()) {
 			// here we need control of it, we need to go into the pure branch and also another branch
 			// we would see the branch in xor should also return it 
 			endBranchList.add(this);
 
-		}else if(isNXORCluster()){
-			for(XORCluster<T> cluster: childrenCluster) {
+		} else if (isNXORCluster()) {
+			for (XORCluster<T> cluster : childrenCluster) {
 				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 				endBranchList.addAll(cluster.getEndXORBranch());
 			}
-		}else {
+		} else {
 			System.out.println("in loop situation, not go deeper");
 		}
 		return endBranchList;
-	
+
 	}
-	
-	
+
 	public List<XORCluster<T>> getEndXORList() {
-		if(!endXORList.isEmpty())
+		if (!endXORList.isEmpty())
 			return endXORList;
-		
-		if(isSeqCluster()) {
+
+		if (isSeqCluster()) {
 			XORCluster<T> cluster = childrenCluster.get(childrenCluster.size() - 1);
 			// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 			endXORList.addAll(cluster.getEndXORList());
-			
-		}else if(isParallelCluster()) {
+
+		} else if (isParallelCluster()) {
 			// beginXORList can be inferred from the xorList?? Right?? 
 			// we really need to consider about the sequence and other stuffs here!! 
 			// ok they can be across of them selfs, what we need is to get it from the childen parts
-			for(XORCluster<T> cluster: childrenCluster) {
+			for (XORCluster<T> cluster : childrenCluster) {
 				// if there are some branches form it, what to do it ?? Nana, we need recursive run!!
 				endXORList.addAll(cluster.getEndXORList());
 			}
-			
-		}else if(isXORCluster()){
+
+		} else if (isXORCluster()) {
 			// here we need control of it, we need to go into the pure branch and also another branch
 			// we would see the branch in xor should also return it 
 			endXORList.add(this);
-			
-			
-		}else {
+
+		} else {
 			System.out.println("in loop situation, not go deeper");
 		}
 		return endXORList;
@@ -201,6 +193,7 @@ public class XORCluster<T> {
 	public void setEndXORList(List<XORCluster<T>> endXORList) {
 		this.endXORList = endXORList;
 	}
+
 	// we will see if this method is in need
 	public void addEndXORList(XORCluster<T> xorS) {
 		endXORList.add(xorS);
@@ -213,20 +206,21 @@ public class XORCluster<T> {
 	public void setChildrenCluster(List<XORCluster<T>> childrenCluster) {
 		this.childrenCluster = childrenCluster;
 	}
-	
+
 	public void addChilrenCluster(XORCluster<T> cluster) {
-		if(childrenCluster == null)
+		if (childrenCluster == null)
 			childrenCluster = new ArrayList<XORCluster<T>>();
 		childrenCluster.add(cluster);
 	}
-	
+
 	public void addXORCluster(XORCluster<T> xorS) {
 		xorList.add(xorS);
 	}
 
 	/**
-	 * check if it has xor structure.
-	 *  if it's un nested xor structure, it means, the children cluster has no XOR cluster
+	 * check if it has xor structure. if it's un nested xor structure, it means,
+	 * the children cluster has no XOR cluster
+	 * 
 	 * @return
 	 */
 	public boolean hasXOR() {
@@ -237,14 +231,14 @@ public class XORCluster<T> {
 		this.hasXOR = hasXOR;
 	}
 
-	
 	public boolean isSeqCluster() {
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.SEQUENCE))
+		if (keyNode.getClass().getSimpleName().equals(ProcessConfiguration.SEQUENCE))
 			return true;
 		return false;
 	}
+
 	public boolean isParallelCluster() {
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL))
+		if (keyNode.getClass().getSimpleName().equals(ProcessConfiguration.PARALLEL))
 			return true;
 		return false;
 	}
@@ -255,12 +249,13 @@ public class XORCluster<T> {
 	public void setAvailable(boolean value) {
 		pairAvailable = value;
 	}
-	
+
 	public boolean isAvailable() {
 		return pairAvailable;
 	}
 
-	boolean ltVisited=false;
+	boolean ltVisited = false;
+
 	public boolean isLtVisited() {
 		return ltVisited;
 	}
@@ -273,52 +268,54 @@ public class XORCluster<T> {
 		// TODO test if this cluster is not nested xor structure
 		// if it is not nested xor cluster, then return true, 
 		// nested xor cluster, then return false
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR) && !hasXOR())
+		if (keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR) && !hasXOR())
 			return true;
-		
+
 		return false;
 	}
-	
+
 	// if it is nested xor cluster
 	public boolean isNXORCluster() {
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR) && hasXOR())
+		if (keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR) && hasXOR())
 			return true;
 		return false;
 	}
+
 	// here we mean a cluster without xor and not xor 
 	public boolean isPureBranchCluster() {
-		if(!hasXOR && !isXORCluster()) 
+		if (!hasXOR && !isXORCluster())
 			return true;
 		return false;
 	}
-		
+
 	// only for pure branch, we have this
 	List<T> beginNodeList;
+
 	public List<T> getBeginNodeList() {
 		// TODO Auto-generated method stub, so should we also record its childrenCluster, 
 		// yap, we need to do it 
 		beginNodeList = new ArrayList<T>();
 		// if it is just one single node, so what to to then?? 
-		if(isLeafCluster()) {
+		if (isLeafCluster()) {
 			beginNodeList.add(keyNode);
-		}else if(isSeqCluster()) {
+		} else if (isSeqCluster()) {
 			beginNodeList.addAll(childrenCluster.get(0).getBeginNodeList());
-		}else if(isParallelCluster()) {
-			for(XORCluster<T> child: childrenCluster) {
+		} else if (isParallelCluster()) {
+			for (XORCluster<T> child : childrenCluster) {
 				beginNodeList.addAll(child.getBeginNodeList());
 			}
-		}else if(isXORCluster()) {
-			for(XORCluster<T> child: childrenCluster) {
+		} else if (isXORCluster()) {
+			for (XORCluster<T> child : childrenCluster) {
 				beginNodeList.addAll(child.getBeginNodeList());
 			}
-		}else if(isLoopCluster()){
+		} else if (isLoopCluster()) {
 			// here we can not give out the beginNode for loop!!
 			// but we can add new silent transition before it and represent this branch
 			// and also a end node to represent it!!
 			// then we avoid this situation for it 
 			beginNodeList.addAll(childrenCluster.get(0).getBeginNodeList());
 		}
-		
+
 		return beginNodeList;
 	}
 
@@ -328,52 +325,53 @@ public class XORCluster<T> {
 	// we should record that we are in a branch, and then record the cluster of them .'
 	// if we meet one parallel, then we record its seq branch, but until we reach the leaf node, that's how it works
 	// yes, we need to remember all things relative to xor structure
-	
-	
 
 	// for pure branch, there is the End node list
 	List<T> endNodeList;
+
 	public List<T> getEndNodeList() {
 		// TODO Auto-generated method stub
 		endNodeList = new ArrayList<T>();
-		if(isLeafCluster()) {
+		if (isLeafCluster()) {
 			endNodeList.add(keyNode);
-		}else if(isSeqCluster()) {
-			endNodeList.addAll(childrenCluster.get(childrenCluster.size() -1).getEndNodeList());
-		}else if(isParallelCluster()) {
-			for(XORCluster<T> child: childrenCluster) {
+		} else if (isSeqCluster()) {
+			endNodeList.addAll(childrenCluster.get(childrenCluster.size() - 1).getEndNodeList());
+		} else if (isParallelCluster()) {
+			for (XORCluster<T> child : childrenCluster) {
 				endNodeList.addAll(child.getEndNodeList());
 			}
-		}else if(isXORCluster()) {
-			for(XORCluster<T> child: childrenCluster) {
+		} else if (isXORCluster()) {
+			for (XORCluster<T> child : childrenCluster) {
 				endNodeList.addAll(child.getEndNodeList());
 			}
-		}else if(isLoopCluster()){
-			
+		} else if (isLoopCluster()) {
+
 			endNodeList.addAll(childrenCluster.get(0).getEndNodeList());
-			
+
 		}
 		return endNodeList;
 	}
 
 	public boolean isXORCluster() {
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR))
+		if (keyNode.getClass().getSimpleName().equals(ProcessConfiguration.XOR))
 			return true;
-		
+
 		return false;
 	}
-	
+
 	private boolean isLoopCluster() {
 		// TODO if it is a loop cluster
-		if(keyNode.getClass().getSimpleName().equals(ProcessConfiguration.LOOP))
+		if (keyNode.getClass().getSimpleName().equals(ProcessConfiguration.LOOP))
 			return true;
 		return false;
 	}
-	
-	boolean isLeaf =false;
+
+	boolean isLeaf = false;
+
 	public boolean isLeafCluster() {
 		return isLeaf;
 	}
+
 	public void setIsLeaf(boolean value) {
 		isLeaf = value;
 	}
@@ -385,10 +383,10 @@ public class XORCluster<T> {
 
 	public void testPairAvailable() {
 		// if it is pure branch, then we have pair available true
-		if(isPureBranchCluster())
+		if (isPureBranchCluster())
 			pairAvailable = true;
 	}
-	
+
 	public boolean isPairAvailable() {
 		return pairAvailable;
 	}

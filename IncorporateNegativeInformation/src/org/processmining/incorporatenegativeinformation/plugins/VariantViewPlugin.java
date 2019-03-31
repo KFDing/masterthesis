@@ -20,13 +20,13 @@ public class VariantViewPlugin {
 
 	@Plugin(name = "Explore and Label Trace Variants", level = PluginLevel.PeerReviewed, //
 			returnLabels = { "Log Variants Visualization" }, returnTypes = { JComponent.class }, //
-			userAccessible = true, parameterLabels = { "Trace Variants" ,"XLog"})
+			userAccessible = true, parameterLabels = { "Trace Variants", "XLog" })
 	@Visualizer
 	@PluginVariant(requiredParameterLabels = { 0, 1 })
 	@UITopiaVariant(pack = "Preprocess", affiliation = UITopiaVariant.EHV, author = "kefang", email = "@kefang")
 	public JComponent visualise(final PluginContext context, List<TraceVariant> variants, XLog log) {
 		XLogInfo info = XLogInfoFactory.createLogInfo(log);
-		return new VariantWholeView( variants, info); //PluginContext context, 
+		return new VariantWholeView(variants, info); //PluginContext context, 
 	}
 
 }

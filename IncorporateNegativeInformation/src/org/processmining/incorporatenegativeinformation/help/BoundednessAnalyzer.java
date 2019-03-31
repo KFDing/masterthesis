@@ -55,9 +55,10 @@ import org.processmining.models.semantics.petrinet.impl.PetrinetSemanticsFactory
  * @email arya.adriansyah@gmail.com
  * @version Dec 13, 2008
  */
-@Plugin(name = "Analyze Boundedness", returnLabels = { "Boundedness info", "Unbounded Places", "Unbounded Sequences" }, returnTypes = {
-		NetAnalysisInformation.BOUNDEDNESS.class, UnboundedPlacesSet.class, UnboundedSequences.class }, parameterLabels = {
-		"Net", "Marking", "Coverability Set", "Semantics" }, userAccessible = true)
+@Plugin(name = "Analyze Boundedness", returnLabels = { "Boundedness info", "Unbounded Places",
+		"Unbounded Sequences" }, returnTypes = { NetAnalysisInformation.BOUNDEDNESS.class, UnboundedPlacesSet.class,
+				UnboundedSequences.class }, parameterLabels = { "Net", "Marking", "Coverability Set",
+						"Semantics" }, userAccessible = true)
 public class BoundednessAnalyzer {
 
 	// variant with only petri net as input
@@ -72,8 +73,8 @@ public class BoundednessAnalyzer {
 	@PluginVariant(variantLabel = "Analyze Boundedness", requiredParameterLabels = { 0, 1 })
 	public Object[] analyzeBoundednessPetriNet(PluginContext context, Petrinet net, Marking state)
 			throws ConnectionCannotBeObtained {
-		return analyzeBoundednessPetriNet(context, net, state, PetrinetSemanticsFactory
-				.regularPetrinetSemantics(Petrinet.class));
+		return analyzeBoundednessPetriNet(context, net, state,
+				PetrinetSemanticsFactory.regularPetrinetSemantics(Petrinet.class));
 	}
 
 	// variant with only petri net, marking, and semantic as input
@@ -125,7 +126,8 @@ public class BoundednessAnalyzer {
 
 		semantics.initialize(net.getTransitions(), state);
 		Object[] result = analyzeBoundednessAssumingConnection(context, net, state, covSet, semantics);
-		context.addConnection(new BoundednessInfoConnection(net, state, semantics, (NetAnalysisInformation.BOUNDEDNESS) result[0]));
+		context.addConnection(
+				new BoundednessInfoConnection(net, state, semantics, (NetAnalysisInformation.BOUNDEDNESS) result[0]));
 		context.addConnection(new UnboundedPlacesConnection(net, (UnboundedPlacesSet) result[1], state, semantics));
 		context.addConnection(new UnboundedSequencesConnection(net, (UnboundedSequences) result[2], state, semantics));
 		context.getFutureResult(0).setLabel("Boundedness Analysis of " + net.getLabel());

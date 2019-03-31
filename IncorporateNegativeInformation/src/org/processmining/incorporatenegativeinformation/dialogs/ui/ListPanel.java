@@ -37,27 +37,27 @@ import org.processmining.incorporatenegativeinformation.models.XESTrace;
 public class ListPanel extends JPanel {
 	private final JList jlist;
 	private final DefaultListModel<TraceVariant> listModel;
-    private int seleted_idx;
-    private  ProMTraceViewCellRenderer<TraceVariant> cellRenderer;
+	private int seleted_idx;
+	private ProMTraceViewCellRenderer<TraceVariant> cellRenderer;
 	private transient CopyOnWriteArraySet<ClickListener<TraceVariant>> clickListener = new CopyOnWriteArraySet<ClickListener<TraceVariant>>();
 	private transient CopyOnWriteArraySet<MoveListener<TraceVariant>> moveListener = new CopyOnWriteArraySet<MoveListener<TraceVariant>>();
-    
+
 	public ListPanel(List<TraceVariant> variants) {
 		super(new BorderLayout());
 		seleted_idx = 0;
 		listModel = new DefaultListModel<TraceVariant>();
-		for(TraceVariant var: variants) {
+		for (TraceVariant var : variants) {
 			listModel.addElement(var);
 		}
-		
+
 		cellRenderer = new ProMTraceViewCellRenderer<TraceVariant>(listModel, new TraceBuilder<TraceVariant>() {
 			public Trace<? extends Event> build(TraceVariant element) {
 				// here how to transfer element to Trace ?? 
-				XTrace  trace = element.getTrace_list().get(0);
+				XTrace trace = element.getTrace_list().get(0);
 				return new XESTrace(trace, new XEventNameClassifier());
 			}
 		}, Configuration.DEFAULT_FONT, true);
-		
+
 		// create the JList to show data 
 		// how about each cell render?? 
 		jlist = new JList(listModel);
@@ -65,15 +65,15 @@ public class ListPanel extends JPanel {
 		jlist.setLayoutOrientation(JList.VERTICAL);
 		jlist.setSelectedIndex(seleted_idx);
 		jlist.setVisibleRowCount(-1);
-        
+
 		jlist.setFixedCellHeight((int) cellRenderer.getPreferredSize().getHeight());
 		jlist.setOpaque(false);
 		jlist.setForeground(null);
 		jlist.setBackground(null);
 		jlist.setCellRenderer(cellRenderer);
-		
-		ProMTraceListMouseAdapter<TraceVariant> mouseAdapter = new ProMTraceListMouseAdapter<TraceVariant>(jlist, cellRenderer, clickListener,
-				moveListener);
+
+		ProMTraceListMouseAdapter<TraceVariant> mouseAdapter = new ProMTraceListMouseAdapter<TraceVariant>(jlist,
+				cellRenderer, clickListener, moveListener);
 		jlist.addMouseListener(mouseAdapter);
 		jlist.addMouseMotionListener(mouseAdapter);
 
@@ -81,25 +81,26 @@ public class ListPanel extends JPanel {
 		setOpaque(false);
 		setForeground(null);
 		setBackground(null);
-        
-        // JScrollPane listScrollPane = new JScrollPane(jlist);
-        ProMScrollPane listScrollPane = new ProMScrollPane(jlist);
-        // add part to cell render, but later
-        listScrollPane.setPreferredSize(new Dimension(500, 500));
-        listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
-        listScrollPane.setForeground(null);
-        listScrollPane.setOpaque(false);
-        listScrollPane.getViewport().setForeground(null);
-        listScrollPane.getViewport().setOpaque(false);
-        //listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-        //listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        
-        add(listScrollPane, BorderLayout.CENTER);
+
+		// JScrollPane listScrollPane = new JScrollPane(jlist);
+		ProMScrollPane listScrollPane = new ProMScrollPane(jlist);
+		// add part to cell render, but later
+		listScrollPane.setPreferredSize(new Dimension(500, 500));
+		listScrollPane.setAlignmentX(LEFT_ALIGNMENT);
+		listScrollPane.setForeground(null);
+		listScrollPane.setOpaque(false);
+		listScrollPane.getViewport().setForeground(null);
+		listScrollPane.getViewport().setOpaque(false);
+		//listScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+		//listScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+		add(listScrollPane, BorderLayout.CENTER);
 	}
 
 	public int getSeleted_idx() {
 		return seleted_idx;
 	}
+
 	public JList getList() {
 		return jlist;
 	}
@@ -173,7 +174,6 @@ public class ListPanel extends JPanel {
 
 	}
 
-	
 	private final static class ProMTraceViewCellRenderer<E> extends ProMTraceView implements ListCellRenderer<E> {
 
 		private static final long serialVersionUID = -2495069999724478333L;
@@ -292,5 +292,5 @@ public class ListPanel extends JPanel {
 			return x == null ? "" : x.toString();
 		}
 	}
-	
+
 }

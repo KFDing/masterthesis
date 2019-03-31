@@ -62,10 +62,10 @@ public class ResultRightControlView extends JPanel {
 	JComboBox saveModelCombox;
 
 	AddPairPanel addPairPanel;
-	
+
 	private JPanel showConfusionMatrixPanel;
-	JButton showCMBtn ;
-	
+	JButton showCMBtn;
+
 	protected Color COLOR_FG = new Color(30, 30, 30);
 	protected Font smallFont;
 
@@ -111,7 +111,7 @@ public class ResultRightControlView extends JPanel {
 				}
 			}
 		});
-		
+
 		// here add one more choices to reduce silent transition after this model generation
 		rpnButton = new JRadioButton("Show Petri net with LT After Reducing Silent Transition");
 		rpnButton.addItemListener(new ItemListener() {
@@ -136,7 +136,6 @@ public class ResultRightControlView extends JPanel {
 		this.add(pnButton, new Float(3));
 		this.add(ltpnButton, new Float(3));
 		this.add(rpnButton, new Float(3));
-		
 
 		Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
 		JPanel weightPanel = new JPanel();
@@ -324,32 +323,33 @@ public class ResultRightControlView extends JPanel {
 		savePanel.add(saveModelCombox, gbc_saveModelCombox);
 
 		showConfusionMatrixPanel = new JPanel();
-		showConfusionMatrixPanel.setBorder(new TitledBorder(null, "Show Confusion Matrix Evaluation ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		showConfusionMatrixPanel.setBorder(new TitledBorder(null, "Show Confusion Matrix Evaluation ",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_showConfusionMatrixPanel = new GridBagConstraints();
 		gbc_showConfusionMatrixPanel.insets = new Insets(0, 0, 0, 5);
 		gbc_showConfusionMatrixPanel.fill = GridBagConstraints.BOTH;
 		gbc_showConfusionMatrixPanel.gridx = 0;
 		gbc_showConfusionMatrixPanel.gridy = 2;
-		
+
 		GridBagLayout gbl_showConfusionMatrixPanel = new GridBagLayout();
-		gbl_showConfusionMatrixPanel.columnWidths = new int[]{0, 0, 0};
-		gbl_showConfusionMatrixPanel.rowHeights = new int[]{0, 0, 10, 0};
-		gbl_showConfusionMatrixPanel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_showConfusionMatrixPanel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_showConfusionMatrixPanel.columnWidths = new int[] { 0, 0, 0 };
+		gbl_showConfusionMatrixPanel.rowHeights = new int[] { 0, 0, 10, 0 };
+		gbl_showConfusionMatrixPanel.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_showConfusionMatrixPanel.rowWeights = new double[] { 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		showConfusionMatrixPanel.setLayout(gbl_showConfusionMatrixPanel);
-		
+
 		showCMBtn = new JButton("Show Confusion Matrix");
 		// how to pass the action to outside ?? we can expose this btn
 		// showCMBtn.setActionCommand("new");
 		// showCMBtn.addActionListener(this);
 		showConfusionMatrixPanel.add(showCMBtn);
-		
+
 		this.add(weightPanel, new Float(30));
 		this.add(buttonPane, new Float(5));
 		this.add(addPairPanel, new Float(40));
-		this.add(showConfusionMatrixPanel,  new Float(5));
+		this.add(showConfusionMatrixPanel, new Float(5));
 		this.add(savePanel, new Float(5));
-		
+
 	}
 
 	public int getSaveModelIndex() {

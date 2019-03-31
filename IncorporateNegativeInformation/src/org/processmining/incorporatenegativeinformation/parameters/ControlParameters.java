@@ -4,18 +4,14 @@ import org.processmining.incorporatenegativeinformation.help.ProcessConfiguratio
 import org.processmining.incorporatenegativeinformation.help.ProcessConfiguration.ViewType;
 
 /**
- * this class is used to create the control parameters, it includes:
- *   -- existing model weight;
- *   -- pos event log weight;
- *   -- neg event log weight;
- *   
- *   -- view Type :
- *     ++ dfg
- *     ++ Process Tree
- *     ++ Petri net
- *     
- *     ** somehow we can show the existing and modified model together in one view.
- *     ** or create the floating window
+ * this class is used to create the control parameters, it includes: -- existing
+ * model weight; -- pos event log weight; -- neg event log weight;
+ * 
+ * -- view Type : ++ dfg ++ Process Tree ++ Petri net
+ * 
+ * ** somehow we can show the existing and modified model together in one view.
+ * ** or create the floating window
+ * 
  * @author dkf
  *
  */
@@ -23,8 +19,8 @@ public class ControlParameters {
 
 	double existWeight;
 	double posWeight;
-	double negWeight ;
-	ViewType type ;
+	double negWeight;
+	ViewType type;
 	ActionType action;
 	// choose xor pair by manually or add them all
 	boolean addAllPair; // default value is true, but can be decided by the addPairPanel
@@ -34,26 +30,26 @@ public class ControlParameters {
 	Object target;
 
 	// but to show the choice what to do then?? we need to pass by using the generate.
-	
+
 	public ControlParameters() {
-		existWeight =1.0 ;
+		existWeight = 1.0;
 		posWeight = 1.0;
 		negWeight = 1.0;
 		type = ViewType.ProcessTree;
-		
+
 		addAllPair = true;
 	}
-	
+
 	public void cloneValues(ControlParameters paras) {
-		existWeight =paras.getExistWeight();
+		existWeight = paras.getExistWeight();
 		posWeight = paras.getPosWeight();
 		negWeight = paras.getNegWeight();
 		type = paras.getType();
-		
+
 		action = paras.getAction();
 		addAllPair = paras.isAddAllPair();
 	}
-	
+
 	public boolean isAddAllPair() {
 		return addAllPair;
 	}
@@ -61,11 +57,11 @@ public class ControlParameters {
 	public void setAddAllPair(boolean addAllPair) {
 		this.addAllPair = addAllPair;
 	}
-	
+
 	public void setAction(ActionType action) {
 		this.action = action;
 	}
-	
+
 	public ActionType getAction() {
 		return action;
 	}
@@ -77,7 +73,7 @@ public class ControlParameters {
 	public void setType(ViewType type) {
 		this.type = type;
 	}
-	
+
 	public double getExistWeight() {
 		return existWeight;
 	}
@@ -107,10 +103,10 @@ public class ControlParameters {
 		existWeight = 1.0;
 		posWeight = 1.0;
 		negWeight = 1.0;
-		
+
 		addAllPair = true;
 	}
-	
+
 	public Object getSource() {
 		return source;
 	}
@@ -126,5 +122,5 @@ public class ControlParameters {
 	public void setTarget(Object target) {
 		this.target = target;
 	}
-	
+
 }

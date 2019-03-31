@@ -36,14 +36,13 @@ public class AttributeLogFilter_UI extends BorderPanel {
 
 	public final static String DIALOG_TITLE = "Filter Log by Properties";
 	public final static String ATTRIBUTE_DIALOG_TITLE = "Filter Log by Attributes";
-	
+
 	private XLog log;
 
 	private JCheckBox attribute_filter_include_box;
 	private ProMComboBox<String> attribute_filter_filter_on;
 	private ProMComboBox<String> attribute_filter_log_attributes;
 	private ProMComboBox<String> attribute_filter_log_values;
-
 
 	@SuppressWarnings("unchecked")
 	public AttributeLogFilter_UI(AttributeLogFilter filter) {
@@ -82,7 +81,6 @@ public class AttributeLogFilter_UI extends BorderPanel {
 		attribute_filter_include_box = SlickerFactory.instance().createCheckBox(null, true);
 		attributePanel.addProperty("keep matching traces", attribute_filter_include_box);
 
-
 		setFilterValues(filter);
 	}
 
@@ -100,7 +98,7 @@ public class AttributeLogFilter_UI extends BorderPanel {
 			for (Object o : filter.attribute_values) {
 				attribute_filter_log_values.setSelectedItem(o);
 			}
-		
+
 	}
 
 	/**
@@ -162,7 +160,7 @@ public class AttributeLogFilter_UI extends BorderPanel {
 
 				Set<String> values = getValues((String) attribute_filter_filter_on.getSelectedItem(),
 						(String) attribute_filter_log_attributes.getSelectedItem());
-				
+
 				MyComboBoxModel model = new MyComboBoxModel(values.toArray());
 				attribute_filter_log_values.setModel(model);
 				model.setSelectedItem(null);
@@ -173,6 +171,7 @@ public class AttributeLogFilter_UI extends BorderPanel {
 	}
 
 	private Set<String> attribute_group_values = null;
+
 	/**
 	 * Listener to watch
 	 * {@link AttributeLogFilter_UI#attribute_filter_log_attributes} and store
@@ -188,10 +187,10 @@ public class AttributeLogFilter_UI extends BorderPanel {
 				Set<String> values = getValues((String) attribute_filter_filter_on.getSelectedItem(),
 						(String) attribute_filter_log_attributes.getSelectedItem());
 				/*
-				System.out.println(values.size() + " on AttributeLister");
-				for(String value: values)
-					System.out.println(value + " on AttributeLister");
-				*/
+				 * System.out.println(values.size() + " on AttributeLister");
+				 * for(String value: values) System.out.println(value +
+				 * " on AttributeLister");
+				 */
 				attribute_group_values = values;
 				MyComboBoxModel model = new MyComboBoxModel(values.toArray());
 				attribute_filter_log_values.setModel(model);
@@ -274,7 +273,7 @@ class MyComboBoxModel extends AbstractListModel<String> implements ComboBoxModel
 			if (object == null || object == NONE || !(object instanceof String)) {
 				continue;
 			}
-			this.values.add((String)object);
+			this.values.add((String) object);
 		}
 	}
 
@@ -296,7 +295,7 @@ class MyComboBoxModel extends AbstractListModel<String> implements ComboBoxModel
 		} else {
 			boolean removed = selected.remove(anItem);
 			if (!removed) {
-				selected.add((String)anItem);
+				selected.add((String) anItem);
 			}
 		}
 		fireContentsChanged(this, -1, -1);
@@ -306,6 +305,5 @@ class MyComboBoxModel extends AbstractListModel<String> implements ComboBoxModel
 	public Object getSelectedItem() {
 		return selected;
 	}
-
 
 }

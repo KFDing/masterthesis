@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<pnml>
+	<net id="net1" type="http://www.pnml.org/version-2009/grammar/pnmlcoremodel">
+		<name>
+			<text>Process-Normal-02</text>
+		</name>
+		<page id="n0">
+			<name>
+				<text/>
+			</name>
+			<transition id="65">
+				<name>
+					<text>Activity D</text>
+				</name>
+				<toolspecific tool="libPlg" version="2.0.5" activity="Activity D"/>
+				<graphics>
+					<position x="50" y="50"/>
+					<dimension x="25" y="20"/>
+					<fill color="#FFFFFF"/>
+				</graphics>
+			</transition>
+			<transition id="61">
+				<name>
+					<text>Activity E</text>
+				</name>
+				<toolspecific tool="libPlg" version="2.0.5" activity="Activity E"/>
+				<graphics>
+					<position x="100" y="50"/>
+					<dimension x="25" y="20"/>
+					<fill color="#FFFFFF"/>
+				</graphics>
+			</transition>
+			<transition id="62">
+				<name>
+					<text>Activity A</text>
+				</name>
+				<toolspecific tool="libPlg" version="2.0.5" activity="Activity A"/>
+				<graphics>
+					<position x="150" y="50"/>
+					<dimension x="25" y="20"/>
+					<fill color="#FFFFFF"/>
+				</graphics>
+			</transition>
+			<transition id="64">
+				<name>
+					<text>Activity C</text>
+				</name>
+				<toolspecific tool="libPlg" version="2.0.5" activity="Activity C"/>
+				<graphics>
+					<position x="200" y="50"/>
+					<dimension x="25" y="20"/>
+					<fill color="#FFFFFF"/>
+				</graphics>
+			</transition>
+			<transition id="63">
+				<name>
+					<text>Activity B</text>
+				</name>
+				<toolspecific tool="libPlg" version="2.0.5" activity="Activity B"/>
+				<graphics>
+					<position x="250" y="50"/>
+					<dimension x="25" y="20"/>
+					<fill color="#FFFFFF"/>
+				</graphics>
+			</transition>
+			<place id="67">
+				<name>
+					<text>67</text>
+				</name>
+				<graphics>
+					<position x="300" y="50"/>
+					<dimension x="12.5" y="12.5"/>
+				</graphics>
+			</place>
+			<place id="69">
+				<name>
+					<text>69</text>
+				</name>
+				<graphics>
+					<position x="350" y="50"/>
+					<dimension x="12.5" y="12.5"/>
+				</graphics>
+			</place>
+			<place id="66">
+				<name>
+					<text>66</text>
+				</name>
+				<graphics>
+					<position x="400" y="50"/>
+					<dimension x="12.5" y="12.5"/>
+				</graphics>
+			</place>
+			<place id="60">
+				<name>
+					<text>60</text>
+				</name>
+				<graphics>
+					<position x="450" y="50"/>
+					<dimension x="12.5" y="12.5"/>
+				</graphics>
+			</place>
+			<place id="68">
+				<name>
+					<text>68</text>
+				</name>
+				<graphics>
+					<position x="500" y="50"/>
+					<dimension x="12.5" y="12.5"/>
+				</graphics>
+			</place>
+			<place id="59">
+				<name>
+					<text>59</text>
+				</name>
+				<graphics>
+					<position x="550" y="50"/>
+					<dimension x="12.5" y="12.5"/>
+				</graphics>
+				<initialMarking>
+					<text>1</text>
+				</initialMarking>
+			</place>
+			<arc id="67-64" source="67" target="64">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="69-63" source="69" target="63">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="66-65" source="66" target="65">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="62-69" source="62" target="69">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="64-66" source="64" target="66">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="61-60" source="61" target="60">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="63-67" source="63" target="67">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="59-62" source="59" target="62">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="68-61" source="68" target="61">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+			<arc id="65-68" source="65" target="68">
+				<name>
+					<text>1</text>
+				</name>
+				<graphics/>
+				<arctype>
+					<text>normal</text>
+				</arctype>
+			</arc>
+		</page>
+	</net>
+</pnml>

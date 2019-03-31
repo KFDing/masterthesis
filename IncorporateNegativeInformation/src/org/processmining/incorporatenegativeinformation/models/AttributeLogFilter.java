@@ -21,25 +21,24 @@ public class AttributeLogFilter {
 	public String attribute_key = null;
 	public Set<String> attribute_values = new HashSet<String>();
 	public Set<String> attribute_group_values = new HashSet<String>();
-	
-	
+
 	public XLog log;
 
 	public AttributeLogFilter() {
 		setDefaultValues();
 	}
-	
+
 	public AttributeLogFilter(XLog log) {
 		this.log = log;
 		setDefaultValues();
 	}
-	
+
 	public AttributeLogFilter(String filterOn, String key, Set<String> values) {
 		attribute_filterOn = filterOn;
 		attribute_key = key;
 		attribute_values.addAll(values);
 	}
-	
+
 	public void setAttributeKey(String key) {
 		attribute_key = key;
 	}
@@ -47,11 +46,11 @@ public class AttributeLogFilter {
 	public void setFilterOn(String filterOn) {
 		attribute_filterOn = filterOn;
 	}
-	
+
 	public void setAttributeValue(Set<String> values) {
 		attribute_values.addAll(values);
 	}
-	
+
 	public void setDefaultValues() {
 		this.attribute_filterOn = NONE;
 	}
@@ -66,7 +65,7 @@ public class AttributeLogFilter {
 
 		// here we specify it to all values on it, we need to generate all the list of them,
 		// but they should be in a group, not like this, only return true, is ok
-		
+
 		return attribute_values.contains(attr_value);
 	}
 
@@ -98,19 +97,19 @@ public class AttributeLogFilter {
 		return false;
 	}
 
-
 	public boolean keepTrace(XTrace trace) {
 
 		if (attribute_filterOn != NONE) {
 			if (!keepTraceOnAttributes(trace))
 				return false;
 		}
-		
+
 		return true;
 	}
 
-	/** 
-	 * used to find the 
+	/**
+	 * used to find the
+	 * 
 	 * @param t
 	 * @return
 	 */
@@ -132,11 +131,11 @@ public class AttributeLogFilter {
 	public Set<String> groupAttributeValues() {
 		return attribute_group_values;
 	}
-	
+
 	// get all the attributes of filter  
 	public String toString() {
-		String label="";
-		label += attribute_filterOn +":" +attribute_key + ":" ;
+		String label = "";
+		label += attribute_filterOn + ":" + attribute_key + ":";
 		return label;
 	}
 

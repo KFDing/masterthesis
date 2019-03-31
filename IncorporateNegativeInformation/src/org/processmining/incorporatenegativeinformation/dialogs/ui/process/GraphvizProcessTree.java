@@ -16,9 +16,11 @@ import org.processmining.processtree.Node;
 import org.processmining.processtree.ProcessTree;
 import org.processmining.processtree.impl.AbstractBlock;
 import org.processmining.processtree.impl.AbstractTask;
-//import org.processmining.plugins.InductiveMiner.mining.operators.Interleaved;
+// import org.processmining.plugins.InductiveMiner.mining.operators.Interleaved;
 
-@Plugin(name = "Graphviz process tree visualisation", returnLabels = { "Dot visualization" }, returnTypes = { JComponent.class }, parameterLabels = { "Process Tree" }, userAccessible = true, level = PluginLevel.PeerReviewed)
+@Plugin(name = "Graphviz process tree visualisation", returnLabels = { "Dot visualization" }, returnTypes = {
+		JComponent.class }, parameterLabels = {
+				"Process Tree" }, userAccessible = true, level = PluginLevel.PeerReviewed)
 @Visualizer
 public class GraphvizProcessTree {
 
@@ -88,7 +90,8 @@ public class GraphvizProcessTree {
 		addArc(dot, parent, dotNode);
 	}
 
-	private static void convertInterleaved(Dot dot, DotNode parent, Interleaved node) throws NotYetImplementedException {
+	private static void convertInterleaved(Dot dot, DotNode parent, Interleaved node)
+			throws NotYetImplementedException {
 		convertBinOperator(dot, parent, node, "int");
 	}
 

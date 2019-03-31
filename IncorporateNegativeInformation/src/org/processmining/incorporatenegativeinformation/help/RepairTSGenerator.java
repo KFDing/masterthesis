@@ -48,36 +48,36 @@ import org.processmining.models.semantics.petrinet.impl.PetrinetSemanticsFactory
 
 @Plugin(name = "Construct Reachability Graph of a Petri Net", returnLabels = { "Reachability graph", "Reachability Set",
 		"Initial states", "Final states" }, returnTypes = { ReachabilityGraph.class, ReachabilitySet.class,
-		StartStateSet.class, AcceptStateSet.class }, parameterLabels = { "Net", "Marking", "Semantics",
-		"Coverability Graph" })
+				StartStateSet.class,
+				AcceptStateSet.class }, parameterLabels = { "Net", "Marking", "Semantics", "Coverability Graph" })
 public class RepairTSGenerator {
 
 	private static final int MAXSTATES = 25000;
 
-	@UITopiaVariant(affiliation = UITopiaVariant.EHV, author = "A. Adriansyah", email = "a.adriansyah@tue.nl", pack="PNAnalysis")
+	@UITopiaVariant(affiliation = UITopiaVariant.EHV, author = "A. Adriansyah", email = "a.adriansyah@tue.nl", pack = "PNAnalysis")
 	@PluginVariant(requiredParameterLabels = { 0, 1 })
-	public  Object[]  calculateTS(PluginContext context, Petrinet net, Marking state) throws ConnectionCannotBeObtained {
+	public Object[] calculateTS(PluginContext context, Petrinet net, Marking state) throws ConnectionCannotBeObtained {
 		return calculateTS(context, net, state, PetrinetSemanticsFactory.regularPetrinetSemantics(Petrinet.class));
 	}
 
-	@UITopiaVariant(affiliation = UITopiaVariant.EHV, author = "A. Adriansyah", email = "a.adriansyah@tue.nl", pack="PNAnalysis")
+	@UITopiaVariant(affiliation = UITopiaVariant.EHV, author = "A. Adriansyah", email = "a.adriansyah@tue.nl", pack = "PNAnalysis")
 	@PluginVariant(requiredParameterLabels = { 0, 1 })
-	public  Object[] calculateTS(PluginContext context, ResetNet net, Marking state) throws ConnectionCannotBeObtained {
+	public Object[] calculateTS(PluginContext context, ResetNet net, Marking state) throws ConnectionCannotBeObtained {
 		return calculateTS(context, net, state, PetrinetSemanticsFactory.regularResetNetSemantics(ResetNet.class));
 	}
 
 	@PluginVariant(requiredParameterLabels = { 0, 1 })
 	public Object[] calculateTS(PluginContext context, InhibitorNet net, Marking state)
 			throws ConnectionCannotBeObtained {
-		return calculateTS(context, net, state, PetrinetSemanticsFactory
-				.regularInhibitorNetSemantics(InhibitorNet.class));
+		return calculateTS(context, net, state,
+				PetrinetSemanticsFactory.regularInhibitorNetSemantics(InhibitorNet.class));
 	}
 
 	@PluginVariant(requiredParameterLabels = { 0, 1 })
 	public Object[] calculateTS(PluginContext context, ResetInhibitorNet net, Marking state)
 			throws ConnectionCannotBeObtained {
-		return calculateTS(context, net, state, PetrinetSemanticsFactory
-				.regularResetInhibitorNetSemantics(ResetInhibitorNet.class));
+		return calculateTS(context, net, state,
+				PetrinetSemanticsFactory.regularResetInhibitorNetSemantics(ResetInhibitorNet.class));
 	}
 
 	@PluginVariant(requiredParameterLabels = { 0, 1, 3 })
@@ -105,7 +105,7 @@ public class RepairTSGenerator {
 	}
 
 	@PluginVariant(requiredParameterLabels = { 0, 1, 2 })
-	public  Object[] calculateTS(PluginContext context, Petrinet net, Marking state, PetrinetSemantics semantics)
+	public Object[] calculateTS(PluginContext context, Petrinet net, Marking state, PetrinetSemantics semantics)
 			throws ConnectionCannotBeObtained {
 		semantics.initialize(net.getTransitions(), new Marking(state));
 		return buildAndConnect(context, net, state, semantics, null);
@@ -135,14 +135,14 @@ public class RepairTSGenerator {
 	private Object[] buildAndConnect(PluginContext context, PetrinetGraph net, Marking initial,
 			CoverabilityGraph coverabilityGraph) throws ConnectionCannotBeObtained {
 
-		CoverabilityGraphConnection connection = context.getConnectionManager().getFirstConnection(
-				CoverabilityGraphConnection.class, context, net, initial, coverabilityGraph);
+		CoverabilityGraphConnection connection = context.getConnectionManager()
+				.getFirstConnection(CoverabilityGraphConnection.class, context, net, initial, coverabilityGraph);
 		Semantics<Marking, Transition> sem = connection.getObjectWithRole(AbstractSemanticConnection.SEMANTICS);
 		sem.initialize(net.getTransitions(), initial);
 		return buildAndConnect(context, net, initial, sem, coverabilityGraph);
 	}
 
-	private  Object[] buildAndConnect(PluginContext context, PetrinetGraph net, Marking initial,
+	private Object[] buildAndConnect(PluginContext context, PetrinetGraph net, Marking initial,
 			Semantics<Marking, Transition> semantics, CoverabilityGraph coverabilityGraph)
 			throws ConnectionCannotBeObtained {
 		context.getConnectionManager().getFirstConnection(InitialMarkingConnection.class, context, net, initial);
@@ -151,8 +151,8 @@ public class RepairTSGenerator {
 		NetAnalysisInformation.BOUNDEDNESS info = null;
 
 		try {
-			BoundednessInfoConnection analysis = context.getConnectionManager().getFirstConnection(
-					BoundednessInfoConnection.class, context, net, initial, semantics);
+			BoundednessInfoConnection analysis = context.getConnectionManager()
+					.getFirstConnection(BoundednessInfoConnection.class, context, net, initial, semantics);
 			info = analysis.getObjectWithRole(BehavioralAnalysisInformationConnection.NETANALYSISINFORMATION);
 		} catch (Exception e) {
 			// No connections available
@@ -232,13 +232,18 @@ public class RepairTSGenerator {
 		context.addConnection(new DeadMarkingConnection(net, initial, acceptingStates, semantics));
 		/*
 		 * this is due to the return value doesn't exist in later use
-		context.getFutureResult(0).setLabel("Reachability graph of " + net.getLabel());
-		context.getFutureResult(1).setLabel("Reachability set of " + net.getLabel());
-		context.getFutureResult(2).setLabel("Initial states of " + ts.getLabel());
-		context.getFutureResult(3).setLabel("Accepting states of " + ts.getLabel());
+		 * context.getFutureResult(0).setLabel("Reachability graph of " +
+		 * net.getLabel());
+		 * context.getFutureResult(1).setLabel("Reachability set of " +
+		 * net.getLabel());
+		 * context.getFutureResult(2).setLabel("Initial states of " +
+		 * ts.getLabel());
+		 * context.getFutureResult(3).setLabel("Accepting states of " +
+		 * ts.getLabel());
 		 */
-		context.log("Statespace size: " + ts.getStates().size() + " states and " + ts.getEdges().size()
-				+ " transitions.", MessageLevel.DEBUG);
+		context.log(
+				"Statespace size: " + ts.getStates().size() + " states and " + ts.getEdges().size() + " transitions.",
+				MessageLevel.DEBUG);
 
 		return new Object[] { ts, rs, startStates, acceptingStates };
 	}

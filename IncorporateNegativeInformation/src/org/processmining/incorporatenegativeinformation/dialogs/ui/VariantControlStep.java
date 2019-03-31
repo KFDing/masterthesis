@@ -11,24 +11,24 @@ import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.incorporatenegativeinformation.help.EventLogUtilities;
 import org.processmining.incorporatenegativeinformation.models.TraceVariant;
 
-public class VariantControlStep implements ProMWizardStep<XLog>{
+public class VariantControlStep implements ProMWizardStep<XLog> {
 
-	private VariantWholeView controlPanel; 
-	
+	private VariantWholeView controlPanel;
+
 	public VariantControlStep(XLog log) {
 		// parameters = new FilteringParameters();
 		List<TraceVariant> variants = EventLogUtilities.getTraceVariants(log);
 		XLogInfo info = XLogInfoFactory.createLogInfo(log);
 		this.controlPanel = new VariantWholeView(variants, info);
 	}
-	
+
 	public VariantWholeView getFilteringPanel() {
 		return controlPanel;
-	} 
-	
+	}
+
 	public XLog apply(XLog model, JComponent component) {
 		// TODO Auto-generated method stub
-		if(canApply(model, component))
+		if (canApply(model, component))
 			return model;
 		return null;
 	}
@@ -46,5 +46,5 @@ public class VariantControlStep implements ProMWizardStep<XLog>{
 	public String getTitle() {
 		return "Set Control Parameters";
 	}
-	
+
 }

@@ -18,17 +18,17 @@ import org.processmining.incorporatenegativeinformation.models.TraceVariant;
 
 public class VariantWholeView extends JPanel {
 	private static final long serialVersionUID = 2073714666502722213L;
-	
+
 	private final VariantsViewMaster masterView;
 	private final VariantViewChange detailView;
-	
+
 	private int select_idx = 0;
-	
+
 	public VariantWholeView(List<TraceVariant> variants, XLogInfo info) {
-		
+
 		masterView = new VariantsViewMaster(variants, info);
 		detailView = new VariantViewChange(variants.get(select_idx));
-		
+
 		// here to add the listSelectionListener
 		JList list = masterView.getListPanel().getList();
 		list.addListSelectionListener(new ListSelectionListener() {
@@ -36,55 +36,54 @@ public class VariantWholeView extends JPanel {
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
 				if (e.getValueIsAdjusting() == false) {
-		            if (list.getSelectedIndex() == -1) {
-		            	
-		            } else {
-		            	//Selection, update the other detailView
-		            	
-		            	select_idx = list.getSelectedIndex();
-		            	// System.out.println(select_idx);
-		            	detailView.update(variants.get(select_idx));
-		            	// System.out.println(variants.get(select_idx).getTraceVariant().toString());
-		            }
-		        }
+					if (list.getSelectedIndex() == -1) {
+
+					} else {
+						//Selection, update the other detailView
+
+						select_idx = list.getSelectedIndex();
+						// System.out.println(select_idx);
+						detailView.update(variants.get(select_idx));
+						// System.out.println(variants.get(select_idx).getTraceVariant().toString());
+					}
+				}
 			}
 		});
 		// JButton submit_button = detailView.getSubmitButton();
 		// but for submit value, we need to do it outside of the initial view
-	
 
-		this.setSize(800,800);
+		this.setSize(800, 800);
 		add(new MasterDetailView(masterView, detailView));
 	}
 
 	private static void createAndShowGUI() {
-        //Create and set up the window.
-        JFrame frame = new JFrame("Variant Change Demo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- 
-        List<TraceVariant> variants = new ArrayList<TraceVariant>() ;
-        variants.add(new TraceVariant());
-        variants.add(new TraceVariant());
-        //Add contents to the window.
-        // XLogInfo info = XLogInfoImpl.create(log);
-        frame.add(new VariantWholeView(variants, null));
- 
-        //Display the window.
-        frame.pack();
-        frame.setVisible(true);
-    }
- 
-    public static void main(String[] args) {
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                //Turn off metal's use of bold fonts
-            UIManager.put("swing.boldMetal", Boolean.FALSE);
-                createAndShowGUI();
-            }
-        });
-    }
+		//Create and set up the window.
+		JFrame frame = new JFrame("Variant Change Demo");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		List<TraceVariant> variants = new ArrayList<TraceVariant>();
+		variants.add(new TraceVariant());
+		variants.add(new TraceVariant());
+		//Add contents to the window.
+		// XLogInfo info = XLogInfoImpl.create(log);
+		frame.add(new VariantWholeView(variants, null));
+
+		//Display the window.
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	public static void main(String[] args) {
+		//Schedule a job for the event dispatch thread:
+		//creating and showing this application's GUI.
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				//Turn off metal's use of bold fonts
+				UIManager.put("swing.boldMetal", Boolean.FALSE);
+				createAndShowGUI();
+			}
+		});
+	}
 }
 
 class MasterDetailView extends JPanel {
@@ -117,11 +116,11 @@ class MasterDetailView extends JPanel {
 		return new TransparentSplitPane(ProMSplitPane.HORIZONTAL_SPLIT);
 	}
 
-	public  VariantsViewMaster getMasterView() {
+	public VariantsViewMaster getMasterView() {
 		return masterView;
 	}
 
-	public  VariantViewChange getDetailView() {
+	public VariantViewChange getDetailView() {
 		return detailView;
 	}
 
@@ -129,6 +128,4 @@ class MasterDetailView extends JPanel {
 		return splitPane;
 	}
 
-	
 }
-

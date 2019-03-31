@@ -36,5 +36,5 @@ final class XESEvent extends DefaultEvent {
 			return false;
 		return true;
 	}
-	
+
 }
