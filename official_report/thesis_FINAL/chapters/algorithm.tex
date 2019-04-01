@@ -94,18 +94,20 @@ The result from last step is a generated directly-follows graph with weighted un
 %% To write the procedure for it 
 \iffalse
 \begin{algorithm}
-	\label{minemodel}
-	\begin{algorithmic}
+	\begin{algorithm*}
+		\SetAlgoLined
 		\Require A directly-follow graph $G_{new}$ with weighted unified cardinality
 		\Function{Derive model from directly-follows graph}
-			\ForAll{ directly-follows relation $E(A,B)$ in $G_{new}$ }
-				\If{ $Weight(E_{G_{new}}(A,B)) > 0$ }
-					\State keep $E(A,B)$ and assign
-					\State $Cardinality_{new}(E(A,B)) = Weight(E_{G_{new}}(A,B))*\vert L\vert$
-				\EndIf
-			\EndFor
-	    \EndFunction
-	\end{algorithmic}
+		\ForAll{ directly-follows relation $E(A,B)$ in $G_{new}$ }
+		\If{ $Weight(E_{G_{new}}(A,B)) > 0$ }{
+			\State keep $E(A,B)$ and assign
+			\State $Cardinality_{new}(E(A,B)) = Weight(E_{G_{new}}(A,B))*\vert L\vert$
+		}
+		\EndIf
+		\EndFor
+		\EndFunction
+	\end{algorithm*}
+	
 \end{algorithm}
 \fi
 \section{Add long-term dependency}
@@ -136,45 +138,25 @@ The order of xor branch follows the same rule of node in process tree which is e
 
 The correlation of xor branches is significant if they always happen together. To define it, several concepts are listed at first. 
 \begin{definition}[Xor branch frequency]
-	Xor branch $XORB_X$ frequency in event log l is $F_{l}(XORB_X)$, the count of traces with the execution of $XORB_X$. \\
-	For multiple xor branches, the frequency in event log l is defined as the count of traces with all the execution of xor branches $XORB_{Xi}$ , written as \[F_{l}(XORB_{X1}, XORB_{X2},...,XORB_{Xn})\].
+	Xor branch $XORB_X$ frequency in event log L is $F_{L}(XORB_X)$, the count of traces with the execution of $XORB_X$. \\
+	For multiple xor branches, the frequency of their coexistence in event log L is defined as the count of traces with all the occurrence of xor branches $XORB_{Xi}$ , written as \[F_{L}(XORB_{X1}, XORB_{X2},...,XORB_{Xn})\].
 \end{definition}
-After calculation of the frequency of the coexistence of multiple xor branches in positive and negative event log, we get the supported connection of those xor branches, and define the correlation. 
+After calculation of the frequency of the coexistence of multiple xor branches in positive and negative event log, we get the supported connection of those xor branches to reflect the correlation. 
 \begin{definition}[Correlation of xor branches]
 	\label{def: supported-connection}
-	For two pure xor branches, $XORB_X \prec XORB_Y$, the supported connection is given as \[SC(XORB_X,XORB_Y)= F_{pos}(XORB_X, XORB_Y) -F_{neg}(XORB_X, XORB_Y)\]. If $SC(XORB_X,XORB_Y) > lt-threshold$, then we say $XORB_X$ and $XORB_Y$ have significant correlation.
+	For two pure xor branches, $XORB_X \prec XORB_Y$, the supported connection is given as \[SC(XORB_X,XORB_Y)= F_{pos}(XORB_X, XORB_Y) -F_{neg}(XORB_X, XORB_Y)\]If $SC(XORB_X,XORB_Y) > \text{lt-threshold}$, then we say $XORB_X$ and $XORB_Y$ have significant correlation.
 \end{definition}
-%% here we add silent transition to express long-term dependency
-We add long-term dependency on model by injecting silent transitions and extra places into Petri net. 
-An example is given to describe this method.
-\begin{figure}[!h]
-	\centering
-	\begin{subfigure}[a]{\textwidth}
-		\includegraphics[width=\textwidth]{figures/algorithm/LT_Seq_01_Silent_01.png}
-		\label{fig:seq-2-silent-1}
-		\caption{For situation 2}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Silent_03.png}
-		\label{fig:seq-2-silent-2}
-		\caption{For situation 4}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[c]{\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Silent_02.png}
-		\label{fig:seq-2-silent-3}
-		\caption{For situation 5}
-	\end{subfigure}
-	\label{fig:seq-2-silent-cases}
-	\caption{Silent Events for Long-term Dependency}
-\end{figure} 
+%% combine the existing model factor together. How about we record the long-term dependency from the existing model?? How to extract the long-term dependency from the model?? No method currently
+The existing model can also affect the long-term dependency by supporting the existence of xor branches. In this assumption, the full long-tern dependency is approved. To incorporate the influence from the existing model, we rephrase the definition for xor branch correlation.
+\begin{definition}[Rephrased Correlation of xor branch] The correlation for two branches is expressed into
+	\[Wlt(XORB_X,XORB_Y)= Wlt_{ext}(XORB_X, XORB_Y) + Wlt_{pos}(XORB_X, XORB_Y)\] \[ -Wlt_{neg}(XORB_X, XORB_Y)\], where 
+	$Wlt_{ext}(XORB_X, XORB_Y)= \frac{1}{|XORB_Y*|}$, $|XORB_{Y*}|$ means the number of possible  directly-follows xor branche set $XORB_{Y*}=\{XORB_{Y1}, XORB_{Y2},...XORB_{Yn} \}$ after $XORB_X$. \\ 
+	$Wlt_{pos}(XORB_X, XORB_Y)= \frac{F_{pos}(XORB_X, XORB_Y)}{F_{pos}(XORB_X, *)}$, \\
+	$Wlt_{neg}(XORB_X, XORB_Y)= \frac{F_{neg}(XORB_X, XORB_Y)}{F_{neg}(XORB_X, *)}$, \\	
+\end{definition}
+The $F_{pos}(XORB_X, XORB_Y)$ and $F_{neg}(XORB_X, XORB_Y)$ are the frequency of the coexistence of $XORB_X$ and $XORB_Y$, respectively in positive and negative event log.
 
-However, only with data from positive and negative information on the long-term dependency, it is possible to result in unsound model, because the existing model can keep some directly-follows relations about xor branches. When those relations do not show in the positive event log or shows only in negative event log, we get incomplete information. Consequently, when we detect this long-term dependency on those xor branches, there is no evidence of long-term dependency on those xor branches. It results in an unsound model, since those xor branches can't get fired to consume the tokens generated from the choices before.
-
-
+\subsection{Cases Analysis}
 There are 7 sorts of long-term dependency that is able to happen in this model as listed in the following. Before this, we need to define some concepts at the sake of convenience.
 \begin{definition}[Source and Target of Long-term Dependency]
 	We define the source set of long-term dependency is  $LT_S:= \{X \vert \exists X, X\rightsquigarrow Y  \in LT \} $, and target set is $LT_T:= \{Y \vert \exists Y, X\rightsquigarrow Y \in LT \} $. \\
@@ -203,19 +185,98 @@ At the same time, we use $XORB_S $ and $XORB_T$ to represent the set of xor bran
 	There exists at least one xor branch in source $X \in XORB_S$  and one xor target xor branch which has no long-term dependency on it.
 	\item $ \emptyset$ . There is no long-term dependency on this set. 
 \end{enumerate}
+In the following, we propose a method to express long-term dependency on Petri net. 
+\subsection{Way to express long-term dependency}
+In dynamic aspect of the process model, long-term dependency can be seen as a way to block certain behaviors. By injecting silent transitions and extra places on Petri net, it limits the executions of certain behaviors. 
+% here to explain the mechanism??
+% An algorithm is given to show how to add the long-term dependency
+The steps to add silent transitions and places according to the long-term dependency are listed bellow. % Paste the algorithm to add the long-term dependency 
+\begin{algorithm}[!ht]
+	\SetAlgoLined
+	$XORB_Y$ is dependent on $XORB_X$\;
+	\If{$XORB_X$ is leaf node}{
+		One place is added after this leaf node. \;
+	}
+	\If{$XORB_X$ is Seq}{
+		Add a place after  the end node of this branch;\;
+		The node points to the new place;\;
+	}
+	\If{$XORB_X$ is And}{
+		Create a place after the end node of every children branch in this And xor branch; \; 
+		Combine all the places by a silent transition after those places; \;
+		Create a new place directly after silent transition to represent the And xor branch; \;
+	}
+	
+	\If{$XORB_Y$ is leaf node}{
+		One place is added before this leaf node. \;
+	}\If{$XORB_Y$ is Seq}{
+		Add a place before  the end node of this branch;\;
+		The new place points to this end node;\;
+	}\If{$XORB_Y$ is And}{
+		Create a place before the end node of every children branch in this And xor branch; \; 
+		Combine all the places by a silent transition before those places; \;
+		Create a new place directly before silent transition to represent the And xor branch; \;
+	}
+	Connect the places which represent the $XORB_X$ and $XORB_Y$ by creating a silent transition.
+	\caption{Add long-term dependency between pure xor branch}
+	\label{alg: Adding method}
+\end{algorithm}
 
-For situation 1, it's full connected and xor branches can be chosen freely. So there is no need to add explicit connection on model to represent long-term dependency, therefore the model keeps the same as original. 
+An example is given in Figure \ref{fig:seq-2-silent-1}. Given the long-term dependency in situation 2 with  $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}$, firstly, two extra places are added respectively after A and B; Next, two places before D and E are created to express that the xor branches are involved with long-term dependency. At end, for each long-term dependency with xor branches, a silent transition is generated to connect the extra places after the source xor branch to the place before target place. 
+\begin{figure}[!h]
+	\centering
+	\begin{subfigure}[a]{\textwidth}
+		\includegraphics[width=\textwidth]{figures/algorithm/LT_Seq_01_Silent_01.png}
+		\label{fig:seq-2-silent-1}
+		\caption{For situation 2}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Silent_03.png}
+		\label{fig:seq-2-silent-2}
+		\caption{For situation 4}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[c]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Silent_02.png}
+		\label{fig:seq-2-silent-3}
+		\caption{For situation 5}
+	\end{subfigure}
+	\label{fig:seq-2-silent-cases}
+	\caption{Silent Events for Long-term Dependency}
+\end{figure} 
+
+\subsection{Feasible cases due to soundness}
+However, only with data from positive and negative information on the long-term dependency, it is possible to result in unsound model, because  some directly-follows relations about xor branches can be kept due to the existing model. When those relations do not show in the positive event log or shows only in negative event log, we get incomplete information and no evidence of long-term dependency is shown on those xor branches. In this way, it results in an unsound model, since those xor branches can't get fired to consume the tokens generated from the choices before.
+
+For situation 1, it's full connected and xor branches can be chosen freely. So there is no need to add explicit connection on model to represent long-term dependency, therefore the model keeps same as original. 
 For Situation 2 and 3, if $LT_S = XORB_S, LT_T= XORB_T$, then we can create an sound model by adding silent transitions. If not, then we need to use the duplicated transitions to create sound model. But before, we need to prove its soundness. 
 For situation 4, 5 and 6, there is no way to prove the soundness even by adding duplicated events.
 
-By adding constraints, we make sure only situations 1,2,3 happen when adding long-term dependency. It requires that after dfg method considers the negative, positive and existing model to delete the unused xor branches for long-term dependency. 
-Before doing it, we recover some definitions for long-term dependency detection. 
-The definition \ref{def: supported-connection} is rephrased into weight. 
-\begin{definition}[Rephrased Correlation of xor branch] The correlation for two branches is expressed into
-	\[Wlt(XORB_X,XORB_Y)= Wlt_{ext}(XORB_X, XORB_Y) + Wlt_{pos}(XORB_X, XORB_Y)\] \[ -Wlt_{neg}(XORB_X, XORB_Y)\], where 
-	$Wlt_{ext}(XORB_X, XORB_Y)= \frac{1}{|XORB_Y*|}$, $|XORB_{Y*}|$ means the number of possible  directly-follows xor branche set $XORB_{Y*}=\{XORB_{Y1}, XORB_{Y2},...XORB_{Yn} \}$ after $XORB_X$. \\ \\
-	$Wlt_{pos}(XORB_X, XORB_Y)= \frac{F_{pos}(XORB_X, XORB_Y)}{F_{pos}(XORB_X, *)}$, \\
-	$Wlt_{neg}(XORB_X, XORB_Y)= \frac{F_{neg}(XORB_X, XORB_Y)}{F_{neg}(XORB_X, *)}$, \\	
-\end{definition}
-The $F_{pos}(XORB_X, XORB_Y)$ and $F_{neg}(XORB_X, XORB_Y)$ are the frequency of the coexistence of $XORB_X$ and $XORB_Y$, respectively in positive and negative event log.
+By adding constraints, we make sure only situations 1,2,3 happen when adding long-term dependency. 
 \section{Reduce Silent Transitions}
+%% We reduce the silent transition when there is no 
+Our method to represent long-term dependency  can introduce redundant silent transitions and places. On one hand, it complicates the model; on the other hand, it causes the model unsound where the extra silent transitions suspend the execution and therefore violates the soundness condition of proper completion. So, in this step, we postprocess the Petri net to reduce silent transitions.
+\begin{proposition}
+	Given a silent transition $\epsilon$ in Petri net with input place set $P_{in}$ and output place set $P_{out}$, if $\vert P_{in} \vert \geq 2 \quad and \quad \vert P_{in} \vert \geq 2 $, the silent transitions can not be deleted. Else, the deletion is ok, and it does not damage the process model.
+\end{proposition}
+%% here we need to prove this proposition
+One example is given in the following graph. 
+\begin{figure}[!h]
+	\centering
+	\begin{subfigure}[a]{\textwidth}
+		\includegraphics[width=\textwidth]{figures/algorithm/dfg-IM-pn-with-lt.png}
+		\label{fig:with-lt}
+		\caption{A Petri net with redundant silent transitions}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{figures/algorithm/dfg-IM-pn-with-lt-reduced.png}
+		\label{fig:reduced-lt}
+		\caption{A Petri net with reduced silent transitions}
+	\end{subfigure}
+\end{figure}
+

@@ -43,6 +43,7 @@
 
 %% allow more lines into one lines
 \RequirePackage{makecell}
+\RequirePackage[ruled,linesnumbered]{algorithm2e}
 %%make the chapters separate from each other
 %\RequirePackage{graphicx}
 %\graphicspath{{figures/}{../figures/}}
@@ -57,7 +58,6 @@
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{observation}[theorem]{Observation}
 \newtheorem{convention}[theorem]{Convention}
-\newtheorem{algorithm}[theorem]{Algorithm}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{corollary}[theorem]{Corollary}
 
@@ -223,7 +223,6 @@
 \newcommand{\IS}{\var{IS}}
 
 \RequirePackage{listings}
-\RequirePackage{algorithm}
 \RequirePackage[noend]{algpseudocode}
 \RequirePackage{multirow}
 %\setlength{\parindent}{0pt} % removes paragraph indentation

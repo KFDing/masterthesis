@@ -6,35 +6,37 @@ Due to the increasing availability of detailed event logs of information systems
 
 Model repair belongs to process enhancement and stands between process discovery and conformance checking. It analyzes the workflow deviations between event log  and process model, and fix the deviations mainly by adding sub processes on the model. As known, business in organizations is goal-oriented and aims to have high performance according to a set of Key Performance Indicators(KPIs), for example, average conversion time for the sales, payment error rate for the finance. However, there are few researches on applying the process mining with consideration of performance\cite{ghasemi2016process}.  \cite{ghasemi2016process} points out the rare contributions like \cite{dees2017enhancing} to combine performance into process mining. Deviations are firstly analyzed to determine if they have a positive impact on the process performance. Model repair techniques in \cite{fahland2015model} are applied into traces with positive deviations.
 
-However, the current repair methods have some limits. Model repair fixes the model by adding subprocesses, silent transitions or loops, it guarantees the model fitness but overgeneralizes the model, such that it allows more behaviors than expected. On the other hand, it increases the model complexity.  Even the performance is considered in \cite{dees2017enhancing}, but only deviations in positive is used to add subprocesses, the negative information is ignored, which disables the possibility to block negative behaviors from model.  An motivation example is listed to describe those limits.
+However, the current repair methods have some limits. Model repair fixes the model by adding subprocesses, silent transitions or loops, it guarantees the model fitness but overgeneralizes the model, such that it allows more behaviors than expected. On the other hand, it increases the model complexity.  Even the performance is considered in \cite{dees2017enhancing}, but only deviations in positive is used to add subprocesses, the negative information is ignored, which disables the possibility to block negative behaviors from model.  A motivation example is listed to describe those limits.
 %% Motivation 
 \section{Motivation Example}
-As an example, there is an model presented in Figure \ref{fig:model_examples} (a), where A is followed directly by B. During its execution in real life, an event log is generated: 
+The example is extracted from the registration procedure of thesis project one German university. The main activities are topic selection, make proposal, a meeting with supervisor to discuss the topic, and check course requirements. After finishing all of those activities, the formal registration is enabled. \\
+Figure \ref{fig:model_a} shows the original process in Petri net. The activities are modeled by the corresponding \emph{transitions} which is represented by a square. Transitions are connected through a circle called \emph{place}. The network structure is static but governed by the firing rule. 
+
+As an example, there is a model presented in Figure \ref{fig:model_a}, where A is followed directly by B. During its execution in real life, an event log is generated: 
 \[{ <A, B> }^{55}  , {<B, A>}^{105} \] 
 When considering KPIs performance, the log is divided into a positive and a negative set: 
 \[ Positive \;  examples: { <A, B> }^{5}  , {<B, A>}^{100} \] 
 \[ Negative \; examples: { <A, B> }^{50}  , {<B, A>}^{5} \]  
 After applying current model repair techniques in \cite{fahland2015model}, the process model is repaired using all examples. A can be skipped and duplicated later in a self-loop. In \cite{dees2017enhancing} methods, only the positive examples are taken for the model repair. Yet, since both $<A,B> and <B,A>$ contributes to good performance,  the repaired model keeps the same like in Figure \ref{fig:model_examples}(b).
-
 \begin{figure}[h]
 	\centering
-	\begin{subfigure}[b]{0.32\textwidth}
+	\begin{subfigure}[b]{\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/introduction/PN_modelchange_a.png}
+		\includegraphics[width=\linewidth]{figures/introduction/Thesis-PN-Example-original-model.jpg}
 		\caption{original process model}
 		\label{fig:model_a}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.32\textwidth}
+	\begin{subfigure}[b]{\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/introduction/PN_modelchange_b.png}
+		\includegraphics[width=\linewidth]{figures/introduction/Thesis-PN-Example-model-with-fitness.jpg}
 		\caption{process model \\ with high fitness}
 		\label{fig:model_b}
 	\end{subfigure}
 	\hfill
-	\begin{subfigure}[b]{0.32\textwidth}
+	\begin{subfigure}[b]{\textwidth}
 		\centering
-		\includegraphics[width=01.0\linewidth]{figures/introduction/PN_modelchange_c.png}
+		\includegraphics[width=01.0\linewidth]{figures/introduction/Thesis-PN-Example-model-with-lt-1.jpg}
 		\caption{process model \\ with good KPI}
 		\label{fig:model_c}
 	\end{subfigure}

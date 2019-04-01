@@ -283,7 +283,7 @@ After trying, I can't prove its validity. So I don't know if I should continue t
 After detecting long-term dependency on xor branches from process tree, silent transitions and extra places are added to express those dependency on Petri net. Given, the basic idea is to add places after $XORB_X$ and places before $XORB_Y$, then connect the places by silent transition. Due to the structure of xor branches, situations differ, as listed in the Algorithm \ref{alg: Adding method}.  
 \begin{algorithm}[!ht]
 	\SetAlgoLined
-	$XORB_Y$ is dependent on $XORB_X$\;
+	Given $XORB_Y$ is dependent on $XORB_X$\;
 	\If{$XORB_X$ is leaf node}{
 		One place is added after this leaf node. \;
 	}
