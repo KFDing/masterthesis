@@ -207,10 +207,10 @@ public class EventLogUtilities {
 		return lvariants;
 	}
 
-	public static void assignVariantLabel(TraceVariant variant, String attr_name, Boolean is_true) {
+	public static void assignVariantLabel(List<XTrace> traceList, String attr_name, Boolean is_true) {
 		// for each trace in the variant, we create an attribution with name of attr_name, value isPos
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
-		for (XTrace trace : variant.getTrace_list()) {
+		for (XTrace trace : traceList) {
 			XAttributeBoolean attr = factory.createAttributeBoolean(attr_name, is_true, null);
 			trace.getAttributes().put(attr.getKey(), attr);
 		}
@@ -283,10 +283,10 @@ public class EventLogUtilities {
 			TraceVariant variant = variants.get(nolidx_list.get(idx));
 			// assign pos to nooverlap variant
 			if (nolpos_list.contains(idx)) {
-				EventLogUtilities.assignVariantLabel(variant, Configuration.POS_LABEL, true);
+				EventLogUtilities.assignVariantLabel(variant.getTrace_list(), Configuration.POS_LABEL, true);
 			} else {
 				// assign neg to nooverlap variants
-				EventLogUtilities.assignVariantLabel(variant, Configuration.POS_LABEL, false);
+				EventLogUtilities.assignVariantLabel(variant.getTrace_list(), Configuration.POS_LABEL, false);
 			}
 		}
 		// then overlap

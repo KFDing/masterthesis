@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  1 APR 2019 18:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  2 APR 2019 12:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1686,29 +1686,29 @@ Underfull \vbox (badness 1052) has occurred while \output is active []
  [1
 
 ]
-<figures/introduction/Thesis-PN-Example-original-model.jpg, id=192, 893.3375pt 
+<figures/introduction/Thesis-PN-Example-original-model.jpg, id=193, 893.3375pt 
 x 201.75375pt>
 File: figures/introduction/Thesis-PN-Example-original-model.jpg Graphic file (t
 ype jpg)
 <use figures/introduction/Thesis-PN-Example-original-model.jpg>
 Package pdftex.def Info: figures/introduction/Thesis-PN-Example-original-model.
-jpg  used on input line 23.
+jpg  used on input line 25.
 (pdftex.def)             Requested size: 426.79135pt x 96.38815pt.
-<figures/introduction/Thesis-PN-Example-model-with-fitness.jpg, id=193, 789.951
+<figures/introduction/Thesis-PN-Example-model-with-fitness.jpg, id=194, 789.951
 25pt x 270.00874pt>
 File: figures/introduction/Thesis-PN-Example-model-with-fitness.jpg Graphic fil
 e (type jpg)
 <use figures/introduction/Thesis-PN-Example-model-with-fitness.jpg>
 Package pdftex.def Info: figures/introduction/Thesis-PN-Example-model-with-fitn
-ess.jpg  used on input line 30.
+ess.jpg  used on input line 32.
 (pdftex.def)             Requested size: 426.79135pt x 145.88081pt.
-<figures/introduction/Thesis-PN-Example-model-with-lt-1.jpg, id=194, 789.95125p
+<figures/introduction/Thesis-PN-Example-model-with-lt-1.jpg, id=195, 789.95125p
 t x 270.00874pt>
 File: figures/introduction/Thesis-PN-Example-model-with-lt-1.jpg Graphic file (
 type jpg)
 <use figures/introduction/Thesis-PN-Example-model-with-lt-1.jpg>
 Package pdftex.def Info: figures/introduction/Thesis-PN-Example-model-with-lt-1
-.jpg  used on input line 37.
+.jpg  used on input line 39.
 (pdftex.def)             Requested size: 426.79135pt x 145.88081pt.
 
 
@@ -1736,14 +1736,14 @@ l.21 \begin{definition}
                        [Silent transition] [1
 
 ]
-<figures/preliminary/PN06_Seq_2_xor_notnested.png, id=274, 1234.6125pt x 312.16
+<figures/preliminary/PN06_Seq_2_xor_notnested.png, id=275, 1234.6125pt x 312.16
 624pt>
 File: figures/preliminary/PN06_Seq_2_xor_notnested.png Graphic file (type png)
 <use figures/preliminary/PN06_Seq_2_xor_notnested.png>
 Package pdftex.def Info: figures/preliminary/PN06_Seq_2_xor_notnested.png  used
  on input line 35.
 (pdftex.def)             Requested size: 192.0548pt x 48.55673pt.
-<figures/preliminary/PT06_Seq_2_xor_notnested.png, id=275, 621.32124pt x 210.78
+<figures/preliminary/PT06_Seq_2_xor_notnested.png, id=276, 621.32124pt x 210.78
 75pt>
 File: figures/preliminary/PT06_Seq_2_xor_notnested.png Graphic file (type png)
 <use figures/preliminary/PT06_Seq_2_xor_notnested.png>
@@ -1755,7 +1755,7 @@ LaTeX Font Info:    Try loading font information for TS1+lmr on input line 54.
 (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<figures/preliminary/PT_PN_corresponding_01_seq_PN.png, id=283, 326.21875pt x 5
+<figures/preliminary/PT_PN_corresponding_01_seq_PN.png, id=284, 326.21875pt x 5
 8.2175pt>
 File: figures/preliminary/PT_PN_corresponding_01_seq_PN.png Graphic file (type 
 png)
@@ -1763,7 +1763,7 @@ png)
 Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_01_seq_PN.png 
  used on input line 64.
 (pdftex.def)             Requested size: 192.0548pt x 34.27518pt.
-<figures/preliminary/PT_PN_corresponding_02_xor_PN.png, id=285, 224.84pt x 73.2
+<figures/preliminary/PT_PN_corresponding_02_xor_PN.png, id=286, 224.84pt x 73.2
 7374pt>
 File: figures/preliminary/PT_PN_corresponding_02_xor_PN.png Graphic file (type 
 png)
@@ -1771,7 +1771,7 @@ png)
 Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_02_xor_PN.png 
  used on input line 71.
 (pdftex.def)             Requested size: 192.0548pt x 62.59154pt.
-<figures/preliminary/PT_PN_corresponding_03_and_PN.png, id=286, 385.44pt x 73.2
+<figures/preliminary/PT_PN_corresponding_03_and_PN.png, id=287, 385.44pt x 73.2
 7374pt>
 File: figures/preliminary/PT_PN_corresponding_03_and_PN.png Graphic file (type 
 png)
@@ -1779,7 +1779,7 @@ png)
 Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_03_and_PN.png 
  used on input line 78.
 (pdftex.def)             Requested size: 192.0548pt x 36.51042pt.
-<figures/preliminary/PT_PN_corresponding_04_loop_PN.png, id=287, 224.84pt x 78.
+<figures/preliminary/PT_PN_corresponding_04_loop_PN.png, id=288, 224.84pt x 78.
 2925pt>
 File: figures/preliminary/PT_PN_corresponding_04_loop_PN.png Graphic file (type
  png)
@@ -1814,7 +1814,7 @@ l.53 \chapter
              {Algorithm} \label{chap:alg} [4]
 Chapter 4.
 (./chapters/algorithm.tex
-<figures/algorithm/FD_architecture_detail_02.png, id=323, 711.65875pt x 1277.77
+<figures/algorithm/FD_architecture_detail_02.png, id=324, 711.65875pt x 1277.77
 374pt>
 File: figures/algorithm/FD_architecture_detail_02.png Graphic file (type png)
 <use figures/algorithm/FD_architecture_detail_02.png>
@@ -1891,19 +1891,19 @@ See the caption package documentation for explanation.
 LaTeX Warning: Reference `fig:seq-2-silent-1' on page 11 undefined on input lin
 e 225.
 
-<figures/algorithm/LT_Seq_01_Silent_01.png, id=364, 404.51125pt x 161.60374pt>
+<figures/algorithm/LT_Seq_01_Silent_01.png, id=365, 404.51125pt x 161.60374pt>
 File: figures/algorithm/LT_Seq_01_Silent_01.png Graphic file (type png)
 <use figures/algorithm/LT_Seq_01_Silent_01.png>
 Package pdftex.def Info: figures/algorithm/LT_Seq_01_Silent_01.png  used on inp
 ut line 229.
 (pdftex.def)             Requested size: 426.79135pt x 170.5076pt.
-<figures/algorithm/LT_Seq_01_Silent_03.png, id=365, 404.51125pt x 131.49126pt>
+<figures/algorithm/LT_Seq_01_Silent_03.png, id=366, 404.51125pt x 131.49126pt>
 File: figures/algorithm/LT_Seq_01_Silent_03.png Graphic file (type png)
 <use figures/algorithm/LT_Seq_01_Silent_03.png>
 Package pdftex.def Info: figures/algorithm/LT_Seq_01_Silent_03.png  used on inp
 ut line 236.
 (pdftex.def)             Requested size: 426.79135pt x 138.736pt.
-<figures/algorithm/LT_Seq_01_Silent_02.png, id=366, 404.51125pt x 157.58875pt>
+<figures/algorithm/LT_Seq_01_Silent_02.png, id=367, 404.51125pt x 157.58875pt>
 File: figures/algorithm/LT_Seq_01_Silent_02.png Graphic file (type png)
 <use figures/algorithm/LT_Seq_01_Silent_02.png>
 Package pdftex.def Info: figures/algorithm/LT_Seq_01_Silent_02.png  used on inp
@@ -1918,13 +1918,13 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [13 <./figures/algorithm/LT_Seq_01_Silent_01.png> <./figures/algorithm/LT_Seq_
 01_Silent_03.png> <./figures/algorithm/LT_Seq_01_Silent_02.png>]
-<figures/algorithm/dfg-IM-pn-with-lt.png, id=421, 747.79375pt x 206.7725pt>
+<figures/algorithm/dfg-IM-pn-with-lt.png, id=422, 747.79375pt x 206.7725pt>
 File: figures/algorithm/dfg-IM-pn-with-lt.png Graphic file (type png)
 <use figures/algorithm/dfg-IM-pn-with-lt.png>
 Package pdftex.def Info: figures/algorithm/dfg-IM-pn-with-lt.png  used on input
  line 270.
 (pdftex.def)             Requested size: 426.79135pt x 118.01299pt.
-<figures/algorithm/dfg-IM-pn-with-lt-reduced.png, id=422, 1050.92625pt x 197.73
+<figures/algorithm/dfg-IM-pn-with-lt-reduced.png, id=423, 1050.92625pt x 197.73
 875pt>
 File: figures/algorithm/dfg-IM-pn-with-lt-reduced.png Graphic file (type png)
 <use figures/algorithm/dfg-IM-pn-with-lt-reduced.png>
@@ -1935,13 +1935,13 @@ on input line 277.
 n-with-lt-reduced.png>]
 Chapter 5.
 (./chapters/implementation.tex
-<figures/implementation/dfg-IM-setting.png, id=432, 400.49625pt x 143.53625pt>
+<figures/implementation/dfg-IM-setting.png, id=433, 400.49625pt x 143.53625pt>
 File: figures/implementation/dfg-IM-setting.png Graphic file (type png)
 <use figures/implementation/dfg-IM-setting.png>
 Package pdftex.def Info: figures/implementation/dfg-IM-setting.png  used on inp
 ut line 31.
 (pdftex.def)             Requested size: 300.37144pt x 107.65192pt.
-<figures/implementation/dfg-IM-pn-without-lt.png, id=434, 1308.89pt x 744.7825p
+<figures/implementation/dfg-IM-pn-without-lt.png, id=435, 1308.89pt x 744.7825p
 t>
 File: figures/implementation/dfg-IM-pn-without-lt.png Graphic file (type png)
 <use figures/implementation/dfg-IM-pn-without-lt.png>
@@ -1952,13 +1952,13 @@ on input line 38.
 
 ] [16 <./figures/implementation/dfg-IM-setting.png> <./figures/implementation/d
 fg-IM-pn-without-lt.png>]
-<figures/implementation/dfg-IM-pn-with-lt.png, id=452, 811.03pt x 548.0475pt>
+<figures/implementation/dfg-IM-pn-with-lt.png, id=453, 811.03pt x 548.0475pt>
 File: figures/implementation/dfg-IM-pn-with-lt.png Graphic file (type png)
 <use figures/implementation/dfg-IM-pn-with-lt.png>
 Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt.png  used on 
 input line 50.
 (pdftex.def)             Requested size: 426.79135pt x 288.4066pt.
-<figures/implementation/dfg-IM-pn-with-lt-manual.png, id=455, 1381.16pt x 855.1
+<figures/implementation/dfg-IM-pn-with-lt-manual.png, id=456, 1381.16pt x 855.1
 95pt>
 File: figures/implementation/dfg-IM-pn-with-lt-manual.png Graphic file (type pn
 g)
@@ -1966,7 +1966,7 @@ g)
 Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-manual.png  u
 sed on input line 58.
 (pdftex.def)             Requested size: 426.79135pt x 264.25952pt.
-<figures/implementation/dfg-IM-pn-with-lt-reduced.png, id=458, 1374.13374pt x 6
+<figures/implementation/dfg-IM-pn-with-lt-reduced.png, id=459, 1374.13374pt x 6
 62.475pt>
 File: figures/implementation/dfg-IM-pn-with-lt-reduced.png Graphic file (type p
 ng)
@@ -1977,7 +1977,7 @@ used on input line 67.
  [17 <./figures/implementation/dfg-IM-pn-with-lt.png>] [18 <./figures/implement
 ation/dfg-IM-pn-with-lt-manual.png> <./figures/implementation/dfg-IM-pn-with-lt
 -reduced.png>]
-<figures/implementation/dfg-IM-confusionmatrix.png, id=471, 959.585pt x 213.798
+<figures/implementation/dfg-IM-confusionmatrix.png, id=472, 959.585pt x 213.798
 75pt>
 File: figures/implementation/dfg-IM-confusionmatrix.png Graphic file (type png)
 
@@ -2013,7 +2013,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 74.
 Here is how much of TeX's memory you used:
  36440 strings out of 494847
  846026 string characters out of 6179079
- 1054796 words of memory out of 5000000
+ 1055796 words of memory out of 5000000
  38931 multiletter control sequences out of 15000+600000
  87764 words of font info for 59 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
@@ -2034,10 +2034,10 @@ bx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/f
 onts/type1/public/lm/lmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
 c/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 /amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (38 pages, 1793144 bytes).
+Output written on main.pdf (38 pages, 1793786 bytes).
 PDF statistics:
- 608 PDF objects out of 1000 (max. 8388607)
- 514 compressed objects within 6 object streams
+ 609 PDF objects out of 1000 (max. 8388607)
+ 515 compressed objects within 6 object streams
  158 named destinations out of 1000 (max. 500000)
  387 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -81,7 +81,7 @@ public class TraceVariant {
 	public void setFitLabel(Boolean isFit) {
 		this.isFit = isFit;
 		// here we need to assign all fit to trace list
-		EventLogUtilities.assignVariantLabel(this, Configuration.FIT_LABEL, isFit);
+		EventLogUtilities.assignVariantLabel(trace_list, Configuration.FIT_LABEL, isFit);
 	}
 
 	public void setFitLabel(String fit_choice) {
