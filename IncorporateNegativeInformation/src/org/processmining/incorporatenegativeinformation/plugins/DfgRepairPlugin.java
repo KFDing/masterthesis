@@ -8,8 +8,9 @@ import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
-import org.processmining.incorporatenegativeinformation.algorithms.IncorporateNeg2Dfg;
 import org.processmining.incorporatenegativeinformation.algorithms.PN2DfgTransform;
+import org.processmining.incorporatenegativeinformation.help.Configuration;
+import org.processmining.incorporatenegativeinformation.help.EventLogUtilities;
 import org.processmining.incorporatenegativeinformation.help.NetUtilities;
 import org.processmining.incorporatenegativeinformation.models.DfMatrix;
 import org.processmining.incorporatenegativeinformation.models.DfgProcessResult;
@@ -75,16 +76,16 @@ public class DfgRepairPlugin {
 		int num = XLogInfoFactory.createLogInfo(log).getNumberOfTraces();
 		// PN2DfgTransform.setCardinality(dfg, num);
 		// -- incorporate the negative information and give out the Dfg and Petri net model
-		Object[] result = IncorporateNeg2Dfg.splitEventLog(log);
-		XLog pos_log = (XLog) result[0];
-		XLog neg_log = (XLog) result[1];
+		XLog[] result = EventLogUtilities.splitLog(log, Configuration.POS_LABEL, "true");
+		XLog pos_log = result[0];
+		XLog neg_log = result[1];
 
 		XLog2Dfg ld = new XLog2Dfg();
 		Dfg pos_dfg = ld.log2Dfg(context, pos_log);
 		Dfg neg_dfg = ld.log2Dfg(context, neg_log);
 
 		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
-		DfMatrix dfMatrix = IncorporateNeg2Dfg.createDfMatrix(dfg, pos_dfg, neg_dfg, num);
+		DfMatrix dfMatrix = DfMatrix.createDfMatrix(dfg, pos_dfg, neg_dfg, num);
 
 		return new DfgProcessResult(log, dfMatrix);
 	}

@@ -42,6 +42,23 @@ public class DfMatrix {
 		return standardCardinality;
 	}
 
+	public static DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg, int num) {
+		// here we need to update the codes for accepting double percent 
+
+		DfMatrix dfMatrix = new DfMatrix();
+		dfMatrix.setStandardCardinality(num);
+		// here we don't need magical number, but they should exist, or zero
+		dfMatrix.addDirectFollowMatrix(dfg, 0);
+		// one problem here is about the single direct follow relation, it doesn't show here
+		dfMatrix.addDirectFollowMatrix(pos_dfg, 1);
+
+		dfMatrix.addDirectFollowMatrix(neg_dfg, 2);
+		// after we have dfMatrix, we need to assign edges to new dfg w.r.t. different situations
+		// Dfg new_dfg = dfMatrix.buildDfs();
+
+		return dfMatrix;
+	}
+	
 	public void addDirectFollowMatrix(Dfg dfg, int colIdx) {
 		/*
 		 * read from each dfg, put edges into the new map, ======if the map has
@@ -60,9 +77,13 @@ public class DfMatrix {
 			double denomial = 1;
 			if (colIdx == 0) {
 				denomial = getOutEdgesCardinality(dfg, source);
-			} else
-				denomial = standardCardinality;
-
+			} else {
+				// there are also other actions here... 
+				// for each the directly-follows relation we use the same as it here
+				// what is the 
+				denomial = getOutEdgesCardinality(dfg, source);
+				// denomial = standardCardinality;
+			}
 			double percent = 1.0 * cardinality / denomial;
 			addMatrixItem(source, target, percent, colIdx);
 		}
@@ -79,7 +100,8 @@ public class DfMatrix {
 			if (colIdx == 0) {
 				denomial = getStartEventCardinality(dfg);
 			} else
-				denomial = standardCardinality;
+				denomial = getStartEventCardinality(dfg);
+				// denomial = standardCardinality;
 
 			double percent = 1.0 * cardinality / denomial;
 
@@ -94,7 +116,8 @@ public class DfMatrix {
 			if (colIdx == 0) {
 				denomial = getEndEventCardinality(dfg);
 			} else
-				denomial = standardCardinality;
+				denomial = getEndEventCardinality(dfg);
+				// denomial = standardCardinality;
 
 			double percent = 1.0 * cardinality / denomial;
 			addMatrixItem(endEventClass, endPoint, percent, colIdx);

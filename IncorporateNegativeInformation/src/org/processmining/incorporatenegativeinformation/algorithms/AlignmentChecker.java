@@ -320,7 +320,42 @@ public class AlignmentChecker {
 				if(!path.contains(nodeKey))
 					path.add(nodeKey);
 		}
-		return path;
+		
+		List<Node> npath = new ArrayList<>();
+		AlignmentChecker.sortPath(tree.getRoot(), path, npath);
+		
+		return npath;
+	}
+	/**
+	 * this is used to sort the path in the tree according to the visited relation
+	 * we only concern the xor branch order in the path:::
+	 *   -- nodes: S1,T1 // T1,S1 
+	 *   -- we get the index of nodes in the path:: As we know, they have an order in themselves,
+	 *   -- also, how to arrange the path ??? It is different, we 
+	 *      so others doesn't matter
+	 *  The order of nodes in path:: depth at first, current node visited at last
+	 *      If we only focus on the leaves node, so it just add more silent nodes in the nodeVariant, 
+	 *      after this, we try to check the position in the nodeVariant, so it should be fine
+	 *      But the order should matter the other surroundings.  If the path is in order, 
+	 *      then keep all the leaves node, it becomes the model move in process tree.. So
+	 *        -- 1. sort the path in the tree
+	 *        -- 2. leave the leaf nodes in it
+	 * @param node :: keep the current node to visit, it begins from the root
+	 * @param tree
+	 * @param path
+	 * @return
+	 */
+	public static void sortPath(Node node,  List<Node> path, List<Node> npath){
+		if(node.isLeaf()) {
+			npath.add(node);
+			return ;
+		}
+		Block block = (Block) node;
+		for(Node child: block.getChildren() ) {
+			if(path.contains(child))
+				sortPath(child, path, npath);
+		}
+		npath.add(block);
 	}
 	// check the information from bottom, but it is difficult to find the first one
 	// so we need to recursively check the map information 

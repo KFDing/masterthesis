@@ -22,6 +22,8 @@ import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetFactory;
 import org.processmining.models.semantics.petrinet.Marking;
+import org.processmining.processtree.Node;
+import org.processmining.processtree.ProcessTree;
 
 public class NetUtilities {
 
@@ -354,4 +356,37 @@ public class NetUtilities {
 	public static void checkAndAssignLabel(XLog log, Petrinet net) {
 
 	}
+	static int tID = 0;
+	public static Map<Node, Transition> getProcessTree2NetMap(Petrinet net, ProcessTree pTree, XEventClassifier classifier) {
+		// TODO generate the transfer from process tree to event classes in log
+		Map<Node, Transition> map = new HashMap<Node, Transition>();
+		Collection<Node> nodes = pTree.getNodes();
+		Collection<Transition> transitions = net.getTransitions();
+
+		boolean match;
+		for (Node node : nodes) {
+			if (!node.isLeaf())
+				continue;
+
+			match = false;
+			for (Transition transition : transitions) {
+				// here we need to create a mapping from event log to graphs
+				// need to check at first what the Name and other stuff
+				if (node.getName().equals(transition.getLabel())) {
+					map.put(node, transition);
+					match = true;
+					break;
+				}
+			}
+			if (!match) {// it there is node not showing in the petri net, which we don't really agree
+				// but one thing we need to make sure is that, we don't have currently the silent transition
+				Transition tTransition = net.addTransition(node.getID().toString());
+				// Transition tTransition = net.addTransition(ProcessConfiguration.TRANSITION_TAU_PREFIX + tID++ );
+				map.put(node, tTransition);
+			}
+		}
+
+		return map;
+	}
+
 }

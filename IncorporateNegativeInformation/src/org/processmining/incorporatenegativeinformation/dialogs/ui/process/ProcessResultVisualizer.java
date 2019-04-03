@@ -446,7 +446,7 @@ class ResultMainView extends JPanel {
 		generator.initialize(pTree);
 
 		detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
-
+		detector.reset();
 	}
 
 	private void createPNWithLT() {
@@ -457,7 +457,7 @@ class ResultMainView extends JPanel {
 		List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
 		List<LTRule<XORCluster<ProcessTreeElement>>> connSet = generator.getAllLTConnection();
 		// generate all the pairs here 
-		detector.addLTOnPairList(clusterPairs, connSet, generator.getClusterList());
+		detector.addLTOnPairList(clusterPairs, connSet);
 
 		// after this we can delete silent transition to make model simpler
 		// but do we need it, or not?? 
@@ -480,8 +480,13 @@ class ResultMainView extends JPanel {
 			generator.initialize(pTree);
 
 		}
-
-		detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
+		// we go from adding all lt dependency to single one, the detector should be reset, but 
+		// the maps and variants built before should not change! if the parameter keeps the same
+		// so after reset, we should leep 
+		if(detector ==null) {
+			detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
+		}
+		detector.reset();
 		manet = detector.getAcceptionPN();
 
 		leftView.drawResult(context, manet);
@@ -496,7 +501,7 @@ class ResultMainView extends JPanel {
 		clusterPairs.add(pair);
 		List<LTRule<XORCluster<ProcessTreeElement>>> connSet = pair.getConnection();
 
-		detector.addLTOnPairList(clusterPairs, connSet, generator.getClusterList());
+		detector.addLTOnPairList(clusterPairs, connSet);
 		manet = detector.getAcceptionPN();
 
 		addPairPanel.updateAddSource(generator.getAddAvailableSources());

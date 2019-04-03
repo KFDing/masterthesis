@@ -1,7 +1,12 @@
 package org.processmining.incorporatenegativeinformation.algorithms;
-
+/**
+ * this class is used to detect LT dependency between cluster pair.. 
+ *  --- check all the traceVariant path in the tree
+ *    --- check each cluster Pair to see if they have such connection
+ */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +21,7 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.incorporatenegativeinformation.help.EventLogUtilities;
+import org.processmining.incorporatenegativeinformation.help.NetUtilities;
 import org.processmining.incorporatenegativeinformation.help.ProcessConfiguration;
 import org.processmining.incorporatenegativeinformation.models.LTRule;
 import org.processmining.incorporatenegativeinformation.models.LabeledTraceVariant;
@@ -36,10 +42,14 @@ public class NewLTDetector {
 	ProcessTree tree;
 	XLog log;
 	ControlParameters parameters;
-	AcceptingPetriNet manet;
+	@SuppressWarnings("deprecation")
+	PetrinetWithMarkings mnet;
+	
+	Petrinet net;
 	Petrinet dnet = null;
 	Map<Node, XEventClass> tlmaps;
 	Map<XEventClass, Node> ltmaps;
+	Map<LabeledTraceVariant, List<Node>> vpmaps;
 	AddLT2Net adder;
 	long traceNum = 0;
 
@@ -51,32 +61,36 @@ public class NewLTDetector {
 		traceNum = tNum;
 		tlmaps = getProcessTree2EventMap(log, tree, null);
 		ltmaps = AlignmentChecker.getEvent2ProcessTreeMap(xlog, pTree, null);
-				
-		@SuppressWarnings("deprecation")
-		PetrinetWithMarkings mnet;
+		vpmaps = findVariantPathMap();		
+		
+		
 		try {
+			// keep it not change!!! 
 			mnet = ProcessTree2Petrinet.convert(tree, true);
-			manet = new AcceptingPetriNetImpl(mnet.petrinet, mnet.initialMarking, mnet.finalMarking);
-
+			
 		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
 
-		Petrinet net = manet.getNet();
+	// reset the LTDetector, it happens when changing from the whole lt to single lt
+	// or remove one lt, add one lt..so on
+	// net returns to the one without any lt on it.. but the net is from the pTree, 
+	// so for the NewLTDetector, the net should be fixed under this condition
+	public void reset() {
+		net = NetUtilities.clone(mnet.petrinet);
 		adder = new AddLT2Net(net, tree);
 	}
 
-	// if sth changes, we need to create a new object of it, yes, a new object of it
-
 	public void addLTOnPairList(List<XORClusterPair<ProcessTreeElement>> clusterPairs,
-			List<LTRule<XORCluster<ProcessTreeElement>>> connSet, List<XORCluster<ProcessTreeElement>> clusterList) {
+			List<LTRule<XORCluster<ProcessTreeElement>>> connSet) {
 		// one mistake here, if we use all the connSet, then wehen adaptConnectionValue
 		// it can't make sure we have the right connSet, 
 		// on each clusterPair, we do it??  initializeConnection and then adapthConnectionValue
 		// by ?? 
-		// 
-		initializeConnection(connSet, clusterList);
+		
+		initializeConnection(connSet);
 		adaptConnectionValue(connSet, parameters);
 
 		// detector.detectPairWithLTDependency(pairs, parameters);
@@ -113,7 +127,6 @@ public class NewLTDetector {
 		source = pair.getSourceXORCluster();
 		target = pair.getTargetXORCluster();
 
-		Petrinet net = manet.getNet();
 		// get the addned values nad then pnNodeMap remove them form this
 		for (PetrinetNode node : pair.getPNMap().values())
 			net.removeNode(node);
@@ -124,42 +137,58 @@ public class NewLTDetector {
 		target.setAsTarget(false);
 	}
 
-	private boolean containPlace(PetrinetNode pt, List<ProcessTreeElement> nodeList, boolean post) {
-		// TODO if this place is after one the endNodeList, return true
-		String name = pt.getLabel();
-		String prefix;
-		if (post)
-			prefix = ProcessConfiguration.POST_PREFIX;
-		else
-			prefix = ProcessConfiguration.PRE_PREFIX;
-
-		for (ProcessTreeElement node : nodeList) {
-			String nodeName = node.getName();
-
-			if (name.contains(prefix) && name.contains(nodeName))
-				return true;
-
-		}
-		return false;
-	}
-
 	public Petrinet getReducedPetriNet() {
-		dnet = deleteSilentTransition(manet.getNet());
+		dnet = deleteSilentTransition(net);
 		return dnet;
 	}
 
 	public AcceptingPetriNet getAcceptionPN() {
+		// it return the current net with lt on it
+		AcceptingPetriNet manet = new AcceptingPetriNetImpl(net, mnet.initialMarking, mnet.finalMarking);
 		return manet;
 	}
 
-	// fill the connection with base data from event log 
-	public void initializeConnection(List<LTRule<XORCluster<ProcessTreeElement>>> connSet,
-			List<XORCluster<ProcessTreeElement>> clusterList) {
+	public  Map<LabeledTraceVariant, List<Node>> findVariantPathMap(){
+		Map<LabeledTraceVariant, List<Node>> vpmaps = new HashMap<>();
+		
 		List<LabeledTraceVariant> variants = EventLogUtilities.getLabeledTraceVariants(log, null);
 		for (LabeledTraceVariant var : variants) {
 			// for each var, we check for each xor pair 
+			// firstly, to get the path in the tree
+			List<XEventClass> traceVariant = var.getTraceVariant();
+			
+			List<Node> nodeVariant = new ArrayList<>();
+			for(XEventClass eClass: traceVariant) {
+				nodeVariant.add(ltmaps.get(eClass));
+			}
+			// path is related to each tree, so we don't need to change it, if 
+			// we check single pair, so we should keep them into tone map??
+			// even the variants of logs, we shouldn't use it double time
+			List<Node> path = AlignmentChecker.getPathOnTree(tree, nodeVariant);
+			if(!vpmaps.containsKey(var))
+				vpmaps.put(var, path);
+		}
+		return vpmaps;
+	}
+	
+	// fill the connection with base data from event log 
+	public void initializeConnection(List<LTRule<XORCluster<ProcessTreeElement>>> connSet) {
+		Set<LabeledTraceVariant> variants = vpmaps.keySet();
+		for (LabeledTraceVariant var : variants) {
+			
+			List<Node> path = vpmaps.get(var);
+			
 			for (LTRule<XORCluster<ProcessTreeElement>> conn : connSet) {
-				fillLTConnectionFreq(var, conn, clusterList);
+				if(isLTConnOK(path, conn)) {
+					ArrayList<Double> counts = new ArrayList<Double>();
+					for (int i = 0; i < ProcessConfiguration.LT_IDX_NUM * 2; i++)
+						counts.add(0.0); // initialize it counts
+		
+					counts.set(1, (double) var.getPosNum());
+					counts.set(2, (double) var.getNegNum());
+		
+					conn.addConnectionValues(counts);
+				}
 			}
 		}
 		// we need one step to change the freq into the weight situations.. So we need to change it here
@@ -170,7 +199,7 @@ public class NewLTDetector {
 			ControlParameters parameters) {
 		// first to set the weight on connection
 		// if we create a hashMap, and then find all with same target, then it solved the problem
-		Map<String, List<LTRule<XORCluster<ProcessTreeElement>>>> connGroup = new HashMap();
+		Map<String, List<LTRule<XORCluster<ProcessTreeElement>>>> connGroup = new HashMap<>();
 		for (LTRule<XORCluster<ProcessTreeElement>> conn : connSet) {
 			// get source String name 
 			String sourceName = "";
@@ -197,7 +226,7 @@ public class NewLTDetector {
 			// which violates the noise in data, if we use standardCardinality, then we have?? 
 			// 
 			List<Double> groupSum = getGroupWeight(tmpConnList);
-			; // new ArrayList<>();
+			
 			// existing weight, because we have all conn, so we can have all branches after this
 			// visit each tmpConnList and then assign the values on it 
 			for (LTRule<XORCluster<ProcessTreeElement>> conn : tmpConnList) {
@@ -264,17 +293,9 @@ public class NewLTDetector {
 		return clusterPairs;
 	}
 
-	private void fillLTConnectionFreq(LabeledTraceVariant var, LTRule<XORCluster<ProcessTreeElement>> conn,
-			List<XORCluster<ProcessTreeElement>> clusterList) {
-		// TODO fill the frequency for lt connection in pair.. But should we put the LTConnection into pair
-		List<XEventClass> traceVariant = var.getTraceVariant();
+	private boolean isLTConnOK(List<Node> path, LTRule<XORCluster<ProcessTreeElement>> conn) {
+		// TODO check if conn exists in this path and in right order
 		
-		List<Node> nodeVariant = new ArrayList<>();
-		for(XEventClass eClass: traceVariant) {
-			nodeVariant.add(ltmaps.get(eClass));
-		}
-		
-		List<Node> path = AlignmentChecker.getPathOnTree(tree, nodeVariant);
 		Set<Node> sources = new HashSet<Node>();
 		Set<Node> targets = new HashSet<Node>();
 		for(XORCluster<ProcessTreeElement> source: conn.getSources()) {
@@ -288,23 +309,30 @@ public class NewLTDetector {
 		// we don't matter this, so we can still have this order?? I don't know..
 		// or we assume, the connection has its order, we just need to make sure if they exist
 		if(path.containsAll(sources) && path.containsAll(targets)){
-			ArrayList<Double> counts = new ArrayList<Double>();
-			for (int i = 0; i < ProcessConfiguration.LT_IDX_NUM * 2; i++)
-				counts.add(0.0); // initialize it counts
-
-			counts.set(1, (double) var.getPosNum());
-			counts.set(2, (double) var.getNegNum());
-
-			conn.addConnectionValues(counts);
+			List<Integer> sIdxList = findNodesIndex(sources, path);
+			List<Integer> tIdxList = findNodesIndex(targets, path);
+			
+			if(Collections.max(sIdxList) < Collections.min(tIdxList)) {
+				return true;
+				
+			}
 		}
-		
+		return false;
+	}
+	
+
+	private List<Integer> findNodesIndex(Set<Node> nodes, List<Node> path) {
+		// give out the whole index for the set od nodes, 
+		List<Integer> idxList = new ArrayList<>();
+		int idx ;
+		for(Node node: nodes) {
+			idx = path.indexOf(node);
+			idxList.add(idx);
+		}
+		return idxList;
 	}
 
-	private int findNodeIndex(ProcessTreeElement keyNode, List<XEventClass> traceVariant) {
-		// TODO get the index of process tree element, if it is in the tracevariant
-		return traceVariant.indexOf(tlmaps.get(keyNode));
-	}
-
+	
 	private Map<Node, XEventClass> getProcessTree2EventMap(XLog xLog, ProcessTree pTree, XEventClassifier classifier) {
 		// TODO generate the transfer from process tree to event classes in log
 		Map<Node, XEventClass> map = new HashMap<Node, XEventClass>();

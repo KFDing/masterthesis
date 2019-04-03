@@ -8,14 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.deckfour.xes.classification.XEventClassifier;
+import org.processmining.incorporatenegativeinformation.help.NetUtilities;
 import org.processmining.incorporatenegativeinformation.help.ProcessConfiguration;
 import org.processmining.incorporatenegativeinformation.models.LTRule;
 import org.processmining.incorporatenegativeinformation.models.XORCluster;
 import org.processmining.incorporatenegativeinformation.models.XORClusterPair;
-import org.processmining.models.graphbased.directed.AbstractDirectedGraph;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
-import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
@@ -44,18 +42,12 @@ public class AddLT2Net {
 	// before writing them , design it clearly and then write codes
 	Set<LTRule<XORCluster<ProcessTreeElement>>> ruleSet;
 	Petrinet net;
-	ProcessTree tree;
-	Map<Node, Transition> tnMap;
 	Map<String, PetrinetNode> pnNodeMap;
-
+	Map<Node, Transition> tnMap;
 	public AddLT2Net(Petrinet net, ProcessTree tree) {
 		this.net = net;
-		this.tree = tree;
-
-		tnMap = getProcessTree2NetMap(net, tree, null);
-
 		ruleSet = new HashSet<LTRule<XORCluster<ProcessTreeElement>>>();
-
+		tnMap = NetUtilities.getProcessTree2NetMap(net, tree, null);
 	}
 
 	public void initializeAdder() {
@@ -229,7 +221,7 @@ public class AddLT2Net {
 				tTransition = (Transition) beginNodeList.get(0);
 			}
 
-			String tBranchName = ProcessConfiguration.PLACE_PRE_PREFIX + "-" + tBranch.getLabel();
+			String tBranchName = ProcessConfiguration.PLACE_PRE_PREFIX + "-" + tTransition.getLabel();
 			Place tBranchPlace = addPlaceWithTest(tBranchName);
 			addArcWithTest(tBranchPlace, tTransition);
 		}
@@ -614,39 +606,7 @@ public class AddLT2Net {
 		return targetNodes;
 	}
 
-	private Map<Node, Transition> getProcessTree2NetMap(Petrinet net, ProcessTree pTree, XEventClassifier classifier) {
-		// TODO generate the transfer from process tree to event classes in log
-		Map<Node, Transition> map = new HashMap<Node, Transition>();
-		Collection<Node> nodes = pTree.getNodes();
-		Collection<Transition> transitions = net.getTransitions();
-
-		Transition tauTransition = new Transition(ProcessConfiguration.Tau_CLASS,
-				(AbstractDirectedGraph<PetrinetNode, PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>>) net);
-
-		boolean match;
-		for (Node node : nodes) {
-			if (!node.isLeaf())
-				continue;
-
-			match = false;
-			for (Transition transition : transitions) {
-				// here we need to create a mapping from event log to graphs
-				// need to check at first what the Name and other stuff
-				if (node.getName().equals(transition.getLabel())) {
-					map.put(node, transition);
-					match = true;
-					break;
-				}
-			}
-			if (!match) {// it there is node not showing in the petri net, which we don't really agree
-				map.put(node, tauTransition);
-			}
-		}
-
-		return map;
-	}
-
-	private List<PetrinetNode> transform2PNNodes(List<ProcessTreeElement> nodeList) {
+	public  List<PetrinetNode> transform2PNNodes(List<ProcessTreeElement> nodeList) {
 		// TODO Auto-generated method stub
 		List<PetrinetNode> pnNodes = new ArrayList<PetrinetNode>();
 		for (ProcessTreeElement ptNode : nodeList) {
