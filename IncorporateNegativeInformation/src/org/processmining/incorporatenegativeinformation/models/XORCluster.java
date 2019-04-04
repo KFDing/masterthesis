@@ -313,7 +313,7 @@ public class XORCluster<T> {
 			// but we can add new silent transition before it and represent this branch
 			// and also a end node to represent it!!
 			// then we avoid this situation for it 
-			beginNodeList.addAll(childrenCluster.get(0).getBeginNodeList());
+			beginNodeList.add(keyNode);
 		}
 
 		return beginNodeList;
@@ -345,8 +345,7 @@ public class XORCluster<T> {
 				endNodeList.addAll(child.getEndNodeList());
 			}
 		} else if (isLoopCluster()) {
-
-			endNodeList.addAll(childrenCluster.get(0).getEndNodeList());
+			endNodeList.addAll(childrenCluster.get(childrenCluster.size() - 1).getEndNodeList());
 
 		}
 		return endNodeList;

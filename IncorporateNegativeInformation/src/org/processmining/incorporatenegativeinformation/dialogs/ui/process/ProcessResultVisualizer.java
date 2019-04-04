@@ -446,7 +446,7 @@ class ResultMainView extends JPanel {
 		generator.initialize(pTree);
 
 		detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
-		detector.reset();
+		detector.reset(null);
 	}
 
 	private void createPNWithLT() {
@@ -486,7 +486,8 @@ class ResultMainView extends JPanel {
 		if(detector ==null) {
 			detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
 		}
-		detector.reset();
+		
+		detector.reset(generator.getClusterPair());
 		manet = detector.getAcceptionPN();
 
 		leftView.drawResult(context, manet);

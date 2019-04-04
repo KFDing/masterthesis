@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.processmining.incorporatenegativeinformation.help.NetUtilities;
 import org.processmining.incorporatenegativeinformation.help.ProcessConfiguration;
 import org.processmining.incorporatenegativeinformation.models.LTRule;
 import org.processmining.incorporatenegativeinformation.models.XORCluster;
@@ -19,8 +18,8 @@ import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.processtree.Block;
 import org.processmining.processtree.Node;
-import org.processmining.processtree.ProcessTree;
 import org.processmining.processtree.ProcessTreeElement;
+import org.processmining.processtree.conversion.ProcessTree2Petrinet.UnfoldedNode;
 
 /**
  * this class is special to add long-term dependency on net, which demands
@@ -43,11 +42,11 @@ public class AddLT2Net {
 	Set<LTRule<XORCluster<ProcessTreeElement>>> ruleSet;
 	Petrinet net;
 	Map<String, PetrinetNode> pnNodeMap;
-	Map<Node, Transition> tnMap;
-	public AddLT2Net(Petrinet net, ProcessTree tree) {
+	Map<ProcessTreeElement, Set<Transition>> tnMap;
+	public AddLT2Net(Petrinet net, Map<UnfoldedNode, Set<Transition>> pathMap) {
 		this.net = net;
 		ruleSet = new HashSet<LTRule<XORCluster<ProcessTreeElement>>>();
-		tnMap = NetUtilities.getProcessTree2NetMap(net, tree, null);
+		tnMap = covertMap(pathMap);
 	}
 
 	public void initializeAdder() {
@@ -173,8 +172,8 @@ public class AddLT2Net {
 			// those rules only has size 1, just one rule
 			ruleSet.addAll(connRules);
 
-			List<PetrinetNode> endNodeList = transform2PNNodes(sBranch.getEndNodeList());
-			List<PetrinetNode> beginNodeList = transform2PNNodes(tBranch.getBeginNodeList());
+			List<PetrinetNode> endNodeList = transform2PNNodes(sBranch.getEndNodeList(), false);
+			List<PetrinetNode> beginNodeList = transform2PNNodes(tBranch.getBeginNodeList(), true);
 
 			// we need to deal with the multiple nodes at first
 			// create a silent transition and a place for this branch at first
@@ -221,7 +220,7 @@ public class AddLT2Net {
 				tTransition = (Transition) beginNodeList.get(0);
 			}
 
-			String tBranchName = ProcessConfiguration.PLACE_PRE_PREFIX + "-" + tTransition.getLabel();
+			String tBranchName = ProcessConfiguration.PLACE_PRE_PREFIX + "-" + tBranch.getLabel();
 			Place tBranchPlace = addPlaceWithTest(tBranchName);
 			addArcWithTest(tBranchPlace, tTransition);
 		}
@@ -606,13 +605,55 @@ public class AddLT2Net {
 		return targetNodes;
 	}
 
-	public  List<PetrinetNode> transform2PNNodes(List<ProcessTreeElement> nodeList) {
-		// TODO Auto-generated method stub
+	
+	public  List<PetrinetNode> transform2PNNodes(List<ProcessTreeElement> nodeList, boolean asBegin) {
+		// TODO given the nodeList, we need to transfrom the node list into petri net transitions
+		// special case for the xor loop situations, also about the begin and end node
+		// it might also about the parallel node, but we need to check the situations later
+		// xorloop we see it as one block with silent start and end node
 		List<PetrinetNode> pnNodes = new ArrayList<PetrinetNode>();
 		for (ProcessTreeElement ptNode : nodeList) {
-			pnNodes.add(tnMap.get(ptNode));
+			if(isXorLopp(ptNode)) {
+				if(asBegin) {
+					// we need to start node for it
+					Set<Transition> transitions = tnMap.get(ptNode);
+					pnNodes.addAll(transitions);
+				}else {
+					// as end, we need to find the end node of this loop and then have it, for each xorloop
+					Set<Transition> transitions = tnMap.get(ptNode);
+					pnNodes.addAll(transitions);
+				}
+				
+			}else {
+				// for the other transitions, we think it has only one nodes to it
+				// find the map from one tree node to the path, do we need to change them back?
+				// it can be better thing to do it 
+				Set<Transition> transitions = tnMap.get(ptNode);
+				pnNodes.addAll(transitions);
+			}
+			
 		}
 		return pnNodes;
+	}
+	
+	private Map<ProcessTreeElement, Set<Transition>> covertMap(Map<UnfoldedNode, Set<Transition>> pathMap){
+		Map<ProcessTreeElement, Set<Transition>> tnMap = new HashMap<>();
+		// find only the latest node and put them together
+		for(UnfoldedNode uNode: pathMap.keySet()) {
+			ProcessTreeElement element = uNode.getNode();
+			Set<Transition> tSet = pathMap.get(uNode);
+			tnMap.put(element, tSet);
+			
+		}
+		
+		return tnMap;
+	}
+
+	private boolean isXorLopp(ProcessTreeElement ptNode) {
+		//check the node if it is a xorloop
+		if(ptNode.getClass().getSimpleName().equals(ProcessConfiguration.LOOP))
+			return true;
+		return false;
 	}
 
 }

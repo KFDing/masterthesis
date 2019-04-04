@@ -21,7 +21,6 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.incorporatenegativeinformation.help.EventLogUtilities;
-import org.processmining.incorporatenegativeinformation.help.NetUtilities;
 import org.processmining.incorporatenegativeinformation.help.ProcessConfiguration;
 import org.processmining.incorporatenegativeinformation.models.LTRule;
 import org.processmining.incorporatenegativeinformation.models.LabeledTraceVariant;
@@ -44,7 +43,8 @@ public class NewLTDetector {
 	ControlParameters parameters;
 	@SuppressWarnings("deprecation")
 	PetrinetWithMarkings mnet;
-	
+	// how can we reset the original model?? By deleting all the places ??
+	// we would say, ok, let's do it in this way, not the other way around on it 
 	Petrinet net;
 	Petrinet dnet = null;
 	Map<Node, XEventClass> tlmaps;
@@ -53,6 +53,7 @@ public class NewLTDetector {
 	AddLT2Net adder;
 	long traceNum = 0;
 
+	@SuppressWarnings("deprecation")
 	public NewLTDetector(ProcessTree pTree, XLog xlog, ControlParameters parameters, long tNum) {
 		// there is no implemented way to clone it
 		tree = pTree;
@@ -67,7 +68,8 @@ public class NewLTDetector {
 		try {
 			// keep it not change!!! 
 			mnet = ProcessTree2Petrinet.convert(tree, true);
-			
+			net = mnet.petrinet;
+			adder = new AddLT2Net(net, mnet.mapPath2Transitions);
 		} catch (NotYetImplementedException | InvalidProcessTreeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,9 +80,14 @@ public class NewLTDetector {
 	// or remove one lt, add one lt..so on
 	// net returns to the one without any lt on it.. but the net is from the pTree, 
 	// so for the NewLTDetector, the net should be fixed under this condition
-	public void reset() {
-		net = NetUtilities.clone(mnet.petrinet);
-		adder = new AddLT2Net(net, tree);
+	public void reset(List<XORClusterPair<ProcessTreeElement>> clusterPairs) {
+		// here we check all the elements if it is not included in map, 
+		// then we delete them from old times
+		if(clusterPairs!=null) {
+			for(XORClusterPair<ProcessTreeElement> pair: clusterPairs)
+				rmLTOnSinglePair(pair);
+		}
+		adder.initializeAdder();
 	}
 
 	public void addLTOnPairList(List<XORClusterPair<ProcessTreeElement>> clusterPairs,
