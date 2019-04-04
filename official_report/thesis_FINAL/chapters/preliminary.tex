@@ -120,4 +120,20 @@ Given a directly-follows graph G(L) derived from an event log L, the cardinality
 \subsection{Split Log Into Sublogs}
 Based on the directly-follows graph, it finds the most prominent cut which is applied afterwards to split the event log into smaller sublogs. Cuts compose of \emph{exclusive-choice cut, sequence cut, parallel cut and redo-loop cut} which correspond to the process tree operators $ \{\rightarrow, \times, \land, \circlearrowright \}$. They are selected in the following order. A maximal exclusive-choice cut is firstly tried to split the directly-follows graph; if it is not available, then a maximal sequence cut, a  maximal parallel cut and a redo-loop cut are applied in sequence. Sublogs are created due to this available operator. Meanwhile, this operator is used to build the process tree. 
 
-The same procedure is applied again on the sublogs until single activities. What's more, this process tree can be converted into Petri net for further analysis. 
+The same procedure is applied again on the sublogs until single activities. What's more, this process tree can be converted into Petri net for further analysis.
+
+\section{Model Measurements}
+After deriving a process model from an event log, multiple measurements are used to address the different aspects of the process model quality.
+\subsection{Soundness}
+Soundness is used to describe if a Petri net is a workflow net with unique start place and unique end place. 
+To prove the model sound, we need to prove the four conditions.
+\begin{itemize}
+	\item safeness. Places cannot hold multiple tokens at the same time
+	\item proper completion. If the sink place is marked, all other places are empty.
+	\item option to complete. It is always possible to reach the final marking just for the sink place/
+	\item no dead part. For any transition there is a path from source to sink place through it. 
+\end{itemize}
+\subsection{Fitness}
+
+\subsection{Confusion Matrix}
+Confusion matrix is used from ??
