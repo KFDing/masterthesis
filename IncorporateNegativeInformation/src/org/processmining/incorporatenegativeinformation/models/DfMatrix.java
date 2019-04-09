@@ -42,24 +42,40 @@ public class DfMatrix {
 		return standardCardinality;
 	}
 
-	public static DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg, int num) {
+	public static DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg) {
 		// here we need to update the codes for accepting double percent 
 
 		DfMatrix dfMatrix = new DfMatrix();
+		// get all cardinality in each Dfg graph
+		long ext_cardinality = getTotalCardinality(dfg);
+		long pos_cardinality = getTotalCardinality(pos_dfg);
+		long neg_cardinality = getTotalCardinality(neg_dfg);
+		long num = ext_cardinality + pos_cardinality+ neg_cardinality;
 		dfMatrix.setStandardCardinality(num);
 		// here we don't need magical number, but they should exist, or zero
-		dfMatrix.addDirectFollowMatrix(dfg, 0);
+		dfMatrix.addDirectFollowMatrix(dfg, 0, ext_cardinality);
 		// one problem here is about the single direct follow relation, it doesn't show here
-		dfMatrix.addDirectFollowMatrix(pos_dfg, 1);
+		dfMatrix.addDirectFollowMatrix(pos_dfg, 1, pos_cardinality);
 
-		dfMatrix.addDirectFollowMatrix(neg_dfg, 2);
+		dfMatrix.addDirectFollowMatrix(neg_dfg, 2, neg_cardinality);
 		// after we have dfMatrix, we need to assign edges to new dfg w.r.t. different situations
 		// Dfg new_dfg = dfMatrix.buildDfs();
 
 		return dfMatrix;
 	}
 	
-	public void addDirectFollowMatrix(Dfg dfg, int colIdx) {
+	public static long getTotalCardinality(Dfg dfg) {
+		// TODO get all the cardinality of this dfg
+		long sum = 0, cardinality;
+		for(long edgeIndex: dfg.getDirectlyFollowsEdges()) {
+			cardinality = dfg.getDirectlyFollowsEdgeCardinality(edgeIndex);
+			sum+= cardinality;
+		}
+		
+		return sum;
+	}
+
+	public void addDirectFollowMatrix(Dfg dfg, int colIdx, double cardinality_sum) {
 		/*
 		 * read from each dfg, put edges into the new map, ======if the map has
 		 * the edge, then mark which exists, ======if not then create new edge
@@ -74,7 +90,8 @@ public class DfMatrix {
 
 			// we need to get the percent of source->target in all source->* 
 			// so firstly we need to get the all source cardinality?? but how about the existing ones?? how to compare it ??
-			double denomial = 1;
+			// double denomial = 1;
+			/*
 			if (colIdx == 0) {
 				denomial = getOutEdgesCardinality(dfg, source);
 			} else {
@@ -84,7 +101,21 @@ public class DfMatrix {
 				denomial = getOutEdgesCardinality(dfg, source);
 				// denomial = standardCardinality;
 			}
-			double percent = 1.0 * cardinality / denomial;
+			*/
+			// modified at 09 April 2019, to use a different normalization method
+			// percent = cardinality/(all cardinality in this directly-follows graph)
+			// proof : side effect, 
+			// (1). if we have ext: pos: neg= 1:0:0,
+			// the model keeps the same: Because it can not delete any of them
+			// (2). if ext: pos: neg= 0:1:0, the final cardinality turns to 
+			//  cardinality/(all cardinality in pos) * (all cardinality in event log)
+			// so the effect might be affected, because when changing to effective graph,
+			// some noise gets affected, but we can also use the weighted trace in event log
+			// to have such effect??  
+			// weighted cardinality:: C-pos * All Cardinality in Pos + C-neg * All Cardinality in Neg
+			// (3). If ext: pos: neg= 0:0:1, ignore the model
+			
+			double percent = 1.0 * cardinality / cardinality_sum;
 			addMatrixItem(source, target, percent, colIdx);
 		}
 
@@ -96,13 +127,14 @@ public class DfMatrix {
 			// addMatrixItemWithCheck( originalPoint, startEventClass, cardinality, colIdx);
 			// for the startEvent, we can't count the use the directfollow edge, because it begins from the first position
 			// then we need to count all the start activity and then get the percent to it
+			
 			double denomial = 1;
 			if (colIdx == 0) {
 				denomial = getStartEventCardinality(dfg);
 			} else
 				denomial = getStartEventCardinality(dfg);
 				// denomial = standardCardinality;
-
+			
 			double percent = 1.0 * cardinality / denomial;
 
 			addMatrixItem(originalPoint, startEventClass, percent, colIdx);
@@ -112,13 +144,14 @@ public class DfMatrix {
 		for (XEventClass endEventClass : dfg.getEndActivities()) {
 			long cardinality = dfg.getEndActivityCardinality(endEventClass);
 			// addMatrixItemWithCheck( endEventClass, endPoint, cardinality, colIdx);
+			
 			double denomial = 1;
 			if (colIdx == 0) {
 				denomial = getEndEventCardinality(dfg);
 			} else
 				denomial = getEndEventCardinality(dfg);
 				// denomial = standardCardinality;
-
+			
 			double percent = 1.0 * cardinality / denomial;
 			addMatrixItem(endEventClass, endPoint, percent, colIdx);
 		}

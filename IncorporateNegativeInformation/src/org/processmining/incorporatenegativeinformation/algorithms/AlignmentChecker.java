@@ -284,6 +284,8 @@ public class AlignmentChecker {
 		// that we should visit??
 		Set<Node> parentSet = new HashSet<Node>();
 		for(Node node: nodeTrace) {
+			if(node == null)
+				continue;
 			if(!goUpMap.containsKey(node))
 				goUpMap.put(node, true);
 			
