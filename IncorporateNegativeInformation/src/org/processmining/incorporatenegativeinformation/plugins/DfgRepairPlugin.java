@@ -1,6 +1,5 @@
 package org.processmining.incorporatenegativeinformation.plugins;
 
-import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.contexts.uitopia.UIPluginContext;
@@ -73,7 +72,7 @@ public class DfgRepairPlugin {
 		// -- transform Petri net into Dfg
 
 		Dfg dfg = PN2DfgTransform.transformPN2Dfg(context, net, marking);
-		int num = XLogInfoFactory.createLogInfo(log).getNumberOfTraces();
+		// int num = XLogInfoFactory.createLogInfo(log).getNumberOfTraces();
 		// PN2DfgTransform.setCardinality(dfg, num);
 		// -- incorporate the negative information and give out the Dfg and Petri net model
 		XLog[] result = EventLogUtilities.splitLog(log, Configuration.POS_LABEL, "true");
@@ -85,7 +84,7 @@ public class DfgRepairPlugin {
 		Dfg neg_dfg = ld.log2Dfg(context, neg_log);
 
 		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
-		DfMatrix dfMatrix = DfMatrix.createDfMatrix(dfg, pos_dfg, neg_dfg, num);
+		DfMatrix dfMatrix = DfMatrix.createDfMatrix(dfg, pos_dfg, neg_dfg);
 
 		return new DfgProcessResult(log, dfMatrix);
 	}

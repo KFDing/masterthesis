@@ -37,7 +37,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 %%% Begin document
 \pagestyle{fancy}
 
-
+\iffalse
 \chapter{Introduction} \label{chap:intro}\pagenumbering{arabic}
 \input{chapters/introduction.tex}
 
@@ -49,11 +49,11 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \chapter{Preliminary} \label{chap:prelim}\pagenumbering{arabic}
 \input{chapters/preliminary.tex}
-
+\fi
 \chapter{Algorithm} \label{chap:alg}
 \input{chapters/algorithm.tex}
 
-
+\iffalse
 \chapter{Implementation} \label{chap:impl}
 \input{chapters/implementation.tex}
 
@@ -65,7 +65,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \chapter{Conclusion} \label{chap:conclusion}
 \input{chapters/conclusion.tex}
-
+\fi
 %%% add ``References'' section to TOC
 %\phantomsection
 
