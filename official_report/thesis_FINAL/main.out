@@ -1,14 +1,13 @@
 \BOOKMARK [0][-]{chapter*.1}{Aknowledgement}{}% 1
 \BOOKMARK [0][-]{chapter*.2}{Abstract}{}% 2
-\BOOKMARK [0][-]{chapter.1}{Algorithm}{}% 3
-\BOOKMARK [1][-]{section.1.1}{Architecture}{chapter.1}% 4
-\BOOKMARK [1][-]{section.1.2}{Generate directly-follows graph}{chapter.1}% 5
-\BOOKMARK [1][-]{section.1.3}{Repair directly-follows graph}{chapter.1}% 6
-\BOOKMARK [1][-]{section.1.4}{Mine models from directly-follows graph}{chapter.1}% 7
-\BOOKMARK [1][-]{section.1.5}{Add long-term dependency}{chapter.1}% 8
-\BOOKMARK [2][-]{subsection.1.5.1}{Cases Analysis}{section.1.5}% 9
-\BOOKMARK [2][-]{subsection.1.5.2}{Way to express long-term dependency}{section.1.5}% 10
-\BOOKMARK [2][-]{subsection.1.5.3}{Soundness Analysis}{section.1.5}% 11
-\BOOKMARK [2][-]{subsection.1.5.4}{Feasible cases due to soundness}{section.1.5}% 12
-\BOOKMARK [1][-]{section.1.6}{Reduce Silent Transitions}{chapter.1}% 13
-\BOOKMARK [0][-]{chapter*.7}{Bibliography}{}% 14
+\BOOKMARK [0][-]{chapter.1}{Evaluation}{}% 3
+\BOOKMARK [1][-]{section.1.1}{Evaluation Measurements}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.2}{Experiment Platform}{chapter.1}% 5
+\BOOKMARK [2][-]{subsection.1.2.1}{KNIME}{section.1.2}% 6
+\BOOKMARK [2][-]{subsection.1.2.2}{ProM Evaluation Plugins}{section.1.2}% 7
+\BOOKMARK [1][-]{section.1.3}{Experiment Result}{chapter.1}% 8
+\BOOKMARK [2][-]{subsection.1.3.1}{Test On Property}{section.1.3}% 9
+\BOOKMARK [2][-]{subsection.1.3.2}{Test On Synthetic Data}{section.1.3}% 10
+\BOOKMARK [2][-]{subsection.1.3.3}{Test On Real life Data}{section.1.3}% 11
+\BOOKMARK [0][-]{chapter.2}{Conclusion}{}% 12
+\BOOKMARK [0][-]{chapter*.8}{Bibliography}{}% 13

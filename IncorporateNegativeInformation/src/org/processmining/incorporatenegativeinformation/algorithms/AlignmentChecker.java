@@ -88,7 +88,7 @@ public class AlignmentChecker {
 			// what nodes we must set  to complete the whole path in the tree?
 			// we don't really care so much here, right?? we just discover the whole structure of them
 			if(node == null) {
-				System.out.println("Event not in model but in log");
+				// System.out.println("Event not in model but in log");
 				continue;
 			}
 			if(!goUpMap.containsKey(node))

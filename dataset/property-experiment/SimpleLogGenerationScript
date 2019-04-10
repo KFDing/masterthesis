@@ -1,0 +1,18 @@
+## To generate model_ltdep_xor_parallel_02
+10 C,G,D,A,Y;
+10 C,A,G,D,Y;
+10 C,B,D,G,Y;
+10 C,E,B,G,Y;
+10 F,G,D,A,Y;
+10 F,A,G,D,Y;
+10 F,B,D,G,Y;
+10 F,G,E,B,Y;
+10 C,G,D,A,Y;
+10 C,A,G,D,X;
+10 C,D,B,G,X;
+10 C,B,E,G,X;
+10 F,D,G,A,X;
+10 F,G,A,D,X;
+10 F,B,G,D,X;
+10 F,E,B,G,X;
+
