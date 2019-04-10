@@ -60,9 +60,8 @@ public class NewLTDetector {
 		log = xlog;
 		this.parameters = parameters;
 		traceNum = tNum;
-		tlmaps = getProcessTree2EventMap(log, tree, null);
+		tlmaps = getProcessTree2EventMap( tree, log, null);
 		ltmaps = AlignmentChecker.getEvent2ProcessTreeMap(xlog, pTree, null);
-		vpmaps = findVariantPathMap();		
 		
 		
 		try {
@@ -83,11 +82,12 @@ public class NewLTDetector {
 	public void reset(List<XORClusterPair<ProcessTreeElement>> clusterPairs) {
 		// here we check all the elements if it is not included in map, 
 		// then we delete them from old times
-		if(clusterPairs!=null) {
+		if(clusterPairs!=null && clusterPairs.size() >0) {
 			for(XORClusterPair<ProcessTreeElement> pair: clusterPairs)
 				rmLTOnSinglePair(pair);
+			
+			adder.initializeAdder();
 		}
-		adder.initializeAdder();
 	}
 
 	public void addLTOnPairList(List<XORClusterPair<ProcessTreeElement>> clusterPairs,
@@ -171,6 +171,7 @@ public class NewLTDetector {
 			// path is related to each tree, so we don't need to change it, if 
 			// we check single pair, so we should keep them into tone map??
 			// even the variants of logs, we shouldn't use it double time
+			// there are more activities from log than in the existing model, so what to do??
 			List<Node> path = AlignmentChecker.getPathOnTree(tree, nodeVariant);
 			if(!vpmaps.containsKey(var))
 				vpmaps.put(var, path);
@@ -180,6 +181,8 @@ public class NewLTDetector {
 	
 	// fill the connection with base data from event log 
 	public void initializeConnection(List<LTRule<XORCluster<ProcessTreeElement>>> connSet) {
+		if(vpmaps == null)
+			vpmaps = findVariantPathMap();	
 		Set<LabeledTraceVariant> variants = vpmaps.keySet();
 		for (LabeledTraceVariant var : variants) {
 			
@@ -340,7 +343,7 @@ public class NewLTDetector {
 	}
 
 	
-	private Map<Node, XEventClass> getProcessTree2EventMap(XLog xLog, ProcessTree pTree, XEventClassifier classifier) {
+	private Map<Node, XEventClass> getProcessTree2EventMap(ProcessTree pTree, XLog xLog, XEventClassifier classifier) {
 		// TODO generate the transfer from process tree to event classes in log
 		Map<Node, XEventClass> map = new HashMap<Node, XEventClass>();
 		Collection<Node> nodes = pTree.getNodes();
@@ -353,7 +356,8 @@ public class NewLTDetector {
 			classes = XLogInfoFactory.createLogInfo(xLog).getNameClasses();
 
 		XEventClass tauClassinLog = new XEventClass(ProcessConfiguration.Tau_CLASS, classes.size());
-
+		// two situations: activity in log but not in model, activity in model but not in log.
+		// but here, we just consider if the node from tree in log, if not in log, then tau event class
 		boolean match;
 		for (Node node : nodes) {
 			if (!node.isLeaf())

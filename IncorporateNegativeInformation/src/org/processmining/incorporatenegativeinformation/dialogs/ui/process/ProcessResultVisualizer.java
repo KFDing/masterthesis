@@ -457,8 +457,11 @@ class ResultMainView extends JPanel {
 		List<XORClusterPair<ProcessTreeElement>> clusterPairs = generator.getClusterPair();
 		List<LTRule<XORCluster<ProcessTreeElement>>> connSet = generator.getAllLTConnection();
 		// generate all the pairs here 
-		detector.addLTOnPairList(clusterPairs, connSet);
-
+		if(clusterPairs.size()>0)
+			detector.addLTOnPairList(clusterPairs, connSet);
+		else {
+			System.out.println("Not enough xors for long-term dependency");
+		}
 		// after this we can delete silent transition to make model simpler
 		// but do we need it, or not?? 
 
