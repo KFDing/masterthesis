@@ -110,8 +110,8 @@ public class SilentTransitionDeletor {
 	 */
 	public static Petrinet deleteSilentTransition(Petrinet net, Transition tau, Place source, Place target) {
 		// check the number of each source and target
-		if(net.getInEdges(source).size()<1) {
-			System.out.println("Tau as the start place can not be deleted");
+		if(net.getInEdges(source).size()<1 || net.getOutEdges(target).size()<1) {
+			System.out.println("Tau as the start place or the end can not be deleted");
 			return net;
 		}
 		

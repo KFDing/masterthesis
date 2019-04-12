@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  10 APR 2019 14:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  12 APR 2019 19:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1617,7 +1617,7 @@ LaTeX Font Info:    Try loading font information for T1+lmss on input line 17.
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<figures/logo/pads_logo_text.jpg, id=59, 1594.95876pt x 379.4175pt>
+<figures/logo/pads_logo_text.jpg, id=67, 1594.95876pt x 379.4175pt>
 File: figures/logo/pads_logo_text.jpg Graphic file (type jpg)
 <use figures/logo/pads_logo_text.jpg>
 Package pdftex.def Info: figures/logo/pads_logo_text.jpg  used on input line 17
@@ -1681,60 +1681,71 @@ ext.jpg>]
 ]
 Chapter 1.
 (./chapters/evaluation.tex
-<figures/evaluation/model_01_sequence.png, id=89, 736.7525pt x 149.55875pt>
-File: figures/evaluation/model_01_sequence.png Graphic file (type png)
-<use figures/evaluation/model_01_sequence.png>
-Package pdftex.def Info: figures/evaluation/model_01_sequence.png  used on inpu
-t line 23.
-(pdftex.def)             Requested size: 384.1096pt x 77.97182pt.
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 28.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 13.
  (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [7
 
-])
+]
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 30.
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[8 <./figures/evaluation/model_01_sequence.png (PNG copy)>]
+[8]
+<figures/evaluation/model_01_sequence.png, id=114, 736.7525pt x 149.55875pt>
+File: figures/evaluation/model_01_sequence.png Graphic file (type png)
+<use figures/evaluation/model_01_sequence.png>
+Package pdftex.def Info: figures/evaluation/model_01_sequence.png  used on inpu
+t line 80.
+(pdftex.def)             Requested size: 384.1096pt x 77.97182pt.
+ [9]
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
+
+ []
+
+[10 <./figures/evaluation/model_01_sequence.png (PNG copy)>]) [11] [12
+
+]
 Chapter 2.
-(./chapters/conclusion.tex) (./main.bbl [9
+(./chapters/conclusion.tex) (./main.bbl [13] [14
 
-] [10
-
-] [11]) [12]
+] [15]) [16]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 74.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 74.
  (./main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 74.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 74.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 05E138E55A5A74D6130247F937450AA6;786.
+(rerunfilecheck)             Checksum: 91F8EFF5A6A8E903C484634CB37A2E43;927.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 74.
  ) 
 Here is how much of TeX's memory you used:
- 36088 strings out of 494847
- 837199 string characters out of 6179079
- 1044796 words of memory out of 5000000
- 38723 multiletter control sequences out of 15000+600000
+ 36101 strings out of 494847
+ 837368 string characters out of 6179079
+ 1046796 words of memory out of 5000000
+ 38729 multiletter control sequences out of 15000+600000
  71528 words of font info for 54 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 76i,13n,121p,726b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share
-/texmf/fonts/enc/dvips/lm/lm-ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lm
-bx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/f
-onts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.p
-fb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/typ
-e1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss10.pfb></us
-r/share/texmf/fonts/type1/public/lm/lmssbx10.pfb>
-Output written on main.pdf (12 pages, 954922 bytes).
+ 76i,16n,121p,726b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
+ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
+/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
+-ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/f
+onts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.
+pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/t
+ype1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></us
+r/share/texmf/fonts/type1/public/lm/lmss10.pfb></usr/share/texmf/fonts/type1/pu
+blic/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
+Output written on main.pdf (16 pages, 971376 bytes).
 PDF statistics:
- 196 PDF objects out of 1000 (max. 8388607)
- 170 compressed objects within 2 object streams
- 53 named destinations out of 1000 (max. 500000)
- 127 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 229 PDF objects out of 1000 (max. 8388607)
+ 198 compressed objects within 2 object streams
+ 60 named destinations out of 1000 (max. 500000)
+ 143 words of extra memory for PDF output out of 10000 (max. 10000000)
 
