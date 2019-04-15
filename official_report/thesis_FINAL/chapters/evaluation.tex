@@ -75,24 +75,50 @@ In this experiment, we aim to answer the questions: 1) How do our techniques inc
 To answer the first question, we applied the repaired techniques on event logs with different relations of activities, such as sequence, parallel and loop, exclusive choice and investigated the effect from the existing model, positive and negative instances on the repaired model, by adjusting the corresponding weights. For the second question, we describe the situations where our techniques overcome the defects of other repair techniques and explain the reasons behind it. 
 \subsubsection{Test On Sequence}
 This part is used to show the effect of our techniques on the sequence relation of activities. Given a fixed model in Petri net with sequence relation, a set of event logs with different deviations are used to test if our repair techniques work properly.
-% The experiments go in this way, given a model, we changed them by looking all the information and then giving them effect on them relation, should we put all experiments, let's do it, later we can modify it.
 \begin{figure}
-	\includegraphics[width=0.9\textwidth]{figures/evaluation/model_01_sequence.png}
+		\includegraphics[width=0.9\textwidth]{figures/evaluation/model_01_sequence.png}
 	\caption{Model M1 with sequence relation}
 	\label{fig:sequence-M1}
-\end{figure} 
+\end{figure}
+% The experiments go in this way, given a model, we changed them by looking all the information and then giving them effect on them relation, should we put all experiments, let's do it, later we can modify it.
+By changing the control weights of the existing model, positive and negative instances, different models are derived from the repair method. Next, we evaluate the model based on confusion matrix and plot the several measurements with the weight changes. By this way, we show how our method incorporates different effect of control weights.
+
+In this experiment, we fix one weight as control variable while keeping the other weights unchanged. To make the experiments more reliable, for each fixed control variable value, we conduct the experiment in 5 different combinations of other weights that are randomly generated. At last, the average of those combination is used to represent the final measurement.
 \begin{itemize}
-	\item \emph{Experiment 1} delete activity from sequence relation \\
-	
-	\emph{Event Log: }
+	\item \emph{Experiment 1 --} delete activity from sequence relation. \\
+	\emph{Event Log -- }
 	\begin{align*}
 	Positive:& {<a>}^{50} \\
 	Negative:& {<a, b>}^{50}
 	\end{align*}
 	% repair result from them, one is the repaired model, second is the plot lines with weight changes
-	\emph{Repair Result}
-	
-	
+	\begin{figure}[h]
+		\centering
+		\begin{subfigure}[b]{\textwidth}
+			\centering
+			\includegraphics[width=0.9\textwidth, height=0.33\textheight]{figures/evaluation/result-ext-weight-01_log_sequence_02.png}
+			\caption{Measurements with the weight for the existing model}
+			\label{fig:seq-delete-ext}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{\textwidth}
+			\centering
+			\includegraphics[width=0.9\linewidth,height=0.33\textheight]{figures/evaluation/result-pos-weight-01_log_sequence_02.png}
+			\caption{Measurements with the weight for positive instances}
+			\label{fig:seq-delete-pos}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}[b]{\textwidth}
+			\centering
+			\includegraphics[width=0.9\linewidth, height=0.33\textheight]{figures/evaluation/result-neg-weight-01_log_sequence_02.png}
+			\caption{Measurements with the weight for negative instances}
+			\label{fig:seq-delete-neg}
+		\end{subfigure}
+		\caption{example for model change under model repair}
+		\label{fig:seq-delete-weights}
+	\end{figure} 
+\emph{Result Analysis -- }Figure \ref{fig:seq-delete-weights} shows the measurements results separately due to the weight change. In Figure \ref{fig:seq-delete-ext}, with the weight for the existing model increases, precision, accuracy and specificity decrease while the recall keeps 1.0. After checking confusion matrix, we see TP and FN keep the same, FP goes up while TN goes down. The reason is that the higher weight for the existing model causes the higher possibility to keep the existing model during the repair. Due to the deviation of the existing model and actual event log, precision and accuracy goes down. With the weight for positive goes up, all measurements are stable in value 1.0. The reason for this is the TF and TN keeps the same, other values are all 0.0.  
+% we can only use the accuracy and recall, not others.
 	\item 
 \end{itemize}
 \subsubsection{Test On Parallel}
@@ -108,15 +134,15 @@ This part displays the changes of exclusive choices relation in the model under 
 \subsection{Comparison To Other Techniques}
 This section represents some situations where current repair techniques can't handle properly, while our algorithm gives out an improved repaired model. 
 
-Situation 1, unfit part!! added subprocess are too much!! Where the addition of subprocesses and loops are allowed, while the structure changes are impossible, 
+\emph{Situation 1}, unfit part!! added subprocess are too much!! Where the addition of subprocesses and loops are allowed, while the structure changes are impossible, 
 Fahrland's method applies the extension strategy to repair model by adding subprocesses and loops in the procedure. It introduces unseen behavior into the model. However, if the behaviors which are already in the model is unlikely to be removed from the model. One simple example is shown in the following part. 
 
 Dee's method is based on Fahrland's method. Deviations are calculated at first and used to build subprocesses for model repair. However, before building subprocesses, it classifies the deviations into positive and negative ones with consideration of trace performance. Only positive deviations are applied to repair model. Different to Fahrland's method, it improves the repaired model performance by limiting the introduced subprocesses. Still, it can't get rid of the defect mentioned before. 
 
-Situation 2, For fitted data in the model, can not recognize them!! where overlapped data noise can not be recognized, trace variant with more negative effect is treated as positive and kept in the model, which we should delete them.   
+\emph{Situation 2}, For fitted data in the model, can not recognize them!! where overlapped data noise can not be recognized, trace variant with more negative effect is treated as positive and kept in the model, which we should delete them.   
 % Here we want to give an example of the overlapped data, compared to IM rediscoverty, easy.. But for Dees' method, firstly, they have labeled data; The analyzed the deviations of them, but when one deviation dominates, then the tree can not see the others. Some data are ignored..
 
-Situation 3, with long-term dependency!! fitted part or new added part!! none of the current techniques can handle this problem yet.
+\emph{Situation 3}, with long-term dependency!! fitted part or new added part!! none of the current techniques can handle this problem yet.
 Simple examples listed, but will this repeat the last section?? 
 
 
