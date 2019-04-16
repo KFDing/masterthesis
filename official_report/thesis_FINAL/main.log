@@ -1,6 +1,6 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  15 APR 2019 14:44
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  16 APR 2019 17:20
 entering extended mode
- restricted \write18 enabled.
+ \write18 enabled.
  %&-line parsing enabled.
 **main.tex
 (./main.tex
@@ -1304,19 +1304,37 @@ Package: relsize 2013/03/29 ver 4.1
 \algocf@algoframe=\box68
 \algocf@algobox=\box69
 )
-\c@theorem=\count139
+(/usr/share/texlive/texmf-dist/tex/latex/svg/svg.sty
+Package: svg 2017/11/29 v2.01 (include SVG pictures)
 
-(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty
-Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
-\OuterFrameSep=\skip80
-\fb@frw=\dimen189
-\fb@frh=\dimen190
-\FrameRule=\dimen191
-\FrameSep=\dimen192
+(/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrbase.sty
+Package: scrbase 2017/09/07 v3.24 KOMA-Script package (KOMA-Script-independent 
+basics and keyval usage)
+
+(/usr/share/texlive/texmf-dist/tex/latex/koma-script/scrlfile.sty
+Package: scrlfile 2017/09/07 v3.24 KOMA-Script package (loading files)
+))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/shellesc.sty
+Package: shellesc 2016/06/07 v0.02a unified shell escape interface for LaTeX
+Package shellesc Info: Unrestricted shell escape enabled on input line 67.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/tools/enumerate.sty
-Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
-\@enLab=\toks43
+\c@svg@param@lastpage=\count139
+\c@svg@param@currpage=\count140
+
+(/usr/share/texlive/texmf-dist/tex/latex/ifplatform/ifplatform.sty
+Package: ifplatform 2017/10/13 v0.4a Testing for the operating system
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/catchfile.sty
+Package: catchfile 2016/05/16 v1.7 Catch the contents of a file (HO)
+)
+runsystem(uname -s > "main.w18")...executed.
+
+ (./main.w18)
+runsystem(rm -- "main.w18")...executed.
+
+)) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/transparent.sty
+Package: transparent 2016/05/16 v1.1 Transparency via pdfTeX's color stack (HO)
+
 )
 (/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
@@ -1327,19 +1345,33 @@ Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 67.
-\captionmargin=\dimen193
-\captionmargin@=\dimen194
-\captionwidth=\dimen195
-\caption@tempdima=\dimen196
-\caption@indent=\dimen197
-\caption@parindent=\dimen198
-\caption@hangindent=\dimen199
+\captionmargin=\dimen189
+\captionmargin@=\dimen190
+\captionwidth=\dimen191
+\caption@tempdima=\dimen192
+\caption@indent=\dimen193
+\caption@parindent=\dimen194
+\caption@hangindent=\dimen195
 )
-\c@ContinuedFloat=\count140
+\c@ContinuedFloat=\count141
 Package caption Info: hyperref package is loaded.
 )
-\c@subfigure=\count141
-\c@subtable=\count142
+\c@subfigure=\count142
+\c@subtable=\count143
+)
+\c@theorem=\count144
+
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip80
+\fb@frw=\dimen196
+\fb@frh=\dimen197
+\FrameRule=\dimen198
+\FrameSep=\dimen199
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/enumerate.sty
+Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
+\@enLab=\toks43
 )
 (/usr/share/texlive/texmf-dist/tex/latex/pgfplots/pgfplots.sty
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/pgfplots.revision.tex)
@@ -1351,8 +1383,8 @@ Package: pgfplots 2017/06/05 v1.15 Data Visualization (1.15)
 \t@pgfplots@tokb=\toks45
 \t@pgfplots@tokc=\toks46
 \pgfplots@tmpa=\dimen256
-\c@pgfplots@coordindex=\count143
-\c@pgfplots@scanlineindex=\count144
+\c@pgfplots@coordindex=\count145
+\c@pgfplots@scanlineindex=\count146
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/sys/pgfplotssysgeneric.code
 .tex))
@@ -1368,7 +1400,7 @@ Package pgfplots: loading complementary arithmetics for your pgf version...
 gfsupp_pgflibraryfpu.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/oldpgfcompatib/pgfplotsoldp
 gfsupp_pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count145
+\c@pgfmathroundto@lastzeros=\count147
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/util/pgfplotsutil.code.tex
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotslists
@@ -1377,13 +1409,13 @@ tructure.code.tex)
 tructureext.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsarray
 .code.tex
-\c@pgfplotsarray@tmp=\count146
+\c@pgfplotsarray@tmp=\count148
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsmatri
 x.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/numtable/pgfplotstableshare
 d.code.tex
-\c@pgfplotstable@counta=\count147
+\c@pgfplotstable@counta=\count149
 \t@pgfplotstable@a=\toks47
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/liststructure/pgfplotsdeque
@@ -1396,7 +1428,7 @@ de.tex))
 .tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/libs/pgflibrarypgfplots.sur
 fshading.code.tex
-\c@pgfplotslibrarysurf@no=\count148
+\c@pgfplotslibrarysurf@no=\count150
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgfplots/sys/pgflibrarypgfplots.surf
 shading.pgfsys-pdftex.def)))
@@ -1423,7 +1455,7 @@ e.tex)
 zlibrarydecorations.pathmorphing.code.tex
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrary
 decorations.pathmorphing.code.tex))
-\pgfplots@numplots=\count149
+\pgfplots@numplots=\count151
 \pgfplots@xmin@reg=\dimen257
 \pgfplots@xmax@reg=\dimen258
 \pgfplots@ymin@reg=\dimen259
@@ -1441,26 +1473,26 @@ File: pgflibraryplotmarks.code.tex 2015/08/03 v3.0.1a (rcs-revision 1.14)
 ))) (/usr/share/texlive/texmf-dist/tex/latex/forloop/forloop.sty
 Package: forloop 2006/09/18 v3.0 For Loops for LaTeX
 )
-\c@loopcntr=\count150
+\c@loopcntr=\count152
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count151
+\lst@mode=\count153
 \lst@gtempboxa=\box70
 \lst@token=\toks48
-\lst@length=\count152
+\lst@length=\count154
 \lst@currlwidth=\dimen263
-\lst@column=\count153
-\lst@pos=\count154
+\lst@column=\count155
+\lst@pos=\count156
 \lst@lostspace=\dimen264
 \lst@width=\dimen265
-\lst@newlines=\count155
-\lst@lineno=\count156
+\lst@newlines=\count157
+\lst@lineno=\count158
 \lst@maxwidth=\dimen266
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-\c@lstnumber=\count157
-\lst@skipnumbers=\count158
+\c@lstnumber=\count159
+\lst@skipnumbers=\count160
 \lst@framebox=\box71
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
@@ -1475,22 +1507,22 @@ Package: algpseudocode
 Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
 
 Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
-\c@ALG@line=\count159
-\c@ALG@rem=\count160
-\c@ALG@nested=\count161
+\c@ALG@line=\count161
+\c@ALG@rem=\count162
+\c@ALG@nested=\count163
 \ALG@tlm=\skip81
 \ALG@thistlm=\skip82
-\c@ALG@Lnr=\count162
-\c@ALG@blocknr=\count163
-\c@ALG@storecount=\count164
-\c@ALG@tmpcounter=\count165
+\c@ALG@Lnr=\count164
+\c@ALG@blocknr=\count165
+\c@ALG@storecount=\count166
+\c@ALG@tmpcounter=\count167
 \ALG@tmplength=\skip83
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
 )) (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
 \multirow@colwidth=\skip84
-\multirow@cntb=\count166
+\multirow@cntb=\count168
 \multirow@dima=\skip85
 \bigstrutjot=\dimen267
 ) (./main.aux)
@@ -1523,16 +1555,16 @@ File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count167
+\scratchcounter=\count169
 \scratchdimen=\dimen268
 \scratchbox=\box72
-\nofMPsegments=\count168
-\nofMParguments=\count169
+\nofMPsegments=\count170
+\nofMParguments=\count171
 \everyMPshowfont=\toks49
-\MPscratchCnt=\count170
+\MPscratchCnt=\count172
 \MPscratchDim=\dimen269
-\MPnumerator=\count171
-\makeMPintoPDFobject=\count172
+\MPnumerator=\count173
+\makeMPintoPDFobject=\count174
 \everyMPtoPDFconversion=\toks50
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
@@ -1595,7 +1627,7 @@ Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count173
+\c@section@level=\count175
 )
 LaTeX Info: Redefining \ref on input line 13.
 LaTeX Info: Redefining \pageref on input line 13.
@@ -1612,12 +1644,12 @@ Package caption Info: End \AtBeginDocument code.
 Package pgfplots notification 'compat/show suggested version=true': document ha
 s been generated with the most recent feature set (\pgfplotsset{compat=1.15}).
 
-\c@lstlisting=\count174
+\c@lstlisting=\count176
 LaTeX Font Info:    Try loading font information for T1+lmss on input line 17.
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<figures/logo/pads_logo_text.jpg, id=67, 1594.95876pt x 379.4175pt>
+<figures/logo/pads_logo_text.jpg, id=47, 1594.95876pt x 379.4175pt>
 File: figures/logo/pads_logo_text.jpg Graphic file (type jpg)
 <use figures/logo/pads_logo_text.jpg>
 Package pdftex.def Info: figures/logo/pads_logo_text.jpg  used on input line 17
@@ -1680,16 +1712,20 @@ ext.jpg>]
 
 ]
 Chapter 1.
-(./chapters/evaluation.tex
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 13.
- (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [7
+(./chapters/introduction.tex
+Underfull \vbox (badness 1052) has occurred while \output is active []
+
+ [1
 
 ]
-
-LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 30.
+<figures/introduction/Thesis-PN-Example-without-preparation.png, id=98, 668.497
+5pt x 270.00874pt>
+File: figures/introduction/Thesis-PN-Example-without-preparation.png Graphic fi
+le (type png)
+<use figures/introduction/Thesis-PN-Example-without-preparation.png>
+Package pdftex.def Info: figures/introduction/Thesis-PN-Example-without-prepara
+tion.png  used on input line 21.
+(pdftex.def)             Requested size: 426.79135pt x 172.38887pt.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1697,85 +1733,86 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[8]
-<figures/evaluation/model_01_sequence.png, id=114, 736.7525pt x 149.55875pt>
-File: figures/evaluation/model_01_sequence.png Graphic file (type png)
-<use figures/evaluation/model_01_sequence.png>
-Package pdftex.def Info: figures/evaluation/model_01_sequence.png  used on inpu
-t line 79.
-(pdftex.def)             Requested size: 384.1096pt x 77.97182pt.
- [9]
-<figures/evaluation/result-ext-weight-01_log_sequence_02.png, id=119, 1858.945p
-t x 1126.2075pt>
-File: figures/evaluation/result-ext-weight-01_log_sequence_02.png Graphic file 
+[2 <./figures/introduction/Thesis-PN-Example-without-preparation.png>]
+<figures/introduction/Thesis-PN-Example-loop-preparation.png, id=109, 731.73375
+pt x 270.00874pt>
+File: figures/introduction/Thesis-PN-Example-loop-preparation.png Graphic file 
 (type png)
-<use figures/evaluation/result-ext-weight-01_log_sequence_02.png>
-Package pdftex.def Info: figures/evaluation/result-ext-weight-01_log_sequence_0
-2.png  used on input line 99.
-(pdftex.def)             Requested size: 384.09291pt x 215.01273pt.
-<figures/evaluation/result-pos-weight-01_log_sequence_02.png, id=120, 1857.9412
-5pt x 1128.215pt>
-File: figures/evaluation/result-pos-weight-01_log_sequence_02.png Graphic file 
+<use figures/introduction/Thesis-PN-Example-loop-preparation.png>
+Package pdftex.def Info: figures/introduction/Thesis-PN-Example-loop-preparatio
+n.png  used on input line 39.
+(pdftex.def)             Requested size: 426.79135pt x 157.48685pt.
+<figures/introduction/Thesis-PN-Example-with-preparation.png, id=110, 789.95125
+pt x 270.00874pt>
+File: figures/introduction/Thesis-PN-Example-with-preparation.png Graphic file 
 (type png)
-<use figures/evaluation/result-pos-weight-01_log_sequence_02.png>
-Package pdftex.def Info: figures/evaluation/result-pos-weight-01_log_sequence_0
-2.png  used on input line 106.
-(pdftex.def)             Requested size: 384.1123pt x 215.01724pt.
-<figures/evaluation/result-neg-weight-01_log_sequence_02.png, id=121, 1855.9337
-5pt x 1129.21875pt>
-File: figures/evaluation/result-neg-weight-01_log_sequence_02.png Graphic file 
+<use figures/introduction/Thesis-PN-Example-with-preparation.png>
+Package pdftex.def Info: figures/introduction/Thesis-PN-Example-with-preparatio
+n.png  used on input line 46.
+(pdftex.def)             Requested size: 426.79135pt x 145.88081pt.
+ [3 <./figures/introduction/Thesis-PN-Example-loop-preparation.png> <./figures/
+introduction/Thesis-PN-Example-with-preparation.png>]
+File: figures/introduction/Thesis-PN-Example-with-preparation.png Graphic file 
 (type png)
-<use figures/evaluation/result-neg-weight-01_log_sequence_02.png>
-Package pdftex.def Info: figures/evaluation/result-neg-weight-01_log_sequence_0
-2.png  used on input line 113.
-(pdftex.def)             Requested size: 384.09375pt x 215.01901pt.
+<use figures/introduction/Thesis-PN-Example-with-preparation.png>
+Package pdftex.def Info: figures/introduction/Thesis-PN-Example-with-preparatio
+n.png  used on input line 69.
+(pdftex.def)             Requested size: 426.79135pt x 145.88081pt.
+<figures/introduction/Thesis-PN-Example-change-order.png, id=127, 903.375pt x 2
+01.75375pt>
+File: figures/introduction/Thesis-PN-Example-change-order.png Graphic file (typ
+e png)
+<use figures/introduction/Thesis-PN-Example-change-order.png>
+Package pdftex.def Info: figures/introduction/Thesis-PN-Example-change-order.pn
+g  used on input line 76.
+(pdftex.def)             Requested size: 426.79135pt x 95.31683pt.
+ [4 <./figures/introduction/Thesis-PN-Example-change-order.png>]) [5] [6
 
-
-LaTeX Warning: Float too large for page by 73.08086pt on input line 119.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[10 <./figures/evaluation/model_01_sequence.png (PNG copy)>]) [11] [12 <./figur
-es/evaluation/result-ext-weight-01_log_sequence_02.png> <./figures/evaluation/r
-esult-pos-weight-01_log_sequence_02.png> <./figures/evaluation/result-neg-weigh
-t-01_log_sequence_02.png>]
+]
 Chapter 2.
-(./chapters/conclusion.tex) (./main.bbl [13
+(./chapters/background.tex [7]) [8]
+Chapter 3.
+(./chapters/conclusion.tex) (./main.bbl [9
 
-] [14
+] [10
 
-] [15]) [16]
+] [11]
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 78.
+
+(/usr/share/texmf/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)) [12]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 74.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 74.
  (./main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 74.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 74.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: EBA1A9EB7BB7F0A4BFE0EF41AE304B6B;928.
+(rerunfilecheck)             Checksum: F74D243652792AF937168887901659FF;539.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 74.
  ) 
 Here is how much of TeX's memory you used:
- 36139 strings out of 494847
- 838772 string characters out of 6179079
- 1046796 words of memory out of 5000000
- 38763 multiletter control sequences out of 15000+600000
- 74518 words of font info for 55 fonts, out of 8000000 for 9000
+ 37006 strings out of 494847
+ 856091 string characters out of 6179079
+ 1080724 words of memory out of 5000000
+ 39599 multiletter control sequences out of 15000+600000
+ 90755 words of font info for 60 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 76i,16n,121p,846b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
-/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
--ts1.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/f
-onts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.
-pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/t
-ype1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></us
-r/share/texmf/fonts/type1/public/lm/lmss10.pfb></usr/share/texmf/fonts/type1/pu
-blic/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb>
-Output written on main.pdf (16 pages, 1197081 bytes).
+ 76i,13n,121p,1123b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/d
+vips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/te
+xmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ma
+thit.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/f
+onts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmbxi10
+.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts
+/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></u
+sr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/p
+ublic/lm/lmss10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/
+share/texmf/fonts/type1/public/lm/lmsy10.pfb>
+Output written on main.pdf (18 pages, 1056391 bytes).
 PDF statistics:
- 237 PDF objects out of 1000 (max. 8388607)
- 202 compressed objects within 3 object streams
- 61 named destinations out of 1000 (max. 500000)
- 158 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 270 PDF objects out of 1000 (max. 8388607)
+ 228 compressed objects within 3 object streams
+ 55 named destinations out of 1000 (max. 500000)
+ 118 words of extra memory for PDF output out of 10000 (max. 10000000)
 

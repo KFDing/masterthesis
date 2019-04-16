@@ -9,10 +9,50 @@ Model repair belongs to process enhancement and stands between process discovery
 However, the current repair methods have some limits. Model repair fixes the model by adding subprocesses, silent transitions or loops, it guarantees the model fitness but overgeneralizes the model, such that it allows more behaviors than expected. On the other hand, it increases the model complexity.  Even the performance is considered in \cite{dees2017enhancing}, but only deviations in positive is used to add subprocesses, the negative information is ignored, which disables the possibility to block negative behaviors from model.  A motivation example is listed to describe those limits.
 %% Motivation 
 \section{Motivation Example}
-The example is extracted from the registration procedure of thesis project one German university. The main activities are topic selection, make proposal, a meeting with supervisor to discuss the topic, and check course requirements. After finishing all of those activities, the formal registration is enabled and the procedure comes to end.
-Figure \ref{fig:model_a} shows the original process in Petri net. The activities are modeled by the corresponding \emph{transitions} which is represented by a square. Transitions are connected through a circle called \emph{place}. Transitions and places build the static structure of Petri net. Tokens in black dots are put in places and represent the 
+% In this section, we use thesis registration example to display the shortcomings of existing techniques and then introduces our methods, but we need to answer them later..
+This section describes some situations where current repair techniques can't handle properly. For the sake of understanding, some examples are extracted from the registration procedure of thesis project at one German university to illustrate those situations. 
 
-and flow through the network to model the possible states. Tokens 
+The main activities for the registration process include topic selection, make proposal, meeting with supervisor to discuss the topic, and finish course requirements. After finishing all of those activities, the formal registration is enabled and the procedure comes to end. Figure \ref{fig:model_a}  shows the original process in Petri net. The activities are modeled by the corresponding \textbf{\emph{transitions}} which is represented by a square. Transitions are connected through a circle called \textbf{\emph{place}}. Transitions and places build the static structure of Petri net. \textbf{\emph{Tokens}} in the black dot are put in the initial places and represent the dynamic state of the model. 
+
+The model in Figure \ref{fig:model_a} is in an initial state where only one token is at the start place to enable the first transition begin thesis. After firing \emph{begin thesis}, the token at the initial place is consumed while two new token are generated in the output places. In this way, activity \emph{finish course requirements}  can be executed in concurrency with the other activities except for the \emph{register thesis}. When multiple activities have the same input place, all of them are enabled but only one of them can be fired and executed, namely, they are exclusive to each other. As shown in the figure,  \emph{select existing topics}  and \emph{create new topics} are exclusive, and only one of them can be triggered. When a transition have multiple input places, it can be triggered with condition that all input places hold at least a token. \emph{Register thesis} is enabled only after \emph{finish course requirements} and getting the \emph{approve} done. 
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{figures/introduction/Thesis-PN-Example-without-preparation.png}
+	\caption{original registration process}
+	\label{fig:model_a}
+\end{figure}
+% here we are going to talk about the situations where the current repair method can not handle well.
+In the following part, those situations are introduced to demonstrate the shortcomings of current techniques. 
+\subsection{Situation 1} % add preparation to this model
+Repair model with unfit traces compared to the original model. After \emph{make proposal} and before the activity \emph{topic meeting}, in order to address the work between them, two activities \emph{prepara carefully} and \emph{prepara casually} are added with an exclusive relation. The actual event log are listed below. In a convenient way, alphabet characters are used to represent the corresponding activities. \\
+\emph{Event Log -- }
+		\begin{align*}
+		Positive:\{ & { <a, c1,d,\textbf{e1},f,g1,h>}^{50}, \\   &{<a,c2,d,\textbf{e2},f,g1,h>}^{50} \} 
+		\end{align*}
+
+By using the repair techniques in \cite{fahland2015model}, the repaired model is shown in Figure \ref{fig:model_b1}, where the two additional activities are added in the form of loop. According to algorithm in \cite{fahland2015model}, two deviations appear at the same position of model. When repairing the model by adding subprocesses,  
+ for this is its algorithm can not discover ordering between different subprocesses at overlapping locations.  % The reason why it repairs like this way 
+\begin{figure}[htp]
+	\centering
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{figures/introduction/Thesis-PN-Example-loop-preparation.png}
+		\caption{process model with preparation after repair }
+		\label{fig:model_b1}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{\textwidth}
+		\centering
+		\includegraphics[width=01.0\linewidth]{figures/introduction/Thesis-PN-Example-with-preparation.png}
+		\caption{expected process model with preparation}
+		\label{fig:model_b2}
+	\end{subfigure}
+	\caption{example for model change under model repair}
+	\label{fig:model_with_preparation}
+\end{figure}
+
+
 
 As an example, there is a model presented in Figure \ref{fig:model_a}, where A is followed directly by B. During its execution in real life, an event log is generated: 
 \[{ <A, B> }^{55}  , {<B, A>}^{105} \] 
@@ -20,26 +60,22 @@ When considering KPIs performance, the log is divided into a positive and a nega
 \[ Positive \;  examples: { <A, B> }^{5}  , {<B, A>}^{100} \] 
 \[ Negative \; examples: { <A, B> }^{50}  , {<B, A>}^{5} \]  
 After applying current model repair techniques in \cite{fahland2015model}, the process model is repaired using all examples. A can be skipped and duplicated later in a self-loop. In \cite{dees2017enhancing} methods, only the positive examples are taken for the model repair. Yet, since both $<A,B> and <B,A>$ contributes to good performance,  the repaired model keeps the same like in Figure \ref{fig:model_examples}(b).
-\begin{figure}[h]
+\begin{figure}[htp]
 	\centering
-	\begin{subfigure}[b]{\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/introduction/Thesis-PN-Example-original-model.jpg}
-		\caption{original process model}
-		\label{fig:model_a}
-	\end{subfigure}
+	
 	\hfill
+	
 	\begin{subfigure}[b]{\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/introduction/Thesis-PN-Example-model-with-fitness.jpg}
-		\caption{process model \\ with high fitness}
+		\includegraphics[width=\linewidth]{figures/introduction/Thesis-PN-Example-with-preparation.png}
+		\caption{process model with preparation}
 		\label{fig:model_b}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{\textwidth}
 		\centering
-		\includegraphics[width=01.0\linewidth]{figures/introduction/Thesis-PN-Example-model-with-lt-1.jpg}
-		\caption{process model \\ with good KPI}
+		\includegraphics[width=01.0\linewidth]{figures/introduction/Thesis-PN-Example-change-order.png}
+		\caption{process model after changing order}
 		\label{fig:model_c}
 	\end{subfigure}
 	

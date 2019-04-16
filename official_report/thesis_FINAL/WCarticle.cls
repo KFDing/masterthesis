@@ -44,6 +44,9 @@
 %% allow more lines into one lines
 \RequirePackage{makecell}
 \RequirePackage[ruled,linesnumbered]{algorithm2e}
+\RequirePackage{svg}
+\RequirePackage{subcaption}
+
 %%make the chapters separate from each other
 %\RequirePackage{graphicx}
 %\graphicspath{{figures/}{../figures/}}
