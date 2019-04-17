@@ -2,9 +2,11 @@
 \BOOKMARK [0][-]{chapter*.2}{Abstract}{}% 2
 \BOOKMARK [0][-]{chapter.1}{Introduction}{}% 3
 \BOOKMARK [1][-]{section.1.1}{Motivation Example}{chapter.1}% 4
-\BOOKMARK [2][-]{subsection.1.1.1}{Situation 1}{section.1.1}% 5
-\BOOKMARK [1][-]{section.1.2}{Research Problem And Questions}{chapter.1}% 6
-\BOOKMARK [1][-]{section.1.3}{Outline}{chapter.1}% 7
-\BOOKMARK [0][-]{chapter.2}{Related Work}{}% 8
-\BOOKMARK [0][-]{chapter.3}{Conclusion}{}% 9
-\BOOKMARK [0][-]{chapter*.6}{Bibliography}{}% 10
+\BOOKMARK [2][-]{subsection.1.1.1}{Situation 1: repair model with unfit traces}{section.1.1}% 5
+\BOOKMARK [2][-]{subsection.1.1.2}{Situation 2: repair model with fit traces}{section.1.1}% 6
+\BOOKMARK [2][-]{subsection.1.1.3}{Situation 3: detect long-term dependency}{section.1.1}% 7
+\BOOKMARK [1][-]{section.1.2}{Research Problem And Questions}{chapter.1}% 8
+\BOOKMARK [1][-]{section.1.3}{Outline}{chapter.1}% 9
+\BOOKMARK [0][-]{chapter.2}{Related Work}{}% 10
+\BOOKMARK [0][-]{chapter.3}{Conclusion}{}% 11
+\BOOKMARK [0][-]{chapter*.5}{Bibliography}{}% 12

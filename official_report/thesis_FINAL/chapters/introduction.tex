@@ -24,15 +24,17 @@ The model in Figure \ref{fig:model_a} is in an initial state where only one toke
 \end{figure}
 % here we are going to talk about the situations where the current repair method can not handle well.
 In the following part, those situations are introduced to demonstrate the shortcomings of current techniques. 
-\subsection{Situation 1} % add preparation to this model
-Repair model with unfit traces compared to the original model. After \emph{make proposal} and before the activity \emph{topic meeting}, in order to address the work between them, two activities \emph{prepara carefully} and \emph{prepara casually} are added with an exclusive relation. The actual event log are listed below. In a convenient way, alphabet characters are used to represent the corresponding activities. \\
-\emph{Event Log -- }
+\subsection{Situation 1: \small{repair model with unfit traces}} % add preparation to this model
+Following the given model, in order to address the work between \emph{make proposal} and before the activity \emph{topic meeting}, two exclusive activities \emph{prepara carefully} and \emph{prepara casually} are executed in the real life and constitutes the actual event log $L_1$ listed below. With those two activities, it makes the whole procedure more efficient and clear and the traces with them are considered positive. For convenience, alphabet characters are used to represent the corresponding activities and annotated in the model. \textbf{e1, e2} represent the activities \emph{prepare carefully} and \emph{prepare casually}.\\
+\emph{Event Log $L_1$ -- }
 		\begin{align*}
-		Positive:\{ & { <a, c1,d,\textbf{e1},f,g1,h>}^{50}, \\   &{<a,c2,d,\textbf{e2},f,g1,h>}^{50} \} 
+		Positive:\{ & { <a,b, c1,d,\textbf{e1},f,g1,h>}^{50}, \\   &{<a,b, c2,d,\textbf{e2},f,g1,h>}^{50} \}  \\
+		% Negative: \{ & {<a,c1,d,\quad f,g1,h>}^{50} \}
 		\end{align*}
+Because the repair techniques in \cite{fahland2015model} don't distinguish the performance of event log, to make the model enforcing the positive performance, only positive instances are employed to repair the model. Firstly, the deviations of the existing model in Figure \ref{fig:model_a} and the event log $L_1$ is computed. After computation of deviations, each deviation has the same start and end place and two deviations appear at the same position of model. When repairing this model, each subprocess has one place as its start and end place, which forms a loop in the model. If there is only one such subprocess, the subprocess will be added in an sequence in the model. This leads to a higher precision. Yet the algorithm does not discover orderings between different subprocesses at overlapping locations. So subprocesses are kept in loop form. 
 
-By using the repair techniques in \cite{fahland2015model}, the repaired model is shown in Figure \ref{fig:model_b1}, where the two additional activities are added in the form of loop. According to algorithm in \cite{fahland2015model}, two deviations appear at the same position of model. When repairing the model by adding subprocesses,  
- for this is its algorithm can not discover ordering between different subprocesses at overlapping locations.  % The reason why it repairs like this way 
+The repaired model is shown in Figure \ref{fig:model_b1}, where the two additional activities are added in the form of loop.  Compared to the model in Figure \ref{fig:model_b2} where the two extra activities are shown in sequence with others, the repaired model in Figure \ref{fig:model_b1} has less precision.
+% The reason why it repairs like this way 
 \begin{figure}[htp]
 	\centering
 	\begin{subfigure}[b]{\textwidth}
@@ -44,46 +46,38 @@ By using the repair techniques in \cite{fahland2015model}, the repaired model is
 	\hfill
 	\begin{subfigure}[b]{\textwidth}
 		\centering
-		\includegraphics[width=01.0\linewidth]{figures/introduction/Thesis-PN-Example-with-preparation.png}
+		\includegraphics[width=1.0\linewidth]{figures/introduction/Thesis-PN-Example-with-preparation.png}
 		\caption{expected process model with preparation}
 		\label{fig:model_b2}
 	\end{subfigure}
 	\caption{example for model change under model repair}
 	\label{fig:model_with_preparation}
 \end{figure}
+% we need to talk about the problem in Dee's method. 
+The repair algorithm in \cite{dees2017enhancing} builds upon \cite{fahland2015model} and considers the performance of event log. However, the repaired model is the same as the one in Figure \ref{fig:model_b1}. The reasons are: (1) there is no deviation from negative factors. (2) positive deviations are used in the same way like \cite{fahland2015model}. As a conclusion, the repair techniques in \cite{dees2017enhancing} can't deal with situation 1 properly, either. 
 
+\subsection{Situation 2: \small{repair model with fit traces}}
+% we should delete the prepare carefully and casually from the model. Only consider to add the data about the order change..what we expect is not 
+This situation describes the existing problem in the current methods that fit traces with negative performance outcomes can not be used to repair model. Given an actual event log $L_2$, when activity \emph{finish course requirements} is fired after \emph{begin thesis} and before the topic selection part, it reduces the pressure of master thesis and has a positive outcome. Else, the negative outcomes are given. 
+\emph{Event Log $L_2$ -- }
+\begin{align*}
+Positive:\{ & { <a,\textbf{b},c1,d,f,g1,h>}^{50}, \\   &{<a,\textbf{b},c2,d,f,g1,h>}^{50} \}  \\
+Negative: \{ & {<a,c1,d,f,g1,\textbf{b},h>}^{50}, \\
+& {<a,c1,\textbf{b},d,f,g1,h>}^{50},  \}
+\end{align*}
+Compared to the model, the event log $L_2$ contains no deviation. When we apply the techniques in \cite{fahland2015model} and \cite{dees2017enhancing} to repair the model, the model keeps untouched due to no deviation. Apparently, those two methods can't incorporate the negative information in fit traces. When we expect a model which enforce the positive instances and avoid the negative instance as the model in Figure \ref{fig:model_c2}, the current methods fail our need. 
+\subsection{Situation 3: \small{detect long-term dependency}}
+This part introduces a problem which causes a lower precision in process model. It is the inability to detect the long-term dependency in the Petri net. 
+% For us, there can be no positive or negative information?? Not really, we need to see the negative ones, but how to we repair them?? If we only check the positive ones, we will add them, but over one threshold, else, we consider the effect from negative ones. %But how to combine them into those model?? They have good result?? I don't really know. It matters to the dependency on the data. So from the model, we can know, if we want to have higher possibility to get approval of topic. Unlogical..
+An event log $L_3$ with labels is given in the following. In this situation,  what is the performance standard?? So we can see in the model?? 
+\emph{Event Log $L_3$ -- }
+\begin{align*}
+Positive:\{ & { <a,b,\textbf{c1},d,f,\textbf{g1},h>}^{50}, \\   &{<a,b,\textbf{c2},d,f,\textbf{g2},b, \textbf{c1},d,f,\textbf{g1},h>}^{50} \}  \\
+Negative: \{ % & {<a,\textbf{c1},d,f,\textbf{g2},b, c1,d,f,g1,h>}^{50}, \\
+& {<a,\textbf{c1},b,d,f,\textbf{g1},h>}^{50}  \}
+\end{align*}
+%here we list one example to explain the long-term dependency, but we need to make them clear, might without the loop item..It means that we need to change the whole model..
 
-
-As an example, there is a model presented in Figure \ref{fig:model_a}, where A is followed directly by B. During its execution in real life, an event log is generated: 
-\[{ <A, B> }^{55}  , {<B, A>}^{105} \] 
-When considering KPIs performance, the log is divided into a positive and a negative set: 
-\[ Positive \;  examples: { <A, B> }^{5}  , {<B, A>}^{100} \] 
-\[ Negative \; examples: { <A, B> }^{50}  , {<B, A>}^{5} \]  
-After applying current model repair techniques in \cite{fahland2015model}, the process model is repaired using all examples. A can be skipped and duplicated later in a self-loop. In \cite{dees2017enhancing} methods, only the positive examples are taken for the model repair. Yet, since both $<A,B> and <B,A>$ contributes to good performance,  the repaired model keeps the same like in Figure \ref{fig:model_examples}(b).
-\begin{figure}[htp]
-	\centering
-	
-	\hfill
-	
-	\begin{subfigure}[b]{\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/introduction/Thesis-PN-Example-with-preparation.png}
-		\caption{process model with preparation}
-		\label{fig:model_b}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{\textwidth}
-		\centering
-		\includegraphics[width=01.0\linewidth]{figures/introduction/Thesis-PN-Example-change-order.png}
-		\caption{process model after changing order}
-		\label{fig:model_c}
-	\end{subfigure}
-	
-	\caption{example for model change under model repair}
-	\label{fig:model_examples}
-\end{figure}
-
-However, it's obvious that $<A,B>$ often leads to bad performance and therefore should be excluded. The Figure \ref{fig:model_examples}(c) shows the expected model with incorporating the negative information. This model reinforces positive examples and avoids negative instances, which provides us a more accurate view of the business process.
 
 Clearly, the use of negative information can bring significant benefits, e.g, enable a controlled generalization of a process model: the patterns to generalize should never include negative instances. The demand to improve current repair model techniques with incorporating negative instances appears. In the next section, the demand is analyzed and defined in a formal way.
 
