@@ -44,6 +44,7 @@
 %% allow more lines into one lines
 \RequirePackage{makecell}
 \RequirePackage[ruled,linesnumbered]{algorithm2e}
+\RequirePackage{wrapfig}
 \RequirePackage{svg}
 \RequirePackage{subcaption}
 
