@@ -45,8 +45,8 @@
 \RequirePackage{makecell}
 \RequirePackage[ruled,linesnumbered]{algorithm2e}
 \RequirePackage{wrapfig}
-\RequirePackage{svg}
-\RequirePackage{subcaption}
+%\RequirePackage{svg}
+%\RequirePackage{subcaption}
 
 %%make the chapters separate from each other
 %\RequirePackage{graphicx}
@@ -73,7 +73,10 @@
 \RequirePackage{pgfplots}
 \pgfplotsset{compat=1.15} 
 %%% BibTeX setup
-\bibliographystyle{plain}
+
+\RequirePackage[numbers,sort&compress]{natbib}
+\RequirePackage{notoccite}
+\bibliographystyle{unsrtnat}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% user-defined macros
 \newcommand{\gHeader}{Bachelor thesis}
