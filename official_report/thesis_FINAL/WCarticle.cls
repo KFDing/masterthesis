@@ -78,6 +78,9 @@
 \RequirePackage{notoccite}
 \bibliographystyle{unsrtnat}
 
+%% Set the enumearete item
+\RequirePackage[shortlabels]{enumitem}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% user-defined macros
 \newcommand{\gHeader}{Bachelor thesis}
 \newcommand{\gTitle}{Fancy long name for something incredibly useless}

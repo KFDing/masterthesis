@@ -13,124 +13,118 @@
 %%    ++ delete the silent transitions on the model as a post model
 
 %% Put some words here
-This chapter describes the repair algorithm to incorporate the negative instances on process enhancement. At the beginning, the main architecture is listed to provide an overview of our strategy. Main modules of the algorithm are described in the next sections. Firstly, the impact of the existing model, positive and negative instances are balanced in the media of the directly-follow relations. Inductive Miner is then applied to mine process models from those directly-follows relations. Again, we review the negative instances and express its impact by adding the long-term dependency. To add long-term dependency, extra places and silent transitions are created on the model, aiming to enforce the positive instances and block negative instances. Furthermore, the model in Petri net with long-term dependency can be  post-processed by reducing the silent transitions for the sake of simplicity.
+This chapter describes our repair algorithm to incorporate the negative instances on process enhancement. In the beginning, the architecture of this algorithm is provided to give an overview. Details of main steps are represented in the following order. Firstly, the impact of the existing model, positive and negative instances are balanced in the media of the directly-follow relations. Inductive Miner is then applied to mine process models from those directly-follows relations. Next, we detect and add long-term dependency on the generated process models. Furthermore, the model in Petri net with long-term dependency is  post-processed for the sake of simplicity. 
 \section{Architecture}
 %% Describe the 
-Figure \ref{fig:architecture} shows the steps of our strategy to enhance a process model. The basic inputs are an event log, and a Petri net. The traces in event log have an attribute for the classification labels of positive or negative in respect to some KPIs of business processes. The Petri net is the referenced model for the business process. To repair model with negative instances, the main steps are conducted.
+Figure \ref{fig:architecture} shows the steps of our strategy to enhance a process model. The basic inputs are an event log, and a Petri net. The traces in event log have an attribute for the classification labels of positive or negative in respect to some KPIs of business processes. The Petri net is the referenced model for the business process. To repair model with negative instances,  those steps are conducted.
 \begin{figure}
 	\includegraphics[width=0.9\textwidth, height=0.9\textheight]{figures/algorithm/FD_architecture_detail_02.png}
-	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and output data in eclipse shape, especially customized processes and data are in doubled lattice shape. Input event log and existing model are in blue, KPIs are in cloud. The output is a petri net in purple. }
+	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and output data in eclipse shape, especially customized processes and data are in doubled lattice shape. Input event log and existing model are in blue, KPIs are in cloud. The final output is a Petri net in purple. }
 	\label{fig:architecture}
 \end{figure} 
 \begin{itemize}
-	\item \emph{Generate directly-follows graph}\quad 
-	Three directly-follows graph are generated respectively for the existing model, positive instance and negative instances from event log.
+	\item \emph{Generate directly-follows graphs}\quad 
+	Three directly-follows graphs are generated respectively for the existing model, positive instance and negative instances from the event log.
 	\item \emph{Repair directly-follows graph} \quad
 	The three directly-follows graphs are combined into one single directly-follows graph after balancing their impact.
 	\item \emph{Mine models from directly-follows graph} \quad
-	Process models are mined by Inductive Miner as intermediate results.
+	Process models are mined from the repaired directly-follows graph by Inductive Miner as intermediate results.
 	\item \emph{Add long-term dependency} \quad
-	Long-term dependency is detected on the intermediate models and finally added on the Petri net. To simplify the model, the reduction of silent transitions can be applied at end.
+	Long-term dependency is detected on the intermediate models and finally added on the Petri net. To simplify the model, the reduction of silent transitions can be applied at the end.
 \end{itemize}
 More details can be provided in the following sections.
 
 \section{Generate directly-follows graph}
-Originally, the even log $L$ is split into two sublogs, called $L_{pos}$ and $L_{neg}$. $L_{pos}$ contains the traces which is labeled as positive, while $L_{neg}$ contains the negative instances in the event log. Then, the two sublogs are passed to procedure \emph{IMLog2Dfg} to generate directly-follows graphs, respectively $G(L_{pos})$ and $G(L_{neg})$. More details about the procedure is available in \cite{leemans2013discovering}. 
+Originally, the even log $L$ is split into two sublogs, called $L_{pos}$ and $L_{neg}$. $L_{pos}$ contains the traces which are labeled as positive, while $L_{neg}$ contains the negative instances in the event log. Then, those two sublogs are passed to an existing procedure \emph{IMLog2Dfg} from \cite{leemans2013discovering}. \emph{IMLog2Dfg} traverses traces in the event log, extracts directly-follows relations of activities, and generates a directly-follows graph based on those relations. By using \emph{IMLog2Dfg}, $G(L_{pos})$ and $G(L_{neg})$ are generated respectively from positive and negative instances.
+% Actually we can simplify those steps and reduce the time, but here just keep it like this.
 
-To generate a directly-follows relation from  a Petri net, we gather the model behaviors by building a transitions system of its states. Then the directly-follows relations are extracted from state transitions. Based on those relations, we create a directly-follows graph for the existing model.
+To generate a directly-follows graph from a Petri net, we gather the model behaviors by building a transition system. A transition system for a Petri net is composed of \emph{states} and \emph{transitions}. \emph{States} are the possible markings of this Petri net. \emph{Transitions} are activities from event log. Those transitions connect states as an arc from its enable marking to the marking after its execution. For each state, transitions pointed from this state are directly followed by transitions pointed to this state. By checking the transition system. directly-follows relations for the models are extracted. Based on those relations, we create a directly-follows graph for the existing model.
 
-From the positive and negative event log, we can get the cardinality for corresponding directly-follows graph, to represent the strength of this directly-follows relation. However, when the existing model is transformed into  directly-follows graph $G(L_{ext})$, there is no point to assign cardinality on each edge. So we just set cardinality with 1 for each edge. 
+From the positive and negative event logs, we can get the cardinality for corresponding directly-follows graph to represent the strength of this directly-follows relation. However, when the existing model is transformed into  directly-follows graph $G(L_{ext})$, there is no point to assign cardinality on each edge. So we just set cardinality with 1 for each arc. 
 \section{Repair directly-follows graph}
 %% we can have subsection on it. How to repair on them??? 
-To combine all information of the directly-follows graphs from the positive , negative instances and the existing model, namely $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$, the cardinality in directly-follows graphs is unified into the same range [0-1]. Since $G(L_{ext})$ is derived differently, its unified cardinality is based only on the given directly-follows graph and defined in the following. 
-\begin{definition}[Unified cardinality for the existing Model]
-Given a directly-follows graphs $G(L_{ext})$ for a model, the unified cardinality of each directly-follows relation is defined as \[ U_{ext}(E(A,B)) = \frac{Cardinality(E(A,B))}{Cardinality(E(A,*))}, with \]
-	\[ Cardinality(E(A,*))=\sum{Cardinality(E(A,X) \vert E(A,X) \in G(L))}  \] 
+To combine all information of the directly-follows graphs from the positive , negative instances and the existing model, namely $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$, the cardinality in directly-follows graphs is unified as the percentage to the sum of total cardinalities with a range [0-1].
+% here we already changed the definitions for the unifications..now it became as the percentage of the cardinality to its whole cardinality. No matter negative or positive ones...we can do it, right? 
+\begin{definition}[Unified cardinality]
+Given a directly-follows graphs $G(L)$ for a model, the unified cardinality of each directly-follows relation is defined as \[ U(E(A,B)) = \frac{Cardinality(E(A,B))}{Cardinality(E(*,*))}, with \]
+	\[ Cardinality(E(*,*))=\sum{Cardinality(E(X,Y) \vert E(X,Y) \in G(L))}  \] 
 	for start activities A, 
 	\[ U(Start(A)) = \frac{Cardinality(Start(A))}{Cardinality(Start(*))} \]
 	Similarly for end activities B,
 	\[ U(End(B)) = \frac{Cardinality(End(B))}{Cardinality(End(*))} \]
-$E(A,*)$ means all edges with source A, $E(*,B)$ means all edges with target B, $Start(*)$ represents all start nodes, and $End(*)$ represents all end nodes. 
-\end{definition}
-The unification of cardinality for positive and negative instances from an event log should consider the whole event log as its basic. 
-\begin{definition}[Unified cardinality for $G(L_{pos})$, $G(L_{neg})$]
-	Given a directly-follows graphs $G(L_{pos})$ for a model, the unified cardinality of each directly-follows relation is defined as 
-	\begin{align*}
-		&U_{pos}(E(A,B)) = \frac{Cardinality_{pos}(E(A,B))}{Cardinality(E(A,*))}, with  \\ 
-		Cardinality(E(A,*))&=\sum{Cardinality_{pos}(E(A,X) + Cardinality_{neg}(E(A,Y))} where \\
-		&	E(A,X) \in G(L_{pos}) and E(A,Y) \in G(L_{neg})) \\
-		\text{for start activities A, } \\
-		&U(Start_{pos}(A)) = \frac{Cardinality_{pos}(Start(A))}{Cardinality(Start(*))} \\
-		\text{for end activities B,} \\
-		&U(End_{pos}(B)) = \frac{Cardinality_{pos}(End(B))}{Cardinality(End(*))} \\
-	\end{align*}
-The unification for negative instances is defined in a similar way.  
+$E(*,*)$ means all edges in the directly-follows graph, $E(*,B)$ means all edges with target B, $Start(*)$ represents all start nodes, and $End(*)$ represents all end nodes. 
 \end{definition}
 
-Considering all the unified cardinalities, we derive a concept called weight for directly-follows relation to combine the factors from the existing model, positive and negative instances. Later, a new directly-follows graph is built based on those weights. 
-\begin{definition}[Weight of directly-follows relation $G_{new}$]
+After the unification, the impact from existing model, positive and negative instances is in the same level and is balanced by subtracting the negative unification from the sum of existing and positive unification. The output from this balance is as the generated unification for the repaired model. 
+\begin{definition}[Unified cardinality for directly-follows graph $G_{new}$]
+The unified cardinality for the repaired directly-follows relations is defined in the following.
 	\begin{itemize}
-		\item For one directly-follows relation, \[ Weight(E_{G_{new}}(A,B)) =  U(E_{G_{ext}}(A,B))+ U(E_{G_{pos}}(A,B))  - U(E_{G_{neg}}(A,B))\]
+		\item For one directly-follows relation, \[ U(E_{G_{new}}(A,B)) =  U(E_{G_{ext}}(A,B))+ U(E_{G_{pos}}(A,B))  - U(E_{G_{neg}}(A,B)) \] 
+		
+		if $U(E_{G_{new}}(A,B)) > 1 , U(E_{G_{new}}(A,B)) =1$, \\
+		if $U(E_{G_{new}}(A,B)) < 0 , U(E_{G_{new}}(A,B)) =0$; 
+	    
 		\item For start acivities A, we have 
-		\[ Weight(Start_{G_{new}}(A)) =  U(Start_{G_{ext}}(A)) + U(Start_{G_{pos}}(A)) - U(Start_{G_{neg}}(A)) \]
+		\[ U(Start_{G_{new}}(A)) =  U(Start_{G_{ext}}(A)) + U(Start_{G_{pos}}(A)) - U(Start_{G_{neg}}(A)) \]
+		
+		if $U(Start_{G_{new}}(A)) > 1 , U(Start_{G_{new}}(A)) =1$, \\
+		if $U(Start_{G_{new}}(A)) < 0 , U(Start_{G_{new}}(A)) =0$;  
+		
 		\item For end activities B, we have
-		\[ Weight(End_{G_{new}}(A)) = U(End_{G_{ext}}(A)) +  U(End_{G_{pos}}(A)) - U(End_{G_{neg}}(A)) \]
+		\[ U(End_{G_{new}}(A)) = U(End_{G_{ext}}(A)) +  U(End_{G_{pos}}(A)) - U(End_{G_{neg}}(A)) \]
+		if $U(End_{G_{new}}(A)) > 1 , U(End_{G_{new}}(A)) =1$, \\
+		if $U(End_{G_{new}}(A)) < 0 , U(End_{G_{new}}(A)) =0$. 
 	\end{itemize}
 \end{definition} 
 %% Here we add the control weight on it
-In the real life, there exists various needs to address either on the existing model, the positive instances or the negative instances. To meet this requirement, three control parameters are assigned respectively to each unified cardinality from the existing model, and positive and negative instances. The weight for one directly-follow relation is modified in the way bellow. 
-\begin{definition}[Weight of directly-follows relation $G_{new}$]
+In the real life, there exists various needs to address the impact either from the existing model, the positive instances or the negative instances. To meet this requirement, three control parameters in range [0-1] are assigned respectively to each unified cardinality from the existing model, and positive and negative instances. The weighted unification is modified in the way bellow. 
+\begin{definition}[Weighted unification of directly-follows graph $G_{new}$]
+	Given the control weight $C_{ext}$,$C_{pos}$, and $C_{neg}$ in range of [0-1], the weighted unification for $G_{new}$ is defined below.
 	\begin{itemize}
-		\item For one directly-follows relation, \[ Weight(E_{G_{new}}(A,B)) = C_{ext}*U(E_{G_{ext}}(A,B))+ C_{pos}*U(E_{G_{pos}}(A,B))  - C_{neg}*U(E_{G_{neg}}(A,B))\]
+		\item For one directly-follows relation, \[ Wu(E_{G_{new}}(A,B)) = C_{ext}*U(E_{G_{ext}}(A,B))+ C_{pos}*U(E_{G_{pos}}(A,B))  - C_{neg}*U(E_{G_{neg}}(A,B))\]
+		if $Wu(E_{G_{new}}(A,B)) > 1 , Wu(E_{G_{new}}(A,B)) =1$, \\
+		if $Wu(E_{G_{new}}(A,B)) < 0 , Wu(E_{G_{new}}(A,B)) =0$; 
+		
 		\item For start acivities A, we have 
-		\[ Weight(Start_{G_{new}}(A)) = C_{ext}*U(Start_{G_{ext}}(A))+ C_{pos}*U(Start_{G_{pos}}(A)) - C_{neg}*U(Start_{G_{neg}}(A)) \]
+		\[ Wu(Start_{G_{new}}(A)) = C_{ext}*U(Start_{G_{ext}}(A))+ C_{pos}*U(Start_{G_{pos}}(A)) - C_{neg}*U(Start_{G_{neg}}(A)) \]
+		if $Wu(Start_{G_{new}}(A)) > 1 , Wu(Start_{G_{new}}(A)) =1$, \\
+		if $Wu(Start_{G_{new}}(A)) < 0 , Wu(Start_{G_{new}}(A)) =0$;  
+		
 		\item For end activities B, we have
-		\[ Weight(End_{G_{new}}(A)) =  C_{ext}*U(End_{G_{ext}}(A)) + C_{pos}*U(End_{G_{pos}}(A))  - C_{neg}*U(End_{G_{neg}}(A)) \]
+		\[ Wu(End_{G_{new}}(A)) =  C_{ext}*U(End_{G_{ext}}(A)) + C_{pos}*U(End_{G_{pos}}(A))  - C_{neg}*U(End_{G_{neg}}(A)) \]
+		if $Wu(End_{G_{new}}(A)) > 1 , Wu(End_{G_{new}}(A)) =1$, \\
+		if $Wu(End_{G_{new}}(A)) < 0 , Wu(End_{G_{new}}(A)) =0$. 
 	\end{itemize}
 \end{definition}
 By adjusting the weight of $C_{ext}$,$C_{pos}$,$C_{neg}$, different focus can be reflected by the model. For example, by setting $C_{ext}=0$,$C_{pos}=1$,$C_{neg}=1$, the existing model is ignored in the repair, while  $C_{ext}=1$,$C_{pos}=0$,$C_{neg}=0$, the original model is kept.
-\section{Mine models from directly-follows graph}
-The result from last step is a generated directly-follows graph with weighted unified cardinality. To apply the Inductive Miner on directly-follows graph, more procedures are in need. The directly-follows relations are firstly filtered when its weighted unified cardinality is less than 0. Secondly, its cardinality is transformed into the form which is acceptable by the Inductive Miner.  
+
+After getting the weighted unification, we can assign cardinality for the directly-follows graph $G_{new}$ by multiplying weighted unification with the total number of cardinalities of $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$. 
+\section{Mine models from a directly-follows graph}
+The result from the last step above is a generated directly-follows graph with weighted unified cardinality. We mine process models from this graph by procedure \emph{Dfg2ProcessTree} in the Figure \ref{fig:architecture}. This procedure was introduced with Inductive Miner\cite{leemans2013discovering}. It finds the most prominent split from the set of exclusive choice, sequence, parallelism, and loop splits on  a directly-follows graph.  Afterward, the corresponding operator to the split is used to build a block-structured process model called a process tree. Iteratively, the split sub graphs are passed as inputs for the same procedure until one single activity is reached and no split is available. A process tree is output as the mined process model and can be converted into another process model called Petri net.
 %% To write the procedure for it 
-\iffalse
-\begin{algorithm}
-	\begin{algorithm*}
-		\SetAlgoLined
-		\Require A directly-follow graph $G_{new}$ with weighted unified cardinality
-		\Function{Derive model from directly-follows graph}
-		\ForAll{ directly-follows relation $E(A,B)$ in $G_{new}$ }
-		\If{ $Weight(E_{G_{new}}(A,B)) > 0$ }{
-			\State keep $E(A,B)$ and assign
-			\State $Cardinality_{new}(E(A,B)) = Weight(E_{G_{new}}(A,B))*\vert L\vert$
-		}
-		\EndIf
-		\EndFor
-		\EndFunction
-	\end{algorithm*}
-	
-\end{algorithm}
-\fi
+
 \section{Add long-term dependency}
-Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can not be discovered. 
+Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. 
 % DO we need to give one example?? 
 To make the generated model  more precise, we detect the long-term dependency and add it on the model in Petri net. 
-Obviously, long-term dependency relates the choices structure in process model, such as exclusive choice, loop and or structure. Due to the complexity of or and loop structure, the long-term dependency in exclusive choice is considered only in this thesis. 
+Obviously, long-term dependency relates the structure of choices in process model, such as exclusive choice, loop and or structure. Due to the complexity of or and loop structure, the long-term dependency in the exclusive choice is considered only in this thesis. 
 
-To analyze the exclusive choice of activities, we uses process tree as a intermediate process. We use  process  trees as one internal result in  our  approach in two factors: The reasons are: (1) easy to extract the exclusive choice structure from process tree. Process tree is block-structured and benefits the analysis of exclusive choices. (2) easy to get the model in process tree. Inductive Miner can generate process model in process tree. (3) easy to transform process tree to Petri net. 
+To analyze the exclusive choice of activities, we use process tree as an intermediate process model due to several reasons: (1) easy to extract the exclusive choice structure from process tree. Process tree is block-structured and exclusive choices are easy to split from others. (2) easy to transform a process tree to a Petri net. 
 %% Here we need to add the relation of process to the long-term dependency
-The exclusive choice can be written as Xor in process tree. For sake of convenience, we define the concept called xor branch. 
-\begin{definition}{Xor branch}
-$Q= \times(Q_1 , Q_2 ,.. Q_n)$, $Q_i$ is one xor branch with respect to Q, rewritten as $XORB_{Q_i}$ to represent one xor branch $Q_i$ in xor block, and record it $XORB_{Q_i} \in XOR_{Q}$. For each branch, there exists the begin and end nodes to represent the beginning and end execution of this branch, which is written respectively as Begin($XORB_{Q_i}$) and End($XORB_{Q_i}$).	
+
+An exclusive choice structure be represented as Xor in a process tree. The subtree of this structure is called xor branch in this thesis for convenience.
+\begin{definition}[Xor branch]
+Given an xor block $Q= \times(Q_1 , Q_2 ,.. Q_n)$, $Q_i$ is one xor branch with respect to Q. It can be rewritten as $XORB_{Q_i}$ to represent one xor branch $Q_i$. For each branch, there exists the begin and end nodes to represent the beginning and end execution of this branch, which is written respectively as Begin($XORB_{Q_i}$) and End($XORB_{Q_i}$).	
 \end{definition}
 Two properties of xor block, purity and nestedness are demonstrated to express the different structures of xor block according to its branches.
-\begin{definition}[XOR Purity and XOR Nestedness] The xor block purity and nestedness are defined as following: \\
+\begin{definition}[XOR Purity and XOR Nestedness] The xor block purity and nestedness are defined as following: 
 	\begin{itemize}
 		\item A xor block $XOR_Q$ is pure if and only $\forall XORB_X \in XOR_Q, XORB_X $ has no xor block descent, which is named as pure xor branch. Else,
 		\item A xor block $XOR_Q$ is nested if $ \exists XOR_X, Anc(XOR_Q, XOR_X) \rightarrow True  $. Similarly, this xor branch with xor block is nested.
 	\end{itemize}
 \end{definition}
 
-For two arbitrary xor branches, to have long-term dependency, they firstly need to satisfy the conditions: (1) they have an order;(2) they have significant correlation.
+For two arbitrary xor branches with long-term dependency, they firstly need to satisfy the conditions: (1) they have an order;(2) they have significant correlation.
 The order of xor branch follows the same rule of node in process tree which is explained in the following.
 \begin{definition}[Order of nodes in process tree]
 	Node $X$ is before node $Y$, written in $X \prec Y$, if $X$ is always executed before $Y$.  In the aspect of process tree structure, $X \prec Y$, if the least common ancestor of $X$ and $Y$ is a sequential node, and $X$ positions before $Y$.
@@ -139,7 +133,7 @@ The order of xor branch follows the same rule of node in process tree which is e
 The correlation of xor branches is significant if they always happen together. To define it, several concepts are listed at first. 
 \begin{definition}[Xor branch frequency]
 	Xor branch $XORB_X$ frequency in event log L is $F_{L}(XORB_X)$, the count of traces with the execution of $XORB_X$. \\
-	For multiple xor branches, the frequency of their coexistence in event log L is defined as the count of traces with all the occurrence of xor branches $XORB_{Xi}$ , written as \[F_{L}(XORB_{X1}, XORB_{X2},...,XORB_{Xn})\].
+	For multiple xor branches, the frequency of their coexistence in event log L is defined as the count of traces with all the occurrence of xor branches $XORB_{Xi}$ , written as \[F_{L}(XORB_{X1}, XORB_{X2},...,XORB_{Xn}).\]
 \end{definition}
 After calculation of the frequency of the coexistence of multiple xor branches in positive and negative event log, we get the supported connection of those xor branches to reflect the correlation. 
 \begin{definition}[Correlation of xor branches]
@@ -150,9 +144,9 @@ After calculation of the frequency of the coexistence of multiple xor branches i
 The existing model can also affect the long-term dependency by supporting the existence of xor branches. In this assumption, the full long-tern dependency is approved. To incorporate the influence from the existing model, we rephrase the definition for xor branch correlation.
 \begin{definition}[Rephrased Correlation of xor branch] The correlation for two branches is expressed into
 	\[Wlt(XORB_X,XORB_Y)= Wlt_{ext}(XORB_X, XORB_Y) + Wlt_{pos}(XORB_X, XORB_Y)\] \[ -Wlt_{neg}(XORB_X, XORB_Y)\], where 
-	$Wlt_{ext}(XORB_X, XORB_Y)= \frac{1}{|XORB_Y*|}$, $|XORB_{Y*}|$ means the number of possible  directly-follows xor branche set $XORB_{Y*}=\{XORB_{Y1}, XORB_{Y2},...XORB_{Yn} \}$ after $XORB_X$. \\ 
-	$Wlt_{pos}(XORB_X, XORB_Y)= \frac{F_{pos}(XORB_X, XORB_Y)}{F_{pos}(XORB_X, *)}$, \\
-	$Wlt_{neg}(XORB_X, XORB_Y)= \frac{F_{neg}(XORB_X, XORB_Y)}{F_{neg}(XORB_X, *)}$, \\	
+	$Wlt_{ext}(XORB_X, XORB_Y)= \frac{1}{|XORB_Y*|}$, $|XORB_{Y*}|$ means the number of possible  directly-follows xor branche set $XORB_{Y*}=\{XORB_{Y1}, XORB_{Y2},...XORB_{Yn} \}$ after $XORB_X$. 
+	\[Wlt_{pos}(XORB_X, XORB_Y)= \frac{F_{pos}(XORB_X, XORB_Y)}{F_{pos}(XORB_X, *)},\]
+	\[Wlt_{neg}(XORB_X, XORB_Y)= \frac{F_{neg}(XORB_X, XORB_Y)}{F_{neg}(XORB_X, *)}\]	
 \end{definition}
 The $F_{pos}(XORB_X, XORB_Y)$ and $F_{neg}(XORB_X, XORB_Y)$ are the frequency of the coexistence of $XORB_X$ and $XORB_Y$, respectively in positive and negative event log.
 
@@ -265,9 +259,6 @@ To prove the model soundness after adding long-term dependency, we need to prove
 		In source xor block $S$, only one xor branch $X_i$  can be triggered.  
 	\end{itemize}
 
-	
-	
-	
 	In the target xor block $T$, only one xor block $Y_j$ can be triggered. 
 	
 	\item the algorithm does not violate the soundness outside of xor blocks.\\ 
