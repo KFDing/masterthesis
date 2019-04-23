@@ -265,16 +265,21 @@ public class NewLTDetector {
 
 		for (int i = 0; i < ProcessConfiguration.LT_IDX_NUM; i++)
 			sums.add(0.0);
-
+		// here we need to unify the effect from positive and negative
+		// else the bias caused from the absolute values
+		// to get the relative values, we need to find out the portitions 
+		// for the negative connections?? Also, the ones in positive
+		// sums(pos)=
 		for (LTRule<XORCluster<ProcessTreeElement>> conn : tmpConnList) {
 			for (int i = 0; i < ProcessConfiguration.LT_IDX_NUM; i++)
 				sums.set(i, sums.get(i) + conn.getConnValue(i));
 
 		}
-		sums.set(1, sums.get(1) + sums.get(2));
-		sums.set(2, sums.get(1));
+		// here we set the sum to be the counts from positive and negative
+		//sums.set(1, sums.get(1) + sums.get(2));
+		// sums.set(2, sums.get(1));
 		/*
-		 * Here some thing not rightm because if we consider the whole effect,
+		 * Here some thing not right because if we consider the whole effect,
 		 * we use the trace num but we then need to find all xor branches in the
 		 * model and then divide it sums.add((double) tmpConnList.size());
 		 * sums.add((double) traceNum); sums.add((double) traceNum);

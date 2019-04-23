@@ -42,7 +42,7 @@ public class ProcessConfiguration extends Configuration {
 
 	// the threshold to keep the dfg working
 	public static double DFG_THRESHOLD = 0.0;
-	public static double LT_THRESHOLD = 0.25;
+	public static double LT_THRESHOLD = 0.0;
 
 	public enum ViewType {
 		ProcessTree, PetriNet, PetriNetWithLTDependency, ReducedPetriNet

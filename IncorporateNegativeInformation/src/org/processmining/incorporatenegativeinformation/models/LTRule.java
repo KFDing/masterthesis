@@ -41,7 +41,8 @@ public class LTRule<E> {
 		for (int i = 0; i < num; i++)
 			connectionValues.add(0.0);
 		// set the existing value for it 
-		connectionValues.set(0, 1.0);
+		// we don't need to set it here
+		// connectionValues.set(0, 1.0);
 	}
 
 	public LTRule(E source, E target) {
@@ -53,8 +54,8 @@ public class LTRule<E> {
 		connectionValues = new ArrayList<Double>();
 		for (int i = 0; i < num; i++)
 			connectionValues.add(0.0);
-
-		connectionValues.set(0, 1.0);
+		// for the existing model, but no need
+		// connectionValues.set(0, 1.0);
 		sourceNodes.add(source);
 		targetNodes.add(target);
 

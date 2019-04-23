@@ -106,60 +106,72 @@ The result from the last step above is a generated directly-follows graph with w
 \section{Add long-term dependency}
 Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. 
 % DO we need to give one example?? 
-To make the generated model  more precise, we detect the long-term dependency and add it on the model in Petri net. 
-Obviously, long-term dependency relates the structure of choices in process model, such as exclusive choice, loop and or structure. Due to the complexity of or and loop structure, the long-term dependency in the exclusive choice is considered only in this thesis. 
+To make the generated model preciser, we detect the long-term dependency and add it on the process model. 
 
-To analyze the exclusive choice of activities, we use process tree as an intermediate process model due to several reasons: (1) easy to extract the exclusive choice structure from process tree. Process tree is block-structured and exclusive choices are easy to split from others. (2) easy to transform a process tree to a Petri net. 
+Obviously, long-term dependency relates the structure of choices in process model, such as exclusive choice, loop and or structure. Due to the complexity of or and loop structure, we only deal with the long-term dependency in the exclusive choice structure. 
+
+To analyze the exclusive choice structure, we use process tree as an intermediate process model due to several reasons: (1) easy to extract the exclusive choice structure from process tree, since process tree is block-structured. (2) easy to transform a process tree to a Petri net. 
 %% Here we need to add the relation of process to the long-term dependency
 
-An exclusive choice structure be represented as Xor in a process tree. The subtree of this structure is called xor branch in this thesis for convenience.
+An exclusive choice structure be represented as Xor in a process tree. A subtree of this structure is called xor branch in this thesis for convenience.
 \begin{definition}[Xor branch]
 Given an xor block $Q= \times(Q_1 , Q_2 ,.. Q_n)$, $Q_i$ is one xor branch with respect to Q. It can be rewritten as $XORB_{Q_i}$ to represent one xor branch $Q_i$. For each branch, there exists the begin and end nodes to represent the beginning and end execution of this branch, which is written respectively as Begin($XORB_{Q_i}$) and End($XORB_{Q_i}$).	
 \end{definition}
-Two properties of xor block, purity and nestedness are demonstrated to express the different structures of xor block according to its branches.
+\iffalse
+Two properties of xor block, purity and nestedness are defined to express the different structures of xor block according to its branches.
 \begin{definition}[XOR Purity and XOR Nestedness] The xor block purity and nestedness are defined as following: 
 	\begin{itemize}
 		\item A xor block $XOR_Q$ is pure if and only $\forall XORB_X \in XOR_Q, XORB_X $ has no xor block descent, which is named as pure xor branch. Else,
 		\item A xor block $XOR_Q$ is nested if $ \exists XOR_X, Anc(XOR_Q, XOR_X) \rightarrow True  $. Similarly, this xor branch with xor block is nested.
 	\end{itemize}
 \end{definition}
-
-For two arbitrary xor branches with long-term dependency, they firstly need to satisfy the conditions: (1) they have an order;(2) they have significant correlation.
+\fi
+For two arbitrary xor branches with long-term dependency, they have to satisfy the conditions: (1) they have a sequential order;(2) they have significant correlation.
 The order of xor branch follows the same rule of node in process tree which is explained in the following.
 \begin{definition}[Order of nodes in process tree]
 	Node $X$ is before node $Y$, written in $X \prec Y$, if $X$ is always executed before $Y$.  In the aspect of process tree structure, $X \prec Y$, if the least common ancestor of $X$ and $Y$ is a sequential node, and $X$ positions before $Y$.
 \end{definition} 
 
-The correlation of xor branches is significant if they always happen together. To define it, several concepts are listed at first. 
+The correlation of xor branches is significant if they always happen together. To define it, several concepts listed below are necessary. 
 \begin{definition}[Xor branch frequency]
-	Xor branch $XORB_X$ frequency in event log L is $F_{L}(XORB_X)$, the count of traces with the execution of $XORB_X$. \\
+	Xor branch $XORB_X$ frequency in event log L, $F_{L}(XORB_X)$, is the count of traces with the execution of $XORB_X$. \\
 	For multiple xor branches, the frequency of their coexistence in event log L is defined as the count of traces with all the occurrence of xor branches $XORB_{Xi}$ , written as \[F_{L}(XORB_{X1}, XORB_{X2},...,XORB_{Xn}).\]
 \end{definition}
-After calculation of the frequency of the coexistence of multiple xor branches in positive and negative event log, we get the supported connection of those xor branches to reflect the correlation. 
-\begin{definition}[Correlation of xor branches]
-	\label{def: supported-connection}
-	For two pure xor branches, $XORB_X \prec XORB_Y$, the supported connection is given as \[SC(XORB_X,XORB_Y)= F_{pos}(XORB_X, XORB_Y) -F_{neg}(XORB_X, XORB_Y)\]If $SC(XORB_X,XORB_Y) > \text{lt-threshold}$, then we say $XORB_X$ and $XORB_Y$ have significant correlation.
-\end{definition}
+The frequency of the coexistence of multiple xor branches in positive and negative event logs reflects the correlation of those xor branches. The long-term dependency in the existing model also affects the long-term dependency in the repaired model. However, since the repaired model possibly differs from the existing model, the impact of long-term dependency from the existing model becomes difficult to detect. With limits of time, we only consider the impact from positive and negative instances on the long-term dependency.
+%In one way, it has explicit long-term dependencies that should be kept. In another way, the existence of xor branches implies a full-connected long-term dependency. To incorporate the influence from the existing model, we give the definition for xor branch correlation.
+% but to detect the explict long-term dependency, we need one pre-process?? But how ?? Also, how to combine the effect into the model then??
+%% To detect it:: <1> xor blocks in the Petri net,  1.0 is assigned to the existing model but, but !!! we can not decide it!! Because the xor block the generated model differs from the existing models!! So our whole methods can have such wrong parts!! If the wrong part from them, we need to make sure the xor branches also exist in the repaired model. Then we need to check the long-term depedency. We must see the positive and negative ones..
+% so we can also have the positive and negative instances for long-term dependency.
 %% combine the existing model factor together. How about we record the long-term dependency from the existing model?? How to extract the long-term dependency from the model?? No method currently
-The existing model can also affect the long-term dependency by supporting the existence of xor branches. In this assumption, the full long-tern dependency is approved. To incorporate the influence from the existing model, we rephrase the definition for xor branch correlation.
-\begin{definition}[Rephrased Correlation of xor branch] The correlation for two branches is expressed into
-	\[Wlt(XORB_X,XORB_Y)= Wlt_{ext}(XORB_X, XORB_Y) + Wlt_{pos}(XORB_X, XORB_Y)\] \[ -Wlt_{neg}(XORB_X, XORB_Y)\], where 
-	$Wlt_{ext}(XORB_X, XORB_Y)= \frac{1}{|XORB_Y*|}$, $|XORB_{Y*}|$ means the number of possible  directly-follows xor branche set $XORB_{Y*}=\{XORB_{Y1}, XORB_{Y2},...XORB_{Yn} \}$ after $XORB_X$. 
+\begin{definition}[Correlation of xor branch] The correlation for two branches is expressed into
+	\[Wlt(XORB_X,XORB_Y)=  Wlt_{pos}(XORB_X, XORB_Y) -Wlt_{neg}(XORB_X, XORB_Y)\], where 
 	\[Wlt_{pos}(XORB_X, XORB_Y)= \frac{F_{pos}(XORB_X, XORB_Y)}{F_{pos}(XORB_X, *)},\]
 	\[Wlt_{neg}(XORB_X, XORB_Y)= \frac{F_{neg}(XORB_X, XORB_Y)}{F_{neg}(XORB_X, *)}\]	
 \end{definition}
-The $F_{pos}(XORB_X, XORB_Y)$ and $F_{neg}(XORB_X, XORB_Y)$ are the frequency of the coexistence of $XORB_X$ and $XORB_Y$, respectively in positive and negative event log.
-
+The $F_{pos}(XORB_X, XORB_Y)$ and $F_{neg}(XORB_X, XORB_Y)$ are the frequency of the coexistence of $XORB_X$ and $XORB_Y$, respectively in positive and negative event logs.
+% here we need to define the long-term dependency
+%Based on the concepts above, we give a formal definition for long-term dependency in this thesis. 
+%\begin{definition}[Long-term dependency for xor blocks] We call two xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency, if 
+%	 \[ S \prec T, Wlt  \]
+%\end{definition}
 \subsection{Cases Analysis}
-There are 7 sorts of long-term dependency that is able to happen in this model as listed in the following. Before this, we need to define some concepts at the sake of convenience.
-\begin{definition}[Source and Target of Long-term Dependency]
-	We define the source set of long-term dependency is  $LT_S:= \{X \vert \exists X, X\rightsquigarrow Y  \in LT \} $, and target set is $LT_T:= \{Y \vert \exists Y, X\rightsquigarrow Y \in LT \} $. \\
+% Here we need to check the combination for all xor branches, but with one example.
+There are various sorts of long-term dependencies that are able to happen for two xor blocks. To explain those situations better, we define concepts called sources and targets of long-term dependency and then give an example of one Petri net with long-term dependency.
+\begin{definition}[Source and target set of Long-term Dependency]
+	The source set of the long-term dependency in two xor blocks is the set of all  xor branches, $LT_S:= \{X \vert \exists Y, X\rightsquigarrow Y  \in LT \} $, and target set is $LT_T:= \{Y \vert \exists X, X\rightsquigarrow Y \in LT \} $. \\
 	For one xor branch $X \in XORB_S$, the target xor branch set relative to it with long-term dependency is defined as:
-	$ LT_T(X)= \{Y \vert \exists Y, X\rightsquigarrow Y \in LT \}$
+	$ LT_T(X)= \{Y \vert  X\rightsquigarrow Y \in LT \}$
 	Respectively, the source xor branch relative to one xor branch in target is
-	$ LT_S(Y)= \{X \vert \exists X, X\rightsquigarrow Y \in LT \}$
+	$ LT_S(Y)= \{X \vert  X\rightsquigarrow Y \in LT \}$
 \end{definition}
-At the same time, we use $XORB_S $ and $XORB_T$ to represent the set of xor branches for source and target xor block. 
+At the same time, we use $XORB_S $ and $XORB_T$ to represent the set of xor branches for source and target xor block with long-term dependency.
+Given an Petri net in Figure \ref{fig:seq-2-original}, two xor blocks are contained in the model which allows the following long-term situations.
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Original.png}
+	\label{fig:seq-2-original}
+	\caption{One Petri net with two two xor blocks}
+\end{figure}
 \begin{enumerate}
 	\item $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow D, B\rightsquigarrow D\}$. \\
 	$LT_S = \{A,B\}, LT_T=\{D,E\}, \vert LT \vert = \vert XORB_S \vert * \vert XORB_T \vert  $, which means long-term dependency has all combinations of source and target xor branches. 
@@ -221,9 +233,9 @@ The steps to add silent transitions and places according to the long-term depend
 \subsection{Soundness Analysis}
 % this section is used to select the sound situations. 
 % next time I can go to library at Tuesday with the laptop and study there..
-With this algorithm by adding silent transitions and places to express long-term dependency, the model soundness can be violated. In the following section, we will discuss the soundness in different situations.
+With this algorithm \ref{alg: Adding method} by adding silent transitions and places to express long-term dependency, the model soundness can be violated. In the following section, we discuss the soundness in different situations.
 
-Given arbitrary two xor block, $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$, following the algorithm\ref{alg: Adding method}, places after the source xor branches,  $P_S={p_{X_i} \vert X_i \in LT_{S} }$, and places before target xor branches,$P_T={p_{Y_j} \vert Y_i \in LT_{T} }$ are firstly added. \\ 
+Given arbitrary two xor block, $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$, following the algorithm\ref{alg: Adding method}, places after the source xor branches,  $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$, and places before target xor branches,$P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$ are firstly added. \\ 
 For each long-term dependency $X_{i} \rightsquigarrow Y_{j}$ in LT, there is silent transition t with $p_{X_i} \rightarrow t \rightarrow p_{Y_{j}}$.
 
 To prove the model soundness after adding long-term dependency, we need to prove 

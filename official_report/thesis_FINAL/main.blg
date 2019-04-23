@@ -1,46 +1,10 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
 The style file: unsrtnat.bst
 Database file #1: references.bib
-You've used 18 entries,
-            2481 wiz_defined-function locations,
-            660 strings with 7732 characters,
-and the built_in function-call counts, 8472 in all, are:
-= -- 791
-> -- 350
-< -- 18
-+ -- 136
-- -- 100
-* -- 610
-:= -- 1234
-add.period$ -- 63
-call.type$ -- 18
-change.case$ -- 35
-chr.to.int$ -- 18
-cite$ -- 18
-duplicate$ -- 453
-empty$ -- 796
-format.name$ -- 128
-if$ -- 1906
-int.to.chr$ -- 1
-int.to.str$ -- 19
-missing$ -- 19
-newline$ -- 98
-num.names$ -- 54
-pop$ -- 177
-preamble$ -- 1
-purify$ -- 18
-quote$ -- 0
-skip$ -- 292
-stack$ -- 0
-substring$ -- 529
-swap$ -- 126
-text.length$ -- 11
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 123
-warning$ -- 0
-while$ -- 80
-width$ -- 0
-write$ -- 250
+Warning--entry type for "ProM" isn't style-file defined
+--line 218 of file references.bib
+Warning--entry type for "MyPlugin" isn't style-file defined
+--line 224 of file references.bib
+Warning--empty year in ProM
+Warning--empty year in MyPlugin
+(There were 4 warnings)
