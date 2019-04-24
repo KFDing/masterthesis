@@ -1,4 +1,4 @@
-\begin{thebibliography}{3}
+\begin{thebibliography}{4}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -12,6 +12,13 @@ Sander~JJ Leemans, Dirk Fahland, and Wil~MP van~der Aalst.
   constructive approach.
 \newblock In \emph{International conference on applications and theory of Petri
   nets and concurrency}, pages 311--329. Springer, 2013.
+
+\bibitem[Bergenthum et~al.(2007)Bergenthum, Desel, Lorenz, and
+  Mauser]{bergenthum2007process}
+Robin Bergenthum, J{\"o}rg Desel, Robert Lorenz, and Sebastian Mauser.
+\newblock Process mining based on regions of languages.
+\newblock In \emph{International Conference on Business Process Management},
+  pages 375--383. Springer, 2007.
 
 \bibitem[Process Mining~Group()]{ProM}
 Eindhoven Technical University. ©~2010. Process Mining~Group.

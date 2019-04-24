@@ -194,10 +194,14 @@ Given an Petri net in Figure \ref{fig:seq-2-original}, two xor blocks are contai
 In the following, we propose a method to express long-term dependency on Petri net. 
 %% should we write down here to prove the correctness of available situations, or we need to wait??
 \subsection{Way to express long-term dependency}
-In dynamic aspect of the process model, long-term dependency can be seen as a way to block certain behaviors. By injecting silent transitions and extra places on Petri net, it limits the executions of certain behaviors. 
-% here to explain the mechanism??
+Adding places to Petri net can limit the behavior\cite{bergenthum2007process}, since its output transitions demand a token from it to fire themselves. When there is no token at this place, the transitions are enabled. By injecting extra places on Petri net, it can block negative behaviors which are not expected in the aspect of business performance. 
+
+Long-term dependency limits the available choices to fire transitions after the previous xor branch executes. So to express long-term dependency, our basic idea is to add places to the Petri net model. What's more, because one xor branch can be as a source to multiple long-term dependencies and one xor branch can be as a target to multiple long-term dependencies, silent transitions are also needed to address a long-term dependency explicitly. 
+
+
+Given arbitrary two xor blocks, $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$, we add places after the source xor branches,  $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$, and places before target xor branches,$P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$. For each long-term dependency $X_{i} \rightsquigarrow Y_{j}$ in LT, there is silent transition t with $p_{X_i} \rightarrow t \rightarrow p_{Y_{j}}$. The steps to add silent transitions and places according to the long-term dependency are listed in algorithm \ref{alg: Adding method}.
+
 % An algorithm is given to show how to add the long-term dependency
-The steps to add silent transitions and places according to the long-term dependency are listed bellow. % Paste the algorithm to add the long-term dependency 
 \begin{algorithm}[!ht]
 	\SetAlgoLined
 	$XORB_Y$ is dependent on $XORB_X$\;
@@ -228,91 +232,47 @@ The steps to add silent transitions and places according to the long-term depend
 	\caption{Add long-term dependency between pure xor branch}
 	\label{alg: Adding method}
 \end{algorithm}
+\begin{figure}
+	\includegraphics[width=\textwidth]{figures/algorithm/LT_Seq_01_Silent_01.png}
+	\label{fig:add-algorithm-example}
+	\caption{Model with long-term dependency $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $ }
+\end{figure}
+One simple example is given in the Figure \ref{fig:add-algorithm-example} to explain this algorithm. Given the long-term dependencies $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}$, two extra places are added respectively after A and B; Next, two places before D and E are created to express that the xor branches are involved with long-term dependency. At end, for each long-term dependency, a silent transition is generated to connect the extra places after the source xor branch to the place before target place. 
 
-%% here we can have one example, but we need to prove it here
 \subsection{Soundness Analysis}
 % this section is used to select the sound situations. 
 % next time I can go to library at Tuesday with the laptop and study there..
-With this algorithm \ref{alg: Adding method} by adding silent transitions and places to express long-term dependency, the model soundness can be violated. In the following section, we discuss the soundness in different situations.
+Following algorithm \ref{alg: Adding method} by adding silent transitions and places to express long-term dependency, the model soundness can be violated. In the following section, we discuss the soundness in different situations. 
 
-Given arbitrary two xor block, $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$, following the algorithm\ref{alg: Adding method}, places after the source xor branches,  $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$, and places before target xor branches,$P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$ are firstly added. \\ 
-For each long-term dependency $X_{i} \rightsquigarrow Y_{j}$ in LT, there is silent transition t with $p_{X_i} \rightarrow t \rightarrow p_{Y_{j}}$.
-
-To prove the model soundness after adding long-term dependency, we need to prove 
+Given a Petri net with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$ on two xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$, following the Algorithm \ref{alg: Adding method}, $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$ , $P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$, and silent transitions $ E = \{\epsilon \vert p_{X_i} \rightarrow \epsilon
+ \rightarrow p_{Y_{j}} \}$ are added. The Petri net is sound if and only if (1)the soundness outside xor blocks with long-term dependency is not violated; and  (2) soundness between xor blocks is kept. In the following, we check the model soundness with long-term dependency after applying Algorithm \ref{alg: Adding method}.
+\subsubsection{(1) Soundness outside xor blocks}
+\emph{Proof:} he added silent transitions and places do not violate the execution outside of the xor blocks, because the extra tokens that are generated due to long-term dependency are constrained in the xor blocks, and it doesn't affect the token flows outside. As we know, the original model is sound. So the soundness outside xor blocks is not violated.
+\subsubsection{(2) Soundness inside xor blocks}
+For all xor branches in S, only one branch can be fired. Without loss of generality, $X_i$ is assumed to be enabled. After firing $X_i$, the marking distribution on the extra places are  
+\[ M(p_{X_i}) = 1; \quad 
+\forall p_{X_i\prime} \in P_S, i\prime \neq i, M(p_{X_i\prime})=0 \]
+%% here we need to divide them into different situations...
+If $ LT_S = S, LT_T=T$, the following conditions are checked. 
 \begin{itemize}
-	\item the algorithm keep soundness between xor blocks.
-	\begin{proof}
-		For all xor branches in S, only one branch can be enabled. Without loss if generality, $X_i$ is assumed to be enabled. After firing $X_i$, the marking distribution is those xor block are  
-		\[ M(p_{X_i}) = 1, 
-		\forall p_{X_i\prime} \in P_S, i\prime \neq i, M(p_{X_i\prime})=0 \]
-		The silent transition t with $p_{X_i} \rightarrow t \rightarrow p_{Y_{j}}$, can pass one token from $p_{X_i}$  to $p_{Y_j}$. 
-		After firing t, the marking distribution changes to 
-		\[ M(p_{Y_j}) = 1, 
-		\forall p_{Y_j\prime} \in P_T, j\prime \neq j,  M(p_{Y_i})=0 \]
-		For each xor branch in $T$, it has two input places, one of them is the new added place $p_{Y_j}, Y_j \in T$.	Now only $Y_j$ is enabled. After executing the $Y_j$, it consumes the extra token at place $p_{Y_j}$. 
-	\end{proof}
-	\begin{itemize}
-		\item In Situation 1,2 and 3, $ LT_S = S, LT_T = T$, the original model is sound, now only consider the extra places and transitions, if they satisfy the conditions, too, then the whole model is sound. 
-		\begin{itemize}
-			\item safeness. \\
-			For all extra places $p_{X_i}$ and $p_{Y_j}$, 
-			\[\forall p_{X_i} \in P_S, \sum M(p_{X_i})=1, \\
-		  	   p_{Y_j} \in P_T,  \sum M(p_{Y_j})=1 \] 
-			\item proper completion.\\ %If the sink place is marked, all other places are empty. 
-			After firing $Y_j$, all the extra places hold no token. So it does not violate the proper completion.
-			\item option to complete. \\% It is always possible to reach the final marking just for the sink place.
-			There is always one $Y_j$ enabled to continue the subsequent execution.
-			\item no dead part. \\%For any transition there is a path from source to sink place through it.
-			Because all $Y_j \in T$ are also in $LT_T$, there exists at least one $X_i\in S$ with long-term dependency with $Y_j$. After $X_i$ is fired, one token is generated on the extra place $p_{X_i}$ and can be consumed by silent transition t in  $p_{X_i} \rightarrow t \rightarrow p_{Y_{j}}$ to produce a token in $p_{Y_j}$, which enables xor branch $Y_j$ and leaves no dead part.
-		\end{itemize}
-		
-		\item In the rest situations,  $\quad LT_S \neq S={X_i}, LT_T \neq \emptyset, \text{there exists one xor branch} X_i with X_i \notin LT_S, Y_j \in LT_T, $ when $X_i$ is selected, it generates one token at place $p_{X_i}$, this token can not be consumed by any $Y_j$. So it violates the proper completion. 
-		$If \quad LT_T \neq T={Y_j}$, there exists one $Y_j \notin LT_T, \nexists X_i, X_i \rightsquigarrow Y_j$, so with two input places but $Token(p_{Y_j})=0$,  $Y_j$ becomes the dead part, which violates the soundness again.\\
-		In source xor block $S$, only one xor branch $X_i$  can be triggered.  
-	\end{itemize}
+	\item safeness. Places cannot hold multiple tokens at the same time.\\
+	For all extra places $p_{X_i}$ and $p_{Y_j}$, 
+	\[\forall p_{X_i} \in P_S, \sum M(p_{X_i})=1, \\
+	p_{Y_j} \in P_T,  \sum M(p_{Y_j})=1 \] 
+	\item proper completion. If the sink place is marked, all other places are empty. \\
+	After firing $Y_j$, all the extra places hold no token. So it does not violate the proper completion.
+	\item option to complete.  It is always possible to reach the final marking just for the sink place. \\
+	There is always one $Y_j$ enabled to continue the subsequent execution.
+	\item no dead part. For any transition there is a path from source to sink place through it. \\
+	Because all $Y_j \in T$ are also in $LT_T$, there exists at least one $X_i\in S$ with long-term dependency with $Y_j$. After $X_i$ is fired, one token is generated on the extra place $p_{X_i}$ and can be consumed by silent transition t in  $p_{X_i} \rightarrow t \rightarrow p_{Y_{j}}$ to produce a token in $p_{Y_j}$, which enables xor branch $Y_j$ and leaves no dead part.
+\end{itemize}
+Since it fulfills all the conditions above, adding the long-term dependency in this situation doesn't violate the model soundness.
 
-	In the target xor block $T$, only one xor block $Y_j$ can be triggered. 
-	
-	\item the algorithm does not violate the soundness outside of xor blocks.\\ 
-	the added silent transitions and places do not damage the execution outside of the xor blocks.
-	Because the tokens are only stays in those xor blocks, so it does not affect the execution of other parts. The tokens flow through the network like it does before. 
-\end{itemize} 
+Else, in other situation $\quad LT_S \neq S={X_i}, LT_T \neq \emptyset, \text{there exists one xor branch} X_i with X_i \notin LT_S, Y_j \in LT_T, $ when $X_i$ is selected, it generates one token at place $p_{X_i}$, this token can not be consumed by any $Y_j$. So it violates the proper completion. 
+$If \quad LT_T \neq T={Y_j}$, there exists one $Y_j \notin LT_T, \nexists X_i, X_i \rightsquigarrow Y_j$, so with two input places but $Token(p_{Y_j})=0$,  $Y_j$ becomes the dead part, which violates the soundness again.\\
+In source xor block $S$, only one xor branch $X_i$  can be triggered.  
 
-
-An example is given in Figure \ref{fig:seq-2-silent-1}. Given the long-term dependency in situation 2 with  $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}$, firstly, two extra places are added respectively after A and B; Next, two places before D and E are created to express that the xor branches are involved with long-term dependency. At end, for each long-term dependency with xor branches, a silent transition is generated to connect the extra places after the source xor branch to the place before target place. 
-\begin{figure}[!h]
-	\centering
-	\begin{subfigure}[a]{\textwidth}
-		\includegraphics[width=\textwidth]{figures/algorithm/LT_Seq_01_Silent_01.png}
-		\label{fig:seq-2-silent-1}
-		\caption{For situation 2}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[b]{\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Silent_03.png}
-		\label{fig:seq-2-silent-2}
-		\caption{For situation 4}
-	\end{subfigure}
-	\hfill
-	\begin{subfigure}[c]{\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Silent_02.png}
-		\label{fig:seq-2-silent-3}
-		\caption{For situation 5}
-	\end{subfigure}
-	\label{fig:seq-2-silent-cases}
-	\caption{Silent Events for Long-term Dependency}
-\end{figure} 
-
-\subsection{Feasible cases due to soundness}
-However, only with data from positive and negative information on the long-term dependency, it is possible to result in unsound model, because  some directly-follows relations about xor branches can be kept due to the existing model. When those relations do not show in the positive event log or shows only in negative event log, we get incomplete information and no evidence of long-term dependency is shown on those xor branches. In this way, it results in an unsound model, since those xor branches can't get fired to consume the tokens generated from the choices before.
-
-For situation 1, it's full connected and xor branches can be chosen freely. So there is no need to add explicit connection on model to represent long-term dependency, therefore the model keeps same as original. 
-For Situation 2 and 3, if $LT_S = XORB_S, LT_T= XORB_T$, then we can create an sound model by adding silent transitions. If not, then we need to use the duplicated transitions to create sound model. But before, we need to prove its soundness. 
-For situation 4, 5 and 6, there is no way to prove the soundness even by adding duplicated events.
-
-By adding constraints, we make sure only situations 1,2,3 happen when adding long-term dependency. 
+As a conclusion, to keep Petri net with long-term dependency sound, only situation $ LT_S = S, LT_T=T$ is considered. In this situations, when the long-term dependency is full connected where xor branches can be chosen freely, we don't add any places and silent transitions on the model. 
 \section{Reduce Silent Transitions}
 %% We reduce the silent transition when there is no 
 Our method to represent long-term dependency  can introduce redundant silent transitions and places. On one hand, it complicates the model; on the other hand, it causes the model unsound where the extra silent transitions suspend the execution and therefore violates the soundness condition of proper completion. So, in this step, we postprocess the Petri net to reduce silent transitions.
