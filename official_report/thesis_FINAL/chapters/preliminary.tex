@@ -22,17 +22,45 @@ A trace is labeled with respect to certain KPIs, if it has an attribute for the 
 An event log $L$ is a set of traces, $L \in \mathcal{B(\mathcal{E}^*)}$. A labeled event log is an event log if all of its traces have an performance attribute according to certain KPIs.
 \end{definition}
 \section{Process Models}
-After gathering an event log from the information system, process mining can discover a process model based on the event log, aims to improve the understanding of the business process. To describe the process, multiple process modeling languages are proposed in the last years, e.g, Petri net, BPMN models, etc. Among multiple models which are proposed to describe business processes, Petri net has been best studied thoroughly to allow for the modeling of concurrency of activities and is one of the main models in process mining. Process tree is based on a tree structure to organize the event relation and simple to understand in comparison with other models. In this thesis, those two models are used to represent process models.
-\subsection{Petri Net}
-Petri nets are bipartite graph to describe concurrent systems. Activities from event log correspond to observable transitions in Petri net. Places in Petri net connect the transitions to express execution rules of activities. Except the observable transitions, there are silent transitions which are not visible and used to build certain model structures. 
-\begin{definition}[Silent transition]
-	A silent transition, usually denoted by $\epsilon$, is an internal transition that is non-observable from the outside but builds certain structures in Petri net. In dynamic view, it can be used to express the different states of the Petri net. 
-\end{definition}
-The observable transitions with silent transition ground a basic element set for the static structure of Petri net. To describe the dynamic behaviors of Petri net, the concept called \emph{token} is introduced. It is a mark in the place to enable execution of the following transition. If all the input places for a transition hold a token, the transition becomes enabled. In other words, the corresponding activity can be triggered. After this execution, the token in the input places are consumed and new tokens are generated in the output places. Initially, only the start place contains a token. 
-% Begin to introduce the event log 
+After gathering an event log from the information system, process mining can discover a process model based on the event log, aims to improve the understanding of the business process. To describe the process, multiple process modeling languages are proposed in the last years, e.g, Petri net, BPMN models, etc. 
+
+Among those model languages, Petri net has been best studied thoroughly. It captures concurrent systems in a compact manner. Process trees are based on a tree structure to organize the event relation and simple to understand in comparison with other models, like BPMN models. In this thesis, we use Petri net and process tree to represent our process.
+\subsection{Petri Nets}
+Petri nets are bipartite graphs which are built by \textbf{\emph{transitions}} represented by a square and \textbf{\emph{place}} in a circle. \textbf{\emph{Tokens}} in black dots are put in places to express the states of a Petri net. In the following, we define Petri nets in a formal way.
 \begin{definition}[Petri net]
-	A Petri net N is composed of a finite set of places P, transitions T, and a set of directed arcs $F \subseteq (P \times T) \cup (T \times P)$, which can be written as $N=(P,T,F)$. A marked Petri net is (P,T,F,M) where M the marking of the net. A marking of a net N is a multi-set over P, $M \in \mathbb{P} $ and used to express the dynamic state of the Petri net.
+	A Petri net is a tuple $N=(P,T,F)$ where \\ P and T are disjoint finite set of  places and transitions, respectively, $P \cap T = \emptyset $. \\ F is the set of arcs to connect places and transitions, $F \subseteq (P\times T)\cup (T \times P)$.
 \end{definition}
+Further, we can define a labeling function $\lambda$ on the transitions.
+\begin{definition}[Labeling function $\lambda$]	
+	$\lambda$ is a function defined as 
+	\[\lambda: T \rightarrow \Sigma \cup \{ \tau \}, \Sigma \text{ is a set of labels}, \tau \text{is an empty label}. \] 
+\end{definition}
+To express the dynamic states of Petri nets, we introduce a concept called \textbf{\emph{marking}}. 
+\begin{definition}[Marking]
+	A marking is a place multiset,$M:P \rightarrow N$, which assigns to a place a number of tokens. 
+\end{definition}	
+With marking concepts, we extend the form  $N=(P,T,F)$ and define a marked Petri net. 
+\begin{definition}[Marked Petri nets]
+A marked Petri net is a 4-tuple $N=(P,T,F,M_0)$ where $M_0$ is an initial marking of this net.
+\end{definition}
+If all the input places for a transition hold a token, the transition becomes enabled. In other words, the  activity in the corresponding process can be triggered. After this execution, the token in the input places are consumed and new tokens are generated in the output places. The firing sequence of transitions can carry out business execution in reality.  However, to perform the business on an enterprise level, the correctness of business process models is necessary. Soundness defines a minimum correctness criterion that a process model should satisfy\cite{van2006structural}. In the following, we give the definition of soundness for Petri nets.
+\begin{definition}[Soundness]
+	A Petri net is sound if and only if it satisfies the following conditions.
+	\begin{itemize}
+		\itemsep0em 
+		\item safeness. Places cannot hold multiple tokens at the same time.
+		\item proper completion. If the sink place is marked, all other places are empty.
+		\item option to complete. It is always possible to reach the final marking just for the sink place.
+		\item no dead part. For any transition there is a path from source to sink place through it. 
+	\end{itemize}
+\end{definition}
+
+With guarantee  of correctness, a subclass of Petri nets is extracted to model the workflow of process activities in real life. This subclass is called workflow nets. 
+\begin{definition}[Workflow nets]
+	A workflow net is a Petri net with constraints: \\
+	(1) only one source place and one sink place. 
+	(2) sound
+\end{definition}  
 
 An example is shown in Figure \ref{fig:pn-seq-2}. It has transitions $T=\{A,B,C,D,E\}$ and four places with the initial marking in the place before $T=\{A,B\}$. 
 \begin{figure}[!h]
@@ -53,17 +81,6 @@ An example is shown in Figure \ref{fig:pn-seq-2}. It has transitions $T=\{A,B,C,
 \end{figure}
 %% Here add the definition for soundness
 
-The correctness of business process models is necessary to perform the business on an enterprise level. Soundness defines a minimum correctness criterion that a process model should satisfy\cite{van2006structural}. In the following, we give the definition of soundness for Petri net.
-\begin{definition}[Soundness]
-	A Petri net is sound if and only if it satisfies the following conditions.
-	\begin{itemize}
-		\itemsep0em 
-		\item safeness. Places cannot hold multiple tokens at the same time.
-		\item proper completion. If the sink place is marked, all other places are empty.
-		\item option to complete. It is always possible to reach the final marking just for the sink place.
-		\item no dead part. For any transition there is a path from source to sink place through it. 
-	\end{itemize}
-\end{definition}
 
 \subsection{Process Tree}
 Process tree is block-structured and sound by construction, while Petri nets, BPMN models possibly suffer from deadlocks, other anomalies\cite{van2016data}. Here we give the definition of process tree.
