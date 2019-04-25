@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  24 APR 2019 17:38
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  25 APR 2019 19:04
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1644,7 +1644,7 @@ LaTeX Font Info:    Try loading font information for T1+lmss on input line 17.
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<figures/logo/pads_logo_text.jpg, id=83, 1594.95876pt x 379.4175pt>
+<figures/logo/pads_logo_text.jpg, id=55, 1594.95876pt x 379.4175pt>
 File: figures/logo/pads_logo_text.jpg Graphic file (type jpg)
 <use figures/logo/pads_logo_text.jpg>
 Package pdftex.def Info: figures/logo/pads_logo_text.jpg  used on input line 17
@@ -1707,227 +1707,112 @@ ext.jpg>]
 
 ]
 Chapter 1.
-(./chapters/algorithm.tex
-<figures/algorithm/FD_architecture_detail_02.png, id=114, 711.65875pt x 1277.77
-374pt>
-File: figures/algorithm/FD_architecture_detail_02.png Graphic file (type png)
-<use figures/algorithm/FD_architecture_detail_02.png>
-Package pdftex.def Info: figures/algorithm/FD_architecture_detail_02.png  used 
-on input line 21.
-(pdftex.def)             Requested size: 384.1054pt x 586.39876pt.
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 26.
- (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [7
+(./chapters/preliminary.tex [1
 
 ]
+<figures/preliminary/PN06_Seq_2_xor_notnested.png, id=102, 1234.6125pt x 312.16
+624pt>
+File: figures/preliminary/PN06_Seq_2_xor_notnested.png Graphic file (type png)
+<use figures/preliminary/PN06_Seq_2_xor_notnested.png>
+Package pdftex.def Info: figures/preliminary/PN06_Seq_2_xor_notnested.png  used
+ on input line 42.
+(pdftex.def)             Requested size: 192.0548pt x 48.55673pt.
+<figures/preliminary/PT06_Seq_2_xor_notnested.png, id=103, 621.32124pt x 210.78
+75pt>
+File: figures/preliminary/PT06_Seq_2_xor_notnested.png Graphic file (type png)
+<use figures/preliminary/PT06_Seq_2_xor_notnested.png>
+Package pdftex.def Info: figures/preliminary/PT06_Seq_2_xor_notnested.png  used
+ on input line 49.
+(pdftex.def)             Requested size: 192.0548pt x 65.15369pt.
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 61.
+ (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[8 <./figures/algorithm/FD_architecture_detail_02.png>] [9]
-Overfull \hbox (21.31499pt too wide) detected at line 84
-\OML/lmm/m/it/10.95 Wu\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 E[]\OT1/lmr/m/n/1
-0.95 (\OML/lmm/m/it/10.95 A; B\OT1/lmr/m/n/10.95 )) = \OML/lmm/m/it/10.95 C[] \
-OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/1
-0.95 E[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A; B\OT1/lmr/m/n/10.95 )) + \OM
-L/lmm/m/it/10.95 C[] \OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/
-10.95 (\OML/lmm/m/it/10.95 E[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A; B\OT1/
-lmr/m/n/10.95 )) \OMS/lmsy/m/n/10.95 ^^@ \OML/lmm/m/it/10.95 C[] \OMS/lmsy/m/n/
-10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 E[]\OT1/
-lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A; B\OT1/lmr/m/n/10.95 ))
- []
-
-
-Overfull \hbox (39.24083pt too wide) detected at line 89
-\OML/lmm/m/it/10.95 Wu\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 Start[]\OT1/lmr/m
-/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 )) = \OML/lmm/m/it/10.95 C[] 
-\OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/
-10.95 Start[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 )) + \
-OML/lmm/m/it/10.95 C[] \OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/
-n/10.95 (\OML/lmm/m/it/10.95 Start[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\O
-T1/lmr/m/n/10.95 )) \OMS/lmsy/m/n/10.95 ^^@ \OML/lmm/m/it/10.95 C[] \OMS/lmsy/m
-/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 Start
-[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 ))
- []
-
-
-Overfull \hbox (18.04039pt too wide) detected at line 94
-\OML/lmm/m/it/10.95 Wu\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 End[]\OT1/lmr/m/n
-/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 )) = \OML/lmm/m/it/10.95 C[] \O
-MS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10
-.95 End[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 )) + \OML/
-lmm/m/it/10.95 C[] \OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10
-.95 (\OML/lmm/m/it/10.95 End[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr
-/m/n/10.95 )) \OMS/lmsy/m/n/10.95 ^^@ \OML/lmm/m/it/10.95 C[] \OMS/lmsy/m/n/10.
-95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 End[]\OT1/l
-mr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 ))
- []
-
-[10] [11]
-
-Package caption Warning: \label without proper reference on input line 172.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `fig:seq-2-original' on page xii undefined on input li
-ne 168.
-
-<figures/algorithm/LT_Seq_01_Original.png, id=159, 404.51125pt x 121.45375pt>
-File: figures/algorithm/LT_Seq_01_Original.png Graphic file (type png)
-<use figures/algorithm/LT_Seq_01_Original.png>
-Package pdftex.def Info: figures/algorithm/LT_Seq_01_Original.png  used on inpu
-t line 171.
-(pdftex.def)             Requested size: 426.79135pt x 128.14545pt.
-[12] [13 <./figures/algorithm/LT_Seq_01_Original.png>]
-<figures/algorithm/LT_Seq_01_Silent_01.png, id=187, 404.51125pt x 161.60374pt>
-File: figures/algorithm/LT_Seq_01_Silent_01.png Graphic file (type png)
-<use figures/algorithm/LT_Seq_01_Silent_01.png>
-Package pdftex.def Info: figures/algorithm/LT_Seq_01_Silent_01.png  used on inp
-ut line 236.
-(pdftex.def)             Requested size: 426.79135pt x 170.5076pt.
- [14]
-
-Package caption Warning: \label without proper reference on input line 237.
-See the caption package documentation for explanation.
-
-
-LaTeX Warning: Reference `fig:add-algorithm-example' on page xv undefined on in
-put line 240.
-
-[15 <./figures/algorithm/LT_Seq_01_Silent_01.png>]
-Overfull \hbox (16.79268pt too wide) in paragraph at lines 271--274
-[]\T1/lmr/m/n/10.95 Else, in other sit-u-a-tion $ \OML/lmm/m/it/10.95 LT[] \OMS
-/lmsy/m/n/10.95 6\OT1/lmr/m/n/10.95 = \OML/lmm/m/it/10.95 S \OT1/lmr/m/n/10.95 
-= []\OML/lmm/m/it/10.95 ; LT[] \OMS/lmsy/m/n/10.95 6\OT1/lmr/m/n/10.95 = \OMS/l
-msy/m/n/10.95 ;\OML/lmm/m/it/10.95 ; []X[]withX[] []
- []
-
-[16]
-<figures/algorithm/dfg-IM-pn-with-lt.png, id=240, 747.79375pt x 206.7725pt>
-File: figures/algorithm/dfg-IM-pn-with-lt.png Graphic file (type png)
-<use figures/algorithm/dfg-IM-pn-with-lt.png>
-Package pdftex.def Info: figures/algorithm/dfg-IM-pn-with-lt.png  used on input
- line 294.
-(pdftex.def)             Requested size: 426.79135pt x 118.01299pt.
-<figures/algorithm/dfg-IM-pn-with-lt-reduced.png, id=241, 1050.92625pt x 197.73
-875pt>
-File: figures/algorithm/dfg-IM-pn-with-lt-reduced.png Graphic file (type png)
-<use figures/algorithm/dfg-IM-pn-with-lt-reduced.png>
-Package pdftex.def Info: figures/algorithm/dfg-IM-pn-with-lt-reduced.png  used 
-on input line 301.
-(pdftex.def)             Requested size: 426.79135pt x 80.304pt.
-) [17 <./figures/algorithm/dfg-IM-pn-with-lt.png> <./figures/algorithm/dfg-IM-p
-n-with-lt-reduced.png>] [18
+[2 <./figures/preliminary/PN06_Seq_2_xor_notnested.png> <./figures/preliminary/
+PT06_Seq_2_xor_notnested.png>]
+<figures/preliminary/PT_PN_corresponding_01_seq_PN.png, id=123, 326.21875pt x 5
+8.2175pt>
+File: figures/preliminary/PT_PN_corresponding_01_seq_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_01_seq_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_01_seq_PN.png 
+ used on input line 83.
+(pdftex.def)             Requested size: 192.0548pt x 34.27518pt.
+<figures/preliminary/PT_PN_corresponding_02_xor_PN.png, id=125, 224.84pt x 73.2
+7374pt>
+File: figures/preliminary/PT_PN_corresponding_02_xor_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_02_xor_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_02_xor_PN.png 
+ used on input line 90.
+(pdftex.def)             Requested size: 192.0548pt x 62.59154pt.
+<figures/preliminary/PT_PN_corresponding_03_and_PN.png, id=126, 385.44pt x 73.2
+7374pt>
+File: figures/preliminary/PT_PN_corresponding_03_and_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_03_and_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_03_and_PN.png 
+ used on input line 97.
+(pdftex.def)             Requested size: 192.0548pt x 36.51042pt.
+<figures/preliminary/PT_PN_corresponding_04_loop_PN.png, id=127, 224.84pt x 78.
+2925pt>
+File: figures/preliminary/PT_PN_corresponding_04_loop_PN.png Graphic file (type
+ png)
+<use figures/preliminary/PT_PN_corresponding_04_loop_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_04_loop_PN.png
+  used on input line 104.
+(pdftex.def)             Requested size: 192.0548pt x 66.87865pt.
+ [3 <./figures/preliminary/PT_PN_corresponding_01_seq_PN.png> <./figures/prelim
+inary/PT_PN_corresponding_02_xor_PN.png> <./figures/preliminary/PT_PN_correspon
+ding_03_and_PN.png> <./figures/preliminary/PT_PN_corresponding_04_loop_PN.png>]
+ [4]) [5] [6
 
 ]
 Chapter 2.
-(./chapters/implementation.tex
-<figures/implementation/dfg-IM-setting.png, id=254, 400.49625pt x 143.53625pt>
-File: figures/implementation/dfg-IM-setting.png Graphic file (type png)
-<use figures/implementation/dfg-IM-setting.png>
-Package pdftex.def Info: figures/implementation/dfg-IM-setting.png  used on inp
-ut line 31.
-(pdftex.def)             Requested size: 300.37144pt x 107.65192pt.
-<figures/implementation/dfg-IM-pn-without-lt.png, id=256, 1308.89pt x 744.7825p
-t>
-File: figures/implementation/dfg-IM-pn-without-lt.png Graphic file (type png)
-<use figures/implementation/dfg-IM-pn-without-lt.png>
-Package pdftex.def Info: figures/implementation/dfg-IM-pn-without-lt.png  used 
-on input line 38.
-(pdftex.def)             Requested size: 426.79135pt x 242.84695pt.
- [19] [20 <./figures/implementation/dfg-IM-setting.png> <./figures/implementati
-on/dfg-IM-pn-without-lt.png>]
-<figures/implementation/dfg-IM-pn-with-lt.png, id=274, 811.03pt x 548.0475pt>
-File: figures/implementation/dfg-IM-pn-with-lt.png Graphic file (type png)
-<use figures/implementation/dfg-IM-pn-with-lt.png>
-Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt.png  used on 
-input line 50.
-(pdftex.def)             Requested size: 426.79135pt x 288.4066pt.
-<figures/implementation/dfg-IM-pn-with-lt-manual.png, id=277, 1381.16pt x 855.1
-95pt>
-File: figures/implementation/dfg-IM-pn-with-lt-manual.png Graphic file (type pn
-g)
-<use figures/implementation/dfg-IM-pn-with-lt-manual.png>
-Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-manual.png  u
-sed on input line 58.
-(pdftex.def)             Requested size: 426.79135pt x 264.25952pt.
-<figures/implementation/dfg-IM-pn-with-lt-reduced.png, id=280, 1374.13374pt x 6
-62.475pt>
-File: figures/implementation/dfg-IM-pn-with-lt-reduced.png Graphic file (type p
-ng)
-<use figures/implementation/dfg-IM-pn-with-lt-reduced.png>
-Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-reduced.png  
-used on input line 67.
-(pdftex.def)             Requested size: 426.79135pt x 205.74925pt.
- [21 <./figures/implementation/dfg-IM-pn-with-lt.png>] [22 <./figures/implement
-ation/dfg-IM-pn-with-lt-manual.png> <./figures/implementation/dfg-IM-pn-with-lt
--reduced.png>]
-<figures/implementation/dfg-IM-confusionmatrix.png, id=294, 959.585pt x 213.798
-75pt>
-File: figures/implementation/dfg-IM-confusionmatrix.png Graphic file (type png)
+(./chapters/conclusion.tex) (./main.bbl [7] [8
 
-<use figures/implementation/dfg-IM-confusionmatrix.png>
-Package pdftex.def Info: figures/implementation/dfg-IM-confusionmatrix.png  use
-d on input line 78.
-(pdftex.def)             Requested size: 426.79135pt x 95.08957pt.
-)
-[23 <./figures/implementation/dfg-IM-confusionmatrix.png>] [24
-
-]
-Chapter 3.
-(./chapters/conclusion.tex) (./main.bbl [25] [26
-
-]
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 26.
-
-(/usr/share/texmf/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)) [27]
+]) [9]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 75.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 75.
  (./main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 75.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 75.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 8025E6B6F12FB5A9A0D65B417FDCD60F;1275.
-
-
-LaTeX Warning: There were undefined references.
-
+(rerunfilecheck)             Checksum: E888B3F393C4850DB955008D27478528;703.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 75.
  ) 
 Here is how much of TeX's memory you used:
- 36941 strings out of 494847
- 850841 string characters out of 6179079
- 1050886 words of memory out of 5000000
- 39486 multiletter control sequences out of 15000+600000
- 88083 words of font info for 60 fonts, out of 8000000 for 9000
+ 36787 strings out of 494847
+ 848269 string characters out of 6179079
+ 1047886 words of memory out of 5000000
+ 39407 multiletter control sequences out of 15000+600000
+ 74518 words of font info for 55 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 76i,13n,121p,891b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
-/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
--mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}</usr/share/texmf/f
+ 76i,13n,121p,777b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/en
+c/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/s
+hare/texmf/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/lm/l
+m-ec.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}</usr/share/texmf/f
 onts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.
-pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/t
-ype1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb><
-/usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1
-/public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/sh
-are/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/
-lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texm
-f/fonts/type1/public/lm/lmss10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss
-bx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/f
-onts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
->
-Output written on main.pdf (27 pages, 1590460 bytes).
+pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb></usr/share/texmf/fonts/
+type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi8.pfb></
+usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/p
+ublic/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/shar
+e/texmf/fonts/type1/public/lm/lmss10.pfb></usr/share/texmf/fonts/type1/public/l
+m/lmssbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/t
+exmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (15 pages, 1017934 bytes).
 PDF statistics:
- 411 PDF objects out of 1000 (max. 8388607)
- 345 compressed objects within 4 object streams
- 108 named destinations out of 1000 (max. 500000)
- 225 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 249 PDF objects out of 1000 (max. 8388607)
+ 203 compressed objects within 3 object streams
+ 47 named destinations out of 1000 (max. 500000)
+ 144 words of extra memory for PDF output out of 10000 (max. 10000000)
 

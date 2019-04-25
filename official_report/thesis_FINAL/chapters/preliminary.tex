@@ -1,22 +1,28 @@
 % we should list the event log definition and petri net definition
 % also the process tree definition
 % For definitions, we capitalize only the first character, others we use camel methods. 
-This chapter introduces the most important ground concepts and notations that are used in this thesis. 
+This chapter introduces the most important concepts and notations that are used in this thesis. Firstly, the event data and process models typically used in process mining are described. Later, details of Inductive Miner techniques which relate to our work are listed.
 \section{Event Log}
 % introduce of event and trace , later event log historical business process execution data in information systems
-Business process in organizations is reflected by its execution of a set of activities. The historical execution data is usually in a form of event logs in information systems and can be used by Process Mining to analyze the business execution. To specify the event log, we begin with formalizing the various notations\cite{van2016data} .
+Business processes in organizations can be reflected by their activities execution. The historical execution data is usually stored as event logs in information systems and can be used by process mining techniques to analyze, understand, and improve the business execution. To specify the event log, we begin with formalizing the various notations\cite{van2016data} .
 \begin{definition}[Event]
-	An event corresponds to an activity in business execution and can be marked by $e$. An event is characterized by attributes, like a timestamp, name, and associated costs, etc. The finite set of events in the process is written as $\mathcal{E}$.
+	An event corresponds to one execution of an activity in business execution and written as $e$. An event is characterized by attributes, like a timestamp, activity name, associated costs, etc. The set of all possible events in a process is written as $\mathcal{E}$.
 \end{definition}
 \begin{definition}[Trace]
-A trace is a finite sequence of events $\sigma \in \mathcal{E}^*$ with conditions that \emph{(i)} each event can not appear twice in a trace, $ \forall i,j, 1 \leq i,j \leq \vert \sigma \vert, if \ i \neq j, then\ \sigma (i) \neq \sigma (j) $.  \emph{(ii)} one event can only appear in one trace, $ \forall e \in \sigma, if\ e \in \sigma\prime, then\ \sigma = \sigma\prime $. 
-A trace also has a set of attributes, which describes the trace characters, like the identifier, the trace cost.
+A trace is a finite sequence of events $\sigma \in \mathcal{E}^*$ with conditions that (i)  each event  appears only once in a trace. 
+\[ \forall  1 \leq i,j \leq \vert \sigma \vert,  i \neq j \Rightarrow \sigma (i) \neq \sigma (j) \] 
+(ii) one event can only appear in one trace. 
+\[ \forall e \in \sigma, e \in \sigma\prime \Rightarrow \sigma = \sigma\prime \]  
 \end{definition}
-\begin{definition}[Event log]
-An event log $L$ is a set of traces. If an event log contains timestamps, then the ordering in a trace should respect these timestamps. 
+A trace also has a set of attributes, like its unique identifier, the cost. We extend this definition to handle traces with performance output according to certain KPIs. 
+\begin{definition}[Labeled Trace]
+A trace is labeled with respect to certain KPIs, if it has an attribute for the performance output. We call a trace positive, if the value of its performance attribute is positive, else the trace is negative.
+\end{definition}
+\begin{definition}[Event log and labeled Event log]
+An event log $L$ is a set of traces, $L \in \mathcal{B(\mathcal{E}^*)}$. A labeled event log is an event log if all of its traces have an performance attribute according to certain KPIs.
 \end{definition}
 \section{Process Models}
-After gathering the event log from information systems, process mining can discover a process model based on the event log, aims to improve understanding and insights on the business process. Multiple process modeling languages are applied in process mining in the last years, such as Petri net, BPMN models, etc. Among multiple models which are proposed to describe business processes, Petri net has been best studied thoroughly to allow for the modeling of concurrency of activities and is one of the main models in process mining. Process tree is based on a tree structure to organize the event relation and simple to understand in comparison with other models. In this thesis, those two models are used to represent process models.
+After gathering an event log from the information system, process mining can discover a process model based on the event log, aims to improve the understanding of the business process. To describe the process, multiple process modeling languages are proposed in the last years, e.g, Petri net, BPMN models, etc. Among multiple models which are proposed to describe business processes, Petri net has been best studied thoroughly to allow for the modeling of concurrency of activities and is one of the main models in process mining. Process tree is based on a tree structure to organize the event relation and simple to understand in comparison with other models. In this thesis, those two models are used to represent process models.
 \subsection{Petri Net}
 Petri nets are bipartite graph to describe concurrent systems. Activities from event log correspond to observable transitions in Petri net. Places in Petri net connect the transitions to express execution rules of activities. Except the observable transitions, there are silent transitions which are not visible and used to build certain model structures. 
 \begin{definition}[Silent transition]
@@ -134,22 +140,3 @@ Given a directly-follows graph G(L) derived from an event log L, the cardinality
 Based on the directly-follows graph, it finds the most prominent cut which is applied afterwards to split the event log into smaller sublogs. Cuts compose of \emph{exclusive-choice cut, sequence cut, parallel cut and redo-loop cut} which correspond to the process tree operators $ \{\rightarrow, \times, \land, \circlearrowright \}$. They are selected in the following order. A maximal exclusive-choice cut is firstly tried to split the directly-follows graph; if it is not available, then a maximal sequence cut, a  maximal parallel cut and a redo-loop cut are applied in sequence. Sublogs are created due to this available operator. Meanwhile, this operator is used to build the process tree. 
 
 The same procedure is applied again on the sublogs until single activities. What's more, this process tree can be converted into Petri net for further analysis.
-
-\iffalse
-I'd like to put this part into the evaluation section.
-\section{Model Measurements}
-After deriving a process model from an event log, multiple measurements are used to address the different aspects of the process model quality.
-\subsection{Soundness}
-Soundness is used to describe the property of a workflow net. A workflow net is a Petri net with unique start place and unique end place and satisfies the following conditions.
-To prove the model sound, we need to prove the four conditions.
-\begin{itemize}
-	\item safeness. Places cannot hold multiple tokens at the same time
-	\item proper completion. If the sink place is marked, all other places are empty.
-	\item option to complete. It is always possible to reach the final marking just for the sink place.
-	\item no dead part. For any transition there is a path from source to sink place through it. 
-\end{itemize}
-\subsection{Fitness}
-
-\subsection{Confusion Matrix}
-Confusion matrix is used from ??
-\fi

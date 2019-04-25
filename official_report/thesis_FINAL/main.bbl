@@ -1,9 +1,40 @@
-\begin{thebibliography}{4}
+\begin{thebibliography}{6}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Van~der Aalst(2016)]{van2016data}
+Wil Van~der Aalst.
+\newblock Data science in action.
+\newblock In \emph{Process Mining}, pages 3--23. Springer, 2016.
+
+\bibitem[Van~Dongen et~al.(2006)Van~Dongen, Mendling, and Van
+  Der~Aalst]{van2006structural}
+BF~Van~Dongen, Jan Mendling, and WMP Van Der~Aalst.
+\newblock Structural patterns for soundness of business process models.
+\newblock In \emph{2006 10th IEEE International Enterprise Distributed Object
+  Computing Conference (EDOC'06)}, pages 116--128. IEEE, 2006.
+
+\bibitem[van~der Aalst(2016)]{vanderAalst:2016:PMD:2948762}
+Wil van~der Aalst.
+\newblock \emph{Process Mining: Data Science in Action}.
+\newblock Springer Publishing Company, Incorporated, 2nd edition, 2016.
+\newblock ISBN 3662498502, 9783662498507.
+
+\bibitem[Buijs et~al.(2012)Buijs, van Dongen, and van~der Aalst]{Buijs2012OnTR}
+Joos C. A.~M. Buijs, Boudewijn~F. van Dongen, and Wil M.~P. van~der Aalst.
+\newblock On the role of fitness, precision, generalization and simplicity in
+  process discovery.
+\newblock In \emph{OTM Conferences}, 2012.
+
+\bibitem[Van~der Aalst et~al.(2004)Van~der Aalst, Weijters, and
+  Maruster]{van2004workflow}
+Wil Van~der Aalst, Ton Weijters, and Laura Maruster.
+\newblock Workflow mining: Discovering process models from event logs.
+\newblock \emph{IEEE Transactions on Knowledge and Data Engineering},
+  16\penalty0 (9):\penalty0 1128--1142, 2004.
 
 \bibitem[Leemans et~al.(2013)Leemans, Fahland, and van~der
   Aalst]{leemans2013discovering}
@@ -12,23 +43,5 @@ Sander~JJ Leemans, Dirk Fahland, and Wil~MP van~der Aalst.
   constructive approach.
 \newblock In \emph{International conference on applications and theory of Petri
   nets and concurrency}, pages 311--329. Springer, 2013.
-
-\bibitem[Bergenthum et~al.(2007)Bergenthum, Desel, Lorenz, and
-  Mauser]{bergenthum2007process}
-Robin Bergenthum, J{\"o}rg Desel, Robert Lorenz, and Sebastian Mauser.
-\newblock Process mining based on regions of languages.
-\newblock In \emph{International Conference on Business Process Management},
-  pages 375--383. Springer, 2007.
-
-\bibitem[Process Mining~Group()]{ProM}
-Eindhoven Technical University. ©~2010. Process Mining~Group.
-\newblock Prom introduction.
-\newblock URL \url{http://www.promtools.org/doku.php}.
-
-\bibitem[Ding()]{MyPlugin}
-Kefang Ding.
-\newblock Incorporatenegativeinformation.
-\newblock URL
-  \url{http://ais-hudson.win.tue.nl:8080/job/IncorporateNegativeInformation/}.
 
 \end{thebibliography}

@@ -17,6 +17,7 @@ This chapter describes our repair algorithm to incorporate the negative instance
 \section{Architecture}
 %% Describe the 
 Figure \ref{fig:architecture} shows the steps of our strategy to enhance a process model. The basic inputs are an event log, and a Petri net. The traces in event log have an attribute for the classification labels of positive or negative in respect to some KPIs of business processes. The Petri net is the referenced model for the business process. To repair model with negative instances,  those steps are conducted.
+% Substitute it with a general framework for this.
 \begin{figure}
 	\includegraphics[width=0.9\textwidth, height=0.9\textheight]{figures/algorithm/FD_architecture_detail_02.png}
 	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and output data in eclipse shape, especially customized processes and data are in doubled lattice shape. Input event log and existing model are in blue, KPIs are in cloud. The final output is a Petri net in purple. }
