@@ -1,8 +1,7 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: main.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: main.aux
 The style file: unsrtnat.bst
 Database file #1: references.bib
+<<<<<<< HEAD
 You've used 6 entries,
             2481 wiz_defined-function locations,
             592 strings with 5585 characters,
@@ -44,3 +43,12 @@ warning$ -- 0
 while$ -- 23
 width$ -- 0
 write$ -- 89
+=======
+Warning--entry type for "ProM" isn't style-file defined
+--line 221 of file references.bib
+Warning--entry type for "MyPlugin" isn't style-file defined
+--line 227 of file references.bib
+Warning--empty year in ProM
+Warning--empty year in MyPlugin
+(There were 4 warnings)
+>>>>>>> 6bd9d1ff15535e1041eb0c206fdf40712f622371
