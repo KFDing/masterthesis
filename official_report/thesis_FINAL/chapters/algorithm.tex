@@ -13,16 +13,28 @@
 %%    ++ delete the silent transitions on the model as a post model
 
 %% Put some words here
-This chapter describes our repair algorithm to incorporate the negative instances on process enhancement. In the beginning, the architecture of this algorithm is provided to give an overview. Details of main steps are represented in the following order. Firstly, the impact of the existing model, positive and negative instances are balanced in the media of the directly-follow relations. Inductive Miner is then applied to mine process models from those directly-follows relations. Next, we detect and add long-term dependency on the generated process models. Furthermore, the model in Petri net with long-term dependency is  post-processed for the sake of simplicity. 
-\section{Architecture}
+This chapter begins with a general framework to repair a reference model by incorporating the negative instances. In subsequent sections, we propose a concrete solution to implement the modules in the framework. 
+%our repair algorithm to incorporate the negative instances on process enhancement. In the beginning, the architecture of this algorithm is provided to give an overview. Details of main steps are represented in the following order. Firstly, the impact of the existing model, positive and negative instances are balanced in the media of the directly-follow relations. Inductive Miner is then applied to mine process models from those directly-follows relations. Next, we detect and add long-term dependency on the generated process models. Furthermore, the model in Petri net with long-term dependency is  post-processed for the sake of simplicity. 
+\section{General Framework}
 %% Describe the 
-Figure \ref{fig:architecture} shows the steps of our strategy to enhance a process model. The basic inputs are an event log, and a Petri net. The traces in event log have an attribute for the classification labels of positive or negative in respect to some KPIs of business processes. The Petri net is the referenced model for the business process. To repair model with negative instances,  those steps are conducted.
-% Substitute it with a general framework for this.
+Figure \ref{fig:architecture} shows our proposed framework to repair a process model with negative information. The inputs are a reference process model and an labeled event log. The reference process model can be in multiple types, like Petri net, process tree. Traces in the labeled event log are classified as positive or negative in respect to some KPIs of business processes. The output is a repaired process model with the same type as the reference model.
+
+The basic idea behind the framework is to unify the impact from the reference model $M$, positive sublog $L^+$ and negative sublog $L^-$ into data models. Those data models are of the same type and denoted as $D^M$, $D^+$ and $D^-$ respectively. Then we consider all impact from models and generate a new data model $D^n$. $D^n$ is later transformed into a process model $M^r$ as the output. Several post-processes are optional to improve the repaired model $M^r$.
+
+After defining a data model to unify the impact and implementing the process modules in the general framework, a solution to repair model which also considers the negative information is able to find. 
 \begin{figure}
-	\includegraphics[width=0.9\textwidth, height=0.9\textheight]{figures/algorithm/FD_architecture_detail_02.png}
-	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and output data in eclipse shape, especially customized processes and data are in doubled lattice shape. Input event log and existing model are in blue, KPIs are in cloud. The final output is a Petri net in purple. }
-	\label{fig:architecture}
+	\includegraphics{figures/algorithm/FD_architeccture_detail_03-architecture-with-abstraction.pdf}
+	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and data models in eclipse shape. Input event log and the reference model are in blue. Output in blue is a repaired model with the same type as the reference model.}
+	\label{fig:framework}
 \end{figure} 
+\section{Algorithm}
+In this part, we give our algorithm to implement the modules to repair the. First of all, we define a proper data model to represent the impact from the reference process model, and event log. Then, we list all the modules  and describe our basic ideas to implement them.
+\subsection{Unified Data Model}
+We choose directly-follows graph as our unified data model. The reasons are, 
+\subsection{Modules List}
+
+\subsection{Modules Implementation}
+
 \begin{itemize}
 	\item \emph{Generate directly-follows graphs}\quad 
 	Three directly-follows graphs are generated respectively for the existing model, positive instance and negative instances from the event log.
@@ -35,14 +47,14 @@ Figure \ref{fig:architecture} shows the steps of our strategy to enhance a proce
 \end{itemize}
 More details can be provided in the following sections.
 
-\section{Generate directly-follows graph}
+\subsection{Generate directly-follows graph}
 Originally, the even log $L$ is split into two sublogs, called $L_{pos}$ and $L_{neg}$. $L_{pos}$ contains the traces which are labeled as positive, while $L_{neg}$ contains the negative instances in the event log. Then, those two sublogs are passed to an existing procedure \emph{IMLog2Dfg} from \cite{leemans2013discovering}. \emph{IMLog2Dfg} traverses traces in the event log, extracts directly-follows relations of activities, and generates a directly-follows graph based on those relations. By using \emph{IMLog2Dfg}, $G(L_{pos})$ and $G(L_{neg})$ are generated respectively from positive and negative instances.
 % Actually we can simplify those steps and reduce the time, but here just keep it like this.
 
 To generate a directly-follows graph from a Petri net, we gather the model behaviors by building a transition system. A transition system for a Petri net is composed of \emph{states} and \emph{transitions}. \emph{States} are the possible markings of this Petri net. \emph{Transitions} are activities from event log. Those transitions connect states as an arc from its enable marking to the marking after its execution. For each state, transitions pointed from this state are directly followed by transitions pointed to this state. By checking the transition system. directly-follows relations for the models are extracted. Based on those relations, we create a directly-follows graph for the existing model.
 
 From the positive and negative event logs, we can get the cardinality for corresponding directly-follows graph to represent the strength of this directly-follows relation. However, when the existing model is transformed into  directly-follows graph $G(L_{ext})$, there is no point to assign cardinality on each edge. So we just set cardinality with 1 for each arc. 
-\section{Repair directly-follows graph}
+\subsection{Repair directly-follows graph}
 %% we can have subsection on it. How to repair on them??? 
 To combine all information of the directly-follows graphs from the positive , negative instances and the existing model, namely $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$, the cardinality in directly-follows graphs is unified as the percentage to the sum of total cardinalities with a range [0-1].
 % here we already changed the definitions for the unifications..now it became as the percentage of the cardinality to its whole cardinality. No matter negative or positive ones...we can do it, right? 
@@ -100,11 +112,11 @@ In the real life, there exists various needs to address the impact either from t
 By adjusting the weight of $C_{ext}$,$C_{pos}$,$C_{neg}$, different focus can be reflected by the model. For example, by setting $C_{ext}=0$,$C_{pos}=1$,$C_{neg}=1$, the existing model is ignored in the repair, while  $C_{ext}=1$,$C_{pos}=0$,$C_{neg}=0$, the original model is kept.
 
 After getting the weighted unification, we can assign cardinality for the directly-follows graph $G_{new}$ by multiplying weighted unification with the total number of cardinalities of $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$. 
-\section{Mine models from a directly-follows graph}
+\subsection{Mine models from a directly-follows graph}
 The result from the last step above is a generated directly-follows graph with weighted unified cardinality. We mine process models from this graph by procedure \emph{Dfg2ProcessTree} in the Figure \ref{fig:architecture}. This procedure was introduced with Inductive Miner\cite{leemans2013discovering}. It finds the most prominent split from the set of exclusive choice, sequence, parallelism, and loop splits on  a directly-follows graph.  Afterward, the corresponding operator to the split is used to build a block-structured process model called a process tree. Iteratively, the split sub graphs are passed as inputs for the same procedure until one single activity is reached and no split is available. A process tree is output as the mined process model and can be converted into another process model called Petri net.
 %% To write the procedure for it 
 
-\section{Add long-term dependency}
+\subsection{Add long-term dependency}
 Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. 
 % DO we need to give one example?? 
 To make the generated model preciser, we detect the long-term dependency and add it on the process model. 
@@ -155,7 +167,7 @@ The $F_{pos}(XORB_X, XORB_Y)$ and $F_{neg}(XORB_X, XORB_Y)$ are the frequency of
 %\begin{definition}[Long-term dependency for xor blocks] We call two xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency, if 
 %	 \[ S \prec T, Wlt  \]
 %\end{definition}
-\subsection{Cases Analysis}
+\subsubsection{Cases Analysis}
 % Here we need to check the combination for all xor branches, but with one example.
 There are various sorts of long-term dependencies that are able to happen for two xor blocks. To explain those situations better, we define concepts called sources and targets of long-term dependency and then give an example of one Petri net with long-term dependency.
 \begin{definition}[Source and target set of Long-term Dependency]
@@ -194,7 +206,7 @@ Given an Petri net in Figure \ref{fig:seq-2-original}, two xor blocks are contai
 \end{enumerate}
 In the following, we propose a method to express long-term dependency on Petri net. 
 %% should we write down here to prove the correctness of available situations, or we need to wait??
-\subsection{Way to express long-term dependency}
+\subsubsection{Way to express long-term dependency}
 Adding places to Petri net can limit the behavior\cite{bergenthum2007process}, since its output transitions demand a token from it to fire themselves. When there is no token at this place, the transitions are enabled. By injecting extra places on Petri net, it can block negative behaviors which are not expected in the aspect of business performance. 
 
 Long-term dependency limits the available choices to fire transitions after the previous xor branch executes. So to express long-term dependency, our basic idea is to add places to the Petri net model. What's more, because one xor branch can be as a source to multiple long-term dependencies and one xor branch can be as a target to multiple long-term dependencies, silent transitions are also needed to address a long-term dependency explicitly. 
@@ -240,16 +252,16 @@ Given arbitrary two xor blocks, $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ 
 \end{figure}
 One simple example is given in the Figure \ref{fig:add-algorithm-example} to explain this algorithm. Given the long-term dependencies $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}$, two extra places are added respectively after A and B; Next, two places before D and E are created to express that the xor branches are involved with long-term dependency. At end, for each long-term dependency, a silent transition is generated to connect the extra places after the source xor branch to the place before target place. 
 
-\subsection{Soundness Analysis}
+\subsubsection{Soundness Analysis}
 % this section is used to select the sound situations. 
 % next time I can go to library at Tuesday with the laptop and study there..
 Following algorithm \ref{alg: Adding method} by adding silent transitions and places to express long-term dependency, the model soundness can be violated. In the following section, we discuss the soundness in different situations. 
 
 Given a Petri net with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$ on two xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$, following the Algorithm \ref{alg: Adding method}, $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$ , $P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$, and silent transitions $ E = \{\epsilon \vert p_{X_i} \rightarrow \epsilon
  \rightarrow p_{Y_{j}} \}$ are added. The Petri net is sound if and only if (1)the soundness outside xor blocks with long-term dependency is not violated; and  (2) soundness between xor blocks is kept. In the following, we check the model soundness with long-term dependency after applying Algorithm \ref{alg: Adding method}.
-\subsubsection{(1) Soundness outside xor blocks}
+\Large{(1) Soundness outside xor blocks}
 \emph{Proof:} he added silent transitions and places do not violate the execution outside of the xor blocks, because the extra tokens that are generated due to long-term dependency are constrained in the xor blocks, and it doesn't affect the token flows outside. As we know, the original model is sound. So the soundness outside xor blocks is not violated.
-\subsubsection{(2) Soundness inside xor blocks}
+\Large{(2) Soundness inside xor blocks}
 For all xor branches in S, only one branch can be fired. Without loss of generality, $X_i$ is assumed to be enabled. After firing $X_i$, the marking distribution on the extra places are  
 \[ M(p_{X_i}) = 1; \quad 
 \forall p_{X_i\prime} \in P_S, i\prime \neq i, M(p_{X_i\prime})=0 \]
@@ -278,7 +290,7 @@ Else, in other situation, the model becomes unsound. \\
 \indent If $LT_T \neq T$, there exists one $Y_j \notin LT_T, \nexists X_i, X_i \rightsquigarrow Y_j$, so with two input places but $Token(p_{Y_j})=0$,  $Y_j$ becomes the dead part, which violates the soundness again. \\
 
 As a conclusion, to keep Petri net with long-term dependency sound, only situation $ LT_S = S, LT_T=T$ is considered. However, when the long-term dependency is full connected where each combination of xor branches from source and target xor block has long-term dependency, namely xor branches can be chosen freely, we don't add any places and silent transitions on the model. 
-\section{Reduce Silent Transitions}
+\subsection{Reduce Silent Transitions}
 %% We reduce the silent transition when there is no 
 Our method to represent long-term dependency can introduce redundant silent transitions and places, which complicates the model. So, we post process the Petri net with long-term dependency to delete redundant silent transitions and places.
 % ; on the other hand, it causes the model unsound where the extra silent transitions suspend the execution and therefore violates the soundness condition of proper completion.
