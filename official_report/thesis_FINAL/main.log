@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  26 APR 2019 17:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  28 APR 2019 21:17
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1644,7 +1644,7 @@ LaTeX Font Info:    Try loading font information for T1+lmss on input line 17.
 (/usr/share/texmf/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<figures/logo/pads_logo_text.jpg, id=67, 1594.95876pt x 379.4175pt>
+<figures/logo/pads_logo_text.jpg, id=220, 1594.95876pt x 379.4175pt>
 File: figures/logo/pads_logo_text.jpg Graphic file (type jpg)
 <use figures/logo/pads_logo_text.jpg>
 Package pdftex.def Info: figures/logo/pads_logo_text.jpg  used on input line 17
@@ -1705,257 +1705,630 @@ ext.jpg>]
 
 ] (./chapters/abstract.tex) [5] [6
 
+] (./main.toc [7])
+\tf@toc=\write5
+\openout5 = `main.toc'.
+
+ [8] (./main.lof)
+\tf@lof=\write6
+\openout6 = `main.lof'.
+
+[9
+
+] [10
+
+] (./main.lot)
+\tf@lot=\write7
+\openout7 = `main.lot'.
+
+ [11] [12
+
 ]
 Chapter 1.
-(./chapters/algorithm.tex
+(./chapters/introduction.tex
+Underfull \vbox (badness 1052) has occurred while \output is active []
 
-LaTeX Warning: Reference `fig:architecture' on page vii undefined on input line
- 20.
-
-<figures/algorithm/FD_architeccture_detail_03-architecture-with-abstraction.pdf
-, id=97, 490.71327pt x 500.83109pt>
-File: figures/algorithm/FD_architeccture_detail_03-architecture-with-abstractio
-n.pdf Graphic file (type pdf)
-<use figures/algorithm/FD_architeccture_detail_03-architecture-with-abstraction
-.pdf>
-Package pdftex.def Info: figures/algorithm/FD_architeccture_detail_03-architect
-ure-with-abstraction.pdf  used on input line 26.
-(pdftex.def)             Requested size: 490.71207pt x 500.82986pt.
-
-Overfull \hbox (63.92072pt too wide) in paragraph at lines 26--27
-[][] 
- []
-
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 39.
-(/usr/share/texmf/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-Underfull \vbox (badness 7486) has occurred while \output is active []
-
- [7
+ [1
 
 ]
+<figures/introduction/Master-original-model.pdf, id=403, 614.295pt x 794.97pt>
+File: figures/introduction/Master-original-model.pdf Graphic file (type pdf)
+<use figures/introduction/Master-original-model.pdf>
+Package pdftex.def Info: figures/introduction/Master-original-model.pdf  used o
+n input line 16.
+(pdftex.def)             Requested size: 170.71576pt x 456.10953pt.
+
+Overfull \hbox (42.67706pt too wide) in paragraph at lines 16--17
+ [][] 
+ []
+
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
  Make it at least 13.59999pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[8 <./figures/algorithm/FD_architeccture_detail_03-architecture-with-abstractio
-n.pdf
+[2 <./figures/introduction/Master-original-model.pdf
 
-pdfTeX warning: /usr/bin/pdflatex (file ./figures/algorithm/FD_architeccture_de
-tail_03-architecture-with-abstraction.pdf): PDF inclusion: invalid other resour
-ce which is no dict (key 'ProcSets', type <array>); ignored.
->] [9]
-Overfull \hbox (21.31499pt too wide) detected at line 97
-\OML/lmm/m/it/10.95 Wu\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 E[]\OT1/lmr/m/n/1
-0.95 (\OML/lmm/m/it/10.95 A; B\OT1/lmr/m/n/10.95 )) = \OML/lmm/m/it/10.95 C[] \
-OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/1
-0.95 E[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A; B\OT1/lmr/m/n/10.95 )) + \OM
-L/lmm/m/it/10.95 C[] \OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/
-10.95 (\OML/lmm/m/it/10.95 E[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A; B\OT1/
-lmr/m/n/10.95 )) \OMS/lmsy/m/n/10.95 ^^@ \OML/lmm/m/it/10.95 C[] \OMS/lmsy/m/n/
-10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 E[]\OT1/
-lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A; B\OT1/lmr/m/n/10.95 ))
- []
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/introduction/Master-original-
+model.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSe
+ts', type <array>); ignored.
+>]
+<figures/introduction/Master-add-events-loop.pdf, id=426, 614.295pt x 794.97pt>
 
-[10]
-Overfull \hbox (39.24083pt too wide) detected at line 102
-\OML/lmm/m/it/10.95 Wu\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 Start[]\OT1/lmr/m
-/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 )) = \OML/lmm/m/it/10.95 C[] 
-\OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/
-10.95 Start[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 )) + \
-OML/lmm/m/it/10.95 C[] \OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/
-n/10.95 (\OML/lmm/m/it/10.95 Start[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\O
-T1/lmr/m/n/10.95 )) \OMS/lmsy/m/n/10.95 ^^@ \OML/lmm/m/it/10.95 C[] \OMS/lmsy/m
-/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 Start
-[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 ))
- []
+File: figures/introduction/Master-add-events-loop.pdf Graphic file (type pdf)
+<use figures/introduction/Master-add-events-loop.pdf>
+Package pdftex.def Info: figures/introduction/Master-add-events-loop.pdf  used 
+on input line 43.
+(pdftex.def)             Requested size: 106.6961pt x 456.10953pt.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 44.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 44.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 44.
+<figures/introduction/Master-add-events.pdf, id=428, 614.295pt x 794.97pt>
+File: figures/introduction/Master-add-events.pdf Graphic file (type pdf)
+<use figures/introduction/Master-add-events.pdf>
+Package pdftex.def Info: figures/introduction/Master-add-events.pdf  used on in
+put line 49.
+(pdftex.def)             Requested size: 106.6961pt x 456.10953pt.
+<figures/introduction/Master-change-order.pdf, id=440, 614.295pt x 794.97pt>
+File: figures/introduction/Master-change-order.pdf Graphic file (type pdf)
+<use figures/introduction/Master-change-order.pdf>
+Package pdftex.def Info: figures/introduction/Master-change-order.pdf  used on 
+input line 77.
+(pdftex.def)             Requested size: 106.69946pt x 456.10953pt.
+<figures/introduction/Master-with-lt.pdf, id=442, 614.295pt x 794.97pt>
+File: figures/introduction/Master-with-lt.pdf Graphic file (type pdf)
+<use figures/introduction/Master-with-lt.pdf>
+Package pdftex.def Info: figures/introduction/Master-with-lt.pdf  used on input
+ line 83.
+(pdftex.def)             Requested size: 106.6961pt x 456.10953pt.
+ [3] [4 <./figures/introduction/Master-add-events-loop.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/introduction/Master-add-event
+s-loop.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcS
+ets', type <array>); ignored.
+> <./figures/introduction/Master-add-events.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/introduction/Master-add-event
+s.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets',
+ type <array>); ignored.
+>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5 <./figures/introduction/Master-change-order.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/introduction/Master-change-or
+der.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets
+', type <array>); ignored.
+> <./figures/introduction/Master-with-lt.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/introduction/Master-with-lt.p
+df): PDF inclusion: invalid other resource which is no dict (key 'ProcSets', ty
+pe <array>); ignored.
+>]
+<figures/introduction/P06-problem-scope.pdf, id=525, 453.61469pt x 292.2117pt>
+File: figures/introduction/P06-problem-scope.pdf Graphic file (type pdf)
+<use figures/introduction/P06-problem-scope.pdf>
+Package pdftex.def Info: figures/introduction/P06-problem-scope.pdf  used on in
+put line 109.
+(pdftex.def)             Requested size: 426.79135pt x 274.9421pt.
+ [6]) [7 <./figures/introduction/P06-problem-scope.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/introduction/P06-problem-scop
+e.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets',
+ type <array>); ignored.
+>] [8
+
+]
+Chapter 2.
+(./chapters/background.tex [9]) [10]
+Chapter 3.
+(./chapters/preliminary.texpdfTeX warning (ext4): destination with the same ide
+ntifier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.26 
+      [1
+
+]pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.53 		\itemsep
+               0em [2]
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 54.
+ (/usr/share/texmf/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+<figures/preliminary/PN06_Seq_2_xor_notnested.png, id=618, 1234.6125pt x 312.16
+624pt>
+File: figures/preliminary/PN06_Seq_2_xor_notnested.png Graphic file (type png)
+<use figures/preliminary/PN06_Seq_2_xor_notnested.png>
+Package pdftex.def Info: figures/preliminary/PN06_Seq_2_xor_notnested.png  used
+ on input line 76.
+(pdftex.def)             Requested size: 192.0548pt x 48.55673pt.
+<figures/preliminary/transition-system.pdf, id=619, 251.0178pt x 72.27pt>
+File: figures/preliminary/transition-system.pdf Graphic file (type pdf)
+<use figures/preliminary/transition-system.pdf>
+Package pdftex.def Info: figures/preliminary/transition-system.pdf  used on inp
+ut line 84.
+(pdftex.def)             Requested size: 192.0548pt x 55.29407pt.
 
 
-Overfull \hbox (18.04039pt too wide) detected at line 107
-\OML/lmm/m/it/10.95 Wu\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 End[]\OT1/lmr/m/n
-/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 )) = \OML/lmm/m/it/10.95 C[] \O
-MS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10
-.95 End[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 )) + \OML/
-lmm/m/it/10.95 C[] \OMS/lmsy/m/n/10.95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10
-.95 (\OML/lmm/m/it/10.95 End[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr
-/m/n/10.95 )) \OMS/lmsy/m/n/10.95 ^^@ \OML/lmm/m/it/10.95 C[] \OMS/lmsy/m/n/10.
-95 ^^C \OML/lmm/m/it/10.95 U\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 End[]\OT1/l
-mr/m/n/10.95 (\OML/lmm/m/it/10.95 A\OT1/lmr/m/n/10.95 ))
- []
-
-
-LaTeX Warning: Reference `fig:architecture' on page xi undefined on input line 
-116.
-
-[11] [12]
-
-Package caption Warning: \label without proper reference on input line 185.
+Package caption Warning: \label without proper reference on input line 88.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig:seq-2-original' on page xiii undefined on input l
-ine 181.
+LaTeX Warning: Reference `fig:pn-ts' on page 3 undefined on input line 96.
 
-<figures/algorithm/LT_Seq_01_Original.png, id=193, 404.51125pt x 121.45375pt>
+pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.100 \begin{definition}[Process Tree]
+                                       [3 <./figures/preliminary/PN06_Seq_2_xor
+_notnested.png> <./figures/preliminary/transition-system.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/preliminary/transition-system
+.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets', 
+type <array>); ignored.
+>]
+<figures/preliminary/PT_PN_corresponding_01_seq_PN.png, id=649, 326.21875pt x 5
+8.2175pt>
+File: figures/preliminary/PT_PN_corresponding_01_seq_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_01_seq_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_01_seq_PN.png 
+ used on input line 115.
+(pdftex.def)             Requested size: 192.0548pt x 34.27518pt.
+<figures/preliminary/PT_PN_corresponding_02_xor_PN.png, id=651, 224.84pt x 73.2
+7374pt>
+File: figures/preliminary/PT_PN_corresponding_02_xor_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_02_xor_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_02_xor_PN.png 
+ used on input line 122.
+(pdftex.def)             Requested size: 192.0548pt x 62.59154pt.
+<figures/preliminary/PT_PN_corresponding_03_and_PN.png, id=652, 385.44pt x 73.2
+7374pt>
+File: figures/preliminary/PT_PN_corresponding_03_and_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_03_and_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_03_and_PN.png 
+ used on input line 129.
+(pdftex.def)             Requested size: 192.0548pt x 36.51042pt.
+<figures/preliminary/PT_PN_corresponding_04_loop_PN.png, id=653, 224.84pt x 78.
+2925pt>
+File: figures/preliminary/PT_PN_corresponding_04_loop_PN.png Graphic file (type
+ png)
+<use figures/preliminary/PT_PN_corresponding_04_loop_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_04_loop_PN.png
+  used on input line 136.
+(pdftex.def)             Requested size: 192.0548pt x 66.87865pt.
+
+Overfull \hbox (5.79135pt too wide) in paragraph at lines 151--152
+[]\T1/lmr/m/n/10.95 if $\OML/lmm/m/it/10.95 Q \OT1/lmr/m/n/10.95 =\U/msa/m/n/10
+.95 ^^H \OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 Q[]; Q[]; ::Q[]\OT1/lmr/m/n/10.
+95 )$\T1/lmr/m/n/10.95 , the sub-trees have a loop re-la-tion for $\OMS/lmsy/m/
+n/10.95 f\OML/lmm/m/it/10.95 Q[]; Q[]; ::Q[]\OMS/lmsy/m/n/10.95 g$\T1/lmr/m/n/1
+0.95 . $\OMS/lmsy/m/n/10.95 f\OML/lmm/m/it/10.95 Q[]; ::Q[]\OMS/lmsy/m/n/10.95 
+g$
+ []
+
+
+LaTeX Warning: Reference `fig:pt-seq-2' on page 4 undefined on input line 154.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.4}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.155 
+       [4 <./figures/preliminary/PT_PN_corresponding_01_seq_PN.png> <./figures/
+preliminary/PT_PN_corresponding_02_xor_PN.png> <./figures/preliminary/PT_PN_cor
+responding_03_and_PN.png> <./figures/preliminary/PT_PN_corresponding_04_loop_PN
+.png>]pdfTeX warning (ext4): destination with the same identifier (name{page.5}
+) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.194 ...rt , \sigma(i)=a \ and \ \sigma(i+1)=b.\]
+                                                   [5]
+<figures/preliminary/IM-demo-directly-follows.pdf, id=676, 190.7928pt x 142.612
+81pt>
+File: figures/preliminary/IM-demo-directly-follows.pdf Graphic file (type pdf)
+<use figures/preliminary/IM-demo-directly-follows.pdf>
+Package pdftex.def Info: figures/preliminary/IM-demo-directly-follows.pdf  used
+ on input line 212.
+(pdftex.def)             Requested size: 170.71393pt x 127.61044pt.
+
+Underfull \hbox (badness 1412) in paragraph at lines 213--213
+[]\T1/lmr/m/n/10 (a) |The directly-follows graph from
+ []
+
+<figures/preliminary/IM-demo-split-procedure.pdf, id=677, 295.1025pt x 192.72pt
+>
+File: figures/preliminary/IM-demo-split-procedure.pdf Graphic file (type pdf)
+<use figures/preliminary/IM-demo-split-procedure.pdf>
+Package pdftex.def Info: figures/preliminary/IM-demo-split-procedure.pdf  used 
+on input line 219.
+(pdftex.def)             Requested size: 234.73654pt x 153.29987pt.
+pdfTeX warning (ext4): destination with the same identifier (name{page.6}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.230 A
+       s an example, we apply the splitting on event log $L_{IM}$ and $G(L_{...
+[6 <./figures/preliminary/IM-demo-directly-follows.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/preliminary/IM-demo-directly-
+follows.pdf): PDF inclusion: invalid other resource which is no dict (key 'Proc
+Sets', type <array>); ignored.
+> <./figures/preliminary/IM-demo-split-procedure.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/preliminary/IM-demo-split-pro
+cedure.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcS
+ets', type <array>); ignored.
+>])pdfTeX warning (ext4): destination with the same identifier (name{page.7}) h
+as been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.53 \chapter
+             {Algorithm} \label{chap:alg} [7]pdfTeX warning (ext4): destination
+ with the same identifier (name{page.8}) has been already used, duplicate ignor
+ed
+<to be read again> 
+                   \relax 
+l.53 \chapter
+             {Algorithm} \label{chap:alg} [8
+
+]
+Chapter 4.
+(./chapters/algorithm.tex
+<figures/algorithm/FD_framework.pdf, id=730, 490.71327pt x 500.83109pt>
+File: figures/algorithm/FD_framework.pdf Graphic file (type pdf)
+<use figures/algorithm/FD_framework.pdf>
+Package pdftex.def Info: figures/algorithm/FD_framework.pdf  used on input line
+ 26.
+(pdftex.def)             Requested size: 490.71207pt x 500.82986pt.
+
+Overfull \hbox (63.92072pt too wide) in paragraph at lines 26--27
+[][] 
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.9}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.37 
+      [9]pdfTeX warning (ext4): destination with the same identifier (name{page
+.10}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.37 
+      [10 <./figures/algorithm/FD_framework.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/algorithm/FD_framework.pdf): 
+PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type <a
+rray>); ignored.
+>]
+Overfull \hbox (28.07294pt too wide) in paragraph at lines 42--44
+[]\T1/lmr/bx/n/10.95 Definition 4.1 \T1/lmr/m/n/10.95 (Uni-fied car-di-nal-ity)
+\T1/lmr/bx/n/10.95 . []\T1/lmr/m/n/10.95 Given a directly-follows graphs $\OML/
+lmm/m/it/10.95 G\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 L\OT1/lmr/m/n/10.95 ) =
+ (\OML/lmm/m/it/10.95 A; F; A[]; A[]\OT1/lmr/m/n/10.95 )$
+ []
+
+
+Overfull \hbox (1.43068pt too wide) in paragraph at lines 57--59
+[]\T1/lmr/m/it/10.95 Convert event logs into uni-fied directly-follows graphs, 
+$\OML/lmm/m/it/10.95 D[]; D[]$ \T1/lmr/m/n/10.95 Two uni-fied directly-
+ []
+
+[11]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <12> on input line 69.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 69.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 69.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 69.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 69.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 74.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 74.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 74.
+
+[12] [13]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 154.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 154.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 154.
+
+[14] [15]
+
+Package caption Warning: \label without proper reference on input line 215.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig:seq-2-original' on page 16 undefined on input lin
+e 211.
+
+<figures/algorithm/LT_Seq_01_Original.png, id=855, 404.51125pt x 121.45375pt>
 File: figures/algorithm/LT_Seq_01_Original.png Graphic file (type png)
 <use figures/algorithm/LT_Seq_01_Original.png>
 Package pdftex.def Info: figures/algorithm/LT_Seq_01_Original.png  used on inpu
-t line 184.
+t line 214.
 (pdftex.def)             Requested size: 426.79135pt x 128.14545pt.
-[13 <./figures/algorithm/LT_Seq_01_Original.png>]
-<figures/algorithm/LT_Seq_01_Silent_01.png, id=212, 404.51125pt x 161.60374pt>
+[16 <./figures/algorithm/LT_Seq_01_Original.png>]
+<figures/algorithm/LT_Seq_01_Silent_01.png, id=868, 404.51125pt x 161.60374pt>
 File: figures/algorithm/LT_Seq_01_Silent_01.png Graphic file (type png)
 <use figures/algorithm/LT_Seq_01_Silent_01.png>
 Package pdftex.def Info: figures/algorithm/LT_Seq_01_Silent_01.png  used on inp
-ut line 249.
+ut line 279.
 (pdftex.def)             Requested size: 426.79135pt x 170.5076pt.
 
 
-Package caption Warning: \label without proper reference on input line 250.
+Package caption Warning: \label without proper reference on input line 280.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig:add-algorithm-example' on page xiv undefined on i
-nput line 253.
-
-[14 <./figures/algorithm/LT_Seq_01_Silent_01.png>]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <14.4> on input line 265.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 265.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 265.
- [15]
-Underfull \hbox (badness 10000) in paragraph at lines 267--272
-
- []
-
-[16]
-Underfull \hbox (badness 10000) in paragraph at lines 288--291
-
- []
-
-
-Overfull \hbox (1.41208pt too wide) in paragraph at lines 292--293
-[]\T1/lmr/m/n/14.4 As a con-clu-sion, to keep Petri net with long-term de-pen-d
-ency sound,
- []
-
-
-Overfull \hbox (108.06888pt too wide) in paragraph at lines 298--299
-\T1/lmr/m/n/14.4 put place $\OML/lmm/m/it/14.4 P[]$ \T1/lmr/m/n/14.4 and one ou
-t-put place $\OML/lmm/m/it/14.4 P[]$\T1/lmr/m/n/14.4 , if $\OMS/lmsy/m/n/14.4 j
-\OML/lmm/m/it/14.4 Outedges\OT1/lmr/m/n/14.4 ([]\OMS/lmsy/m/n/14.4 j ^^U \OT1/l
-mr/m/n/14.4 2 \OML/lmm/m/it/14.4 and \OMS/lmsy/m/n/14.4 j\OML/lmm/m/it/14.4 Ine
-dges\OT1/lmr/m/n/14.4 (\OML/lmm/m/it/14.4 P[]\OT1/lmr/m/n/14.4 )\OMS/lmsy/m/n/1
-4.4 j ^^U
- []
+LaTeX Warning: Reference `fig:add-algorithm-example' on page 17 undefined on in
+put line 283.
 
 [17]
+Underfull \hbox (badness 10000) in paragraph at lines 293--300
 
-Package caption Warning: \label without proper reference on input line 314.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 293--300
+
+ []
+
+[18] [19 <./figures/algorithm/LT_Seq_01_Silent_01.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 322--325
+
+ []
+
+[20]
+
+Package caption Warning: \label without proper reference on input line 348.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig:with-lt' on page xviii undefined on input line 30
-9.
+LaTeX Warning: Reference `fig:with-lt' on page 21 undefined on input line 343.
 
 
-Package caption Warning: \label without proper reference on input line 321.
+Package caption Warning: \label without proper reference on input line 355.
 See the caption package documentation for explanation.
 
 
-LaTeX Warning: Reference `fig:reduced-lt' on page xviii undefined on input line
- 309.
+LaTeX Warning: Reference `fig:reduced-lt' on page 21 undefined on input line 34
+3.
 
-<figures/algorithm/dfg-IM-pn-with-lt.png, id=280, 747.79375pt x 206.7725pt>
+<figures/algorithm/dfg-IM-pn-with-lt.png, id=931, 747.79375pt x 206.7725pt>
 File: figures/algorithm/dfg-IM-pn-with-lt.png Graphic file (type png)
 <use figures/algorithm/dfg-IM-pn-with-lt.png>
 Package pdftex.def Info: figures/algorithm/dfg-IM-pn-with-lt.png  used on input
- line 313.
+ line 347.
 (pdftex.def)             Requested size: 426.79135pt x 118.01299pt.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 315.
-<figures/algorithm/dfg-IM-pn-with-lt-reduced.png, id=281, 1050.92625pt x 197.73
+<figures/algorithm/dfg-IM-pn-with-lt-reduced.png, id=932, 1050.92625pt x 197.73
 875pt>
 File: figures/algorithm/dfg-IM-pn-with-lt-reduced.png Graphic file (type png)
 <use figures/algorithm/dfg-IM-pn-with-lt-reduced.png>
 Package pdftex.def Info: figures/algorithm/dfg-IM-pn-with-lt-reduced.png  used 
-on input line 320.
+on input line 354.
 (pdftex.def)             Requested size: 426.79135pt x 80.304pt.
+<figures/algorithm/FD_architeccture_detail.pdf, id=934, 501.79468pt x 704.6325p
+t>
+File: figures/algorithm/FD_architeccture_detail.pdf Graphic file (type pdf)
+<use figures/algorithm/FD_architeccture_detail.pdf>
+Package pdftex.def Info: figures/algorithm/FD_architeccture_detail.pdf  used on
+ input line 362.
+(pdftex.def)             Requested size: 417.59972pt x 586.40732pt.
+) [21 <./figures/algorithm/dfg-IM-pn-with-lt.png> <./figures/algorithm/dfg-IM-p
+n-with-lt-reduced.png>] [22 <./figures/algorithm/FD_architeccture_detail.pdf
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+pdfTeX warning: /usr/bin/pdflatex (file ./figures/algorithm/FD_architeccture_de
+tail.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSet
+s', type <array>); ignored.
+>]
+Chapter 5.
+(./chapters/implementation.tex
+<figures/implementation/dfg-IM-setting.png, id=979, 400.49625pt x 143.53625pt>
+File: figures/implementation/dfg-IM-setting.png Graphic file (type png)
+<use figures/implementation/dfg-IM-setting.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-setting.png  used on inp
+ut line 25.
+(pdftex.def)             Requested size: 300.37144pt x 107.65192pt.
+<figures/implementation/dfg-IM-pn-without-lt.png, id=981, 1308.89pt x 744.7825p
+t>
+File: figures/implementation/dfg-IM-pn-without-lt.png Graphic file (type png)
+<use figures/implementation/dfg-IM-pn-without-lt.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-without-lt.png  used 
+on input line 32.
+(pdftex.def)             Requested size: 426.79135pt x 242.84695pt.
+ [23
 
-) [18] [19 <./figures/algorithm/dfg-IM-pn-with-lt.png> <./figures/algorithm/dfg
--IM-pn-with-lt-reduced.png>] [20
+] [24 <./figures/implementation/dfg-IM-setting.png> <./figures/implementation/d
+fg-IM-pn-without-lt.png>]
+<figures/implementation/dfg-IM-pn-with-lt.png, id=996, 811.03pt x 548.0475pt>
+File: figures/implementation/dfg-IM-pn-with-lt.png Graphic file (type png)
+<use figures/implementation/dfg-IM-pn-with-lt.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt.png  used on 
+input line 44.
+(pdftex.def)             Requested size: 426.79135pt x 288.4066pt.
+<figures/implementation/dfg-IM-pn-with-lt-manual.png, id=999, 1381.16pt x 855.1
+95pt>
+File: figures/implementation/dfg-IM-pn-with-lt-manual.png Graphic file (type pn
+g)
+<use figures/implementation/dfg-IM-pn-with-lt-manual.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-manual.png  u
+sed on input line 52.
+(pdftex.def)             Requested size: 426.79135pt x 264.25952pt.
+ [25 <./figures/implementation/dfg-IM-pn-with-lt.png>]
+<figures/implementation/dfg-IM-pn-with-lt-reduced.png, id=1006, 1374.13374pt x 
+662.475pt>
+File: figures/implementation/dfg-IM-pn-with-lt-reduced.png Graphic file (type p
+ng)
+<use figures/implementation/dfg-IM-pn-with-lt-reduced.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-reduced.png  
+used on input line 61.
+(pdftex.def)             Requested size: 426.79135pt x 205.74925pt.
+<figures/implementation/dfg-IM-confusionmatrix.png, id=1008, 959.585pt x 213.79
+875pt>
+File: figures/implementation/dfg-IM-confusionmatrix.png Graphic file (type png)
+
+<use figures/implementation/dfg-IM-confusionmatrix.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-confusionmatrix.png  use
+d on input line 72.
+(pdftex.def)             Requested size: 426.79135pt x 95.08957pt.
+ [26 <./figures/implementation/dfg-IM-pn-with-lt-manual.png>] [27 <./figures/im
+plementation/dfg-IM-pn-with-lt-reduced.png> <./figures/implementation/dfg-IM-co
+nfusionmatrix.png>]
+<figures/implementation/implementation-KNIME.png, id=1019, 862.22125pt x 436.63
+126pt>
+File: figures/implementation/implementation-KNIME.png Graphic file (type png)
+<use figures/implementation/implementation-KNIME.png>
+Package pdftex.def Info: figures/implementation/implementation-KNIME.png  used 
+on input line 87.
+(pdftex.def)             Requested size: 426.79135pt x 216.12314pt.
+) [28 <./figures/implementation/implementation-KNIME.png>]
+Chapter 6.
+(./chapters/evaluation.tex [29
 
 ]
-Chapter 2.
-(./chapters/conclusion.tex) (./main.bbl [21] [22
 
-]
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 26.
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 32.
+
+[30]
+<figures/evaluation/model_01_sequence.png, id=1033, 736.7525pt x 149.55875pt>
+File: figures/evaluation/model_01_sequence.png Graphic file (type png)
+<use figures/evaluation/model_01_sequence.png>
+Package pdftex.def Info: figures/evaluation/model_01_sequence.png  used on inpu
+t line 81.
+(pdftex.def)             Requested size: 384.1096pt x 77.97182pt.
+ [31]
+<figures/evaluation/result-ext-weight-01_log_sequence_02.png, id=1038, 1858.945
+pt x 1126.2075pt>
+File: figures/evaluation/result-ext-weight-01_log_sequence_02.png Graphic file 
+(type png)
+<use figures/evaluation/result-ext-weight-01_log_sequence_02.png>
+Package pdftex.def Info: figures/evaluation/result-ext-weight-01_log_sequence_0
+2.png  used on input line 101.
+(pdftex.def)             Requested size: 384.09291pt x 215.01273pt.
+<figures/evaluation/result-pos-weight-01_log_sequence_02.png, id=1039, 1857.941
+25pt x 1128.215pt>
+File: figures/evaluation/result-pos-weight-01_log_sequence_02.png Graphic file 
+(type png)
+<use figures/evaluation/result-pos-weight-01_log_sequence_02.png>
+Package pdftex.def Info: figures/evaluation/result-pos-weight-01_log_sequence_0
+2.png  used on input line 108.
+(pdftex.def)             Requested size: 384.1123pt x 215.01724pt.
+<figures/evaluation/result-neg-weight-01_log_sequence_02.png, id=1040, 1855.933
+75pt x 1129.21875pt>
+File: figures/evaluation/result-neg-weight-01_log_sequence_02.png Graphic file 
+(type png)
+<use figures/evaluation/result-neg-weight-01_log_sequence_02.png>
+Package pdftex.def Info: figures/evaluation/result-neg-weight-01_log_sequence_0
+2.png  used on input line 115.
+(pdftex.def)             Requested size: 384.09375pt x 215.01901pt.
+
+
+LaTeX Warning: Float too large for page by 73.08086pt on input line 121.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[32 <./figures/evaluation/model_01_sequence.png (PNG copy)>]) [33] [34 <./figur
+es/evaluation/result-ext-weight-01_log_sequence_02.png> <./figures/evaluation/r
+esult-pos-weight-01_log_sequence_02.png> <./figures/evaluation/result-neg-weigh
+t-01_log_sequence_02.png>]
+Chapter 7.
+(./chapters/conclusion.tex) (./main.bbl [35
+
+] [36
+
+] [37]
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 152.
+
 
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-Underfull \hbox (badness 10000) in paragraph at lines 29--33
-[]\T1/lmr/m/n/14.4 Kefang Ding.  In-cor-po-rateneg-a-tive-in-for-ma-tion.
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 29--33
-\T1/lmr/m/n/14.4 URL []$\T1/lmtt/m/n/14.4 http : / / ais-[]hudson . win . tue .
- nl : 8080 / job /
- []
-
-) [23]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 75.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 75.
+)) [38]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 70.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 70.
  (./main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 75.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 75.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 70.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 70.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 1FF8F4B4330684B4A180983E294C5E12;982.
+(rerunfilecheck)             Checksum: 8005C9E49390B5F72CDA13A54CE5B077;3767.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 75.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 70.
  ) 
 Here is how much of TeX's memory you used:
- 36914 strings out of 494847
- 849497 string characters out of 6179079
- 1052886 words of memory out of 5000000
- 39470 multiletter control sequences out of 15000+600000
- 99176 words of font info for 83 fonts, out of 8000000 for 9000
+ 37450 strings out of 494847
+ 862763 string characters out of 6179079
+ 1055886 words of memory out of 5000000
+ 39789 multiletter control sequences out of 15000+600000
+ 110777 words of font info for 86 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 76i,13n,121p,891b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 76i,18n,121p,1102b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
-ips/lm/lm-ts1.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/shar
-e/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ma
-thex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}</usr/share/texmf/f
+ips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share
+/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
+-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ts1.enc}</usr/share/texmf/f
 onts/type1/public/lm/lmbx10.pfb></usr/share/texmf/fonts/type1/public/lm/lmbx12.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmbx8.pfb></usr/share/texmf/fonts/t
-ype1/public/lm/lmex10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></
-usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/
-public/lm/lmmi6.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi7.pfb></usr/sha
-re/texmf/fonts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/l
-m/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf
-/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.
-pfb></usr/share/texmf/fonts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/
-type1/public/lm/lmss10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb
-></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/typ
-e1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (23 pages, 1300375 bytes).
+ype1/public/lm/lmbxi10.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10.pfb><
+/usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts/type1
+/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi6.pfb></usr/s
+hare/texmf/fonts/type1/public/lm/lmmi7.pfb></usr/share/texmf/fonts/type1/public
+/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/share/tex
+mf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/type1/public/lm/lmr7.
+pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/ty
+pe1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss10.pfb></u
+sr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf/fonts/type1
+/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy6.pfb></usr/s
+hare/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public
+/lm/lmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbo
+ls/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbol
+s/msbm10.pfb>
+Output written on main.pdf (60 pages, 2504199 bytes).
 PDF statistics:
- 414 PDF objects out of 1000 (max. 8388607)
- 342 compressed objects within 4 object streams
- 95 named destinations out of 1000 (max. 500000)
- 163 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1221 PDF objects out of 1440 (max. 8388607)
+ 1019 compressed objects within 11 object streams
+ 258 named destinations out of 1000 (max. 500000)
+ 627 words of extra memory for PDF output out of 10000 (max. 10000000)
 

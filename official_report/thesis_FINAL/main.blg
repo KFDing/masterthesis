@@ -9,45 +9,45 @@ Warning--entry type for "MyPlugin" isn't style-file defined
 --line 227 of file references.bib
 Warning--empty year in ProM
 Warning--empty year in MyPlugin
-You've used 4 entries,
+You've used 23 entries,
             2481 wiz_defined-function locations,
-            574 strings with 5146 characters,
-and the built_in function-call counts, 1656 in all, are:
-= -- 148
-> -- 62
-< -- 4
-+ -- 26
-- -- 18
-* -- 100
-:= -- 241
-add.period$ -- 14
-call.type$ -- 4
-change.case$ -- 8
-chr.to.int$ -- 4
-cite$ -- 6
-duplicate$ -- 90
-empty$ -- 163
-format.name$ -- 22
-if$ -- 373
+            688 strings with 8593 characters,
+and the built_in function-call counts, 10154 in all, are:
+= -- 935
+> -- 413
+< -- 22
++ -- 164
+- -- 118
+* -- 706
+:= -- 1485
+add.period$ -- 80
+call.type$ -- 23
+change.case$ -- 45
+chr.to.int$ -- 23
+cite$ -- 25
+duplicate$ -- 553
+empty$ -- 975
+format.name$ -- 151
+if$ -- 2283
 int.to.chr$ -- 1
-int.to.str$ -- 5
-missing$ -- 2
-newline$ -- 28
-num.names$ -- 12
-pop$ -- 48
+int.to.str$ -- 24
+missing$ -- 23
+newline$ -- 124
+num.names$ -- 69
+pop$ -- 236
 preamble$ -- 1
-purify$ -- 4
+purify$ -- 23
 quote$ -- 0
-skip$ -- 69
+skip$ -- 359
 stack$ -- 0
-substring$ -- 72
-swap$ -- 28
-text.length$ -- 2
+substring$ -- 571
+swap$ -- 147
+text.length$ -- 12
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 28
+type$ -- 155
 warning$ -- 2
-while$ -- 14
+while$ -- 93
 width$ -- 0
-write$ -- 57
+write$ -- 313
 (There were 4 warnings)

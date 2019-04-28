@@ -80,6 +80,8 @@
 
 %% Set the enumearete item
 \RequirePackage[shortlabels]{enumitem}
+%% set the section numbering depth
+\setcounter{secnumdepth}{5}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% user-defined macros
 \newcommand{\gHeader}{Bachelor thesis}

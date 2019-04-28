@@ -78,23 +78,35 @@ An Petri net example is shown in Figure \ref{fig:pn-seq-2}. This Petri net is a 
 		\label{fig:pn-seq-2}
 	\end{subfigure}%
 	\quad
+	% here change the process tree into the transition system
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/preliminary/PT06_Seq_2_xor_notnested.png}
-		\caption{A process tree corresponding to Fig \ref{fig:pn-seq-2}}
-		\label{fig:pt-seq-2}
+		\includegraphics[width=\linewidth]{figures/preliminary/transition-system.pdf}
+		\caption{A transition system corresponding to Fig \ref{fig:pn-seq-2}}
+		\label{fig:ts-model}
 	\end{subfigure}%
+    \label{fig:pn-ts}
 \end{figure}
-%% Here add the definition for soundness
+\subsection{Transition System}
+%% Here add the definition for transitions system in Process mining
+A transition system is a basic process model. As displayed in Figure \ref{fig:ts-model}, it is composed of \emph{states} and \emph{transitions}. \emph{States} are represented by black circles and include an initial and a final state. The initial state \textbf{s1} in Figure \ref{fig:ts-model} is denoted with an input arc without any label and the final state \textbf{s4} is with an output arc without label. \emph{Transitions}, also called actions, correspond to an activity in the process and connect states as an arc.  
+\begin{definition}[Transition System]
+	A transition system is a triple $TS=\{S,A,T\}$ where S is the set of states, A is the set of activities, $T \subseteq S\times A\times S $ is the set of transitions, $(s_i, a, s_j) \in T$ is represented as $s_i \xrightarrow{a} s_j$.  
+\end{definition}
+Transition systems are eligible to describe the dynamic behavior and can easily be translated to Petri nets. The example models in Figure \ref{fig:pn-ts} are mapped to each other. There are 5 transitions and four states in the transition system, which corresponds to the transitions and places in Petri net. Transition systems are simple but have difficulty to express concurrency in business process. So in our thesis, we use more expressive models like Petri nets to represent our process mining result.
+
 \subsection{Process Tree}
 Process tree is a block-structured tree and sound by construction\cite{van2016data}. Also, due to the simplicity to understand, we use it in our thesis and give the formal definition for it.
 \begin{definition}[Process Tree]
 Let $ A \subseteq \mathbb{A} $ be a finite set of activities with silent transition $\tau \notin \mathbb{A}$, $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright\}$ be the set of process tree operators. 
 \begin{itemize}
 \item $Q=a$ is a process tree with $a\in A$, and 
-\item $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ is a process tree with $\oplus \in \bigoplus$, and $Q_i$ is a process tree, $i \in \mathbb{N}$. 
+\item $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ is a process tree with $\oplus \in \bigoplus$, and $Q_i$ is also a process tree, $i \in \mathbb{N}$. 
 \end{itemize}
 \end{definition}
+For convenience, given a process tree $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$, we denote Q the parent for $Q_1 , Q_2 ,.. Q_n$, $Q_i$ as one child of Q. For a node in a tree without children, we call it a \textbf{\emph{leave node}}; Else, we call them \textbf{\emph{blocks}}.
+
+
 Process tree operators represent different block relations of each subtree. Their semantics are standardized in \cite{vanderAalst:2016:PMD:2948762, Buijs2012OnTR} and compared with Petri net in Figure \ref{fig:pn_pt_correspondings}\cite{Buijs2012OnTR}. We provide an informal description in the following.
 \begin{figure}[!h]
 	\centering
@@ -131,13 +143,43 @@ Process tree operators represent different block relations of each subtree. Thei
 \begin{definition}[Operator Semantics] 
 	The semantics of operators $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright \}$ are,
 	\begin{itemize}
-		\item if $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, the subtrees have a sequential relation and are executed in order of $Q_1,Q_2,..Q_n$
-		\item if $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have an exclusive choice relation and only one subtree of $Q_1,Q_2,..Q_n$   can be executed.
-		\item if $Q= \land (Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a parallel relation and $Q_1,Q_2,..Q_n$ they can be executed in parallel.
-		\item if $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a loop relation for $\{Q_1,Q_2,..Q_n\}$. $\{Q_2,..Q_n\}$ have an exclusive relation. $Q_1$ executes at first and is triggered again once one subtree of $\{Q_2,..Q_n\}$ executes.
+		\item if $Q=(a)$, the tree only has one leaf node. With respect to a trace $\sigma \in L$, Q is executed in $\sigma$, denoted as $\sigma \models Q$, if $\exists i, 1 \leq i \leq |\sigma| \sigma(i)=a$.
+		\item if $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, the subtrees have a sequential relation and are executed in order of $Q_1,Q_2,..Q_n$. For a trace $\sigma$,$\sigma \models Q$, iff $\forall Q_i, \sigma \models Q_i$ in order.
+		\item if $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have an exclusive choice relation and only one subtree of $Q_1,Q_2,..Q_n$  can be executed. 
+		For a trace $\sigma$,$\sigma \models Q$, if $\exists Q_i, \sigma \models Q_i$.
+		\item if $Q= \land (Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a parallel relation and $Q_1,Q_2,..Q_n$ they can be executed in parallel. For a trace $\sigma$,$\sigma \models Q$, if $\forall Q_i, \sigma \models Q_i$.
+		\item if $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a loop relation for $\{Q_1,Q_2,..Q_n\}$. $\{Q_2,..Q_n\}$ have an exclusive relation. $Q_1$ executes at first and is triggered again once one subtree of $\{Q_2,..Q_n\}$ executes. For a trace $\sigma$,$\sigma \models Q$, if $ \sigma \models Q_1$ and $\exists Q_i, \sigma \models Q_i \Rightarrow  \sigma \models Q_1$ after $Q_i$.
 	\end{itemize}
 \end{definition}
 According to the corresponding semantic relations,  a process tree can be easily transformed into Petri net. In Figure \ref{fig:pt-seq-2}, it is the process model in process tree which describes the same process as in Figure \ref{fig:pn-seq-2}. 
+
+To describe the execution of  a process tree Q, we need concepts called \textbf{\emph{start nodes}} and \textbf{\emph{end nodes}}. The start nodes represent the firstly executed leaves nodes in Q; Similarly, the end nodes represent the last executed leaves node set in Q. 
+\begin{definition}[Start node and end node set]
+Given a process tree Q, its start node $S(Q)$ and end node set $E(Q)$ is defined as following. 
+\begin{itemize}
+	\item  $Q=(a) \quad \Rightarrow S(Q)=\{(a)\}=E(Q)$ ; 
+	\item  $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n) \Rightarrow S(Q)= S(Q_1); E(Q)=E(Q_n)$. The start node set is the start nodes of its first child, and the end node set is the end nodes from its last child.
+	\item  $Q= \times(Q_1 , Q_2 ,.. Q_n) \Rightarrow S(Q)= \cup_{i\in \{1,..n\}}S(Q_i),E(Q)= \cup_{i\in \{1,..n\}}E(Q_i).$ \\For an exclusive choice block, its start and end node sets are the union of start and end nodes from each child; Any set from the union is an option start node set to represent the execution of Q. 
+	\item $Q= \land (Q_1 , Q_2 ,.. Q_n) \Rightarrow S(Q)= \prod_{i} S(Q_i), E(Q)=\prod_{i} E(i)$. \\For parallel relation, the start nodes are all the start nodes from each child and end nodes are all the end nodes from each child.
+	\item $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n) \Rightarrow S(Q)=S(Q_1), E(Q)=E(Q_1)$ \\The start node sets and end node sets depend on its first child.
+\end{itemize}
+\end{definition}
+
+% here again the definition to address the relation. But it is executed due to several situations.
+\iffalse
+Given a sub process tree $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ and a trace $\sigma \in L$, we say that Q is executed by trace $\sigma$ from position i to j, if the activities corresponding to its start nodes set is executed from i and ends at j.
+\begin{definition}[Execution of a process tree Q w.r.t. a trace $\sigma$ ]
+ A process tree Q is executed according to a trace $\sigma$, if 
+ \[\exists (a_1,a_2,...a_n)\in S(Q), \forall a_i, \exists j, \sigma(j)= a_i \]
+\end{definition}
+\begin{itemize}
+	\item if $Q=a$, the beginning nodes for Q is a;
+	\item if $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, the beginning nodes for Q are  subtrees have a sequential relation and are executed in order of $Q_1,Q_2,..Q_n$
+	\item if $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have an exclusive choice relation and only one subtree of $Q_1,Q_2,..Q_n$   can be executed.
+	\item if $Q= \land (Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a parallel relation and $Q_1,Q_2,..Q_n$ they can be executed in parallel.
+	\item if $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a loop relation for $\{Q_1,Q_2,..Q_n\}$. $\{Q_2,..Q_n\}$ have an exclusive relation. $Q_1$ executes at first and is triggered again once one subtree of $\{Q_2,..Q_n\}$ executes.
+\end{itemize}
+\fi
 %% here to describe the inductive miner 
 \section{Inductive Miner}
 Among multiple discovery techniques to mine a process model from an event log, Inductive Miner suits well our needs, because it guarantees the construction of a sound models, and is flexible and scalable w.r.t. event log. In this section, we explain its algorithms in details.
