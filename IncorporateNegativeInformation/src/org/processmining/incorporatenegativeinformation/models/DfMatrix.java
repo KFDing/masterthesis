@@ -71,7 +71,14 @@ public class DfMatrix {
 			cardinality = dfg.getDirectlyFollowsEdgeCardinality(edgeIndex);
 			sum+= cardinality;
 		}
-		
+		for(int idx: dfg.getStartActivityIndices()) {
+			long sc = dfg.getStartActivityCardinality(idx);
+			sum+= sc;
+		}
+		for(int idx: dfg.getEndActivityIndices()) {
+			long ec = dfg.getEndActivityCardinality(idx);
+			sum+= ec;
+		}
 		return sum;
 	}
 

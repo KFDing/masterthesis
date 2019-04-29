@@ -31,6 +31,15 @@ import org.processmining.incorporatenegativeinformation.models.AttributeLogFilte
  * But the parameters should be also different, but not so many.
  * 
  * 
+	 * another plugins to filter out the data on trace atrribute 
+	 *  == Input: event log
+	== Output: event log with labels
+	== Parameters: choose one trace attribute, if the trace is boolean, then true, or false
+	  if the attribute is categories, the several categories
+	  If the attribute is real number, then choose a threshold in real number or in percentage..
+	  If the attribute is integer, choose a specific or choose a threshold to get above values!! 
+	 
+ * 
  * @author dkf
  *
  */

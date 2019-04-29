@@ -15,6 +15,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 
 import org.deckfour.uitopia.api.event.TaskListener.InteractionResult;
+import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeBoolean;
+import org.deckfour.xes.model.XAttributeContinuous;
+import org.deckfour.xes.model.XAttributeDiscrete;
+import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
@@ -241,8 +246,19 @@ public class AttributeLogFilter_UI extends BorderPanel {
 		if (category == AttributeLogFilter.TRACE_ATTRIBUTE) {
 			for (XTrace t : log) {
 				XAttributeMap attributes = t.getAttributes();
-				if (attributes.containsKey(key))
+				if (attributes.containsKey(key)) {
+					XAttribute attr = attributes.get(key);
+					if(attr instanceof XAttributeBoolean || attr instanceof XAttributeLiteral) {
+						
+						
+					}else if(attr instanceof XAttributeDiscrete) {
+						
+					}else if(attr instanceof XAttributeContinuous) {
+						
+					}
+					
 					values.add(attributes.get(key).toString());
+				}
 			}
 
 		} else if (category == AttributeLogFilter.EVENT_ATTRIBUTE) {
