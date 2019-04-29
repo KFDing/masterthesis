@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeContinuous;
+import org.deckfour.xes.model.XAttributeDiscrete;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
@@ -61,12 +63,26 @@ public class AttributeLogFilter {
 		}
 		XAttribute attr = attributes.get(attribute_key);
 		// the only way to get the value consistently out of all the attribute subclasses
-		String attr_value = attr.toString();
-
+		if(attr instanceof XAttributeContinuous || attr instanceof XAttributeDiscrete) { //attr instanceof XAttributeDiscrete || 
+			// if attr is a number, if it is greater than this value, then we keep it
+			XAttributeContinuous tmpAttr = (XAttributeContinuous) attr; 
+			double tmpValue = -1;
+			for(String valueString: attribute_values) {
+				tmpValue = Double.parseDouble(valueString);
+			}
+			if(tmpValue >= 0 && tmpAttr.getValue() >= tmpValue) {
+				return true;
+			}else
+				return false;
+			
+		}else {
+			String attr_value = attr.toString();
+			return attribute_values.contains(attr_value);
+		}
 		// here we specify it to all values on it, we need to generate all the list of them,
 		// but they should be in a group, not like this, only return true, is ok
 
-		return attribute_values.contains(attr_value);
+		
 	}
 
 	public boolean keepTraceOnAttributes(XTrace trace) {
@@ -98,7 +114,6 @@ public class AttributeLogFilter {
 	}
 
 	public boolean keepTrace(XTrace trace) {
-
 		if (attribute_filterOn != NONE) {
 			if (!keepTraceOnAttributes(trace))
 				return false;

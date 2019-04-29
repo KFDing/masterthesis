@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -13,13 +14,12 @@ import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 
 import org.deckfour.uitopia.api.event.TaskListener.InteractionResult;
 import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XAttributeContinuous;
 import org.deckfour.xes.model.XAttributeDiscrete;
-import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
@@ -233,7 +233,6 @@ public class AttributeLogFilter_UI extends BorderPanel {
 		}
 		return attributeNames;
 	}
-
 	/**
 	 * Collect all attribute values of the selected category and key from
 	 * {@link AttributeLogFilter_UI#log}
@@ -242,23 +241,36 @@ public class AttributeLogFilter_UI extends BorderPanel {
 	 * @return
 	 */
 	private Set<String> getValues(String category, String key) {
+		// get the global trace attribute type and check if it has this
 		TreeSet<String> values = new TreeSet<String>(new AlphanumComparator());
+		List<Double> numValues = new ArrayList<Double>();
+			// TreeSet<String> values = new TreeSet<String>(new AlphanumComparator());
 		if (category == AttributeLogFilter.TRACE_ATTRIBUTE) {
 			for (XTrace t : log) {
 				XAttributeMap attributes = t.getAttributes();
 				if (attributes.containsKey(key)) {
+					
 					XAttribute attr = attributes.get(key);
-					if(attr instanceof XAttributeBoolean || attr instanceof XAttributeLiteral) {
-						
-						
-					}else if(attr instanceof XAttributeDiscrete) {
-						
-					}else if(attr instanceof XAttributeContinuous) {
-						
+					
+					if(attr instanceof XAttributeContinuous || attr instanceof XAttributeDiscrete) { //attr instanceof XAttributeDiscrete || 
+						XAttributeContinuous tmp = (XAttributeContinuous) attributes.get(key); 
+						numValues.add(tmp.getValue());
+					}else {
+						values.add(attributes.get(key).toString());
 					}
 					
-					values.add(attributes.get(key).toString());
 				}
+			}
+			
+			if(numValues.size() >0) {
+				Collections.sort(numValues);
+				String inputString =  JOptionPane.showInputDialog(this, "Give a threshold for negative label", 0.7);
+						
+				double percent = Double.parseDouble(inputString);
+				
+				int idx = (int) (numValues.size() * percent);
+				System.out.println(percent + " idx : " +idx );
+				values.add(numValues.get(idx).toString());
 			}
 
 		} else if (category == AttributeLogFilter.EVENT_ATTRIBUTE) {
@@ -273,6 +285,7 @@ public class AttributeLogFilter_UI extends BorderPanel {
 			values.add("<none>");
 		}
 		return values;
+	
 	}
 
 }
