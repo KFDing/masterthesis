@@ -15,15 +15,13 @@ import org.processmining.incorporatenegativeinformation.help.Configuration;
 
 /**
  * this plugin is used to 
- * -- add one trace attribute to the event log
- * -- modify the trace attribute to different type, but I guess they have such plugin
- * -- modify the trace attribute according to event attribute
- * -- some regrex expression, is also fine..     
+ * -- add one trace attribute call KPI from pos_outcome
+ * -- add this trace into trace attribute and also into event attributes
  * It is not so easy to generalize the codes.. lalanana
  * @author dkf
  *
  */
-@Plugin(name = "Manipulate Trace Attribute", parameterLabels = { "a log" }, //
+@Plugin(name = "Manipulate Trace Attribute with Converting and Adding", parameterLabels = { "a log" }, //
 returnLabels = { "modified log" }, returnTypes = {
 		XLog.class }, userAccessible = true, help = "Adapted Filter traces and individual events from the log based on the presence or "
 				+ "absence of attributes with particular values.", mostSignificantResult = 1)
@@ -35,24 +33,24 @@ public class TraceAttributeManipulatePlugin {
 		XLog nlog = (XLog) log.clone(); 
 		
 		XFactory factory = XFactoryRegistry.instance().currentDefault();
-		nlog.getGlobalTraceAttributes().add(factory.createAttributeBoolean(Configuration.POS_LABEL, true, null));
+		nlog.getGlobalTraceAttributes().add(factory.createAttributeDiscrete(Configuration.KPI_LABEL, 0, null));
+		// createAttributeBoolean(Configuration.KPI_LABEL, true, null));
 		// should we independent on it ?? or not?
 		String eventAttrKey = "DA_11_NUM";
 		for(XTrace trace: nlog) {
-			XAttributeBoolean attrPos = factory.createAttributeBoolean(Configuration.POS_LABEL, true, null);
-			// get event attribute
-			XEvent event = trace.get(0);
-			// show all the attributes
-			if(event.getAttributes().containsKey(eventAttrKey)) {
-				XAttributeDiscrete attr =  (XAttributeDiscrete) event.getAttributes().get(eventAttrKey);
-				
-				if(attr.getValue() == 0) {
-					attrPos.setValue(false);
+			if(trace.getAttributes().containsKey(Configuration.POS_LABEL)) {
+				XAttributeBoolean attrPos = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+				XAttributeDiscrete attrKPI = factory.createAttributeDiscrete(Configuration.KPI_LABEL, 0, null);
+				if(attrPos.getValue()) {
+					attrKPI.setValue(1);
 				}else {
-					attrPos.setValue(true);
+					attrKPI.setValue(0);
 				}
+				for(XEvent event: trace) {
+					event.getAttributes().put(attrKPI.getKey(), attrKPI);
+				}
+				trace.getAttributes().put(attrKPI.getKey(), attrKPI);
 			}
-			trace.getAttributes().put(attrPos.getKey(), attrPos);
 		}
 		return nlog;
 	}

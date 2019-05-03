@@ -9,8 +9,11 @@ package org.processmining.incorporatenegativeinformation.algorithms;
  *
  */
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -69,8 +72,7 @@ public class PN2DfgTransform {
 		addStartEnd(dfg, ts, startStates, acceptingStates);
 
 		addDirectFollow(dfg, ts);
-
-		// setCardinality(dfg, 1);
+		
 		return dfg;
 	}
 
@@ -86,7 +88,7 @@ public class PN2DfgTransform {
 					// here we need to build one corresponding relation with initialization at begin
 					dfg.addStartActivity(eventClassMap.get(t.getLabel()), 1);
 				} else {
-					Collection<Transition> post_tau = getNonTauTransition(rg, t, false);
+					Collection<Transition> post_tau = BFS(t, rg, true);
 					for (Transition post_t : post_tau) {
 						dfg.addStartActivity(eventClassMap.get(post_t.getLabel()), 1);
 					}
@@ -101,7 +103,7 @@ public class PN2DfgTransform {
 					// here we need to build one corresponding relation with initialization at begin
 					dfg.addEndActivity(eventClassMap.get(t.getLabel()), 1);
 				} else {
-					Collection<Transition> pre_tau = getNonTauTransition(rg, t, true);
+					Collection<Transition> pre_tau = BFS(t, rg, false) ;
 					for (Transition pre_t : pre_tau) {
 						dfg.addEndActivity(eventClassMap.get(pre_t.getLabel()), 1);
 					}
@@ -117,20 +119,26 @@ public class PN2DfgTransform {
 	 * specific connection for it so we connect the S1-->T1, and create the
 	 * directly follows relation
 	 * 
+	 * but one missing part, if there are more than one silent transitions between them,
+	 * then the connection gets lost. SO we need to check them links, 
+	 * do it in the following way:
+	 *   --- allow all silent transitions in the states and get the directly-follows relation'
+	 *   --- for any connected to the silent transition, S1-->tau_i, tau_j --> T1, tau_i--> tau_j
+	 *   --- we need to do the combination of them..
+	 *   for S1-->tau_i,
+	 *      find all [T1...Tn, tau_1,..tau_m] relation with tau_i, tau_i --> ??
+	 *      if(it is [T1,T2...Tn]), then
+	 *         connect S1-->Ti
+	 *      if(in [tau_1...tau_m])
+	 *         go breadth search for  tau_j
+	 *         stops at un silent transitions
+	 *          
 	 * @param dfg
 	 * @param rg
 	 */
 	public static void addDirectFollow(Dfg dfg, ReachabilityGraph rg) {
-		// look it from the root, I think,it is a root, then do breadth search,
-		// parent, and then check the children edges, one edge, one df relation
-		// from the startposition, 
-		// get the outEdge of this start, mark them beginning, actually not matter
-		// after one the the edge, and reach one state of it.. Breadth search for it. 
-		// do we need to record the tau and get it out of this?? 
-		// if it is tau split, or somehow, we check the last activity of them..if it's not tau, then connect them together,
-		// if there is one tau, then back again to it, to find the last one, no tau there.
 		Set<State> states = rg.getNodes();
-
+		// rg.getEdges(); // get transitions from graph.. 
 		Collection<Transition> in_ts, out_ts;
 		// transition is the beginning transition, 
 		for (State s : states) {
@@ -138,66 +146,97 @@ public class PN2DfgTransform {
 			out_ts = rg.getOutEdges(s);
 			// after we get all the transitions from initial state, we go deep??
 			for (Transition in_t : in_ts) {
-				if (isTau(in_t))
-					continue;
+				
 				for (Transition out_t : out_ts) {
-					if (!isTau(out_t))
+					 if (!isTau(in_t)&&!isTau(out_t))
 						addDf(dfg, in_t, out_t);
+					 else if (!isTau(in_t)&& isTau(out_t)) {
+						 // in situation S1--> state --> tau_j
+						 // here we do BFS search to find reachable targets
+						 List<Transition> nTransitions = BFS(out_t, rg, true);
+						 for(Transition nt: nTransitions) {
+							 addDf(dfg, in_t, nt);
+						 }
+					 }
 				}
 			}
 
 		}
 	}
+	
+	// if we put the BFS directly on the transitions sytem
+	// we want to get one state where the state can go to another states
+	private static List<Transition> BFS(Transition source, ReachabilityGraph rg, boolean goPost) {
+			List<Transition> nsTarget = new ArrayList<>();
+			// mark if visited, source is a silent transition
+			Map<Transition, Boolean> visited = new HashMap<>();
+			LinkedList<Transition> queue = new LinkedList<>();
+			visited.put(source, true);
+			queue.add(source);
+			
+			while(queue.size()!=0) {
+				source = queue.poll();
+				// System.out.println(source.getLabel() + " : visited");
+				
+				// get the adjacent transitions of source, seems also not so easy to do it here.
+				// either ts or dfg, no direct way, so just do it here
+				if(goPost) {
+					State state = source.getTarget();
+					Collection<Transition> outEdges = rg.getOutEdges(state);
+					
+					for(Transition t: outEdges) {
+						
+						if(!visited.containsKey(t)){
+							visited.put(t, true);
+							
+							if(isTau(t))
+								queue.add(t);
+							else
+								nsTarget.add(t);
+						}
+						
+					}
+				}else {
+					// from back to forward, to deal with the acception state
+					State state = source.getSource();
+					Collection<Transition> inEdges = rg.getInEdges(state);
+					
+					for(Transition t: inEdges) {
+						
+						if(!visited.get(t)) {
+							visited.put(t, true);
+							
+							if(isTau(t))
+								queue.add(t);
+							else
+								nsTarget.add(t);
+						}
+						
+					}
+				}
+				
+			}
+			
+			return nsTarget;
+		}
 
 	// hide the transform details into this function
 	private static void addDf(Dfg dfg, Transition in_t, Transition out_t) {
 		XEventClass source, target;
 		source = eventClassMap.get(in_t.getLabel());
 		target = eventClassMap.get(out_t.getLabel());
-		dfg.addDirectlyFollowsEdge(source, target, 1);
-	}
-
-	private static Collection<Transition> getNonTauTransition(ReachabilityGraph rg, Transition tau, boolean b) {
-
-		if (b) {
-			State state = tau.getSource();
-			Collection<Transition> pre_ts = rg.getInEdges(state);
-			boolean goCheck = true;
-
-			while (goCheck) {
-				goCheck = false;
-				for (Transition t : pre_ts) {
-					if (isTau(t)) {
-						pre_ts.remove(t);
-						pre_ts.addAll(getNonTauTransition(rg, t, true));
-						goCheck = true;
-						break;
-					}
-				}
-			}
-			return pre_ts;
-		} else {
-			State state = tau.getTarget();
-			Collection<Transition> post_ts = rg.getOutEdges(state);
-			boolean goCheck = true;
-
-			while (goCheck) {
-				goCheck = false;
-				for (Transition t : post_ts) {
-					if (isTau(t)) {
-						post_ts.remove(t);
-						post_ts.addAll(getNonTauTransition(rg, t, true));
-						goCheck = true;
-						break;
-					}
-				}
-			}
-			return post_ts;
-		}
+		if(!dfg.containsDirectlyFollowsEdge(source, target))
+			dfg.addDirectlyFollowsEdge(source, target, 1);
 	}
 
 	private static boolean isTau(Transition t) {
 		if (eventClassMap.containsKey(t.getLabel()))
+			return false;
+		return true;
+	}
+	
+	private static boolean isTau(XEventClass t) {
+		if (eventClassMap.containsValue(t))
 			return false;
 		return true;
 	}

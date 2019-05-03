@@ -46,4 +46,6 @@ public class Configuration {
 	public static final String FIT_TRUE = "TRUE";
 	public static final String FIT_FALSE = "FALSE";
 
+	public static final String KPI_LABEL = "KPI_outcome";
+
 }
