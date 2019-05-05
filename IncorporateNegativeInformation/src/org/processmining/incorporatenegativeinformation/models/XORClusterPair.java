@@ -1,8 +1,10 @@
 package org.processmining.incorporatenegativeinformation.models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 
@@ -24,9 +26,9 @@ public class XORClusterPair<T> {
 	// one method to store the names of new added petri nodde for this pair
 	Map<String, PetrinetNode> pnNodeMap;
 
-	// we can create branchClusterPair by using SBranch * TBranch
+	// we can create branchPairList by using SBranch * TBranch
 	// not add them here, but we need to make sure, it has an end	 
-	List<XORClusterPair<T>> branchClusterPair = null, ltBranchClusterPair;
+	List<XORClusterPair<T>> branchPairList = null, ltBranchPairList;
 
 	List<LTRule<XORCluster<T>>> connections, ltConnections;
 	// for Not NXor * NOt NXor, should we go deeper, more general, we need to go to branchCluster and check it 
@@ -38,7 +40,7 @@ public class XORClusterPair<T> {
 	// it is concrete Branch * concrete Branch!! It is available 
 	// but even it is like this.. We don't need to worry about in the deep part
 	public boolean isAvailable() {
-		if (branchClusterPair == null || branchClusterPair.isEmpty())
+		if (branchPairList == null || branchPairList.isEmpty())
 			available = true;
 		return available;
 	}
@@ -106,7 +108,11 @@ public class XORClusterPair<T> {
 
 				} else if (sourceXORCluster.isParallelCluster()) {
 					// add all the children cluster into it, still the children cluster
-					sclusterList.addAll(sourceXORCluster.getChildrenCluster());
+					for(XORCluster<T> sCluster: sourceXORCluster.getChildrenCluster()) {
+						// we need to get the xor cluster directly from each branch
+						sclusterList.addAll(sCluster.getEndXORList());
+					}
+					
 				}
 
 			}
@@ -124,16 +130,17 @@ public class XORClusterPair<T> {
 
 				} else if (targetXORCluster.isParallelCluster()) {
 					// add all the children cluster into it, still the children cluster
-					tclusterList.addAll(targetXORCluster.getChildrenCluster());
+					for(XORCluster<T> tCluster: targetXORCluster.getChildrenCluster()) {
+						tclusterList.addAll(tCluster.getBeginXORList());
+					}
 				}
-
 			}
 
 			// here to use the sclusterList and tClusterList to create new branch pair
-			branchClusterPair = new ArrayList<XORClusterPair<T>>();
+			branchPairList = new ArrayList<XORClusterPair<T>>();
 			for (XORCluster<T> scluster : sclusterList)
 				for (XORCluster<T> tcluster : tclusterList) {
-					branchClusterPair.add(new XORClusterPair(scluster, tcluster, true));
+					branchPairList.add(new XORClusterPair(scluster, tcluster, true));
 				}
 
 		}
@@ -156,29 +163,19 @@ public class XORClusterPair<T> {
 	}
 
 	public void addBranchClusterPair(XORClusterPair<T> clusterPair) {
-		branchClusterPair.add(clusterPair);
+		branchPairList.add(clusterPair);
 	}
 
 	public void addAllBranchClusterPair(List<XORClusterPair<T>> clusterPairList) {
-		branchClusterPair.addAll(clusterPairList);
+		branchPairList.addAll(clusterPairList);
 	}
 
 	public List<XORClusterPair<T>> getBranchClusterPair() {
-		return branchClusterPair;
-	}
-
-	public XORClusterPair<T> findLTBranchClusterPair(XORCluster<T> sourceCluster, XORCluster<T> targetCluster) {
-
-		for (XORClusterPair<T> pair : ltBranchClusterPair) {
-			if (pair.getSourceXORCluster().equals(sourceCluster) && pair.getTargetXORCluster().equals(targetCluster))
-				return pair;
-		}
-
-		return null;
+		return branchPairList;
 	}
 
 	public List<XORClusterPair<T>> getLtBranchClusterPair() {
-		return ltBranchClusterPair;
+		return ltBranchPairList;
 	}
 
 	public List<LTRule<XORCluster<T>>> getLtConnections() {
@@ -218,27 +215,63 @@ public class XORClusterPair<T> {
 			// when they can happen together, so no worry.
 		} else {
 			// we need to test the children cluster and find them out, but we need to record the complete branch
-			ltBranchClusterPair = new ArrayList<XORClusterPair<T>>();
-			for (XORClusterPair<T> cPair : branchClusterPair) {
+			ltBranchPairList = new ArrayList<XORClusterPair<T>>();
+			for (XORClusterPair<T> cPair : branchPairList) {
 				cPair.testConnected();
 				if (cPair.isConnected()) {
 					complete &= cPair.isComplete();
-					ltBranchClusterPair.add(cPair);
+					ltBranchPairList.add(cPair);
 				} else {
 					// not connected,so what to do then??
 					complete &= false;
 				}
 			}
 
-			// if there is some connection with ltClusterPair, if there is, still we need to add them here 
-			// it is just not complete
-			if (ltBranchClusterPair.size() > 0)
+			// check the lt-connection in pair, check if S = LT_S, T=LT_T; 
+			if (ltBranchPairList.size() > 0) {
+				// 1. for xor block S and xor block T; get the xor branches from it..
+				//  tBranchCluster 
 				connected = true;
-
+			}
 		}
 		return connected;
 	}
-
+	
+	public boolean isSoundConnection() {
+		
+		Set<XORCluster<T>> ltSources = new HashSet<>();
+		Set<XORCluster<T>> ltTargets = new HashSet<>();
+		if(ltConnections == null) {
+			// get the ltConnection values
+			ltConnections = new ArrayList<LTRule<XORCluster<T>>>();
+			for(LTRule<XORCluster<T>> conn: connections) {
+				if(conn.isSupportConnection())
+					ltConnections.add(conn);
+				
+			}
+		}
+		for(LTRule<XORCluster<T>> ltConn: ltConnections) { // here we check all the xor
+			// branch connection, not the children ones
+			ltSources.addAll(ltConn.getSources());
+			ltTargets.addAll(ltConn.getTargets());
+		}
+		Set<XORCluster<T>> xorSources = new HashSet<>();
+		Set<XORCluster<T>> xorTargets = new HashSet<>();
+		// here we need to check all the xor branches, not the high level structure
+		for(LTRule<XORCluster<T>> conn: connections) {
+			xorSources.addAll(conn.getSources());
+			xorTargets.addAll(conn.getTargets());
+		}
+			
+		if(xorSources.containsAll(ltSources) && ltSources.containsAll(xorSources) &&
+				xorTargets.containsAll(ltTargets) && ltTargets.containsAll(xorTargets))
+		{ 
+			return true;
+		}
+		
+		return false;
+	}
+	
 	public List<LTRule<XORCluster<T>>> getConnection() {
 		// TODO return connections of this pair
 		// what if we use it later, so we still need to keep reference to it, but anyway by later use
@@ -247,7 +280,7 @@ public class XORClusterPair<T> {
 		else { // if it is not pure then we need to get the branchPaiur
 			connections = new ArrayList<LTRule<XORCluster<T>>>();
 
-			for (XORClusterPair<T> cPair : branchClusterPair) {
+			for (XORClusterPair<T> cPair : branchPairList) {
 				connections.addAll(cPair.getConnection());
 			}
 			return connections;

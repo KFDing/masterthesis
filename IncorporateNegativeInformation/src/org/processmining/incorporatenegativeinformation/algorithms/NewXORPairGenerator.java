@@ -93,7 +93,7 @@ public class NewXORPairGenerator<T> {
 					while (i < childrenCluster.size()) {
 						tmpCluster = childrenCluster.get(i);
 						// this is left to the choices later, we don't build all pairs in order at once
-						if(tmpCluster.isXORCluster()) {
+						if(tmpCluster.isXORCluster() || tmpCluster.hasXOR()) {
 							tmpCluster.setLevel(level); 
 							cpList.add(tmpCluster);
 						}

@@ -35,7 +35,7 @@ public class DfMatrix {
 	}
 
 	public void setStandardCardinality(long cardiality) {
-		standardCardinality = cardiality;
+		standardCardinality = cardiality; 
 	}
 
 	public long getStandardCardinality() {

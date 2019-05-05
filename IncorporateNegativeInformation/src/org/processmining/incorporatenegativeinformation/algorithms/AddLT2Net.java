@@ -271,11 +271,11 @@ public class AddLT2Net {
 	}
 
 	private void addLTOnParallel(XORClusterPair<ProcessTreeElement> pair) {
-		// TODO should we return the new added places ??
+		// TODO merge the combinations of different xor branches from the and source target
 		XORCluster<ProcessTreeElement> sourceCluster;
 		sourceCluster = pair.getSourceXORCluster();
-		// should we try to keep only the current targetCluster use??? 
-
+		
+		// here we want to have all the ruleSet and add the places and transitions for each source xor branch
 		for (XORClusterPair<ProcessTreeElement> branchPair : pair.getLtBranchClusterPair()) {
 			addLTOnPair(branchPair);
 		}

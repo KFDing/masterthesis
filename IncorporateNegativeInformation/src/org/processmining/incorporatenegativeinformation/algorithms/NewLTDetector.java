@@ -118,7 +118,12 @@ public class NewLTDetector {
 		// but after this, we need to change the as source and as target setting here 
 		pair.getSourceXORCluster().setAsSource(true);
 		pair.getTargetXORCluster().setAsTarget(true);
-
+		
+		// here to check the soundness condition if LT_S = S and LT_T = T.
+		if(!pair.isSoundConnection()) {
+			System.out.println("not sound connection, ignore it ");
+			return ;
+		}
 		adder.initializeAdder();
 		adder.addLTOnPair(pair);
 		adder.connectSourceWithTarget();
@@ -298,12 +303,17 @@ public class NewLTDetector {
 			XORClusterPair<ProcessTreeElement> pair = clusterPairs.get(i);
 			pair.testConnected();
 			if (pair.isComplete()) {
-				System.out.format("This pair with source %s, target %s has no dependency. %n",
+				System.out.format("This pair with source %s, target %s has full long-term dependency. %n",
 						pair.getSourceXORCluster().getLabel(), pair.getTargetXORCluster().getLabel());
 
 				clusterPairs.remove(i);
-			} else
+			} else if(pair.isConnected() ) { //&& pair.isSoundConnection()
 				i++;
+			}else {
+				// pair is not connected.. how to check this?? 
+				clusterPairs.remove(i);
+			}
+				
 		}
 		return clusterPairs;
 	}
