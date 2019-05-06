@@ -85,7 +85,7 @@ public class DfgRepairPlugin {
 
 		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
 		DfMatrix dfMatrix = DfMatrix.createDfMatrix(dfg, pos_dfg, neg_dfg);
-
+		dfMatrix.setStandardCardinality(pos_log.size() + neg_log.size());
 		return new DfgProcessResult(log, dfMatrix);
 	}
 

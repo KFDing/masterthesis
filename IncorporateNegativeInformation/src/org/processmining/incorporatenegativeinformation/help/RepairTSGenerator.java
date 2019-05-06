@@ -17,11 +17,7 @@ import org.processmining.models.connections.petrinets.behavioral.AbstractSemanti
 import org.processmining.models.connections.petrinets.behavioral.BehavioralAnalysisInformationConnection;
 import org.processmining.models.connections.petrinets.behavioral.BoundednessInfoConnection;
 import org.processmining.models.connections.petrinets.behavioral.CoverabilityGraphConnection;
-import org.processmining.models.connections.petrinets.behavioral.DeadMarkingConnection;
 import org.processmining.models.connections.petrinets.behavioral.InitialMarkingConnection;
-import org.processmining.models.connections.petrinets.behavioral.ReachabilitySetConnection;
-import org.processmining.models.connections.petrinets.behavioral.StateSpaceConnection;
-import org.processmining.models.connections.transitionsystem.TransitionSystemConnection;
 import org.processmining.models.graphbased.directed.petrinet.InhibitorNet;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetGraph;
@@ -226,10 +222,10 @@ public class RepairTSGenerator {
 		Marking[] markings = ts.getStates().toArray(new Marking[0]);
 		ReachabilitySet rs = new ReachabilitySet(markings);
 
-		context.addConnection(new ReachabilitySetConnection(net, initial, rs, semantics, "Reachability Set"));
-		context.addConnection(new StateSpaceConnection(net, initial, ts, semantics));
-		context.addConnection(new TransitionSystemConnection(ts, startStates, acceptingStates));
-		context.addConnection(new DeadMarkingConnection(net, initial, acceptingStates, semantics));
+		//context.addConnection(new ReachabilitySetConnection(net, initial, rs, semantics, "Reachability Set"));
+		//context.addConnection(new StateSpaceConnection(net, initial, ts, semantics));
+		//context.addConnection(new TransitionSystemConnection(ts, startStates, acceptingStates));
+		//context.addConnection(new DeadMarkingConnection(net, initial, acceptingStates, semantics));
 		/*
 		 * this is due to the return value doesn't exist in later use
 		 * context.getFutureResult(0).setLabel("Reachability graph of " +

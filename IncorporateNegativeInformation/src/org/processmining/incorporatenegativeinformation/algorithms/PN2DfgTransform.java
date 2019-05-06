@@ -37,7 +37,9 @@ import org.processmining.plugins.InductiveMiner.dfgOnly.DfgImpl;
 
 public class PN2DfgTransform {
 	static Map<String, XEventClass> eventClassMap;
-
+	static Map<XEventClass, org.processmining.models.graphbased.directed.petrinet.elements.Transition> etMap;
+	
+	
 	public static Dfg transformPN2Dfg(PluginContext context, Petrinet net, Marking marking)
 			throws ConnectionCannotBeObtained {
 		RepairTSGenerator tsGenerator = new RepairTSGenerator();
@@ -55,24 +57,42 @@ public class PN2DfgTransform {
 		Dfg dfg = new DfgImpl(); // here to change to delet the tau transition
 
 		eventClassMap = new HashMap<String, XEventClass>();
-
+		etMap = new HashMap<>();
 		int idx = 0;
 		for (org.processmining.models.graphbased.directed.petrinet.elements.Transition pTransition : net
 				.getTransitions()) {
 			// build two maps... 
-			if (!pTransition.isInvisible()) {
+			if (!pTransition.isInvisible() && !pTransition.getLabel().equals("")) {
 				String key = pTransition.getLabel();
 				XEventClass eventClass = new XEventClass(key, idx++); // or we need to assign them later.. whatever, only concrete events matter
 				dfg.addActivity(eventClass); // here to add only the non- tau activity
 				eventClassMap.put(key, eventClass);
-
+				etMap.put(eventClass, pTransition);
 			}
 
 		}
 		addStartEnd(dfg, ts, startStates, acceptingStates);
 
 		addDirectFollow(dfg, ts);
+		/*
+		// filter the directly-follows relation to keep only the ones in net
+		List<Long> edgesRemove = new ArrayList<>();
+		for(long edgeIdx: dfg.getDirectlyFollowsEdges()) {
+			XEventClass source = dfg.getConcurrencyEdgeSource(edgeIdx);
+			XEventClass target = dfg.getConcurrencyEdgeTarget(edgeIdx);
+			
+			// if this connection exists in net, when we keep it
+			// if not exist, but after checking, it is due to the silent transitions
+			// we should hold it also...
+			Arc arc = net.getArc(etMap.get(source), etMap.get(target));
+			if(arc==null) {
+				// we need to filter it out from the elements
+				edgesRemove.add(edgeIdx);
+			}
+			
+		}
 		
+		*/
 		return dfg;
 	}
 

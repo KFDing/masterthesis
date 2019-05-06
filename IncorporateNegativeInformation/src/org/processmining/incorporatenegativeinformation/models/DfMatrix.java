@@ -51,7 +51,9 @@ public class DfMatrix {
 		long pos_cardinality = getTotalCardinality(pos_dfg);
 		long neg_cardinality = getTotalCardinality(neg_dfg);
 		long num = ext_cardinality + pos_cardinality+ neg_cardinality;
-		dfMatrix.setStandardCardinality(num);
+		// dfMatrix.setStandardCardinality(num);
+		// the cardinality can be high because, we use the total cardinality to assign them
+		// so here, if we want to use them, we get such number values.
 		// here we don't need magical number, but they should exist, or zero
 		dfMatrix.addDirectFollowMatrix(dfg, 0, ext_cardinality);
 		// one problem here is about the single direct follow relation, it doesn't show here
