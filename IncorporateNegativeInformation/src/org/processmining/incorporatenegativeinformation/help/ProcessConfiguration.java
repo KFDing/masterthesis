@@ -16,9 +16,9 @@ public class ProcessConfiguration extends Configuration {
 
 	public static final String DEFAULT_WEIGHT = "1.0";
 
-	public static final int WEIGHT_RANGE = 10;
+	public static final int WEIGHT_RANGE = 100;
 
-	public static final int WEIGHT_VALUE = 10;
+	public static final int WEIGHT_VALUE = 100;
 
 	public static final int LT_IDX_NUM = 3;
 	public static final int LT_EXISTING_IDX = 3;

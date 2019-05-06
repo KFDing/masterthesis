@@ -172,7 +172,7 @@ public class ResultRightControlView extends JPanel {
 
 				if (e.getSource() == existSlider) {
 					// updateThresholdSlider();
-					double existWeight = 1.0 * existSlider.getValue() / ProcessConfiguration.WEIGHT_VALUE;
+					double existWeight = 1.0 * existSlider.getValue() / ProcessConfiguration.WEIGHT_RANGE;
 					existValueLabel.setText(" " + existWeight);
 					parameters.setExistWeight(existWeight);
 
@@ -209,7 +209,7 @@ public class ResultRightControlView extends JPanel {
 		posSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 
-				double posWeight = 1.0 * posSlider.getValue() / ProcessConfiguration.WEIGHT_VALUE;
+				double posWeight = 1.0 * posSlider.getValue() / ProcessConfiguration.WEIGHT_RANGE;
 				posValueLabel.setText(" " + posWeight);
 				parameters.setPosWeight(posWeight);
 
@@ -248,7 +248,7 @@ public class ResultRightControlView extends JPanel {
 		negSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
-				double negWeight = 1.0 * negSlider.getValue() / ProcessConfiguration.WEIGHT_VALUE;
+				double negWeight = 1.0 * negSlider.getValue() / ProcessConfiguration.WEIGHT_RANGE;
 				negValueLabel.setText(" " + negWeight);
 				parameters.setNegWeight(negWeight);
 			}

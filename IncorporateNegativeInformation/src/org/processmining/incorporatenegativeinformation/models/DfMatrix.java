@@ -26,12 +26,18 @@ public class DfMatrix {
 	final int valueColNum;
 	long standardCardinality;
 	double threshold = ProcessConfiguration.DFG_THRESHOLD;
-
+	// we set start and end activities for the dfg, 
+	// use hashCode not help it, so we need to store the ArrayList<XEventClass> for this 
+	
+	List<ArrayList<XEventClass>> startAct;
+	List<ArrayList<XEventClass>> endAct;
 	// only initialization of DfMatrix
 	public DfMatrix() {
 		dfMatrix = new HashMap<ArrayList<XEventClass>, ArrayList<Double>>();
 		keyColNum = ProcessConfiguration.MATRIX_KEY_COL_NUM;
 		valueColNum = ProcessConfiguration.MATRIX_VALUE_COL_NUM * 2;
+		startAct = new ArrayList<ArrayList<XEventClass>>();
+		endAct = new ArrayList<ArrayList<XEventClass>>();
 	}
 
 	public void setStandardCardinality(long cardiality) {
@@ -99,7 +105,7 @@ public class DfMatrix {
 
 			// we need to get the percent of source->target in all source->* 
 			// so firstly we need to get the all source cardinality?? but how about the existing ones?? how to compare it ??
-			// double denomial = 1;
+			double denomial = getOutEdgesCardinality(dfg, source);
 			/*
 			if (colIdx == 0) {
 				denomial = getOutEdgesCardinality(dfg, source);
@@ -124,12 +130,13 @@ public class DfMatrix {
 			// weighted cardinality:: C-pos * All Cardinality in Pos + C-neg * All Cardinality in Neg
 			// (3). If ext: pos: neg= 0:0:1, ignore the model
 			
-			double percent = 1.0 * cardinality / cardinality_sum;
+			// double percent = 1.0 * cardinality / cardinality_sum;
+			double percent = 1.0 * cardinality / denomial;
 			addMatrixItem(source, target, percent, colIdx);
 		}
 
 		// add the start and end activities as a direct follow relation there, 
-		final int startIdx = dfMatrix.size();
+		final int startIdx = -1;
 		XEventClass originalPoint = new XEventClass(ProcessConfiguration.START_LABEL, startIdx);
 		for (XEventClass startEventClass : dfg.getStartActivities()) {
 			long cardinality = dfg.getStartActivityCardinality(startEventClass); // set the start and end activity in existing model
@@ -138,31 +145,46 @@ public class DfMatrix {
 			// then we need to count all the start activity and then get the percent to it
 			
 			double denomial = 1;
+			denomial = getStartEventCardinality(dfg);
+			/*
 			if (colIdx == 0) {
 				denomial = getStartEventCardinality(dfg);
 			} else
 				denomial = getStartEventCardinality(dfg);
 				// denomial = standardCardinality;
-			
+			*/
 			double percent = 1.0 * cardinality / denomial;
-
 			addMatrixItem(originalPoint, startEventClass, percent, colIdx);
+			ArrayList<XEventClass> dfKey;
+			dfKey = new ArrayList<XEventClass>(keyColNum);
+			dfKey.add(originalPoint);
+			dfKey.add(startEventClass);
+			if(!startAct.contains(dfKey))
+				startAct.add(dfKey);
 		}
-		final int endIdx = dfMatrix.size(); // actually we don't need to build this every time we go to the dfg
+		final int endIdx = -2; // actually we don't need to build this every time we go to the dfg
 		XEventClass endPoint = new XEventClass(ProcessConfiguration.END_LABEL, endIdx);
 		for (XEventClass endEventClass : dfg.getEndActivities()) {
 			long cardinality = dfg.getEndActivityCardinality(endEventClass);
 			// addMatrixItemWithCheck( endEventClass, endPoint, cardinality, colIdx);
 			
-			double denomial = 1;
+			double denomial = getEndEventCardinality(dfg);
+			/*
 			if (colIdx == 0) {
 				denomial = getEndEventCardinality(dfg);
 			} else
 				denomial = getEndEventCardinality(dfg);
 				// denomial = standardCardinality;
-			
+			*/
 			double percent = 1.0 * cardinality / denomial;
 			addMatrixItem(endEventClass, endPoint, percent, colIdx);
+			
+			ArrayList<XEventClass> dfKey;
+			dfKey = new ArrayList<XEventClass>(keyColNum);
+			dfKey.add(endEventClass);
+			dfKey.add(endPoint);
+			if(!endAct.contains(dfKey))
+				endAct.add(dfKey);
 		}
 	}
 
@@ -309,6 +331,63 @@ public class DfMatrix {
 				addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), transform2Cardinality(diffPercent));
 			}
 		}
+		
+		if(!dfg.getDirectlyFollowsEdges().iterator().hasNext())
+			return dfg;
+		// after this we need to check the directly-follows graph
+		// for the start and end activities only
+		// if all the start activities become 0, we need to add them specially, we choose the one with
+		// best value for the diffPercent..It means that we need to recalculate it again
+		if(dfg.getStartActivityIndices().length < 1) {
+			// the start is empty
+			// if all the start activities become 0, we need to add them specially, we choose the one with
+			// best value for the diffPercent..It means that we need to recalculate it again
+			// visit dfMatrix get the start Activities
+			double maxDiff = -2; 
+			int maxIdx = 0;
+			for(int i=0; i< startAct.size(); i++) {
+				ArrayList<XEventClass> start = startAct.get(i);
+				ArrayList<Double> dfValue = dfMatrix.get(start);
+				keepPercent = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX)
+						+ dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
+				removePercent = dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX);
+				double diffPercent = keepPercent - removePercent;
+				if(maxDiff < diffPercent) {
+					maxDiff = diffPercent;
+					maxIdx = i;
+				}
+			}
+			// choose this start activities as the start activities and assign what cardinality? 
+			ArrayList<XEventClass> refStart = startAct.get(maxIdx);
+			int cardinality = (int)(transform2Cardinality(Math.abs(maxDiff)))  +1;
+			dfg.addStartActivity(refStart.get(1), cardinality);
+		}	
+		
+		if(dfg.getEndActivityIndices().length < 1) {
+			// the start is empty
+			// if all the start activities become 0, we need to add them specially, we choose the one with
+			// best value for the diffPercent..It means that we need to recalculate it again
+			// visit dfMatrix get the start Activities
+			double maxDiff = -2; 
+			int maxIdx = 0;
+			for(int i=0; i< endAct.size(); i++) {
+				ArrayList<XEventClass> end = endAct.get(i);
+				ArrayList<Double> dfValue = dfMatrix.get(end);
+				keepPercent = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX)
+						+ dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
+				removePercent = dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX);
+				double diffPercent = keepPercent - removePercent;
+				if(maxDiff < diffPercent) {
+					maxDiff = diffPercent;
+					maxIdx = i;
+				}
+			}
+			// choose this start activities as the start activities and assign what cardinality? 
+			ArrayList<XEventClass> refEnd = endAct.get(maxIdx);
+			int cardinality = (int)(transform2Cardinality(Math.abs(maxDiff) ))  +1;
+			dfg.addEndActivity(refEnd.get(0), cardinality);
+		}
+		
 		return dfg;
 	}
 

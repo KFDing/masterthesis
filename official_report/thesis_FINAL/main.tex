@@ -26,17 +26,17 @@ The acknowledgments and the people to thank go here, don't forget to include you
 \chapter*{Abstract} \addcontentsline{toc}{chapter}{Abstract}
 \input{chapters/abstract.tex}
 %\end{abstract}
-
+\iffalse
 \tableofcontents
 \listoffigures
 \listoftables
-
+\fi
 %\setcounter{page}{1}
 \cleardoublepage
 %%% Begin document
 \pagestyle{fancy}
 
-
+\iffalse
 \chapter{Introduction} \label{chap:intro}\pagenumbering{arabic}
 \input{chapters/introduction.tex}
 
@@ -55,7 +55,7 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 \chapter{Implementation} \label{chap:impl}
 \input{chapters/implementation.tex}
-
+\fi
 \chapter{Evaluation} \label{chap:eval}
 \input{chapters/evaluation.tex}
 
