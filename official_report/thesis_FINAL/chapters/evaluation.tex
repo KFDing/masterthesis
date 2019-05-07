@@ -7,10 +7,10 @@
 %   ==> synthetic data
 %   ==> Real life data
 %   ++ Data to test the property
-This chapter presents an experimental evaluation of our techniques to repair model. At first, the evaluation measurements are defined. Next, we briefly introduce the test platform KNIME and ProM plugins tools for evaluation. In the following main part, the test on properties of our techniques is presented at the beginning. Then synthetic data is generated randomly to show the whole performance of our methods. At last, we conduct our experiments on real life data and also compare our techniques with other methods. The results show the ability of our techniques to repair model with high ranking according to defined measurements.
+This chapter presents an experimental evaluation of our repair techniques. At first, we define the evaluation criteria. Next, we briefly introduce the test platforms KNIME and relevant ProM plugins tools. Then, we conduct two kinds of tests. One is based one the demo example proposed in the introduction part, one is on the real life data. 
 \section{Evaluation Measurements}
 % First talk about our data and our model, then choose the confusion matrix as one measurements. But we should review the traditional measuremtns on process mining before introducing the confusion matrix. but we should also focus on the accuracy part and f-score.
-We evaluate our techniques based on the quality of repaired models with respect to the given event logs. In process mining, there are four quality dimensions generally used to compare the process models with event logs. 
+We evaluate repair techniques based on the quality of repaired models with respect to the given event logs. In process mining, there are four quality dimensions generally used to compare the process models with event logs. 
 \begin{itemize}
 	\item \emph{fitness.} It quantifies the extent of a model to reproduce the traces recorded in an event log which is used to build the model. Alignment-based fitness computation aligns as many events from trace with the model execution as possible.  
 	\item \emph{precision.} It assesses the extent how the discovered model limits the completely unrelated behavior that doesn't show in the event log. 
@@ -18,10 +18,10 @@ We evaluate our techniques based on the quality of repaired models with respect 
 	\item \emph{simplicity.} This dimension captures the model complexity. According to Occam's razor principle, the model should be as simple as possible.
 \end{itemize}
 % How to come to confusion matrix?? 
-The four traditional quality criteria are proposed in semi-positive environment where only positive instances are available. Therefore, when it comes to the model performance, where negative instances are also possible. The measurement metrics should be adjusted. The repair techniques in this thesis are based on the labeled data and the repaired model can be seen as a binary prediction model where the positive instances are supported while the negative ones are rejected. The model evaluation becomes a classification evaluation. 
+The four traditional quality criteria are proposed in semi-positive environment where only positive instances are available. Therefore, when it comes to the model performance, where negative instances are also possible, the measurement metrics should be adjusted. With labeled traces in the event log, the repaired model can be seen as a binary prediction model where the positive instances are supported while the negative ones are rejected. Consequently, the model evaluation becomes a classifier evaluation. 
+
 % Describe its features and some derived measurements. 
-Confusion matrix has a long history to evaluate the performance of a  classification model. %A confusion matrix for the repaired model is a table with two rows and two columns to describe the actual observed behavior and model execution. 
-A confusion matrix is a table with columns to describe the prediction model and rows for actual classification on data.  The repaired model can be seen a binary classifier and produces four outcomes- true positive, true negative, false positive and false negative shown in the Table \ref{tab:cm}.
+Confusion matrix has a long history to evaluate the performance of a  classification model. A confusion matrix is a table with columns to describe the prediction model and rows for actual classification on data.  The repaired model can be seen a binary classifier and produces four outcomes- true positive, true negative, false positive and false negative shown in the Table \ref{tab:cm}.
 \begin{itemize}
 	\item True Positive(TP): The execution allowed by the process model has an positive performance outcome.
 	\item True Negative(TN): The negative instance is also blocked by the process model.
@@ -43,95 +43,35 @@ A confusion matrix is a table with columns to describe the prediction model and 
 Various measurements can be derived from confusion matrix. According to our model, we choose the following ones as the potential measurements. 
 \begin{itemize}
 	\item recall. It represents the true positive rate and is calculated as the number of correct positive predictions divided by the total number of positives.
-	\[Recall = \frac{TP}{TP + FP}\]
+	\[Recall = \frac{TP}{TP + FN}\]
 	\item precision. It describes the ability of the repaired model to produce positive instances.
-	\[Precision = \frac{TP}{TP + FN }\]
-	\item specificity. In opposite with recall, it measures the true negative rate.
-	\[Specificity = \frac{TN}{TN + FP}\]
+	\[Precision = \frac{TP}{TP + FP }\]
+	%\item specificity. In opposite with recall, it measures the true negative rate.
+	%\[Specificity = \frac{TN}{TN + FP}\]
 	\item accuracy. It is the proportion of true result among the total number. It  measures in our case how well a model correctly allows the positive instances or disallows the negative instances.
 	\[Accuracy = \frac{TP+TN}{TP+TN+FP+FN}\]
 	\item F-score is is the harmonic mean of precision and recall.
 	\[F_1 = \frac{2*Recall*Precision}{Precision + Recall}\]
 \end{itemize}
-After experiments we can see that accuracy gaine more weights than precision.
-
-
 Generally, there is a trade-off between the quality criteria. So the measurements are only used to compare specific aspects of our techniques.
-\section{Experiment Platform}
-Data simulation part
-Try to automatize and standardize experiments, in order to make this experiments more effective, and easier to repeat. So KNIME is selected as one of the test platform to perform tasks. Also, some existing evaluation plugins in ProM are used to evaluate on the other aspects.
-
-\subsection{PLG}
-Process Log Generator(PLG) is designed to generate random business processes models and event logs according by setting the complexity parameters. Complexity parameters for model generation in PLG include the maximum number of branches for activities relation parallel, or exclusive choices,  maximum depth of nested pattern, the weights on relations, and so on. The parameters to generate an event log are, for example, number of traces, and noise on the workflow or missing rate of trace heads. 
-
-In this experiment, process models in Petri net are randomly created by inputting simple, normal and complex parameters settings. Event logs are also simulated according to different complexity level. The setting details is in Table??. 
+\section{Experiment Platforms}
+KNIME, as a scientific workflow analytic platform, supports automation of test workflow, which helps us repeat experiments efficiently. Yet, traditional evaluation plugins in ProM are not integrated into KNIME, so partial experiments are conducted in ProM.
 \subsection{KNIME}
-KNIME Analytics Platform is open source software in Java to help researcher analyze data by integration of multiple modules for loading, process and transformation and machine learning algorithms. Researcher can achieve their goals by creating visual workflows composed of modules with an intuitive, drag and drop style graphical interface, rather than focusing on any particular application area. 
-The reason to choose KNIME as our experiment platform is that KNIME supports automation of test workflow which is more efficient.  
-However, to conduct experiments, the related modules of our algorithm have to be integrated into KNIME, which requires additional development effort. At end, process mining modules like event logs, basic process models reader and writer, basic logs manipulators, classic discovery algorithms, and model repair are imported into KNIME.
-\subsection{ProM Evaluation Plugins}
-Here we discuss the plugins to test other aspects of our methods. 
-\section{Experiment Result}
-\subsection{Test On Property}
-In this experiment, we aim to answer the questions: 1) How do our techniques incorporate the existing model, positive and negative information to repair model? 2) How do the techniques overcome the shortcomings of current state-of-the-art repair techniques?
-To answer the first question, we applied the repaired techniques on event logs with different relations of activities, such as sequence, parallel and loop, exclusive choice and investigated the effect from the existing model, positive and negative instances on the repaired model, by adjusting the corresponding weights. For the second question, we describe the situations where our techniques overcome the defects of other repair techniques and explain the reasons behind it. 
-\subsubsection{Test On Sequence}
-This part is used to show the effect of our techniques on the sequence relation of activities. Given a fixed model in Petri net with sequence relation, a set of event logs with different deviations are used to test if our repair techniques work properly.
-\begin{figure}
-		\includegraphics[width=0.9\textwidth]{figures/evaluation/model_01_sequence.png}
-	\caption{Model M1 with sequence relation}
-	\label{fig:sequence-M1}
-\end{figure}
-% The experiments go in this way, given a model, we changed them by looking all the information and then giving them effect on them relation, should we put all experiments, let's do it, later we can modify it.
-By changing the control weights of the existing model, positive and negative instances, different models are derived from the repair method. Next, we evaluate the model based on confusion matrix and plot the several measurements with the weight changes. By this way, we show how our method incorporates different effect of control weights.
-
-In this experiment, we fix one weight as control variable while keeping the other weights unchanged. To make the experiments more reliable, for each fixed control variable value, we conduct the experiment in 5 different combinations of other weights that are randomly generated. At last, the average of those combination is used to represent the final measurement.
+% this section describes how KNIME supports automatic test, FlowVariable and optimization parts of it.
+KNIME supports automation of test workflow mainly through the following mechanisms. 
 \begin{itemize}
-	\item \emph{Experiment 1 --} delete activity from sequence relation. \\
-	\emph{Event Log -- }
-	\begin{align*}
-	Positive:& {<a>}^{50} \\
-	Negative:& {<a, b>}^{50}
-	\end{align*}
-	% repair result from them, one is the repaired model, second is the plot lines with weight changes
-	\begin{figure}[h]
-		\centering
-		\begin{subfigure}[b]{\textwidth}
-			\centering
-			\includegraphics[width=0.9\textwidth, height=0.33\textheight]{figures/evaluation/result-ext-weight-01_log_sequence_02.png}
-			\caption{Measurements with the weight for the existing model}
-			\label{fig:seq-delete-ext}
-		\end{subfigure}
-		\hfill
-		\begin{subfigure}[b]{\textwidth}
-			\centering
-			\includegraphics[width=0.9\linewidth,height=0.33\textheight]{figures/evaluation/result-pos-weight-01_log_sequence_02.png}
-			\caption{Measurements with the weight for positive instances}
-			\label{fig:seq-delete-pos}
-		\end{subfigure}
-		\hfill
-		\begin{subfigure}[b]{\textwidth}
-			\centering
-			\includegraphics[width=0.9\linewidth, height=0.33\textheight]{figures/evaluation/result-neg-weight-01_log_sequence_02.png}
-			\caption{Measurements with the weight for negative instances}
-			\label{fig:seq-delete-neg}
-		\end{subfigure}
-		\caption{example for model change under model repair}
-		\label{fig:seq-delete-weights}
-	\end{figure} 
-\emph{Result Analysis -- }Figure \ref{fig:seq-delete-weights} shows the measurements results separately due to the weight change. In Figure \ref{fig:seq-delete-ext}, with the weight for the existing model increases, precision, accuracy and specificity decrease while the recall keeps 1.0. After checking confusion matrix, we see TP and FN keep the same, FP goes up while TN goes down. The reason is that the higher weight for the existing model causes the higher possibility to keep the existing model during the repair. Due to the deviation of the existing model and actual event log, precision and accuracy goes down. With the weight for positive goes up, all measurements are stable in value 1.0. The reason for this is the TF and TN keeps the same, other values are all 0.0.  
-% we can only use the accuracy and recall, not others.
-	\item 
+	\item Loop Control Structure. KNIME provides a bunch of control nodes which support re-executing workflow parts.  Nodes representing \emph{Loop Start} appear in pairs with nodes for \emph{Loop Nodes}, the workflow between pairs is executed recursively in a fixed number, or until certain conditions are met. In our test, we repeat our repair techniques for different parameter settings by applying loop structure into KNIME workflow.
+	\item Flow Variables. Flow Variables are used inside a KNIME workflow to parameter node settings dynamically. When it combines with loop control structure, tests with different settings is able to conduct automatically.
 \end{itemize}
-\subsubsection{Test On Parallel}
-This part shows how the parallel relation of activities is affected by the weights for the existing model, positive and negative instances.
-%% Here we need to paste the picture and its analysis together..create a table to remark the name and its analysis in doc.
+What's more, there are nodes provided by KNIME to optimize the value of some parameters with respect to a cost function. As long as a cost function is provides, KNIME is able to automatically optimize any kind of parameters. 
+\subsection{ProM Evaluation Plugins}
+%Here we discuss the plugins to test other aspects of our methods. 
+Although KNIME offers a powerful approach to conduct experiments, the integration of traditional process mining evaluation plugins into KNIME is out of our capability due to the time limits. To evaluate repaired models with traditional metrics, we use an existing ProM plugin called \textbf{\emph{Multi-perspective Process Explorer}} \cite{mannhardt2015multi}. This plugin accepts  Petri net and an event log as inputs, and gives out fitness, and precision measurements which are based on the traditional alignment conformance checking. 
+\section{Experiment Results}
+\subsection{Test on Demo Example}
+In this experiment, we aim to answer the question: Will our repair method overcome shortcomings of current techniques which are shown in the introduction chapter?  
 
-\subsubsection{Test On Loop}
-This part investigated our repair method on activities with loop relation.
-
-\subsubsection{Test On Exclusive Choice}
-This part displays the changes of exclusive choices relation in the model under the different control weights.
+% for situation 1, we can not get the ideal model, the reason is that we can not keep the model like just as it states, we can 
 
 \subsection{Comparison To Other Techniques}
 This section represents some situations where current repair techniques can't handle properly, while our algorithm gives out an improved repaired model. 
@@ -151,6 +91,47 @@ Simple examples listed, but will this repeat the last section??
 % Conclusion part
 For one exclusive choices, 
 but with long-term dependency detected and added in the model, precision and accuracy increase, since model with long-term dependency blocks the negative information by adding transitions and places to limit activity selection. 
-\subsection{Test On Synthetic Data}
-Those synthetic data is generated randomly by using the simulation tool plg %should cite it and to the end, or we just mentioned it before in the preparation parts. 
+
 \subsection{Test On Real life Data}
+% here we will list all the data here but before describe the test data
+\subsubsection{Data Description}
+\subsubsection{Test Result}
+% we don't need to transfer page to landscape view, because we have many rows too.
+	\begin{table}[]
+		\centering
+		\caption{Test Result on BPI15-M1 data}
+		\resizebox{\textwidth}{!}{
+		\begin{tabular}{lll|llllllll|ll}
+			\hline
+			\multirow{2}{*}{\thead{event \\ log}} & \multirow{2}{*}{\thead{reference \\ model} }                &    \multirow{2}{*}{\thead{method}}       & \multicolumn{8}{l}{ \thead{confusion matrix metrics}}                              & \multicolumn{2}{|l}{\thead{traditional metrics}} \\
+			\cline{4-13}
+			 &  &     &
+			  \thead{TP}  & \thead{FP} & \thead{TN}  & \thead{FN}  & \thead{recall} & \thead{precision} & \thead{accuracy} & \thead{F1}   & \thead{fitness}           & \thead{precision}           \\
+			  \hline
+			D1.1      & M1              & IM & 137 & 48 & 118 & 289 & 0.32   & 0.74      & 0.43     & 0.45 & ?                 & ?                   \\
+			D1.1      & M1              & Fahland   & 0   & 0  &     &     &        &           &          &      &                   &                     \\
+			D1.3      & M1              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.3      & M1              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.1      & M2              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.1      & M2              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.3      & M2              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.3      & M2              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.1      & M3              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.1      & M3              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.3      & M3              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.3      & M3              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.1      & M4              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.1      & M4              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.3      & M4              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
+			D1.3      & M4              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
+			D2.1      & M1              & IM &     &    &     &     &        &           &          &      &                   &                     \\
+			D2.1      & M1              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
+			D2.3      & M1              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
+			D2.3      & M1              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
+			D2.1      & M2              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
+			D2.1      & M2              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
+			D2.3      & M2              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
+			D2.3      & M2              & dfg       &     &    &     &     &        &           &          &      &                   &                    
+		\end{tabular}}
+	
+	\end{table}

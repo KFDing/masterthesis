@@ -43,6 +43,8 @@
 
 %% allow more lines into one lines
 \RequirePackage{makecell}
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
 \RequirePackage[ruled,linesnumbered]{algorithm2e}
 \RequirePackage{wrapfig}
 %\RequirePackage{svg}
@@ -82,6 +84,8 @@
 \RequirePackage[shortlabels]{enumitem}
 %% set the section numbering depth
 \setcounter{secnumdepth}{5}
+%% to print out wide table
+%\RequirePackage{lscape}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% user-defined macros
 \newcommand{\gHeader}{Bachelor thesis}

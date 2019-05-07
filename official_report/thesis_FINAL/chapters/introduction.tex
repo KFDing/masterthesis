@@ -20,20 +20,35 @@ In the following part, motivating examples are given to describe those limits of
 % In this section, we use thesis registration example to display the shortcomings of existing techniques and then introduces our methods, but we need to answer them later..
 This section describes some situations where current repair techniques tend to fail. For the sake of understanding, examples are extracted from the common master study procedure to illustrate those situations.
 
-The main activities for the master study include \emph{register master}, \emph{finish courses} and \emph{write a master thesis}. Here, we simplify the \emph{finish courses} and only extend the activity \emph{write a master thesis} into a set of sub activities. Those activities are shown in the Petri net model $M_0$ of Figure \ref{fig:model_M0}. The activities are modeled by the corresponding \textbf{\emph{transitions}} which is represented by a square. Transitions are connected through a circle called \textbf{\emph{place}}. Transitions and places build the static structure of Petri net and describe the transition relations. \textbf{\emph{Tokens}} in the black dot are put in the initial places and represent the dynamic state of the model. 
+The main activities for the master study include \emph{register master}, \emph{finish courses} and \emph{write a master thesis}. Here, we simplify the \emph{finish courses} and only extend the activity \emph{write a master thesis} into a set of sub activities. Those activities are shown in the Petri net model $M_0$ of Figure \ref{fig:model_M0}. The activities are modeled by the corresponding \textbf{\emph{transitions}} which is represented by a square. Transitions are connected through a circle called \textbf{\emph{place}}. Transitions and places build the static structure of Petri net and describe the transition relations. \textbf{\emph{Tokens}} in the black dot are put in places and represent the dynamic state of the model. 
 
-$M_0$ is currently in an initial state where only one token is at the start place to enable the transition \emph{register master}. After firing \emph{register master}, the token at the initial place is consumed while two new token are generated in the output places of \emph{register master}. In this way, activity \emph{finish courses}  can be executed concurrently the other branch except for the \emph{get degree}. When multiple activities have the same input place, all of them are enabled but only one of them can be fired and executed, namely, they are exclusive to each other. As shown in the figure,  \emph{select existing topics}  and \emph{create new topics} are exclusive, and only one of them can be triggered. When a transition has multiple input places, it can be triggered with condition that all input places hold at least a token. \emph{Get degree} is enabled only after \emph{finish courses} and \emph{representation} done. 
+$M_0$ is currently in an initial state where one token is at the start place to enable the transition \emph{register master}. After firing \emph{register master}, the token at the initial place is consumed while two new token are generated in the output places of \emph{register master}. In this way, activity \emph{finish courses}  can be executed concurrently the other branch except for the \emph{get degree}. When multiple activities have the same input place, all of them are enabled but only one of them can be fired and executed, namely, they are exclusive to each other. As shown in the figure,  \emph{select existing topics}  and \emph{create new topics} are exclusive, and only one of them can be triggered. When a transition has multiple input places, it can be triggered with condition that all input places hold at least a token. \emph{Get degree} is enabled only after \emph{finish courses} and \emph{representation} done. 
 
 
 % here we are going to talk about the situations where the current repair method can not handle well.
 %talk about the execution trace definition. 
 % but how to combine them into one example?? I don't think it clearly here. But I need to show it later.
-Along the tokens flowing through the model, activities get fired and generate a sequence according to their execution order. One execution sequence is called a trace. A set of traces depicts the model behavior and is recorded into a data file called event log. In real life, activities might be executed with deviation to the process model. A trace which has no deviation to the model is fitting. Otherwise, it's a unfitting trace. With accumulation of deviations, process model needs amending to reflect reality.  In the following part, different several situations are introduced to demonstrate the shortcomings of current techniques to repair a model. 
+Along the tokens flowing through the model, activities get fired and generate a sequence according to their execution order. One execution sequence is called a trace. A set of traces depicts the model behavior and is recorded into a data file called event log. In real life, activities might be executed with deviation to the process model. A trace which has no deviation to the model is fitting. Otherwise, it's an unfitting trace. With accumulation of deviations, process model needs amending to reflect reality.  In the following part, In the following part,several situations are introduced to demonstrate the shortcomings of current techniquesto repair a model.
+\iffalse
+\begin{align*}
+L= \{ & { <a,b, c1,d,\textbf{x1}, e,f1,g1,g2,h,i>}^{50, pos}, \\   
+      &{<a,b, c2,d,\textbf{x2},e,f2,g2,g1,h,i>}^{50, pos}, \\
+      &{<a,b, c1,d,\textbf{x2},e,f1,g2,g1,h,i>}^{30, pos}, \\
+      &{<a,b, c1,d,\textbf{x2},e,f1,g2,g1,h,i>}^{20, pos}, \\
+      
+      &{<a,\quad c1,\quad d,e,f1,g2,g1,h,i>}^{50, neg}, \\
+      &{<a,\quad c1,b, d,\textbf{x2},e,f1,g2,g1,h,i>}^{50, neg}, \\
+      &{<a,\quad c1,d,b, e,f2,g2,g1,h,i>}^{50, neg}, \\
+      
+\}
+\end{align*}
+\fi
+%% here we want to use one example to show the shortcomings of current repair methods.. How to organize them??? 
 \subsection{Situation 1: \small{Repairing Model with Unfitting Traces}} % add preparation to this model
 In some universities, before registering a master thesis, the activities \emph{write proposal} and \emph{check course requirement} with exclusive choice relation might be necessary in the master study procedure. The real process are recorded in the event log $L_1$. Traces with either of those activities are considered as positive. For convenience, alphabet characters are used to represent the corresponding activities and annotated in the model. \textbf{x1, x2} represent the activities \emph{write proposal} and \emph{check course requirement}.
-\emph{Event Log $L_1$ -- }
 		\begin{align*}
-		Positive:\{ & { <a,b, c1,d,e,\textbf{x1},f1,g1,g2,h,i>}^{50}, \\   &{<a,b, c2,d,e,\textbf{x2},f2,g2,g1,h,i>}^{50} \}
+		L_1:= \{ &  {<a,b,c1,d,\textbf{x1},e,f1,g1,g2,h,i>}^{50, pos}, \\   
+		             &{<a,b,c2,d,\textbf{x2}, e, f2,g2,g1,h,i>}^{50,pos} \}
 		% Negative: \{ & {<a,c1,d,\quad f,g1,g2,h,i>}^{50} \}
 		\end{align*}
 \begin{figure}[htp]
@@ -53,7 +68,6 @@ In some universities, before registering a master thesis, the activities \emph{w
 	\caption{example for situation 1 where $M_{1.1}$ is repaired by adding subprocess in the form of loops, which results in lower precision compared with the expected model $M_{1.2}$.}
 	\label{fig:model_change_1}
 \end{figure}
-
 Because the existing repair techniques \cite{fahland2015model} don't consider the performance of traces in event log, all instances with positive labels are used to repair the model. Firstly, the deviations of the existing model M0 and the event log $L_1$ are computed. After computation of deviations, each deviation has the same start and end place and two deviations appear at the same position in the model. When repairing this model, each subprocess has one place as its start and end place, which forms a loop in the model. If there is only one such subprocess, the subprocess is added in a sequence in the model, which leads to a higher precision. Yet the algorithm does not discover orderings between different subprocesses at overlapping locations. So the subprocesses are kept in a loop form. 
 
 The repaired model is shown in Figure \ref{fig:model_b1}, where the two additional activities are added in the form of loop. The repair algorithm in \cite{dees2017enhancing} builds upon \cite{fahland2015model} and considers the performance of the event log. However, the repaired model is the same as the one in Figure \ref{fig:model_b1}. The reasons are: (1) there is no deviation from negative factors. (2) positive deviations are used in the same way as \cite{fahland2015model}. 
@@ -63,11 +77,10 @@ Compared to the model in Figure \ref{fig:model_b1} where the two extra activitie
 \subsection{Situation 2: \small{Repairing A Model with Fitting Traces}}
 % we should delete the prepare carefully and casually from the model. Only consider to add the data about the order change..what we expect is not 
 This situation describes the existing problem in the current methods that fitting traces with negative performance outcomes cannot be used to repair a model. Given an actual event log $L_2$, when activity \emph{finish courses} is fired after \emph{begin thesis} and before writing master thesis, it reduces the pressure for the master thesis phase and traces in such an order are treated as positive. Else, the negative outcomes are given. 
-\emph{Event Log $L_2$ -- }
 \begin{align*}
-Positive:\{ & { <a,\textbf{b},c1,d,f,g2,g1,h,i>}^{50}, \\   &{<a,\textbf{b},c2,d,f,g1,g2,h>}^{50} \}  \\
-Negative: \{ & {<a,c1,d,f,g2,g1,\textbf{b},h,i>}^{50}, \\
-& {<a,c1,\textbf{b},d,f,g1,g2,h,i>}^{50},  \}
+L_2:=\{ & { <a,\textbf{b},c1,d,e,f1,g2,g1,h,i>}^{50, pos} , \\   &{<a,\textbf{b},c2,d,e,f2,g1,g2,h>}^{50, pos};   \\
+& {<a,c1,d,e,f2,g2,g1,\textbf{b},h,i>}^{50, neg} , \\
+& {<a,c1,\textbf{b},d,e,f1,g1,g2,h,i>}^{50, neg}  \}
 \end{align*}
 Compared to the model, the event log $L_2$ contains no deviations. When we apply the techniques in \cite{fahland2015model} and \cite{dees2017enhancing} to repair the model, the model keeps untouched due to no deviation. Apparently, the reason that those two methods can't incorporate the negative information in fit traces causes this shortcoming. When we expect a model which enforce the positive instances and avoid the negative instance as the model $M_2$, the current methods don't allow us to obtain such results. 
 \begin{figure}[htp]
@@ -90,11 +103,10 @@ Compared to the model, the event log $L_2$ contains no deviations. When we apply
 \subsection{Situation 3: \small{detect long-term dependency}}
 This part introduces a problem which causes a lower precision in process mining. It is the inability in current methods to detect the long-term dependency in the Petri net. The long-term dependency describes the phenomenon that one execution choice decides the execution of activities that do not follow directly. Due to the long distance of this dependency, current methods cannot detect it and improve the precision by adding long-term dependency on the model. 
 An event log $L_3$ is given in the following. By using time consumption as one KPI, if the total sum goes over one threshold, we mark this trace as negative, else as positive. Since the activity \emph{create new topics} usually demands new knowledge rather than checking the existing tools. So if students choose to learn existing tools, it's possibly not useful and time is wasted. In the other case, if we select existing topics with existing background, it saves time when we directly learn the existing tools. According to this performance standard, we classified those event traces.
-\emph{Event Log $L_3$ -- }
 \begin{align*}
-Positive:\{ & { <a,b,\textbf{c1},d,e,\textbf{f1},g1,g2, h,i>}^{50}, \\   &{<a,b,\textbf{c2},d,e,\textbf{f2},g2,g1, h,i>}^{50} \}  \\
-Negative: \{ & {<a,b,\textbf{c1},d,e,\textbf{f2},g2,g1,h,i>}^{50}, \\
-& {<a,b,\textbf{c2},d,e,\textbf{f1},g1,g2,h,i>}^{50}  \}
+L_3:= \{ & { <a,b,\textbf{c1},d,e,\textbf{f1},g1,g2, h,i>}^{50, pos}, \\   &{<a,b,\textbf{c2},d,e,\textbf{f2},g2,g1, h,i>}^{50, pos} ; \\
+ & {<a,b,\textbf{c1},d,e,\textbf{f2},g2,g1,h,i>}^{50, neg}, \\
+& {<a,b,\textbf{c2},d,e,\textbf{f1},g1,g2,h,i>}^{50, neg}  \}
 \end{align*}
 %here we list one example to explain the long-term dependency, but we need to make them clear, might without the loop item..It means that we need to change the whole model..
 There are no deviations of the model and event log $L_3$ according to the  algorithms in \cite{fahland2015model} and \cite{dees2017enhancing}. Therefore, the original model stays the same and allows for the execution of negative instances. After checking the model and log, those long-term dependencies have significant evidence. Transition \textbf{\emph{c1}} decides \textbf{\emph{f1}} while \textbf{\emph{c2}} decides \textbf{\emph{f2}}.  After addressing long-term dependency like the model $M_3$ in Figure \ref{fig:model_d} by connecting transitions to extra places, 

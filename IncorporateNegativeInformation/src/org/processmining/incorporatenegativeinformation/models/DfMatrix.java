@@ -322,11 +322,13 @@ public class DfMatrix {
 		for (Map.Entry<ArrayList<XEventClass>, ArrayList<Double>> entry : dfMatrix.entrySet()) {
 			ArrayList<XEventClass> dfKey = entry.getKey();
 			ArrayList<Double> dfValue = entry.getValue();
-
+			// here must be some situations we need to consider more 
+			// existing weigths holds, change the parameters, we can do, but add negative
+			// values on it 
 			keepPercent = dfValue.get(ProcessConfiguration.MATRIX_POS_IDX)
 					+ dfValue.get(ProcessConfiguration.MATRIX_EXISTING_IDX);
 			removePercent = dfValue.get(ProcessConfiguration.MATRIX_NEG_IDX);
-			double diffPercent = keepPercent - removePercent;
+			double diffPercent = Math.min(keepPercent - removePercent, 1.0);
 			if (diffPercent > threshold) {
 				addDfgDirectFollow(dfg, dfKey.get(0), dfKey.get(1), transform2Cardinality(diffPercent));
 			}
