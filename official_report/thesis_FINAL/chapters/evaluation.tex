@@ -94,7 +94,39 @@ but with long-term dependency detected and added in the model, precision and acc
 
 \subsection{Test On Real life Data}
 % here we will list all the data here but before describe the test data
+We choose a publicly available event log from BPI challenge 2015 as our user cases and compare current repair techniques on it. 
 \subsubsection{Data Description}
+The data set for BPI Challenge 2015 contain 5 event logs which are provided by five Dutch municipalities respectively. Those event logs describe the building permit application around four years. We choose it as our user cases due to the following reasons.
+\begin{itemize}
+	\item The event logs hold attributes as potential KPIs to classify traces. Attribute \textbf{SUMleges} which records the cost of the application is a candidate to label traces as positive or negative if its value  is over one threshold. What's more, we can take the throughput time of the application as another potential KPI. \\
+	In a word, this data set provides us information to reasonably label traces.
+	\item The five event logs describe an identical process, but includes deviations caused by the different procedures, regulations in those municipalities. Also, the underlying processes have changes over four years.\\
+	So, this data set gives us a basic process but also allows deviations of the actual event logs and predefined process, which builds the environment for repair techniques.
+\end{itemize}
+Firstly, we conduct our experiments on event log called \textbf{BPIC15\_1.xes.xml}. This event log includes 1199 cases and 52217 events. But the event classes for those events are  with the sum of 398. So we preprocess the event log and get a proper subset of data as our user case. 
+
+We filter the raw event log by \textbf{\emph{Filter Log By Simple Heuristic}} in ProM with the following setting. 40 for the start, end  activities and the events between them, at end. We get the event log $D1$. After this, we calculate the throughput time for each trace and add it as a trace attribute \textbf{throughput time}. 
+Then we classify traces according to  \textbf{SUMleges} and  \textbf{throughput time} separately. When our performance goal is to reduce the cost of application, if \textbf{SUMleges} of one trace is over 0.7 of the whole traces, this trace is treated as negative, else as positive. The similar strategy is applied on the attribute \textbf{throughput time}. A trace with \textbf{throughput time} higher than 0.7 of all traces is considered as a negative instance. Following this preprocess, we have event logs in Table \ref{tab:data-from-BPI1} available for our tests. 
+\begin{table}
+	\label{tab:data-from-BPI1}
+	\caption{Test Data from Event Log BPI15-1}
+	\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		Data ID & Data Description                                & Traces Num & Events Num & Event Classes \\ \hline
+		D1      & \makecell{Heuristic filter  \\ with 40 }                     & 495        & 9565       & 20             \\ \hline
+		D2      & \makecell{Apply heuristic filter \\ on D1 with 60      }     & 378        & 4566       & 12            \\ \hline
+		D3.1    & \makecell{classify on SumLedges;  \\ values below 0.7 as positive} & 349        & 6744       & 20             \\ \hline
+		D3.2    & \makecell{classify on SumLedges;  \\ values above 0.7 as negative }& 146        & 2811       & 20             \\  \hline
+		D3.3    & union of D3.1 and D3.2                             & 495        & 9596       & 20             \\ \hline
+		D4.1    & \makecell{ classify on throughput time;  \\ values below 0.7 as positive} & 349        & 6744       & 20             \\ \hline
+		D4.2    & \makecell{classify on throughput time;  \\ values above 0.7 as negative} & 146        & 2811       & 20            \\ \hline
+		D4.3    & union of D4.1 and D4.2                             & 495        & 9596       & 20           \\ \hline
+		
+	\end{tabular}
+\end{table}
+Based on the filtered data, we derive corresponding Petri nets as reference process models. 
+
+
 \subsubsection{Test Result}
 % we don't need to transfer page to landscape view, because we have many rows too.
 	\begin{table}[]
@@ -131,7 +163,8 @@ but with long-term dependency detected and added in the model, precision and acc
 			D2.1      & M2              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
 			D2.1      & M2              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
 			D2.3      & M2              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
-			D2.3      & M2              & dfg       &     &    &     &     &        &           &          &      &                   &                    
+			D2.3      & M2              & dfg       &     &    &     &     &        &           &          &      &                   &      
+			\\ \hline              
 		\end{tabular}}
 	
 	\end{table}
