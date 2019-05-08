@@ -30,6 +30,8 @@ import org.processmining.models.semantics.petrinet.Marking;
  * to conformance checking and remember the allowed behavior and not allowed
  * behavoir then create the confusion matrix or other evaluation metrics.
  * 
+ * modifed data : 08.05.2019. The reasons are the model can not deal with repeated events
+ * in the model. 
  * @author dkf date: 16.08.2018
  */
 @Plugin(name = "Naive Check Conformance of Petri net and event log", level = PluginLevel.Regular, returnLabels = {
@@ -103,7 +105,7 @@ public class EvaluateResult {
 		XEventClassifier classifier = null; //  = parameters.getClassifier();  // = net.getAttributeMap().get("XEventClassifier");
 		// main problem is the mapping from event, how should we do ?? 
 		Map<XEventClass, Transition> maps = EventLogUtilities.getEventTransitionMap(log, net, classifier);
-
+		// the map is one problem, because it allows 1 to m..
 		// should we separate the event log into different variants and check the variants fit or not fit?? 
 		/*
 		 * to achieve it, we need to define one pos number and neg number for

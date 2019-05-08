@@ -7,12 +7,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventClassifier;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XLog;
+import org.processmining.incorporatenegativeinformation.models.ReplayState;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
@@ -189,11 +192,123 @@ public class NetUtilities {
 		}
 		return false;
 	}
+	/**
+	 * to deal with duplicated events and silent transitions here, but here is based on model
+	 * @param net
+	 * @param marking
+	 * @param trace
+	 * @param maps
+	 * @return
+	 */
+	public static boolean tokenReplayer(Petrinet net, Marking initMarking, List<XEventClass> trace,
+			Map<XEventClass, Transition> maps) {
+		// create basic data structure to use
+		// store the enabled transitions
+		Set<Transition> enabledTransitions =  new HashSet<>();
+		// index for the current visited trace
+		int tIdx = 0;
+		XEventClass event2fire;
+		// another marking to express the current situation which do not change initial ones
+		Marking marking = new Marking(initMarking);
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = null;
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = null;
+		Stack<ReplayState> stack = new Stack<>();
+		
+		// get the enabled Transitions set
+		for(Place p : marking) {
+			
+			postEdgeSet = net.getOutEdges(p);
+			for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: postEdgeSet) {
+				Transition t = (Transition) edge.getSource();
+				// here we check the tmp if enabled
+				if(isEnabled(net, t, marking)) {
+					enabledTransitions.add(t);
+				}
+			}
+		}
+		
+		// fire one of them but according to the current event 
+		event2fire = trace.get(tIdx);
+		// get the list of transitions with potential to be fired
+		// and we use a stack structure to store the execution path on it but also with the current marking
+		 
+		
+		for(Transition t: enabledTransitions) {
+			if(match(event2fire, t)) {
+				Marking dMarking = new Marking(marking);
+				ReplayState dState = new ReplayState(t, dMarking, tIdx);
+				stack.push(dState);
+			}
+		}
+		// check if there is an silent transitions?? but we should always make it match
+		if(stack.size() < 1) {
+			return false;
+		}
+			
+		// visit each of those stack transitions to use and record marking changes 
+		ReplayState cState = stack.pop();
+		Transition ct = cState.getTransition();
+		tIdx = cState.getIndex();
+		marking = cState.getMarking();
+		// consume the marking before this transition and produce marking into it 
+		
+		fire(net, ct, marking);
+		if(!ct.isInvisible()) {
+			tIdx++;
+			// however, we also need to store the visited trace information at current state
+			// so create a class for it
+		}
+		// after firing, we have a new marking and then return it back to find the positions.
+		// until we have reached the final marking place...
+		// but we need to make sure the silent transitions
+		return false;
+	}
+	
+	private static void fire(Petrinet net, Transition t, Marking marking) {
+		// TODO Auto-generated method stub
+		// consume token from marking and produce marking after it
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(t);
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = net.getOutEdges(t);
+		
+		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
+			Place prePlace = (Place) edge.getSource();
+			marking.remove(prePlace);
+		}
+		
+		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: postEdgeSet) {
+			Place postPlace = (Place) edge.getSource();
+			marking.add(postPlace);
+		}
+	}
+
+	private static boolean match(XEventClass event, Transition t) {
+		// TODO Auto-generated method stub
+		if(t.isInvisible() || event.getId().equals(t.getLabel()))
+			return true;
+		return false;
+	}
+
+	private static boolean isEnabled(Petrinet net, Transition t, Marking marking) {
+		// TODO Auto-generated method stub
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(t);
+		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
+			Place p = (Place) edge.getSource();
+			if(!marking.contains(p)) 
+				return false;
+		}
+		return true;
+	}
 
 	public static boolean fitPN(Petrinet net, Marking marking, List<XEventClass> trace,
 			Map<XEventClass, Transition> maps) {
 
 		initPNToken(net);
+		Iterator<Place> titer = marking.iterator();
+		while (titer.hasNext()) {
+			Place splace = titer.next();
+			splace.getAttributeMap().put(Configuration.TOKEN, 1);
+		}
+
 		Transition transition = null;
 		Arc arc = null;
 		// Place place = null;
@@ -201,6 +316,7 @@ public class NetUtilities {
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postset = null;
 		// set a token at first place... Na, we need to check it from another code
 		// this doesn't include the token stuff. Maybe we should include it.
+		/*
 		if (marking == null || marking.size() < 1) {
 			Place splace = NetUtilities.getStartPlace(net).get(0);
 			splace.getAttributeMap().put(Configuration.TOKEN, 1);
@@ -212,6 +328,7 @@ public class NetUtilities {
 				splace.getAttributeMap().put(Configuration.TOKEN, 1);
 			}
 		}
+		*/
 		// boolean fit = true;
 		// first transition if it connects the initial place
 		for (XEventClass eventClass : trace) {
@@ -220,6 +337,7 @@ public class NetUtilities {
 				transition = maps.get(eventClass);
 			else
 				return false;
+			// for repeated data, how to get the naive ways??
 			preset = net.getInEdges(transition);
 			// we need to see two transitions together???  
 			for (PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge : preset) {
@@ -347,15 +465,6 @@ public class NetUtilities {
 		}
 	}
 
-	/**
-	 * check if they fit and add fit or not fit label to log file
-	 * 
-	 * @param log
-	 * @param net
-	 */
-	public static void checkAndAssignLabel(XLog log, Petrinet net) {
-
-	}
 	static int tID = 0;
 	public static Map<Node, Transition> getProcessTree2NetMap(Petrinet net, ProcessTree pTree, XEventClassifier classifier) {
 		// TODO generate the transfer from process tree to event classes in log

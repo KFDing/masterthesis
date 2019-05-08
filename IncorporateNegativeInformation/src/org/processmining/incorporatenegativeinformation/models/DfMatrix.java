@@ -9,6 +9,9 @@ import org.deckfour.xes.classification.XEventClass;
 import org.processmining.incorporatenegativeinformation.help.ProcessConfiguration;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.DfgImpl;
+import org.processmining.plugins.InductiveMiner.dfgOnly.DfgMiningParameters;
+import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.IMdProcessTree;
+import org.processmining.processtree.ProcessTree;
 
 /**
  * this class is used to store the direct follow relation from existing, pos and
@@ -391,6 +394,13 @@ public class DfMatrix {
 		}
 		
 		return dfg;
+	}
+	
+	public ProcessTree buildProcessTree(DfgMiningParameters ptParas) {
+		Dfg dfg = buildDfg();
+		
+		ProcessTree pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
+		return pTree;
 	}
 
 	private long transform2Cardinality(double percent) {
