@@ -276,13 +276,13 @@ class ResultMainView extends JPanel {
 						+ " ; Neg: " + parameters.getNegWeight();
 				if (parameters.getType() == ViewType.PetriNet) {
 					title += "; Without LT";
-					confusion_matrix = EvaluateResult.naiveCheckPN(log, anet.getNet(), anet.getInitialMarking());
+					confusion_matrix = EvaluateResult.naiveCheckPN(log, anet);
 				} else if (parameters.getType() == ViewType.PetriNetWithLTDependency) {
 					title += "; with LT";
-					confusion_matrix = EvaluateResult.naiveCheckPN(log, manet.getNet(), manet.getInitialMarking());
+					confusion_matrix = EvaluateResult.naiveCheckPN(log, manet);
 				} else if (parameters.getType() == ViewType.ReducedPetriNet) {
 					title += "; Reduced with LT";
-					confusion_matrix = EvaluateResult.naiveCheckPN(log, danet.getNet(), danet.getInitialMarking());
+					confusion_matrix = EvaluateResult.naiveCheckPN(log, danet);
 				}
 				// for the confusion_matrix I'd like to use the log variants for saving computation time
 				// here one bug hiiden, we have two net, one is with LT, one without LT, so we need to test them here

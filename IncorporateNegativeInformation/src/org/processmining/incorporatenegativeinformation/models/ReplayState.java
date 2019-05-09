@@ -23,6 +23,8 @@ public class ReplayState {
 	Petrinet net;
 	// current marking
 	Marking marking;
+	Marking firedMarking;
+	
 	// current trace idx
 	int tIdx;
 	// current to fire transition
@@ -60,6 +62,16 @@ public class ReplayState {
 	public int getIndex() {
 		// TODO Auto-generated method stub
 		return tIdx;
+	}
+
+	public void setFiredMarking(Marking marking2) {
+		// TODO Auto-generated method stub
+		firedMarking = marking2;
+	}
+	
+	public Marking getFiredMarking() {
+		// TODO Auto-generated method stub
+		return firedMarking;
 	}
 	
 }

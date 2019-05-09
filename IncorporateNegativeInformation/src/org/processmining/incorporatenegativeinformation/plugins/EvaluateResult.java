@@ -15,6 +15,7 @@ import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.incorporatenegativeinformation.algorithms.TokenReplayer;
 import org.processmining.incorporatenegativeinformation.connections.BaselineConnection;
 import org.processmining.incorporatenegativeinformation.help.Configuration;
 import org.processmining.incorporatenegativeinformation.help.EventLogUtilities;
@@ -36,7 +37,7 @@ import org.processmining.models.semantics.petrinet.Marking;
  */
 @Plugin(name = "Naive Check Conformance of Petri net and event log", level = PluginLevel.Regular, returnLabels = {
 		"Conformance Matrix" }, returnTypes = {
-				ArrayList.class }, parameterLabels = { "Labeled Log", "Petri net", "Marking" }, userAccessible = true)
+				ArrayList.class }, parameterLabels = { "Labeled Log", "Petri net", "Marking", "Final Marking" }, userAccessible = true)
 public class EvaluateResult {
 
 	// the first one is to check conformance of Petri net and event log
@@ -52,19 +53,22 @@ public class EvaluateResult {
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive CC with AcceptingPetriNet", requiredParameterLabels = { 0, 1 })
 	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, AcceptingPetriNet anet) { // Marking 
-		return naiveCheckPNPlugin(context, log, anet.getNet(), anet.getInitialMarking());
+		return naiveCheckPNPlugin(context, log, anet.getNet(), anet.getInitialMarking(),anet.getFinalMarkings().iterator().next());
 	}
+	
+	
 
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive CC No Marking", requiredParameterLabels = { 0, 1 })
 	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, Petrinet net) { // Marking 
-		Marking marking = NetUtilities.guessInitialMarking(net);
-		return naiveCheckPNPlugin(context, log, net, marking);
+		Marking initmarking = NetUtilities.guessInitialMarking(net);
+		Marking finalmarking = NetUtilities.guessFinalMarking(net);
+		return naiveCheckPNPlugin(context, log, net, initmarking, finalmarking);
 	}
 
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
-	@PluginVariant(variantLabel = "Petrinet Naive Conformance Checking", requiredParameterLabels = { 0, 1, 2 })
-	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, Petrinet net, Marking marking) { // Marking 
+	@PluginVariant(variantLabel = "Petrinet Naive Conformance Checking", requiredParameterLabels = { 0, 1, 2, 3 })
+	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, Petrinet net, Marking initmarking, Marking finalMarking) { // Marking 
 		// given log, should we first to organize them into variants and then do such stuff??? 
 		// not really, because anyway we need to check one trace by another...How about we store such trace variants,
 		// and compare them, if they matches, so we know if they get matched , or not 
@@ -84,11 +88,15 @@ public class EvaluateResult {
 		} catch (ConnectionCannotBeObtained e) {
 		}
 
-		return naiveCheckPN(log, net, marking);
+		return naiveCheckPN(log, net, initmarking, finalMarking);
 
 	}
 
-	public static ArrayList<Integer> naiveCheckPN(XLog log, Petrinet net, Marking marking) { // Marking 
+	public static ArrayList<Integer> naiveCheckPN(XLog log, AcceptingPetriNet anet) { // Marking 
+		return naiveCheckPN(log, anet.getNet(), anet.getInitialMarking(), anet.getFinalMarkings().iterator().next());
+	}
+	
+	public static ArrayList<Integer> naiveCheckPN(XLog log, Petrinet net, Marking initmarking, Marking finalMarking) { // Marking 
 		// given log, should we first to organize them into variants and then do such stuff??? 
 		// not really, because anyway we need to check one trace by another...How about we store such trace variants,
 		// and compare them, if they matches, so we know if they get matched , or not 
@@ -99,12 +107,13 @@ public class EvaluateResult {
 			confusion_matrix.add(0);
 		}
 
-		if (marking == null || marking.size() < 1) {
-			marking = NetUtilities.guessInitialMarking(net);
+		if (initmarking == null || initmarking.size() < 1) {
+			initmarking = NetUtilities.guessInitialMarking(net);
 		}
+		
 		XEventClassifier classifier = null; //  = parameters.getClassifier();  // = net.getAttributeMap().get("XEventClassifier");
 		// main problem is the mapping from event, how should we do ?? 
-		Map<XEventClass, Transition> maps = EventLogUtilities.getEventTransitionMap(log, net, classifier);
+		Map<XEventClass, List<Transition>> maps = EventLogUtilities.getEventTransitionMap(log, net, classifier);
 		// the map is one problem, because it allows 1 to m..
 		// should we separate the event log into different variants and check the variants fit or not fit?? 
 		/*
@@ -112,11 +121,14 @@ public class EvaluateResult {
 		 * traceVariant, to store its distribution just extend the already
 		 * existing methods
 		 */
+		TokenReplayer replayer = new TokenReplayer(net, initmarking, finalMarking, maps);
+		// here to set the intial marking and final marking for the replayer.
 		List<LabeledTraceVariant> variants = EventLogUtilities.getLabeledTraceVariants(log, classifier);
 
 		for (LabeledTraceVariant variant : variants) {
 
-			if (NetUtilities.fitPN(net, marking, variant.getTraceVariant(), maps)) {
+			// if (NetUtilities.fitPN(net, marking, variant.getTraceVariant())) {
+			if(replayer.traceFit(variant.getTraceVariant())) {
 				// with pos_outcome
 
 				confusion_matrix.set(Configuration.ALLOWED_POS_IDX,

@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
@@ -30,7 +32,6 @@ import org.deckfour.xes.out.XesXmlSerializer;
 import org.processmining.incorporatenegativeinformation.models.LabeledTraceVariant;
 import org.processmining.incorporatenegativeinformation.models.TraceVariant;
 import org.processmining.log.utils.XUtils;
-import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 
@@ -66,10 +67,10 @@ public class EventLogUtilities {
 	 * @param transitions
 	 * @return
 	 */
-	public static Map<XEventClass, Transition> getEventTransitionMap(XLog log, Petrinet net,
+	public static Map<XEventClass, List<Transition>> getEventTransitionMap(XLog log, Petrinet net,
 			XEventClassifier classifier) {
 		// too complex, so now, I will just change back original ones.
-		Map<XEventClass, Transition> map = new HashMap<XEventClass, Transition>();
+		Map<XEventClass, List<Transition>> map = new HashMap<>();
 		Collection<Transition> transitions = net.getTransitions();
 		XEventClasses classes = null;
 
@@ -79,27 +80,27 @@ public class EventLogUtilities {
 			classes = XLogInfoFactory.createLogInfo(log).getNameClasses();
 
 		XEventClass tauClassinLog = new XEventClass(Configuration.Tau_CLASS, classes.size());
-
-		boolean match;
-		for (Transition transition : transitions) {
-			match = false;
-			for (XEventClass eventClass : classes.getClasses()) { // transition.getLabel()
+		for (XEventClass eventClass : classes.getClasses()) { // transition.getLabel()
+			List<Transition> tSet = new ArrayList<>();
+			map.put(eventClass, tSet); 
+			
+			for (Transition transition : transitions) {
 				// here we need to create a mapping from event log to graphs 
-				if (eventClass.getId().equals(transition.getAttributeMap().get(AttributeMap.LABEL))) {
-					map.put(eventClass, transition);
-					match = true;
-					break;
+				if (eventClass.getId().equals(transition.getLabel())) {
+						map.get(eventClass).add(transition);
 				}
 			}
-			if (!match) {
-				// here sth not so good about numm eventClass, we can create one eventClass marked to be tau in log
-
-				map.put(tauClassinLog, transition);
-			}
+			
 		}
-		// three cases: silent transition
-		// in net but not shown in event, how to match them??? Then return null
-		// in event log but not in net  // return null .
+		// System.out.println("before exception");
+		// get the transitions having no event class for it
+		Set<Transition> tSet = new HashSet<>(transitions);
+		for(List<Transition> ts: map.values()) {
+			tSet.removeAll(ts);
+		}
+		List<Transition> tauSet = new ArrayList<>(tSet);
+		map.put(tauClassinLog, tauSet);
+		
 		return map;
 	}
 

@@ -402,6 +402,7 @@ public class DfMatrix {
 		ProcessTree pTree = IMdProcessTree.mineProcessTree(dfg, ptParas);
 		return pTree;
 	}
+	
 
 	private long transform2Cardinality(double percent) {
 		// here is back from the percent into the cardinality, but still some magical number?? 

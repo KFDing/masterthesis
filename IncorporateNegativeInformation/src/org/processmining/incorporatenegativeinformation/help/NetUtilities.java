@@ -200,68 +200,135 @@ public class NetUtilities {
 	 * @param maps
 	 * @return
 	 */
-	public static boolean tokenReplayer(Petrinet net, Marking initMarking, List<XEventClass> trace,
-			Map<XEventClass, Transition> maps) {
+	public static boolean tokenReplayer(Petrinet net, Marking initMarking, List<XEventClass> trace) {
 		// create basic data structure to use
-		// store the enabled transitions
-		Set<Transition> enabledTransitions =  new HashSet<>();
+		
 		// index for the current visited trace
 		int tIdx = 0;
 		XEventClass event2fire;
 		// another marking to express the current situation which do not change initial ones
 		Marking marking = new Marking(initMarking);
+		Marking finalMarking = guessFinalMarking(net);// must use the final marking given from the original model
+		ReplayState cState = null;
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = null;
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = null;
-		Stack<ReplayState> stack = new Stack<>();
+		Stack<ReplayState> dstack = new Stack<>();
+		Stack<ReplayState> cstack = new Stack<>();
+		// create the initial replaystate and then check if it is the final state
+		
+		// put a state here by checking its marking part here, get the enabled transitions:
 		
 		// get the enabled Transitions set
+		Set<Transition> enabledTransitions =  getEnabledTransitions(net, marking);
+		Set<Transition> ceTransitions = null;
+		while(tIdx < trace.size()) {
+		// fire one of them but according to the current event 
+			event2fire = trace.get(tIdx);
+			// get the list of transitions with potential to be fired
+			// and we use a stack structure to store the execution path on it but also with the current marking
+			 
+			
+			for(Transition t: enabledTransitions) {
+				if(match(event2fire, t)) { // not include the silent transition
+					Marking dMarking = new Marking(marking);
+					ReplayState dState = new ReplayState(t, dMarking, tIdx);
+					cstack.push(dState);
+				}
+			}
+			// check if there is an silent transitions?? but we should always make it match
+			if(cstack.size() < 1) {
+				// check if there are silent transitions available
+				// it is just the current states, not about the enabled tokens
+				// find out the corresponding transitions for this event class
+				Set<Transition> potentialTransitions = getPotentialTransitions(net, event2fire);
+				// one event class has no transitions for it
+				if(potentialTransitions.size() <1)
+					return false;
+				
+				// choose one of those potentialTransitions and check the conditions if it can be fired
+				// it can be fired due to silent transitions, but at end, we need to check remainig and missing token
+				
+				// pick one potential transitions, and add them into stack
+				for(Transition t: potentialTransitions) {
+					if(enabledFire(t)) {
+						// it is enabled to fire, we keep it there
+					}
+					
+				}
+				
+				
+				
+						// put it somewhere to trigger it 
+						// or we can list all the transitions which corresponding to this transitions
+						// check them, if one of them is fine, then we choose it to the end, else
+						// we change to another one; at end, if there is no such options,
+						// then we says it is not fit!!!
+				
+						
+				return false;
+			}
+			
+			// from this part, we repeat the process; if one executes, the token changes
+				
+			// visit each of those stack transitions to use and record marking changes 
+			cState = dstack.pop();
+			
+			Transition ct = cState.getTransition();
+			tIdx = cState.getIndex();
+			marking = cState.getMarking();
+			// consume the marking before this transition and produce marking into it 
+			// after firing this transition, we went to another replay state;;
+			fire(net, ct, marking);
+			if(!ct.isInvisible()) {
+				tIdx++;
+				// however, we also need to store the visited trace information at current state
+				// so create a class for it
+			}
+			// need to changed the enabledTransitions, do we need to ?? Else, we need to check it over and over again??
+			enabledTransitions =  getEnabledTransitions(net, marking);
+			
+		}
+		// after firing, we have a new marking and then return it back to find the positions.
+		// until we have reached the final marking place...
+		// but we need to make sure the silent transitions
+		// here check if the last state is the final state, cState is null, so it is not initialized
+		// one condition is no trace there, another one is not initialized
+		if(cState!=null && cState.isFinalStateFit(finalMarking))
+			return true;
+		
+		return false;
+	}
+	private static boolean enabledFire(Transition t) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private static Set<Transition> getPotentialTransitions(Petrinet net, XEventClass event2fire) {
+		// TODO traverse all the transitions and find out the ones corresponding to event2fire
+		Set<Transition> tSet = new HashSet<Transition>();
+		for(Transition t: net.getTransitions()) {
+			if(match(event2fire,t ))
+				tSet.add(t);
+			
+		}
+		return tSet;
+	}
+
+	private static Set<Transition> getEnabledTransitions(Petrinet net, Marking marking){
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = null;
+		Set<Transition> enabledTransitions =  new HashSet<>();
 		for(Place p : marking) {
 			
 			postEdgeSet = net.getOutEdges(p);
 			for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: postEdgeSet) {
-				Transition t = (Transition) edge.getSource();
+				Transition t = (Transition) edge.getTarget();
 				// here we check the tmp if enabled
 				if(isEnabled(net, t, marking)) {
 					enabledTransitions.add(t);
 				}
 			}
 		}
-		
-		// fire one of them but according to the current event 
-		event2fire = trace.get(tIdx);
-		// get the list of transitions with potential to be fired
-		// and we use a stack structure to store the execution path on it but also with the current marking
-		 
-		
-		for(Transition t: enabledTransitions) {
-			if(match(event2fire, t)) {
-				Marking dMarking = new Marking(marking);
-				ReplayState dState = new ReplayState(t, dMarking, tIdx);
-				stack.push(dState);
-			}
-		}
-		// check if there is an silent transitions?? but we should always make it match
-		if(stack.size() < 1) {
-			return false;
-		}
-			
-		// visit each of those stack transitions to use and record marking changes 
-		ReplayState cState = stack.pop();
-		Transition ct = cState.getTransition();
-		tIdx = cState.getIndex();
-		marking = cState.getMarking();
-		// consume the marking before this transition and produce marking into it 
-		
-		fire(net, ct, marking);
-		if(!ct.isInvisible()) {
-			tIdx++;
-			// however, we also need to store the visited trace information at current state
-			// so create a class for it
-		}
-		// after firing, we have a new marking and then return it back to find the positions.
-		// until we have reached the final marking place...
-		// but we need to make sure the silent transitions
-		return false;
+		return enabledTransitions;
 	}
 	
 	private static void fire(Petrinet net, Transition t, Marking marking) {
@@ -276,14 +343,14 @@ public class NetUtilities {
 		}
 		
 		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: postEdgeSet) {
-			Place postPlace = (Place) edge.getSource();
+			Place postPlace = (Place) edge.getTarget();
 			marking.add(postPlace);
 		}
 	}
 
 	private static boolean match(XEventClass event, Transition t) {
 		// TODO Auto-generated method stub
-		if(t.isInvisible() || event.getId().equals(t.getLabel()))
+		if(event.getId().equals(t.getLabel())) //t.isInvisible() || 
 			return true;
 		return false;
 	}
@@ -299,6 +366,11 @@ public class NetUtilities {
 		return true;
 	}
 
+	public static boolean fitPN(Petrinet net, Marking marking, List<XEventClass> trace) {
+		return tokenReplayer(net, marking, trace);
+	}
+	
+	
 	public static boolean fitPN(Petrinet net, Marking marking, List<XEventClass> trace,
 			Map<XEventClass, Transition> maps) {
 
@@ -335,6 +407,7 @@ public class NetUtilities {
 			// we need to create the map from the Petrinet to the event log.
 			if (maps.containsKey(eventClass))
 				transition = maps.get(eventClass);
+			
 			else
 				return false;
 			// for repeated data, how to get the naive ways??
