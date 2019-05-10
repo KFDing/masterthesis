@@ -35,6 +35,8 @@ public class TokenReplayer {
 	List<XEventClass> trace; 
 	List<ReplayState> path;
 	
+	List<List<PetrinetNode>> sLoops;
+	
 	public TokenReplayer(Petrinet net, Marking initMarking2, Marking finalMarking2, Map<XEventClass, List<Transition>> maps) {
 		this.net = net;
 		this.maps = maps;
@@ -63,6 +65,7 @@ public class TokenReplayer {
 	
 	public boolean traceFit( List<XEventClass> trace) {
 		setTrace(trace);
+		sLoops = LoopDetector.getLoopWithSilentTransitions(net);
 		// we do sth here about the initMarking??
 		if(reachByDFS(0, new Marking(initMarking)))
 			return true;
@@ -159,7 +162,7 @@ public class TokenReplayer {
 	}
 
 	// this is used to trace back from one silent transitions then back to current marking 
-	// check if it is enabled now.. If not, what to do then??
+	// check if it is enabled now.. 
 	// a place directly after one silent transition
 	public boolean traceBackByDFS(Transition ct, Place p, Marking marking, int idx) {
 		if(marking.contains(p))
@@ -199,12 +202,9 @@ public class TokenReplayer {
 			// not a silent transition
 			
 			if(t.isInvisible()) {
-				// one thing to consider is that if we enable one action to execute, so no
-				// get all the places before it 
-				// check if there is a silent loop here... // if there is one silent loop, stop executing it
-				if(inSilentLoop(t, p)) {
+				// check if there is a silent loop here, if it is then stops execute it  
+				if(LoopDetector.isInLoop(t, sLoops))
 					return false;
-				}
 				
 				tmpEdgeSet = net.getInEdges(t);
 				boolean traceBackOK = true;
@@ -236,14 +236,14 @@ public class TokenReplayer {
 		return false;
 	}
 	/**
-	 * modify this code to test it on each place in the net, when we meet silent transitions
-	 * then test it, if it is on silent loop; else don't care about it
+	 * modify this code to test it on each silent transitions in the net, use DFS to record all it is visited;
+	 * if one 
 	 * 
 	 * @param ct
 	 * @param p
 	 * @return
 	 */
-	private List<ArrayList<PetrinetNode>> getSilentLoop(Petrinet net){
+	private List<ArrayList<PetrinetNode>> getLoopWithSilentTransitions(Petrinet net){
 		// for each place in the Petri net, we check it 
 		List<ArrayList<PetrinetNode>> sLoops = new ArrayList<ArrayList<PetrinetNode>>();
 		// loop can be nested.. So we can not remove a place visted from itself, but we can detect it
@@ -254,6 +254,9 @@ public class TokenReplayer {
 		
 		return null;
 	}
+	
+	
+	
 	
 	private boolean isSilentLoop(Transition ct, Place p) {
 		// give one token at this place p, and it can fire transition t, then we know it

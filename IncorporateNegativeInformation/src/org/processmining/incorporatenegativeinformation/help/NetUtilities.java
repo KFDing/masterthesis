@@ -314,6 +314,17 @@ public class NetUtilities {
 		return tSet;
 	}
 
+	
+	public static List<Transition> getSilentTransitions(Petrinet net){
+		List<Transition> stSet = new ArrayList();
+		for(Transition t: net.getTransitions()) {
+			if(t.isInvisible())
+				stSet.add(t);
+			
+		}
+		return stSet;
+	}
+	
 	private static Set<Transition> getEnabledTransitions(Petrinet net, Marking marking){
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = null;
 		Set<Transition> enabledTransitions =  new HashSet<>();

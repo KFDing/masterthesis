@@ -38,6 +38,12 @@ public class ReplayState {
 		tIdx = idx;
 	}
 	
+	public ReplayState(Transition t, Marking marking2) {
+		// TODO Auto-generated constructor stub
+		ct = t;
+		marking = marking2;
+	}
+
 	public void setNet(Petrinet pnet) {
 		net = pnet;
 	}
