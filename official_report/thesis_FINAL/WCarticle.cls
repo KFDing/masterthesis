@@ -49,6 +49,7 @@
 \RequirePackage{wrapfig}
 %\RequirePackage{svg}
 %\RequirePackage{subcaption}
+\RequirePackage[parfill]{parskip}
 
 %%make the chapters separate from each other
 %\RequirePackage{graphicx}

@@ -187,13 +187,9 @@ public class LoopDetectorTarjan {
 		
 		boolean hasCycle = false;
 		// here we should also put the places into it, reduce visit it again
-		/*
-		for(Place p: marking) {
-			pointStack.offerFirst(p);
-			markedSet.add(p);
-			markedStack.offerFirst(p);
-		}
-		*/
+		// how to reduce it visit one node again... with the repeated nodes?
+		// we need to remove them out!!
+		// can't do it now, So Back writing and correct the thesis
 		
 		pointStack.offerFirst(current);
 		markedSet.add(current);
