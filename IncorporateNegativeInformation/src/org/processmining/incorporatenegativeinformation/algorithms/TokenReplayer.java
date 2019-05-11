@@ -43,6 +43,9 @@ public class TokenReplayer {
 		finalMarking = finalMarking2;
 		initMarking = initMarking2;
 		path = new ArrayList<>();
+		
+		LoopDetectorTarjan detector = new LoopDetectorTarjan(net, true);
+		sLoops = detector.findAllSimpleCycles();
 	}
 	
 	public void setTrace(List<XEventClass> trace) {
@@ -65,7 +68,7 @@ public class TokenReplayer {
 	
 	public boolean traceFit( List<XEventClass> trace) {
 		setTrace(trace);
-		sLoops = LoopDetector.getLoopWithSilentTransitions(net);
+		// sLoops = LoopDetector.getLoopWithSilentTransitions(net);
 		// we do sth here about the initMarking??
 		if(reachByDFS(0, new Marking(initMarking)))
 			return true;
@@ -129,8 +132,7 @@ public class TokenReplayer {
 					fire(net, ct, marking, idx);
 					
 					reachByDFS(idx+1, marking);
-				}
-					
+				}	
 			}
 		}
 		
@@ -188,9 +190,10 @@ public class TokenReplayer {
 			
 			if(!needVisit)
 				return false;
-			
 		}
-			
+		// one transitions can be repeated visited, because it is in a loop; 
+		// else it can't go back, and be marked as visited
+		
 		// but in the loop situation, if we can prove they are the same transitions, then fine
 		
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(p);
@@ -203,8 +206,8 @@ public class TokenReplayer {
 			
 			if(t.isInvisible()) {
 				// check if there is a silent loop here, if it is then stops execute it  
-				if(LoopDetector.isInLoop(t, sLoops))
-					return false;
+				if(isSilentInLoop(t))
+					continue;
 				
 				tmpEdgeSet = net.getInEdges(t);
 				boolean traceBackOK = true;
@@ -235,46 +238,14 @@ public class TokenReplayer {
 		
 		return false;
 	}
-	/**
-	 * modify this code to test it on each silent transitions in the net, use DFS to record all it is visited;
-	 * if one 
-	 * 
-	 * @param ct
-	 * @param p
-	 * @return
-	 */
-	private List<ArrayList<PetrinetNode>> getLoopWithSilentTransitions(Petrinet net){
-		// for each place in the Petri net, we check it 
-		List<ArrayList<PetrinetNode>> sLoops = new ArrayList<ArrayList<PetrinetNode>>();
-		// loop can be nested.. So we can not remove a place visted from itself, but we can detect it
-		for(Place p: net.getPlaces()) {
-			
-			
-		}
-		
-		return null;
-	}
 	
-	
-	
-	
-	private boolean isSilentLoop(Transition ct, Place p) {
+	private boolean isSilentInLoop(Transition ct) {
 		// give one token at this place p, and it can fire transition t, then we know it
-		Marking assumeMarking = new Marking();
-		assumeMarking.add(p);
-		
-		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(ct);
-		
-		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
-			Place place = (Place) edge.getSource();
-			
-			if(!traceBackByDFS(ct, place, assumeMarking, -1)) {
-				return false;
-			}
-				
+		for(List<PetrinetNode> loop: sLoops) {
+			if(loop.contains(ct))
+				return true;
 		}
-		
-		return true;
+		return false;
 	}
 
 	private List<Integer> findPlaceInPath(Place p) {

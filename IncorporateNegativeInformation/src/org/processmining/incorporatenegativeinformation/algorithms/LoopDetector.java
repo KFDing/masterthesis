@@ -2,19 +2,21 @@ package org.processmining.incorporatenegativeinformation.algorithms;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.processmining.incorporatenegativeinformation.help.NetUtilities;
-import org.processmining.incorporatenegativeinformation.models.ReplayState;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetNode;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.semantics.petrinet.Marking;
-
 /**
  * this class serves TokenReplayer and give out the loops in Petri net
  * -- first detect loops with silent transitions
@@ -25,295 +27,205 @@ import org.processmining.models.semantics.petrinet.Marking;
  * 
  * So, if I want to test loop on silent transitions, I need to ??
  * @author dkf
- *
+ * 
+ * here we generalize the types for it
+ * * References
+ * https://github.com/jgrapht/jgrapht/blob/master/jgrapht-core/src/main/java/org/jgrapht/alg/cycle/JohnsonSimpleCycles.java
+
  */
-public class LoopDetector {
-	static List<ReplayState> path;
-	static List<Transition> blockTransitions;
-	public static boolean isInLoop(Transition t, List<List<PetrinetNode>> loops) {
+public class LoopDetector{
+	Set<PetrinetNode> blockedSet;
+	Map<PetrinetNode, Set<PetrinetNode>> blockedMap;
+	Deque<PetrinetNode> stack;
+	List<List<PetrinetNode>> allCycles;
+	Petrinet net;
+	Map<PetrinetNode, Boolean> complete;
+	Map<PetrinetNode, Boolean> noInLoop;
+	
+	public List<List<PetrinetNode>> simpleCycles(Petrinet net){
 		
-		for(List<PetrinetNode> loop: loops) {
-			if(loop.contains(t))
-				return true;
+		this.net = net;
+		blockedSet = new HashSet<>();
+        blockedMap = new HashMap<>();
+        stack = new LinkedList<>();
+        allCycles = new ArrayList<>();
+		
+        int startIdx = 0;
+        
+        // but if we use this, then how can we get the silent transitions limits?? not really..
+        // then we need to check the others from it for all the loops in graph
+        Iterator<Transition> tIter = net.getTransitions().iterator();
+        complete = new HashMap<>();
+        noInLoop = new HashMap<>();
+        // complete is used to record if one silent transitions use too sets, better
+        // if one transitions is complete and noInLoop, so skip this transitions
+        // if t inLoop and not complete, then check again
+        // if t not in loop and not complete, check it
+        // if t is complete, skip it, too.
+        
+        while(startIdx < net.getTransitions().size()) {
+        	// how to get the current net node
+        	PetrinetNode node = tIter.next();
+        	// if a node is already in a loop and has no possibility to be in another loop
+        	// then we should skip this test but how?? no possibility to be in another loop?? 
+        	if(complete.get(node))
+        		continue;
+        	
+        	blockedMap.clear();
+        	blockedSet.clear();
+        	Marking assumeMarking = getAssumeMarking(net, node);
+        	findCyclesWithNode(node, node, assumeMarking);
+        	startIdx ++;
+        }
+		return allCycles;
+		
+	}
+
+	private Marking getAssumeMarking(Petrinet net2, PetrinetNode node) {
+		// TODO Auto-generated method stub
+		Marking marking = new Marking();
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(node);
+		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
+			Place p = (Place) edge.getSource();
+			marking.add(p);
+		}
+		return marking;
+	}
+
+	// we use startNode as transitions for our use
+	private boolean findCyclesWithNode(PetrinetNode startNode, PetrinetNode currentNode, Marking marking) {
+		// TODO Auto-generated method stub
+		boolean foundCycle = false;
+		Marking initMarking = new Marking(marking);
+		if(!isEnabled(net, (Transition) currentNode, marking))
+			return false;
+		
+		// we need to fire currentNode
+		fire(net, (Transition) currentNode, marking);
+		stack.push(currentNode);
+		blockedSet.add(currentNode);
+		
+		// ok, if we check the current marking, so it must check if it is enabled in the marking
+		Set<Transition> etSet = getEnabledTransitions(net, marking);
+		
+		for(PetrinetNode node: etSet) {
+			
+			if(node.equals(startNode)) {
+				List<PetrinetNode> cycle = new ArrayList<>();
+				// how to we remember the places between them?? we can do it later
+				// get the place; Because it can turn to another place
+				stack.push(startNode);
+				// cycle only for the transitions. Also for place, we do it late!! 
+				cycle.addAll(stack);
+				
+				stack.pop();
+				allCycles.add(cycle);
+				
+				foundCycle = true;
+			}else if(! blockedSet.contains(node)) {
+				boolean gotCycle =  findCyclesWithNode(startNode, node, marking);
+				foundCycle = foundCycle || gotCycle;
+				
+			} 
+			
 		}
 		
-		return false;
+		if(foundCycle) {
+			unblock(currentNode);
+			// we can only say, not in this loop, but for others, how can say it??
+			noInLoop.put(currentNode, false);
+		}else {
+			// if no cycle found, then add its neighbors and this node to their blockMap
+			
+			// etSet is available for this
+			for(PetrinetNode node: etSet) {
+				Set<PetrinetNode> bSet = getBSet(node);
+				bSet.add(currentNode);
+			}
+			
+			// if it blocks all its subset, then we say it is complete and not in loop
+			
+			
+		}
+		stack.pop();
+		
+		return foundCycle;
 	} 
 	
-	public static List<List<PetrinetNode>> getLoopWithSilentTransitions(Petrinet net){
-		// for each place in the Petri net, we check it 
-		List<List<PetrinetNode>> sLoops = new ArrayList<List<PetrinetNode>>();
-		// blockTransitions = new ArrayList<>();
-		path = new ArrayList<ReplayState>();
-		// for each silent transitions
-		List<Transition> stSet = NetUtilities.getSilentTransitions(net);
-		
-		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet;
-		// we can remove the nodes from it and let repeat if again
-		int i= 0;
-		while(i< stSet.size()) {
-			path.clear();
-			Transition  st = stSet.get(i);
-			// for each out edge from t test if it can go back, 
-			// using only the traceBack strategy?? Not really
-			// it differs in different edges out, so we can check the next place it connects
-			Marking assumeMarking = new Marking();
-			preEdgeSet = net.getInEdges(st);
-			for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
-				Place place = (Place) edge.getSource();
-				// if there is a cycle here then add it here// else pass it
-				// for a small circle we can delete it there from the net and try not look at it
-				assumeMarking.add(place);
-				
-				// the loop is related to some edges.. but let use first to detect a loop
-			}
-			if(!isInLoop(st, sLoops)) {
-				
-				List<PetrinetNode> loop = getLoop(net, st, assumeMarking);
-				if(!loop.isEmpty()) {
-					// it contains loop on those places, but if we delete this 
-					sLoops.add(loop);
-				}else {
-					// remove the connection of this silent transitions when considering it 
-					// blockTransitions.add(st);
-				}
-				// delete this transition from nodes and check next one, if next not done, 
-				// then put it again
-				// but how to know it is not done!! 
-			}
-			i++;
-		}
-		return sLoops;
-	}
-	
-	// so here if we want to test a loop full of silent transitions,check all the silent transitions
-	// and find out if they are connected with each others
-	public static List<List<PetrinetNode>> getSilentLoops(Petrinet net){
-		List<List<PetrinetNode>> sLoops = new ArrayList<List<PetrinetNode>>();
-		
-		// for one silent transition, if it can visit all silent transitions and back to itself
-		// then we says it has a silent loop
-		List<Transition> stList = NetUtilities.getSilentTransitions(net);
-		
-		for(int i=0; i< stList.size(); i++) {
-			
-			
-		}
-		
-		
-		return null;
-	}
-	
-
-	private static List<PetrinetNode> getLoop(Petrinet net, Transition st, Marking fireMarking) {
+	private Set<PetrinetNode> getBSet(PetrinetNode node) {
 		// TODO Auto-generated method stub
-		// the assumeMarking is for the current st available
-		List<PetrinetNode> loop = new ArrayList<>();
-		Marking marking = new Marking(fireMarking);
 		
-		// fire this transitions
-		fire(net, st, marking);
-		
-		// traceBack by DFS methods, how to write it here??
-		boolean inLoop = true;
-		for(Place p: fireMarking) {
-			if(!traceBackByDFS(net, st, p, marking)) {
-				inLoop = false;
-				break;
-			}
-			
-		}
-		if(inLoop) {
-			// we check path information and then put them into loop!! 
-			// find the beginning place for the loop and end place for this loop.
-			// get all the transitions for this path
-			//Set<Transition> ltSet = getTransitionsInPath(); 
-			// loop.addAll(ltSet);
-			//List<Place> beginPlaces = new ArrayList<>();
-			//List<Place> endPlaces = new ArrayList<>();
-			//int beginIdx, endIdx;
-			for(int i = 0; i< path.size();i++) {
-				ReplayState state = path.get(i);
-				// check place which is before this silent transitions
-				// we can have a set 
-				Marking firedMarking = state.getFiredMarking();
-				Marking enabledMarking = new Marking(state.getMarking());
-				// get the changed marking before it
-				enabledMarking.removeAll(firedMarking);
-				loop.addAll(enabledMarking);
-				loop.add(state.getTransition());
-				/*
-				for(Place p: enabledMarking) {
-					// if this place is loop begin or loop end
-					
-					/*
-					if(isBeginLoopPlace(net, p, ltSet)) {
-						// we begin to organize the loop from this place 
-						beginPlaces.add(p);
-						beginIdx = i;
-					}
-					if(isEndLoopPlace(net, p, ltSet)) {
-						// but they can have many places as end
-						endPlaces.add(p);
-						endIdx = i;
-					}
-					
-				}
-				*/
-			}
-			
-			// organize the loop in list but might not in order but with all the nodes in it
-			// do we need to mark the begin and end places..
-			// from the beginIdx and then back to visit all transitions there... 
-			
-			
-		}
-		return loop;
+		return blockedMap.computeIfAbsent(node, (key)-> new HashSet<>());
 	}
-	
-	private static Set<Transition> getTransitionsInPath() {
+
+	private void unblock(PetrinetNode node) {
 		// TODO Auto-generated method stub
-		Set<Transition> ltSet = new HashSet<>();
-		for (ReplayState state: path)
-			ltSet.add(state.getTransition());
-		
-		// if there is a path between this pair 
-		
-		
-		return ltSet;
-	}
-
-	private static boolean isBeginLoopPlace(Petrinet net, Place p,Set<Transition> ltSet) {
-		// TODO 
-		// loop begin place
-		//    -- one of inEdge from loop
-		//    -- one outEdge to the loop
-		//    -- one of inEdge not in loop!! 
-		
-		// check the path situations, check the transitions in the loop or not, also the places
-		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(p);
-		boolean itFromLoop = false;
-		boolean itNotFromLoop = false;
-		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
-			// it is a place
-			Transition t = (Transition) edge.getSource();
-			if(ltSet.contains(t))
-				itFromLoop = true;
-			else
-				itNotFromLoop = true;
-			
-			if(itFromLoop && itNotFromLoop)
-				break;
+		blockedSet.remove(node);
+		if(blockedMap.get(node)!=null) {
+				
+			blockedMap.get(node).forEach( v -> {
+				if(blockedSet.contains(v)) {
+					unblock(v);
+				}
+			});
+			blockedMap.remove(node);
 		}
-		
-		if(itFromLoop && itNotFromLoop) {
-			
-			// check of the outEdge to the loop
-			Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = net.getOutEdges(p);
-			for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: postEdgeSet) {
-				// it is a place
-				Transition t = (Transition) edge.getTarget();
-				if(ltSet.contains(t))
-					return true;
-			}
-		}
-		
-		return false;
-	}
-
-	private static boolean isEndLoopPlace(Petrinet net, Place p, Set<Transition> ltSet) {
-		// TODO 
-		// loop end place
-		//    -- one of inEdge from loop
-		//    -- one outEdge to the loop
-		//    -- one of outEdge not in loop!! 
-		
-		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = net.getOutEdges(p);
-		boolean otFromLoop = false;
-		boolean otNotFromLoop = false;
-		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: postEdgeSet) {
-			// it is a place
-			Transition t = (Transition) edge.getTarget();
-			if(ltSet.contains(t))
-				otFromLoop = true;
-			else
-				otNotFromLoop = true;
-			
-			if(otFromLoop && otNotFromLoop)
-				break;
-		}
-		
-		if(otFromLoop && otNotFromLoop) {
-			
-			// check of the outEdge to the loop
-			Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(p);
-			for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: postEdgeSet) {
-				// it is a place
-				Transition t = (Transition) edge.getSource();
-				if(ltSet.contains(t))
-					return true;
-			}
-		}
-		
-		return false;
 		
 	}
 
-	public static boolean traceBackByDFS(Petrinet net, Transition ct, Place p, Marking marking) {
-		// if transition ct can be traced back by this marking, then return it 
-		// but make the root it visited
-		if(marking.contains(p))
-			return true;
-		
-		// we can only use the silent transitions there
-		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(p);
+	private  Set<Transition> getEnabledTransitions(Petrinet net, Transition ct){
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = net.getOutEdges(ct);
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> tmpEdgeSet = null;
 		
-		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
-			// it is a place
-			Transition t = (Transition) edge.getSource();
-			// not a silent transition
-			
-			if(t.isInvisible() ) { //&& !blockTransitions.contains(t)
-				// check if there is a silent loop here, if it is then stops execute it  
-				
-				tmpEdgeSet = net.getInEdges(t);
-				boolean traceBackOK = true;
-				for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> tmpEdge : tmpEdgeSet) {
-					Place place = (Place) tmpEdge.getSource();
-					// this place is before silent transition t, when it can't be traced back
-					// this silent transitions is not ok for this time
-					// terrible is the silent loop.. Nana, how to record them and avoid them?
-					if(!traceBackByDFS(net, ct, place, marking)) {
-						traceBackOK = false;
-						break;
-					}
-					
-				}
-				
-				// else it can be traced back, have a state to check
-				if(traceBackOK) {
-					// for this silent transition, then we can fire it and put a token in p
-					fire(net, t, marking);
-					// we will stop at one option?? How about the others??
-					// should we record them?? Yes, we shoudl record them or at least not repeat it
-					return true;
-				}
-				
+		Set<Transition> subTransitions =  new HashSet<>();
+		
+		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> tmpEdge : postEdgeSet) {
+			Place p = (Place) tmpEdge.getTarget();
+			tmpEdgeSet = net.getOutEdges(p);
+			for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: tmpEdgeSet) {
+				Transition t = (Transition) edge.getTarget();
+				// here we check the tmp if enabled
+				subTransitions.add(t);
 			}
-		
 		}
-		
-		return false;
+		return subTransitions;
 	}
 	
 	
-	private static  void fire(Petrinet net, Transition t, Marking marking) {
+	private  Set<Transition> getEnabledTransitions(Petrinet net, Marking marking){
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = null;
+		Set<Transition> enabledTransitions =  new HashSet<>();
+		for(Place p : marking) {
+			
+			postEdgeSet = net.getOutEdges(p);
+			for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: postEdgeSet) {
+				Transition t = (Transition) edge.getTarget();
+				// here we check the tmp if enabled
+				if(isEnabled(net, t, marking)) {
+					enabledTransitions.add(t);
+				}
+			}
+		}
+		return enabledTransitions;
+	}
+	
+	private  boolean isEnabled(Petrinet net, Transition t, Marking marking) {
+		// TODO Auto-generated method stub
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(t);
+		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
+			Place p = (Place) edge.getSource();
+			if(!marking.contains(p)) 
+				return false;
+		}
+		return true;
+	}
+
+	private  void fire(Petrinet net, Transition t, Marking marking) {
 		// TODO Auto-generated method stub
 		// consume token from marking and produce marking after it
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(t);
 		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> postEdgeSet = net.getOutEdges(t);
-		ReplayState cState = new ReplayState(t, new Marking(marking));
+		// ReplayState cState = new ReplayState(t, new Marking(marking));
 		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
 			Place prePlace = (Place) edge.getSource();
 			marking.remove(prePlace);
@@ -327,8 +239,7 @@ public class LoopDetector {
 		// we need to record the visited path from this model;
 		// else, if it repeats, it takes a lot of times!! The path has walked by the path;;
 		// but what to remember?? transition, tIdx, and marking at that time?? 
-		cState.setFiredMarking(marking);
-		path.add(cState);
+		// cState.setFiredMarking(marking);
+		
 	}
-	
 }
