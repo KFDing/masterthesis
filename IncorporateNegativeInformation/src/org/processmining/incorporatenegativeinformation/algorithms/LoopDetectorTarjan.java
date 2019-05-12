@@ -115,24 +115,7 @@ public class LoopDetectorTarjan {
         
         // here we also prepare to use only silent transitions and change it
         List<List<PetrinetNode>> result = new ArrayList<>();
-        // at first to check the length with self loop nodes and then with the length
-        // then increase the length?? But how to find the problems here to test selfloop??
-        // detect selfloop for transition
-        /*
-        for(PetrinetNode transition : net.getTransitions()) {
-        	
-        	Marking assumeMarking = getAssumeMarking(net, transition);
-        	fire( (Transition) transition, assumeMarking);
-        	
-        	if(assumeMarking.equals(getAssumeMarking(net, transition))) {
-        		List<PetrinetNode> cycle = new ArrayList<>();
-        		cycle.add(transition);
-        		cycle.add(transition);
-        		visited.add(transition);
-        		result.add(cycle);
-        	}
-        }
-        */
+       
         for(PetrinetNode transition : net.getTransitions()) {
         	
         	Marking assumeMarking = getAssumeMarking(net, transition);

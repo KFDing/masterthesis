@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import org.deckfour.xes.classification.XEventClass;
 import org.processmining.incorporatenegativeinformation.models.ReplayState;
@@ -33,7 +34,7 @@ public class TokenReplayer {
 	Petrinet net;
 	Map<XEventClass, List<Transition>> maps;
 	List<XEventClass> trace; 
-	List<ReplayState> path;
+	Stack<ReplayState> path;
 
 	List<List<PetrinetNode>> loops;
 	List<List<PetrinetNode>> sLoops;
@@ -46,7 +47,7 @@ public class TokenReplayer {
 		this.maps = maps;
 		finalMarking = finalMarking2;
 		initMarking = initMarking2;
-		path = new ArrayList<>();
+		path = new Stack<>();
 		
 		LoopDetectorTarjan detector = new LoopDetectorTarjan(net, false);
 		loops = detector.findAllSimpleCycles();
@@ -55,17 +56,17 @@ public class TokenReplayer {
 		
 		sLoops = detector.getSilentLoops(loops);
 		// with places are listed here
-		List<List<PetrinetNode>> sfLoops = detector.getFinalSilentLoops(sLoops, finalMarking);
-		
-		sfmLoops = addMarking2Loops(sfLoops);
+		List<List<ReplayState>> smLoops = addMarking2Loops(sLoops);
+		sfmLoops = getFinalSilentLoops(smLoops, finalMarking);
 		// after this we should get all the silent transitions loops
 	}
+
 	// given silent loops
-		public List<List<ReplayState>> getFinalSilentLoops(List<List<ReplayState>> smLoops, Marking finalMarking) {
+	public List<List<ReplayState>> getFinalSilentLoops(List<List<ReplayState>> smLoops, Marking finalMarking) {
 			List<List<ReplayState>> sfmLoops = new ArrayList<>();
 	        // to make the loop goes, then the final marking must be in between of places
 	        for(List<ReplayState> smLoop: smLoops) {
-	        	if(isMarkingInLoop(finalMarking, smLoops) {
+	        	if(isMarkingInLoop(finalMarking, smLoop)) {
 	        		sfmLoops.add(smLoop);
 	        	}
 	        	
@@ -74,6 +75,17 @@ public class TokenReplayer {
 		}
 		
 	
+	private boolean isMarkingInLoop(Marking marking, List<ReplayState> mLoop) {
+		// TODO Auto-generated method stub
+		for(ReplayState state: mLoop) {
+			Marking tmpMarking = state.getMarking();
+			if(marking.containsAll(tmpMarking))
+				return true;
+		}
+		return false;
+	}
+
+
 	private List<List<ReplayState>> addMarking2Loops(List<List<PetrinetNode>> loopList) {
 		
 		List<List<ReplayState>> result = new ArrayList<>();
@@ -124,17 +136,17 @@ public class TokenReplayer {
 	}
 	
 	public boolean reachByDFS(int idx, Marking marking) {
-		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet;
 		
 		if(idx >= trace.size()) {
 			// demand to check if the marking is equal to current marking
-			if(marking.equals(finalMarking))
+			if(marking.containsAll(finalMarking)&& finalMarking.containsAll(marking) )
 				return true;
 			else {
 				// check if the marking can go to the finalMarking by silent transitions
-				if(isMarkingInLoop(marking, sfmLoops))
+				if(isMarkingInLoopList(marking, sfmLoops))
 					return true;
 			}
+			return false;
 		}
 		
 		
@@ -152,38 +164,48 @@ public class TokenReplayer {
 		for(Transition t: t2fSet) {
 			// fire t and check the state later
 			// but here we change the marking... which should be reserved for its value
-			fire(net, t, marking, idx);
+			Marking cMarking = new Marking(marking);
+			fire(net, t, cMarking , idx);
 			
-			if(reachByDFS(idx + 1, marking)) {
+			if(reachByDFS(idx + 1, cMarking)) {
 				return true;
 			}else {
 				// here we need to recover tha path:: for what we don't use it 
 				removeState(t, idx);
 			}
 		}
-		
+		boolean reachOK = false;
 		for(Transition ct: ctList) {
 			// get the place before it and then have all
-			preEdgeSet = net.getInEdges(ct);
+			
 			Marking goalMarking = getAssumeMarking(ct);
 			// after we do this, the marking should change during the way..so we need to infer it
-			Marking cMarking = new Marking(marking);
-			if(traceBackByDFS(ct, goalMarking, cMarking, idx)) {
+			
+			if(traceBackByDFS(ct, goalMarking, new Marking(marking), idx)) {
 				// fire ct and 
+				// we need to get the current marking from path!!
+				Marking cMarking = path.pop().getFiredMarking();
 				fire(net, ct, cMarking, idx);
 				// simple the DFS search, and no record
-				reachByDFS(idx+1, cMarking);
+				reachOK = reachByDFS(idx+1, cMarking) || reachOK;
+				if(reachOK)
+					return true;		
 			}	
 		}
+		/*
+		if(!reachOK) {
+			removeState(marking);
+		}
+		*/
 		
-		return false;
+		return reachOK;
 	}
 	
 	// how to get the finalLoop ?? we have final marking... then we
 	
 	
 	
-	private boolean isMarkingInLoop(Marking marking, List<List<ReplayState>> mLoopList) {
+	private boolean isMarkingInLoopList(Marking marking, List<List<ReplayState>> mLoopList) {
 		// TODO Auto-generated method stub
 		for(List<ReplayState> mLoop: mLoopList) {
 			// but it must be a proper places there, deal with situations that 
@@ -215,21 +237,15 @@ public class TokenReplayer {
 		int i = path.size() -1;
 		while(i >= 0) {
 			ReplayState state = path.get(i);
-			if(state.getIndex() >=idx && !state.getTransition().equals(t)) {
-				path.remove(i);
+			if(!(state.getIndex() >=idx && state.getTransition().equals(t))) {
+				path.pop();
 				i--;
 			}else
 				break;
 		}
 		
 		// here we find the state leading to further execution. so we remove it too
-		if(i>=0)
-			path.remove(i);
-		else {
-			// we couldn't find this state,then it must be wrong at the first place
-			System.out.println("Some exception happening");
-		}
-		
+		path.pop();
 	}
 
 	/**
@@ -247,13 +263,16 @@ public class TokenReplayer {
 	 */
 	public boolean traceBackByDFS(Transition ct, Marking goalMarking, Marking cmarking, int idx) {
 		boolean traceBackOK = false;
-		if(cmarking.contains(goalMarking))
+		if(cmarking.containsAll(goalMarking))
 			return true;
 		// check if this place can be visited twice
 		// when it is in a loop, then possible, else not again!! 
-		// if we have visited cmarking before, now, we shouldn't visit it!!
-		if(!isMarkingInLoop(cmarking, mLoops))
-			return false;
+		// if we have visited cmarking before
+		if(isStateInPath(ct, cmarking)) {
+			
+			if(!isMarkingInLoopList(cmarking, mLoops))
+				return false;
+		}
 		
 		Set<Transition> etSet = getEnabledTransitions(net, cmarking);
 		
@@ -263,11 +282,11 @@ public class TokenReplayer {
 				// check if there is a silent loop here, if it is then stops execute it  
 				if(isSilentInLoop(t))
 					continue;
-				
+				Marking dMarking = new Marking(cmarking);
 				// else we fire it and trace it back by using the traceBack methods
-				fire(net, t, cmarking, idx);
+				fire(net, t, dMarking, idx);
 				
-				traceBackOK = traceBackOK || traceBackByDFS(ct, goalMarking, new Marking(cmarking), idx);
+				traceBackOK = traceBackOK || traceBackByDFS(ct, goalMarking, dMarking, idx);
 				
 				// If we find one way, then we should return true, right?? 
 				// we don't need to check it anymore
@@ -287,18 +306,31 @@ public class TokenReplayer {
 		return traceBackOK;
 	}
 	
+	private boolean isStateInPath(Transition ct, Marking cmarking) {
+		// TODO Auto-generated method stub
+		// check if the current state has already in path;
+		for(ReplayState state: path) {
+			if(state.getTransition().equals(ct) && cmarking.containsAll(state.getMarking()))
+				return true;
+		}
+		return false;
+	}
+
 	private void removeState(Marking cmarking) {
 		// TODO Auto-generated method stub
 		int i = path.size() -1;
 		while(i >= 0) {
 			ReplayState state = path.get(i);
-			if(!state.getMarking().equals(cmarking))
+			if(!state.getFiredMarking().containsAll(cmarking)) {
+				path.pop();
 				i--;
+			}else
+				break;
 		}
 		
 		// here we find the state leading to further execution. so we remove it too
 		if(i>=0)
-			path.remove(i);
+			path.pop();
 		else {
 			// we couldn't find this state,then it must be wrong at the first place
 			System.out.println("Some exception happening");
@@ -332,7 +364,7 @@ public class TokenReplayer {
 		}
 		
 		
-		return null;
+		return stSet;
 	}
 	private  void fire(Petrinet net, Transition t, Marking marking, int tIdx) {
 		// TODO Auto-generated method stub
