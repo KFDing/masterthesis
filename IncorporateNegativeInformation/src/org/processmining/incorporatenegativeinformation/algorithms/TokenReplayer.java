@@ -34,8 +34,12 @@ public class TokenReplayer {
 	Map<XEventClass, List<Transition>> maps;
 	List<XEventClass> trace; 
 	List<ReplayState> path;
-	
+
+	List<List<PetrinetNode>> loops;
 	List<List<PetrinetNode>> sLoops;
+	
+	List<List<ReplayState>> mLoops;
+	List<List<ReplayState>> sfmLoops;
 	
 	public TokenReplayer(Petrinet net, Marking initMarking2, Marking finalMarking2, Map<XEventClass, List<Transition>> maps) {
 		this.net = net;
@@ -44,10 +48,54 @@ public class TokenReplayer {
 		initMarking = initMarking2;
 		path = new ArrayList<>();
 		
-		LoopDetectorTarjan detector = new LoopDetectorTarjan(net, true);
-		sLoops = detector.findAllSimpleCycles();
+		LoopDetectorTarjan detector = new LoopDetectorTarjan(net, false);
+		loops = detector.findAllSimpleCycles();
+		mLoops = addMarking2Loops(loops);
+		
+		
+		sLoops = detector.getSilentLoops(loops);
+		// with places are listed here
+		List<List<PetrinetNode>> sfLoops = detector.getFinalSilentLoops(sLoops, finalMarking);
+		
+		sfmLoops = addMarking2Loops(sfLoops);
+		// after this we should get all the silent transitions loops
 	}
+	// given silent loops
+		public List<List<ReplayState>> getFinalSilentLoops(List<List<ReplayState>> smLoops, Marking finalMarking) {
+			List<List<ReplayState>> sfmLoops = new ArrayList<>();
+	        // to make the loop goes, then the final marking must be in between of places
+	        for(List<ReplayState> smLoop: smLoops) {
+	        	if(isMarkingInLoop(finalMarking, smLoops) {
+	        		sfmLoops.add(smLoop);
+	        	}
+	        	
+	        }
+	        return sfmLoops;
+		}
+		
 	
+	private List<List<ReplayState>> addMarking2Loops(List<List<PetrinetNode>> loopList) {
+		
+		List<List<ReplayState>> result = new ArrayList<>();
+		
+		for(List<PetrinetNode> loop: loopList) {
+        	// add places into list just before the transitions to use it
+			List<ReplayState> loopWithMarking = new ArrayList<>();
+        	
+        	PetrinetNode current;
+        	for(int i=0; i< loop.size(); i++) {
+        		current = loop.get(i);
+        		
+        		Marking assumeMarking = getAssumeMarking((Transition) current);
+        		ReplayState state = new ReplayState((Transition) current, assumeMarking);
+        		loopWithMarking.add(state);
+        		
+        	}
+        	result.add(loopWithMarking);
+		}
+		return result;
+	}
+
 	public void setTrace(List<XEventClass> trace) {
 		this.trace = trace;
 	}
@@ -83,16 +131,10 @@ public class TokenReplayer {
 			if(marking.equals(finalMarking))
 				return true;
 			else {
-				// check if the marking can go to the finalMarking
-				// from one marking to another marking only with silent transitions
-				for(Place p: finalMarking) {
-					if(!traceBackByDFS(null, p, marking, idx))
-						return false;
-				}
-				
-				return true;
+				// check if the marking can go to the finalMarking by silent transitions
+				if(isMarkingInLoop(marking, sfmLoops))
+					return true;
 			}
-			
 		}
 		
 		
@@ -119,26 +161,53 @@ public class TokenReplayer {
 				removeState(t, idx);
 			}
 		}
-		// the situation trace back can be silent transition before?? we need to check it
-		// 
 		
 		for(Transition ct: ctList) {
 			// get the place before it and then have all
 			preEdgeSet = net.getInEdges(ct);
-			for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
-				Place place = (Place) edge.getSource();
-				if(traceBackByDFS(ct, place, marking, idx)) {
-					// fire ct and 
-					fire(net, ct, marking, idx);
-					
-					reachByDFS(idx+1, marking);
-				}	
-			}
+			Marking goalMarking = getAssumeMarking(ct);
+			// after we do this, the marking should change during the way..so we need to infer it
+			Marking cMarking = new Marking(marking);
+			if(traceBackByDFS(ct, goalMarking, cMarking, idx)) {
+				// fire ct and 
+				fire(net, ct, cMarking, idx);
+				// simple the DFS search, and no record
+				reachByDFS(idx+1, cMarking);
+			}	
 		}
 		
 		return false;
 	}
 	
+	// how to get the finalLoop ?? we have final marking... then we
+	
+	
+	
+	private boolean isMarkingInLoop(Marking marking, List<List<ReplayState>> mLoopList) {
+		// TODO Auto-generated method stub
+		for(List<ReplayState> mLoop: mLoopList) {
+			// but it must be a proper places there, deal with situations that 
+			// partial marking fit for a loop. It is good. So we can do it like this
+			
+			for(ReplayState state: mLoop) {
+				Marking tmpMarking = state.getMarking();
+				if(marking.containsAll(tmpMarking))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	public Marking getAssumeMarking(Transition node) {
+		// TODO Auto-generated method stub
+		Marking marking = new Marking();
+		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(node);
+		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
+			Place p = (Place) edge.getSource();
+			marking.add(p);
+		}
+		return marking;
+	}
 	
 	private void removeState(Transition t, int idx) {
 		// this remove the transition because it is not allowed by now until this transition
@@ -163,82 +232,80 @@ public class TokenReplayer {
 		
 	}
 
-	// this is used to trace back from one silent transitions then back to current marking 
-	// check if it is enabled now.. 
-	// a place directly after one silent transition
-	public boolean traceBackByDFS(Transition ct, Place p, Marking marking, int idx) {
-		if(marking.contains(p))
+	/**
+	 * We check if we can go from cmarking to goalMarking by only silent transitions:: 
+	 *   the methods work in the following way:
+	 *      -- if current marking already include it, then return true;
+	 *      else, 
+	 *         check all the silent transitions from the cmarking
+	 *         
+	 * @param ct  the corresponding transitions with current trace
+	 * @param goalMarking : marking to fire ct
+	 * @param cmarking : the current marking in the net
+	 * @param idx : current index of trace
+	 * @return
+	 */
+	public boolean traceBackByDFS(Transition ct, Marking goalMarking, Marking cmarking, int idx) {
+		boolean traceBackOK = false;
+		if(cmarking.contains(goalMarking))
 			return true;
+		// check if this place can be visited twice
+		// when it is in a loop, then possible, else not again!! 
+		// if we have visited cmarking before, now, we shouldn't visit it!!
+		if(!isMarkingInLoop(cmarking, mLoops))
+			return false;
 		
-		// to check if this place is possible after ct?? how to check it while ct is waiting for execution
-		// how to check silent transitions are in a loop... 
+		Set<Transition> etSet = getEnabledTransitions(net, cmarking);
 		
-		// if this place is visited before, return false;; but if it in a loop?? How to test this??
-		// in normal situation, when there is a place with token before a transition, which enables this transition
-		// but it chooses another one, then we will not trace back and return false;
-		// --- any of  places after the transition is in path, it means that it passed this, and can not be back
-		List<Integer> stateIdx = findPlaceInPath(p);
-		boolean needVisit = false;
-		if(stateIdx.size() >0) {
-			for(int i: stateIdx) {
-				// if it is not a loop
-				if(path.get(i).getTransition().equals(ct)) {
-					needVisit = true;
-					break;
-				}
-			}
-			
-			if(!needVisit)
-				return false;
-		}
-		// one transitions can be repeated visited, because it is in a loop; 
-		// else it can't go back, and be marked as visited
-		
-		// but in the loop situation, if we can prove they are the same transitions, then fine
-		
-		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> preEdgeSet = net.getInEdges(p);
-		Collection<PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode>> tmpEdgeSet = null;
-		
-		for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> edge: preEdgeSet) {
-			// it is a place
-			Transition t = (Transition) edge.getSource();
-			// not a silent transition
+		for(Transition t : etSet ) {
 			
 			if(t.isInvisible()) {
 				// check if there is a silent loop here, if it is then stops execute it  
 				if(isSilentInLoop(t))
 					continue;
 				
-				tmpEdgeSet = net.getInEdges(t);
-				boolean traceBackOK = true;
-				for(PetrinetEdge<? extends PetrinetNode, ? extends PetrinetNode> tmpEdge : tmpEdgeSet) {
-					Place place = (Place) tmpEdge.getSource();
-					// this place is before silent transition t, when it can't be traced back
-					// this silent transitions is not ok for this time
-					// terrible is the silent loop.. Nana, how to record them and avoid them?
-					if(!traceBackByDFS(ct, place, marking, idx)) {
-						traceBackOK = false;
-						break;
-					}
-					
-				}
+				// else we fire it and trace it back by using the traceBack methods
+				fire(net, t, cmarking, idx);
 				
-				// else it can be traced back, have a state to check
+				traceBackOK = traceBackOK || traceBackByDFS(ct, goalMarking, new Marking(cmarking), idx);
+				
+				// If we find one way, then we should return true, right?? 
+				// we don't need to check it anymore
 				if(traceBackOK) {
-					// for this silent transition, then we can fire it and put a token in p
-					fire(net, t, marking, idx);
-					// we will stop at one option?? How about the others??
-					// should we record them?? Yes, we shoudl record them or at least not repeat it
 					return true;
 				}
-				
 			}
 		}
-		// after this, we check what??
 		
-		return false;
+		if(traceBackOK) {
+			return true;
+		}else {
+			// remove the state here until the current marking
+			removeState(cmarking);
+		}
+		
+		return traceBackOK;
 	}
 	
+	private void removeState(Marking cmarking) {
+		// TODO Auto-generated method stub
+		int i = path.size() -1;
+		while(i >= 0) {
+			ReplayState state = path.get(i);
+			if(!state.getMarking().equals(cmarking))
+				i--;
+		}
+		
+		// here we find the state leading to further execution. so we remove it too
+		if(i>=0)
+			path.remove(i);
+		else {
+			// we couldn't find this state,then it must be wrong at the first place
+			System.out.println("Some exception happening");
+		}
+	}
+
+
 	private boolean isSilentInLoop(Transition ct) {
 		// give one token at this place p, and it can fire transition t, then we know it
 		for(List<PetrinetNode> loop: sLoops) {
@@ -248,26 +315,6 @@ public class TokenReplayer {
 		return false;
 	}
 
-	private List<Integer> findPlaceInPath(Place p) {
-		// TODO check from backforward, if p is in the marking of path, we output true
-		List<Integer> stateIdx = new ArrayList<>();
-		int i = path.size() -1;
-		while(i >= 0) {
-			ReplayState state = path.get(i);
-			if(state.getMarking().contains(p)) {
-				// we need information of ct..
-				Marking firedMarking = state.getFiredMarking();
-				if(!firedMarking.contains(p)) {
-					// the token in p is consumed and not used by this transition
-					stateIdx.add(i);
-					
-				}
-				
-			}
-			i--;
-		}
-		return stateIdx;
-	}
 
 	// here is also DFS search, but backwards to the marking of current way
 	private Set<Transition> getSilentTransitions(Petrinet net, Transition ct) {

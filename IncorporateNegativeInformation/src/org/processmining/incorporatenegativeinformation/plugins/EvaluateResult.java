@@ -53,7 +53,8 @@ public class EvaluateResult {
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive CC with AcceptingPetriNet", requiredParameterLabels = { 0, 1 })
 	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, AcceptingPetriNet anet) { // Marking 
-		return naiveCheckPNPlugin(context, log, anet.getNet(), anet.getInitialMarking(),anet.getFinalMarkings().iterator().next());
+		anet.getFinalMarkings();
+		return naiveCheckPNPlugin(context, log, anet.getNet(), anet.getInitialMarking(), anet.getFinalMarkings().iterator().next());
 	}
 	
 	

@@ -36,6 +36,7 @@ import org.processmining.models.semantics.petrinet.Marking;
 public class LoopDetectorTarjan {
 	private Set<PetrinetNode> visited;
     private Deque<PetrinetNode> pointStack;
+    private Deque<Marking> markingStack;
     private Deque<PetrinetNode> markedStack;
     private Set<PetrinetNode> markedSet;
     Map<DirectedGraphElement, DirectedGraphElement> map, c2oMap;
@@ -100,6 +101,12 @@ public class LoopDetectorTarjan {
     		markedSet.clear();
     	else
     		markedSet = new HashSet<>();
+    	
+    	if(markingStack!=null)
+    		markingStack.clear();
+    	else
+    		markingStack = new LinkedList<>();
+    	
     }
     
     public List<List<PetrinetNode>> findAllSimpleCycles() {
@@ -111,6 +118,7 @@ public class LoopDetectorTarjan {
         // at first to check the length with self loop nodes and then with the length
         // then increase the length?? But how to find the problems here to test selfloop??
         // detect selfloop for transition
+        /*
         for(PetrinetNode transition : net.getTransitions()) {
         	
         	Marking assumeMarking = getAssumeMarking(net, transition);
@@ -124,11 +132,12 @@ public class LoopDetectorTarjan {
         		result.add(cycle);
         	}
         }
-        
+        */
         for(PetrinetNode transition : net.getTransitions()) {
         	
         	Marking assumeMarking = getAssumeMarking(net, transition);
-        	
+
+    		markingStack.offerFirst(new Marking(assumeMarking));
             findAllSimpleCycles(transition, transition, assumeMarking, result);
             // one limit to the place to go?? We just want simple cycles
             // visited.addAll(assumeMarking);
@@ -136,9 +145,15 @@ public class LoopDetectorTarjan {
             while(!markedStack.isEmpty()) {
                 markedSet.remove(markedStack.pollFirst());
             }
+            markingStack.clear();
+            // pointStack.clear();
         }
-       
         
+        return result;
+    }
+
+    public List<List<PetrinetNode>>  addPlace2Loop(List<List<PetrinetNode>> result) {
+    	List<List<PetrinetNode>> resultWithPlaces = new ArrayList<>();
         
         for(List<PetrinetNode> loop: result) {
         	// add places into list just before the transitions to use it
@@ -164,13 +179,11 @@ public class LoopDetectorTarjan {
         			loopWithPlaces.add(current);
         	}
         	// a little bit leak of memory, but it should be ok
-        	loop.clear();
-        	loop = loopWithPlaces;
+        	resultWithPlaces.add(loopWithPlaces);
         }
-        
-        return result;
+        return resultWithPlaces;
     }
-
+    
     private Marking getAssumeMarking(Petrinet net2, PetrinetNode node) {
 		// TODO Auto-generated method stub
 		Marking marking = new Marking();
@@ -190,6 +203,7 @@ public class LoopDetectorTarjan {
 		// how to reduce it visit one node again... with the repeated nodes?
 		// we need to remove them out!!
 		// can't do it now, So Back writing and correct the thesis
+		// if we found the marking is the same, then we go back and not repeat it
 		
 		pointStack.offerFirst(current);
 		markedSet.add(current);
@@ -198,35 +212,45 @@ public class LoopDetectorTarjan {
 		// get the available transitions next to current transition, only with its available marking
 		fire( (Transition) current, marking);
 		
-		Set<Transition> etSet = getEnabledTransitions(net, marking);
-		
-		for(Transition t: etSet) {
-			if(visited.contains(t) ) 
-				continue;
-				
-			if(t.equals(start)) {
-				hasCycle =true;
-				// here we also
-				pointStack.offerFirst(t);
+		if(markingStack.contains(marking)) {
+			// we have found a cycle here, we pop it up until we meet the original ones?? 
+			// should we pop them up 
+			// because we went deeper here, so we can quit 
+			
+			// markingStack.pollFirst();
+			if(marking.equals(markingStack.peekLast())) {
+				// it means the begin and end nodes should be the same, so we give a cycle here
 				List<PetrinetNode> cycle = new ArrayList<>();
 				Iterator<PetrinetNode> itr = pointStack.descendingIterator();
 				while(itr.hasNext()) {
-					
 					cycle.add(itr.next());
 				}
-				// with transition as a set, it should poll all things with it
-				// pollFirst until we meet the current node
-				// while(!pointStack.pollFirst().equals(t));
-				pointStack.pollFirst();
-				// pointStack.pollFirst();
+				cycle.add(start);
 				result.add(cycle);
-				
-			}else if(!markedSet.contains(t)) {
-				hasCycle = findAllSimpleCycles(start, t, marking, result) || hasCycle;
+				hasCycle = true;
+			}else {
+				pointStack.pollFirst();
+				return false;
 			}
-			
-		}
+		}else
+			markingStack.offerFirst(marking);
 		
+		if(!hasCycle) {
+			
+			Set<Transition> etSet = getEnabledTransitions(net, marking);
+			// and only here we push them into this part
+			for(Transition t: etSet) {
+				if(visited.contains(t) ) 
+					continue;
+				if(!markedSet.contains(t)) {
+					hasCycle = findAllSimpleCycles(start, t, new Marking( marking), result) || hasCycle;
+				}
+				
+			}
+			// we only give peek out the marking when the whole etSet are executed..
+			markingStack.pollFirst();
+		}
+				
 		if(hasCycle) {
 			// if we also put places into it, so here, we need to change it to sth else..
 			while(!markedStack.peekFirst().equals(current)) {
@@ -283,4 +307,26 @@ public class LoopDetectorTarjan {
 		}
 		
 	}
+
+	public List<List<PetrinetNode>> getSilentLoops(List<List<PetrinetNode>> loops) {
+		// TODO get the silent loops without places
+		List<List<PetrinetNode>> sLoops = new ArrayList<>();
+        
+        for(List<PetrinetNode> loop: loops) {
+        	// add places into list just before the transitions to use it
+        	boolean silent = true;
+        	for(PetrinetNode node: loop) {
+        		Transition transition = (Transition) node;
+        		if(!transition.isInvisible()) {
+        			silent = false;
+        			break;
+        		}
+        	}
+        	if(silent)
+        		sLoops.add(loop);
+        	
+        }
+		return sLoops;
+	}
+	
 }
