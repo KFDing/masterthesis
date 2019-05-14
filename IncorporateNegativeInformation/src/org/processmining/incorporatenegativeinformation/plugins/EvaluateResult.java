@@ -2,12 +2,11 @@ package org.processmining.incorporatenegativeinformation.plugins;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import org.deckfour.xes.classification.XEventClass;
-import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.model.XAttributeBoolean;
 import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XTrace;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
@@ -15,15 +14,14 @@ import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginLevel;
 import org.processmining.framework.plugin.annotations.PluginVariant;
-import org.processmining.incorporatenegativeinformation.algorithms.TokenReplayer;
+import org.processmining.incorporatenegativeinformation.algorithms.PNReplayer;
 import org.processmining.incorporatenegativeinformation.connections.BaselineConnection;
 import org.processmining.incorporatenegativeinformation.help.Configuration;
-import org.processmining.incorporatenegativeinformation.help.EventLogUtilities;
 import org.processmining.incorporatenegativeinformation.help.NetUtilities;
-import org.processmining.incorporatenegativeinformation.models.LabeledTraceVariant;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
-import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.semantics.petrinet.Marking;
+import org.processmining.plugins.petrinet.replayresult.PNRepResult;
+import org.processmining.plugins.replayer.replayresult.SyncReplayResult;
 
 /**
  * This class includes the methods to evaluate the result by creating the
@@ -39,6 +37,10 @@ import org.processmining.models.semantics.petrinet.Marking;
 		"Conformance Matrix" }, returnTypes = {
 				ArrayList.class }, parameterLabels = { "Labeled Log", "Petri net", "Marking", "Final Marking" }, userAccessible = true)
 public class EvaluateResult {
+
+	private static final int POS_IDX = 0;
+	private static final int NEG_IDX = 1;
+
 
 	// the first one is to check conformance of Petri net and event log
 	/**
@@ -103,57 +105,68 @@ public class EvaluateResult {
 		// and compare them, if they matches, so we know if they get matched , or not 
 		// we need to build the mapping for transitions and event log classifier\
 
+		if (initmarking == null || initmarking.size() < 1) {
+			System.out.println("set the final marking at first");
+			initmarking = NetUtilities.guessInitialMarking(net);
+		}
+		if(finalMarking == null || finalMarking.size() < 1) {
+			System.out.println("set the final marking at first");
+			return null;
+		}
+		
+		PNReplayer replayer = new PNReplayer(log, net, initmarking, finalMarking);
+		PNRepResult pnRepResult = replayer.replay();
+		
 		ArrayList<Integer> confusion_matrix = new ArrayList<Integer>();
 		for (int i = 0; i < Configuration.CONFUSION_MATRIX_SIZE; i++) {
 			confusion_matrix.add(0);
 		}
 
-		if (initmarking == null || initmarking.size() < 1) {
-			initmarking = NetUtilities.guessInitialMarking(net);
-		}
 		
-		XEventClassifier classifier = null; //  = parameters.getClassifier();  // = net.getAttributeMap().get("XEventClassifier");
-		// main problem is the mapping from event, how should we do ?? 
-		Map<XEventClass, List<Transition>> maps = EventLogUtilities.getEventTransitionMap(log, net, classifier);
-		// the map is one problem, because it allows 1 to m..
-		// should we separate the event log into different variants and check the variants fit or not fit?? 
-		/*
-		 * to achieve it, we need to define one pos number and neg number for
-		 * traceVariant, to store its distribution just extend the already
-		 * existing methods
-		 */
-		TokenReplayer replayer = new TokenReplayer(net, initmarking, finalMarking, maps);
-		// here to set the intial marking and final marking for the replayer.
-		List<LabeledTraceVariant> variants = EventLogUtilities.getLabeledTraceVariants(log, classifier);
-
-		for (LabeledTraceVariant variant : variants) {
-
-			// if (NetUtilities.fitPN(net, marking, variant.getTraceVariant())) {
-			if(replayer.traceFit(variant.getTraceVariant())) {
-				// with pos_outcome
-
+		for (SyncReplayResult variantAlignment : pnRepResult) {
+			// variantAlignment.getTraceIndex(); <- index of the log of the trace that has the variant
+			Set<Integer> allTraceIdxOfThisVariant = variantAlignment.getTraceIndex();
+			int[] nums = getPosNegNum(log, allTraceIdxOfThisVariant);
+			if(replayer.fitTraceVariant(variantAlignment)) {
+				// fit traces
 				confusion_matrix.set(Configuration.ALLOWED_POS_IDX,
-						confusion_matrix.get(Configuration.ALLOWED_POS_IDX) + variant.getPosNum());
+						confusion_matrix.get(Configuration.ALLOWED_POS_IDX) + nums[POS_IDX]);
 
 				confusion_matrix.set(Configuration.ALLOWED_NEG_IDX,
-						confusion_matrix.get(Configuration.ALLOWED_NEG_IDX) + variant.getNegNum());
-				// confusion_matrix[Configuration.ALLOWED_NEG_IDX] ++;
-
-			} else {
-				// with pos_outcome
-				//if(attr !=null && attr.getValue()) {
+						confusion_matrix.get(Configuration.ALLOWED_NEG_IDX) + nums[NEG_IDX]);
+				
+			}else {
+				// unfit traces
 				confusion_matrix.set(Configuration.NOT_ALLOWED_POS_IDX,
-						confusion_matrix.get(Configuration.NOT_ALLOWED_POS_IDX) + variant.getPosNum());
+						confusion_matrix.get(Configuration.NOT_ALLOWED_POS_IDX) + nums[POS_IDX]);
 				// confusion_matrix[Configuration.NOT_ALLOWED_POS_IDX] ++;
 				//}else {
 				confusion_matrix.set(Configuration.NOT_ALLOWED_NEG_IDX,
-						confusion_matrix.get(Configuration.NOT_ALLOWED_NEG_IDX) + variant.getNegNum());
-				// confusion_matrix[Configuration.NOT_ALLOWED_NEG_IDX] ++;
-				//}
+						confusion_matrix.get(Configuration.NOT_ALLOWED_NEG_IDX) + nums[NEG_IDX]);
 			}
-
+			
 		}
+		
 		return confusion_matrix;
+	}
+
+
+
+	private static int[] getPosNegNum(XLog log, Set<Integer> allTraceIdxOfThisVariant) {
+		// TODO Auto-generated method stub
+		int[] nums = new int [2];
+		for(int idx:allTraceIdxOfThisVariant ) {
+			XTrace trace = log.get(idx);
+			
+			XAttributeBoolean attr = (XAttributeBoolean) trace.getAttributes().get(Configuration.POS_LABEL);
+			if (attr == null || attr.getValue()) {
+				nums[POS_IDX]++;
+			}else {
+				nums[NEG_IDX]++;
+			}
+		}
+		
+		return nums;
 	}
 
 }

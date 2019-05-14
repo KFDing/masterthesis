@@ -83,8 +83,9 @@
 
 %% Set the enumearete item
 \RequirePackage[shortlabels]{enumitem}
+%\setlist{nosep, itemsep=0pt, parsep=0pt, before={\parskip=0pt}, after=\vspace{-\docparskip}}%
 %% set the section numbering depth
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{6}
 %% to print out wide table
 %\RequirePackage{lscape}
 

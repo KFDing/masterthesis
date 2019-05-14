@@ -106,10 +106,10 @@ The data set for BPI Challenge 2015 contain 5 event logs which are provided by f
 Firstly, we conduct our experiments on event log called \textbf{BPIC15\_1.xes.xml}. This event log includes 1199 cases and 52217 events. But the event classes for those events are  with the sum of 398. So we preprocess the event log and get a proper subset of data as our user case. 
 
 We filter the raw event log by \textbf{\emph{Filter Log By Simple Heuristic}} in ProM with the following setting. 40 for the start, end  activities and the events between them, at end. We get the event log $D1$. After this, we calculate the throughput time for each trace and add it as a trace attribute \textbf{throughput time}. 
-Then we classify traces according to  \textbf{SUMleges} and  \textbf{throughput time} separately. When our performance goal is to reduce the cost of application, if \textbf{SUMleges} of one trace is over 0.7 of the whole traces, this trace is treated as negative, else as positive. The similar strategy is applied on the attribute \textbf{throughput time}. A trace with \textbf{throughput time} higher than 0.7 of all traces is considered as a negative instance. Following this preprocess, we have event logs in Table \ref{tab:data-from-BPI1} available for our tests. 
-\begin{table}
-	\label{tab:data-from-BPI1}
-	\caption{Test Data from Event Log BPI15-1}
+Then we classify traces according to  \textbf{SUMleges} and  \textbf{throughput time} separately. When our performance goal is to reduce the cost of application, if \textbf{SUMleges} of one trace is over 0.7 of the whole traces, this trace is treated as negative, else as positive. The similar strategy is applied on the attribute \textbf{throughput time}. A trace with \textbf{throughput time} higher than 0.7 of all traces is considered as a negative instance. Following this preprocess, we have event logs in Table \ref{tab:event-log} available for our tests. 
+\begin{table}	
+	\caption{Test event log from real life data BPI15-1}
+	\label{tab:event-log}
 	\begin{tabular}{|l|l|l|l|l|}
 		\hline
 		Data ID & Data Description                                & Traces Num & Events Num & Event Classes \\ \hline
@@ -121,10 +121,31 @@ Then we classify traces according to  \textbf{SUMleges} and  \textbf{throughput 
 		D4.1    & \makecell{ classify on throughput time;  \\ values below 0.7 as positive} & 349        & 6744       & 20             \\ \hline
 		D4.2    & \makecell{classify on throughput time;  \\ values above 0.7 as negative} & 146        & 2811       & 20            \\ \hline
 		D4.3    & union of D4.1 and D4.2                             & 495        & 9596       & 20           \\ \hline
-		
 	\end{tabular}
 \end{table}
-Based on the filtered data, we derive corresponding Petri nets as reference process models. 
+
+Based on the filtered data, we derive corresponding Petri nets as reference process models. The Table \ref{tab:ref-models} lists the models with different setting. \textbf{IM-infrequent} is one variant of Inductive Miner working on event logs with infrequent traces. \textbf{Noise} is set as the threshold to filter out infrequent traces. After mining a reference model, we compare them with  corresponding event logs to get the basis lines for later evaluation.
+% should we explain the data and the model, they are different with old files!!
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+\begin{table}[h]
+	\caption{Generated reference models for test}
+	\label{tab:ref-models}
+	\resizebox{\textwidth}{!}{
+	\begin{tabular}{llll|llllllll}
+		\hline
+		\multirow{2}{*}{\thead{Model\\ ID}} & \multirow{2}{*}{\thead{Used \\Data}} & \multirow{2}{*}{\thead{Setting}}  &  
+		\multirow{2}{*}{\thead{Event\\Class}} & \multicolumn{8}{c}{\thead{CM Evaluation}}                     \\ 
+		\cline{5-12}
+		&                                                                           &                                                                             &                                                                            & TP & FP & TN & FN & recall & precision & accuracy & F1 \\ \hline
+		M1                                                                      & D1                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 20} & 20                                                                         &    &    &    &    &        &           &          &    \\
+		M2                                                                      & D1                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 50} & 20                                                                         &    &    &    &    &        &           &          &    \\
+		M3                                                                      & D2                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 20} & 12                                                                         &    &    &    &    &        &           &          &    \\
+		M4                                                                      & D2                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 50} & 12                                                                         &    &    &    &    &        &           &          &\\   
+		\hline
+	\end{tabular}
+ }
+\end{table}
 
 
 \subsubsection{Test Result}
@@ -168,3 +189,14 @@ Based on the filtered data, we derive corresponding Petri nets as reference proc
 		\end{tabular}}
 	
 	\end{table}
+\subsubsection{Result Analysis}
+Due to the different settings in our method, forces from the reference model, positive, and negative event logs are balanced differently during repair, which results in different process models. 
+
+
+Next we show the tendency of evaluation results on the parameters for the existing model, positive and negative event logs. 
+
+From the Figure \ref{}, with the parameter for the existing model going up, recall goes up while accuracy and precision goes down. The reason behind it is possibly ????.
+
+Figure \ref{} shows that if the parameter for negative event log increases, precision and accuracy go up. By addressing negative force, our techniques tend to block behavior which leads to low performance output. However, if the negative force is over the force from positive event log and the existing model, certain behavior which contributes to positive performance will also be deleted from the models. In contrast, this creates a model with less recall. 
+
+Figure \ref{} displays the tendency with the parameter for positive event log. When the positive parameter rises, the recall increases. Precision and accuracy also increases but with ???.

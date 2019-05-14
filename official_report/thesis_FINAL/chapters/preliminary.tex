@@ -1,113 +1,106 @@
 % we should list the event log definition and petri net definition
 % also the process tree definition
 % For definitions, we capitalize only the first character, others we use camel methods. 
-This chapter introduces the most important concepts and notations that are used in this thesis. Firstly, the event data and process models typically used in process mining are described. Later, details of Inductive Miner techniques which relate to our work are listed.
+This chapter introduces the most important concepts and notations that are used in this thesis. Firstly, the event data and process models typically used in process mining are described. Later, details of Inductive Miner techniques  are listed.
 \section{Event Log}
 % introduce of event and trace , later event log historical business process execution data in information systems
-Business processes in organizations can be reflected by their activities execution. The historical execution data is usually stored as event logs in information systems and can be used by process mining techniques to analyze, understand, and improve the business execution. To specify the event log, we begin with formalizing the various notations\cite{van2016data} .
+Business processes in organizations can be reflected by the execution of related activities. The historical execution data is usually stored as event logs in information systems and can be used by process mining techniques to analyze, understand, and improve the business execution. To specify the event log, we begin with formalizing  various notations \cite{van2016data} .
 \begin{definition}[Event]
-	An event corresponds to one execution of an activity in business execution and written as $e$. An event is characterized by attributes, like a timestamp, activity name, associated costs, etc. The set of all possible events in a process is written as $\mathcal{E}$.
+$\mathcal{A}$ is the universe of activities. An event $e$ for an activity  $a \in \mathcal{A}$ corresponds to one execution of this activity. The event set for a process is a finite set $\mathcal{E}$. 
 \end{definition}
-\begin{definition}[Trace]
-A trace is a finite sequence of events $\sigma \in \mathcal{E}^*$ with conditions that (i)  each event  appears only once in a trace. 
-\[ \forall  1 \leq i,j \leq \vert \sigma \vert,  i \neq j \Rightarrow \sigma (i) \neq \sigma (j) \] 
-(ii) one event can only appear in one trace. 
-\[ \forall e \in \sigma, e \in \sigma\prime \Rightarrow \sigma = \sigma\prime \]  
+An event is characterized by attributes, like a timestamp, activity name, associated costs, etc. The executions of activities in a process are recorded as events. The set of events for a complete process case is a trace. Furthermore, the multiset of traces combines as an event log for the process. 
+
+
+\begin{definition}[Trace And Event Log]
+A trace $\sigma$ is a finite sequence of event, $\sigma \in \mathcal{E}^*$. An event log $L$ is a multiset of traces, $L \in \mathcal{B(\mathcal{E}^*)}$. 
 \end{definition}
-A trace also has a set of attributes, like its unique identifier, the cost. We extend this definition to handle traces with performance output according to certain KPIs. 
-\begin{definition}[Labeled Trace]
-A trace is labeled with respect to certain KPIs, if it has an attribute for the performance output. We call a trace positive, if the value of its performance attribute is positive, else the trace is negative.
-\end{definition}
-\begin{definition}[Event log and labeled Event log]
-An event log $L$ is a set of traces, $L \in \mathcal{B(\mathcal{E}^*)}$. A labeled event log is an event log if all of its traces have an performance attribute according to certain KPIs.
-\end{definition}
+A trace also has a set of attributes, like its unique identifier, the cost. In this thesis, we extend this definition to handle traces with performance output according to certain KPIs. We call a trace labeled when this trace has a positive or negative label according to certain KPIs. Correspondingly, an event log is labeled if all of its traces have labels according to certain KPIs.
 \section{Process Models}
-After gathering an event log from the information system, process mining can discover a process model based on the event log, aims to improve the understanding of the business process. To describe the process, multiple process modeling languages are proposed in the last years, e.g, Petri net, BPMN models, etc. 
+After gathering an event log from the information system, process mining can discover a process model based on the event log. With this process model, the understanding of the business process can be improved. To describe the process, multiple process modeling languages are proposed in the past years, e.g, Petri net, BPMN models, etc. 
 
-Among those model languages, Petri net has been best studied thoroughly. It captures concurrent systems in a compact manner. Process trees are based on a tree structure to organize the event relation and simple to understand in comparison with other models, like BPMN models. In this thesis, we use Petri net and process tree to represent our process.
+Among those model languages, Petri nets have been best studied thoroughly. Petri nets are capable to capture concurrent systems in a compact manner. Process trees are based on a tree structure to organize the event relation and simple to understand in comparison with other models, like BPMN models. In this thesis, Petri nets and process trees are used to represent our process.
 \subsection{Petri Nets}
-Petri nets are bipartite graphs which are built by \textbf{\emph{transitions}} represented by a square and \textbf{\emph{place}} in a circle. \textbf{\emph{Tokens}} in black dots are put in places to express the states of a Petri net. In the following, we define Petri nets in a formal way.
-\begin{definition}[Petri net]
-	A Petri net is a tuple $N=(P,T,F)$ where \\ P and T are disjoint finite set of  places and transitions, respectively, $P \cap T = \emptyset $. \\ F is the set of arcs to connect places and transitions, $F \subseteq (P\times T)\cup (T \times P)$.
-\end{definition}
-Further, we can assign activity labels to transitions in Petri nets to describe the corresponding activities in business process. Usually, transitions with activity labels are seen \emph{observable actions}. To represent that particular transitions are not observable, we reserve label $\tau$ for them and name such transitions \emph{silent or invisible} transitions. A Petri net with labels are called labeled Petri nets and can be formally represented in the following way.
-\begin{definition}[Labeled Petri nets]	
-	Labeled Petri nets are a tuple $N=(P,T,F, \Sigma, \lambda)$, where $\Sigma$ is a set of activity labels, $\lambda$ is a function defined as $\lambda: T \rightarrow \Sigma \cup \tau$. A transition t with $\lambda(t)=\tau$ is a silent or an invisible transition.
-\end{definition}
-To express the dynamic states of Petri nets, we introduce a concept called \textbf{\emph{marking}} and extend the form  $N=(P,T,F)$ and define a marked Petri net. 
-\begin{definition}[Marked Petri nets]
-A marked Petri net is a 4-tuple $N=(P,T,F,M)$ where $M \in mathbb{B(P)}$ is a place multiset called marking, which denotes the number of tokens in places.
-\end{definition}
-% we need to define the firing rules in Petri net. 
-The firing sequence of transitions from Petri net corresponds to business execution in reality. A transition can be fired if it is in an enabled state where all the input places for this transition hold at least one token. After firing the transition, the token in the input places are consumed and new tokens are generated in the output places for this transition. Before we formalize the firing rule, we need several concepts below.
-\begin{definition}[Input and output nodes]
-	For a node $x$ in Petri net $N=(P,T,F)$, its input nodes set is $\bullet x = \{y\vert (y,x)\in F\}$. Its output nodes set is $x\bullet = \{y\vert (x,y)\in F\}$.
-\end{definition}
-\begin{definition}[Firing rule]
-	In a marked Petri net $N={P,T,F,M}$, a transition $t\in T$ is enabled, written as $N[t\rangle$, if and only if $\bullet t \leq M$. After firing t, the marking changes in this way, $M \Rightarrow (M\setminus\bullet t)\cup t\bullet$.
-\end{definition}
-In real life, a subclass of Petri nets known as Workflow nets is often used to model business process.
-\begin{definition}[Workflow nets]
-	A workflow net is a labeled Petri net $N={P,T,F,\lambda}$ with constraints: 
-	\begin{itemize}
-		\itemsep0em 
-		\item P contains a source place $i, \bullet i=\emptyset$.
-		\item P contains one sink place $o, o\bullet =\emptyset$.
-		\item When connecting the sink place to source place by an arc, this net becomes strongly connected.
-	\end{itemize}
-\end{definition}   
-However, not every Workflow net represents a correct process. To perform the business on an enterprise level, we define a minimum correctness criterion, known as soudness\cite{van2006structural}. 
-\begin{definition}[Soundness]
-	A Petri net is sound if and only if it satisfies the following conditions.
-	\begin{itemize}
-		\itemsep0em 
-		\item safeness. Places cannot hold multiple tokens at the same time.
-		\item proper completion. If the sink place is marked, all other places are empty.
-		\item option to complete. It is always possible to reach the final marking just for the sink place.
-		\item no dead part. For any transition there is a path from source to sink place through it. 
-	\end{itemize}
-\end{definition}
-
-An Petri net example is shown in Figure \ref{fig:pn-seq-2}. This Petri net is a workflow net with a token at the source place and satisfy the soundness conditions.  
+Petri nets are bipartite graphs which consists of \textbf{\emph{transitions}} represented by a square and \textbf{\emph{place}} by a circle. \textbf{\emph{Tokens}} in black dots are put in places to express the dynamic states of a Petri net. An Petri net example is shown in Figure \ref{fig:pn-seq-2}. This Petri net is a workflow net with a token at the source place and satisfy the soundness conditions.  
 \begin{figure}[!h]
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/preliminary/PN06_Seq_2_xor_notnested.png}
-		\caption{A Simple Petri net}
+		\includegraphics[width=\linewidth]{figures/preliminary/simple-petrinet.pdf}
+		\caption{A simple Petri net}
 		\label{fig:pn-seq-2}
 	\end{subfigure}%
 	\quad
 	% here change the process tree into the transition system
-	\begin{subfigure}[b]{0.45\textwidth}
+	\begin{subfigure}[b]{0.5\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{figures/preliminary/transition-system.pdf}
 		\caption{A transition system corresponding to Fig \ref{fig:pn-seq-2}}
 		\label{fig:ts-model}
 	\end{subfigure}%
-    \label{fig:pn-ts}
-\end{figure}
+	\label{fig:pn-ts}
+\end{figure}  
+
+In the following, we define Petri nets in a formal way.
+\begin{definition}[Petri net]
+	A Petri net is a tuple $N=(P,T,F)$ where $P \cap T = \emptyset $. F is the set of arcs to connect places and transitions, $F \subseteq (P\times T)\cup (T \times P)$.
+\end{definition}
+Further, we can assign activity labels to transitions in Petri nets to describe the corresponding activities in business process. Usually, transitions with activity labels are seen \emph{observable actions}. To represent particular transitions that are not observable, we reserve label $\tau$ for them and name such transitions \emph{silent or invisible} transitions. A Petri net with labels are called labeled Petri nets and can be formalized in Definition \ref{def:labeled-PN}.
+\begin{definition}[Labeled Petri nets]\label{def:labeled-PN}	
+	Labeled Petri nets are a tuple $N=(P,T,F, \Sigma, \lambda)$, where $\Sigma$ is a set of activity labels, $\lambda$ is a function defined as $\lambda: T \rightarrow \Sigma \cup \tau$. A transition t with $\lambda(t)=\tau$ is a silent or an invisible transition.
+\end{definition}
+To express the dynamic states of Petri nets, we introduce a concept called \textbf{\emph{marking}} and extend the form  $N=(P,T,F)$ and define a marked Petri net. 
+\begin{definition}[Marked Petri nets]
+Marked Petri nets are 4-tuple nets, $N=(P,T,F,M)$ where $M \in \mathbb{B(P)}$ is a place multiset called marking, which denotes the number of tokens in places.
+\end{definition}
+% we need to define the firing rules in Petri net. 
+The firing sequence of transitions from Petri net corresponds to business execution in reality. A transition can be fired if it is in an enabled state where all the input places for this transition hold at least one token. After firing the transition, the token in the input places are consumed and new tokens are generated in the output places for this transition. Before we formalize the firing rule, we need several concepts below.
+\begin{definition}[Input and output nodes]
+	For a node $x$ in Petri net $N=(P,T,F)$, the set of its input nodes is denoted as $\bullet x = \{y\vert (y,x)\in F\}$. The set of its output nodes is denoted as $x\bullet = \{y\vert (x,y)\in F\}$.
+\end{definition}
+\begin{definition}[Firing rule]
+	In a marked Petri net $N=(P,T,F,M)$, a transition $t\in T$ is enabled, written as $N[t\rangle$, if and only if $\bullet t \subseteq M$. After firing t, the marking changes in this way, $M \Rightarrow (M\setminus\bullet t)\cup t\bullet$.
+\end{definition}
+In real life, a subclass of Petri nets known as Workflow nets is often used to model business process.
+\begin{definition}[Workflow nets]
+	A workflow net is a labeled Petri net $N={P,T,F,\lambda}$ with constraints: 
+	\begin{itemize}
+		\itemsep-0.5em 
+		\item P contains a source place denoted as $i$, where $ \bullet i=\emptyset$.
+		\item P contains one sink place denoted as $o$, where $ o\bullet =\emptyset$.
+		\item When connecting the sink place to source place by an arc, this net seen as a graph becomes strongly connected.
+	\end{itemize}
+\end{definition}   
+However, not every Workflow net represents a correct process. To perform the business on an enterprise level, we define a minimum correctness criterion, known as soudness \cite{van2006structural}. 
+\begin{definition}[Soundness]
+	A Petri net is sound if and only if it satisfies the following conditions.
+	\begin{itemize}
+		\itemsep-0.5em 
+		\item Safeness. Places cannot hold multiple tokens at the same time.
+		\item Proper completion. If the sink place is marked, all other places are empty.
+		\item Option to complete. It is always possible to reach the final marking from any reachable marking.
+		\item No dead parts. For any transition, there exists a path from source to sink place through it. 
+	\end{itemize}
+\end{definition}
 \subsection{Transition System}
 %% Here add the definition for transitions system in Process mining
-A transition system is a basic process model. As displayed in Figure \ref{fig:ts-model}, it is composed of \emph{states} and \emph{transitions}. \emph{States} are represented by black circles and include an initial and a final state. The initial state \textbf{s1} in Figure \ref{fig:ts-model} is denoted with an input arc without any label and the final state \textbf{s4} is with an output arc without label. \emph{Transitions}, also called actions, correspond to an activity in the process and connect states as an arc.  
+A transition system is a basic process model. As displayed in Figure \ref{fig:ts-model}, it is composed of \emph{states} and \emph{transitions}. \emph{States} are represented by black circles and include an initial and a final state. The initial state \textbf{s1} in Figure \ref{fig:ts-model} is denoted with an input arc without any label and the final state \textbf{s4} is with an output arc without label. \emph{Transitions}, also called actions, correspond to activities in the processes. They connect states by an arc.  
 \begin{definition}[Transition System]
-	A transition system is a triple $TS=\{S,A,T\}$ where S is the set of states, A is the set of activities, $T \subseteq S\times A\times S $ is the set of transitions, $(s_i, a, s_j) \in T$ is represented as $s_i \xrightarrow{a} s_j$.  
+	A transition system is a triple $TS=(S,A,T)$ where S is the set of states, A is the set of activities, $T \subseteq S\times A\times S $ is the set of transitions, $(s_i, a, s_j) \in T$ is represented as $s_i \xrightarrow{a} s_j$.  
 \end{definition}
-Transition systems are eligible to describe the dynamic behavior and can easily be translated to Petri nets. The example models in Figure \ref{fig:pn-ts} are mapped to each other. There are 5 transitions and four states in the transition system, which corresponds to the transitions and places in Petri net. Transition systems are simple but have difficulty to express concurrency in business process. So in our thesis, we use more expressive models like Petri nets to represent our process mining result.
-
+Transition systems are eligible to describe the dynamic behavior and can easily be translated to Petri nets. The example models in Figure \ref{fig:ts-model} are mapped to each other. There are 5 transitions and four states in the transition system, which correspond to the transitions and places in Petri net. %Transition systems are simple but have difficulty to express concurrency in business process. So in our thesis, we use more expressive models like Petri nets to represent our process mining result.
 \subsection{Process Tree}
-Process tree is a block-structured tree and sound by construction\cite{van2016data}. Also, due to the simplicity to understand, we use it in our thesis and give the formal definition for it.
+Process tree is a tree and is suitable to represent a sound WF-net  by construction according to \cite{van2016data}. Moreover, as block-structured in a tree, process tree is easy to understand and use. Therefore, we introduce it in our thesis.
 \begin{definition}[Process Tree]
 Let $ A \subseteq \mathbb{A} $ be a finite set of activities with silent transition $\tau \notin \mathbb{A}$, $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright\}$ be the set of process tree operators. 
 \begin{itemize}
 \item $Q=a$ is a process tree with $a\in A$, and 
-\item $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ is a process tree with $\oplus \in \bigoplus$, and $Q_i$ is also a process tree, $i \in \mathbb{N}$. 
+\item $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ is a process tree with $\oplus \in \bigoplus$, and $Q_i$ is also a process tree, $ 1 \leq i \leq n$. 
 \end{itemize}
 \end{definition}
 For convenience, given a process tree $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$, we denote Q the parent for $Q_1 , Q_2 ,.. Q_n$, $Q_i$ as one child of Q. For a node in a tree without children, we call it a \textbf{\emph{leave node}}; Else, we call them \textbf{\emph{blocks}}.
 
 
-Process tree operators represent different block relations of each subtree. Their semantics are standardized in \cite{vanderAalst:2016:PMD:2948762, Buijs2012OnTR} and compared with Petri net in Figure \ref{fig:pn_pt_correspondings}\cite{Buijs2012OnTR}. We provide an informal description in the following.
+Process tree operators represent different block relations of each subtree. Their semantics are standardized in  \cite{vanderAalst:2016:PMD:2948762, Buijs2012OnTR} and compared with Petri net in Figure \ref{fig:pn_pt_correspondings} \cite{Buijs2012OnTR}. We provide an informal description in the following.
 \begin{figure}[!h]
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
@@ -151,7 +144,7 @@ Process tree operators represent different block relations of each subtree. Thei
 		\item if $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a loop relation for $\{Q_1,Q_2,..Q_n\}$. $\{Q_2,..Q_n\}$ have an exclusive relation. $Q_1$ executes at first and is triggered again once one subtree of $\{Q_2,..Q_n\}$ executes. For a trace $\sigma$,$\sigma \models Q$, if $ \sigma \models Q_1$ and $\exists Q_i, \sigma \models Q_i \Rightarrow  \sigma \models Q_1$ after $Q_i$.
 	\end{itemize}
 \end{definition}
-According to the corresponding semantic relations,  a process tree can be easily transformed into Petri net. In Figure \ref{fig:pt-seq-2}, it is the process model in process tree which describes the same process as in Figure \ref{fig:pn-seq-2}. 
+According to the corresponding semantic relations,  a process tree can be easily transformed into Petri net. In Figure \ref{fig:IM-split}, it is the process model in process tree which describes the same process as in Figure \ref{fig:pn-seq-2}. 
 
 To describe the execution of  a process tree Q, we need concepts called \textbf{\emph{start nodes}} and \textbf{\emph{end nodes}}. The start nodes represent the firstly executed leaves nodes in Q; Similarly, the end nodes represent the last executed leaves node set in Q. 
 \begin{definition}[Start node and end node set]
@@ -189,19 +182,19 @@ At the start, an event log $L$ is scanned to extract the \emph{directly-follows 
 For example, given an event log \[L_{IM}=\{<a,c,d>^{20},<b,c,e>^{10},<a,c,e>^{20},<b,c,d>^{10}\},\] 
 a is directly followed by b and c, denoted as $a >_L b, a>_L c$; d directly follows b and c, $b>_L d, c>_L d$.
 
-later, those directly-follows relations are combined together to build a directly-follows graph with frequency. According to \cite{van2016data, leemans2013discovering}, formal definitions for the concepts above are given.
+later, those directly-follows relations are combined together to build a directly-follows graph with frequency. According to  \cite{van2016data, leemans2013discovering}, formal definitions for the concepts above are given.
 \begin{definition}[Directly-follows Graph]
- The directly-follows relation $a >_L b$ is satisfied iff \[\exists\sigma \in L, 1 \leq i \leq \vert \sigma \vert , \sigma(i)=a \ and \ \sigma(i+1)=b.\]
+ The directly-follows relation $a >_L b$ is satisfied iff \[\exists\sigma \in L, 1 \leq i < \vert \sigma \vert , \sigma(i)=a \ and \ \sigma(i+1)=b.\]
  A directly-follows graph of an event log $L$ is $G(L) = (A, F , A_{start}, A_{end}) $ where $A$ is the set of activities in L, $ F=\{ (a,b) \in A \times A | a >_L b \} $ is the directly-follows relation set, $A_{start}, A_{end}$ are the set of start and end activities respectively, $A_{start}=\{a\vert \exists \sigma \in L, a=\sigma(1)\}, A_{end}=\{a\vert \exists \sigma \in L, a=\sigma(\vert \sigma\vert)\}$.
 \end{definition}
 What's more, the frequency information of the directly-follows relation is stored to express the relation strength and denoted as cardinality. 
 \begin{definition}[Cardinality in a directly-follows graph]
-Given a directly-follows graph $G(L)=(A, F , A_{start}, A_{end})$ derived from an event log L, the cardinality in G(L) is defined as a function $c: F \rightarrow N$:  
+Given a directly-follows graph $G(L)=(A, F , A_{start}, A_{end})$ derived from an event log L, the cardinality in G(L) is defined respectively on the $F$, $A_{start}$, and $A_{end}$.  
 	\begin{itemize}
-		\itemsep0em
-		\item $c(a,b)=\sum_{\sigma \in L} \{ i\in \{1,2...|\sigma|\} \vert \sigma(i)=\sigma(i+1)\} $ is the frequency for directly-follows relation $a>_L b$. 
-		\item $\forall a \in A_{start}, c(a)=\sum_{\sigma \in L} \{\sigma \vert \sigma(1) = a\}$ is the frequency for a start activity.
-		\item $\forall a \in A_{end}, c(a)=\sum_{\sigma \in L} \{\sigma \vert \sigma(|\sigma|) = a\}$ is the frequency for an end activity.
+		\itemsep-0.5em
+		\item $\forall (a,b)\in F, c(a,b)=\sum_{\sigma \in L} |\{ i\in \{1,2...|\sigma|\} \vert \sigma(i)=\sigma(i+1)\} | $ is the frequency for directly-follows relation $a>_L b$. 
+		\item $\forall a \in A_{start}, c(a)=\sum_{\sigma \in L} |\{\sigma \vert \sigma(1) = a\}|$ is the frequency for a start activity.
+		\item $\forall a \in A_{end}, c(a)=\sum_{\sigma \in L} |\{\sigma \vert \sigma(|\sigma|) = a\}|$ is the frequency for an end activity.
 	\end{itemize}	
 \end{definition}
 According to definitions above, we obtain a directly-follows graph from event log $L_{IM}$ as shown in the Figure \ref{fig:IM-dfg}. Cardinality information is listed on the connections of activities.
@@ -225,8 +218,8 @@ According to definitions above, we obtain a directly-follows graph from event lo
 	\label{fig:IM-demo}
 \end{figure}
 \subsection{Split Log Into Sublogs}
-Based on the directly-follows graph, the Inductive Miner finds the most prominent cut which is applied afterwards to split the event log into smaller sublogs. Cuts compose of \emph{exclusive-choice cut, sequence cut, parallel cut and redo-loop cut} which correspond to the process tree operators $ \{\rightarrow, \times, \land, \circlearrowright \}$. They are selected in the following order. A maximal exclusive-choice cut is firstly tried to split the directly-follows graph; if it is not available, then a maximal sequence cut, a  maximal parallel cut and a redo-loop cut are applied in sequence. Sublogs are created due to this available operator. Meanwhile, this operator is used to build the process tree. The same procedure is applied again on the sublogs until single activities.  
+Based on the directly-follows graph, the Inductive Miner finds the most prominent cut which is applied afterwards to split the event log into smaller sublogs. Corresponding to process tree operators $ \{\rightarrow, \times, \land, \circlearrowright \}$, cuts consist of \emph{exclusive-choice cut, sequence cut, parallel cut and redo-loop cut}. They are selected in the following order. A maximal exclusive-choice cut is firstly tried to split the directly-follows graph; if it is not available, then a maximal sequence cut, a  maximal parallel cut and a redo-loop cut are applied in sequence. As a result, sublogs are generated based on those cuts. Meanwhile, the operators which corresponds to those cuts are used to build the process tree. The same procedure is applied again on the sublogs until single activity set.  
 
-As an example, we apply the splitting on event log $L_{IM}$ and $G(L_{IM})$ illustrated in Figure \ref{fig:IM-split}. Firstly, the $\rightarrow$ cut is applied and divides the whole event log into three sublogs $L_{IM1},L_{IM2},L_{IM3}$. Since $L_{IM1}$ includes only one single activity, so we stop splitting and build a corresponding node in the process tree. Next, $L_{IM2},L_{IM3}$ are split by exclusive choice cuts separately until meeting single activities in $L_{IM4},L_{IM5},L_{IM6},L_{IM7}$.
+As an example, we apply the splitting on event log $L_{IM}$ and $G(L_{IM})$ illustrated in Figure \ref{fig:IM-split}. Firstly, the $\rightarrow$ cut is applied and divides the whole event log into three sublogs $L_{IM1},L_{IM2},L_{IM3}$. Since $L_{IM1}$ includes only one single activity, so we stop splitting and build a corresponding node in the process tree. Next, $L_{IM2},L_{IM3}$ are split by exclusive choice cuts separately until meeting single set in $L_{IM4},L_{IM5},L_{IM6},L_{IM7}$.
 
 Furthermore, a process tree is able to be converted into Petri net. 
