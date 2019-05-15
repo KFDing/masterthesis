@@ -13,29 +13,29 @@
 %%    ++ delete the silent transitions on the model as a post model
 
 %% Put some words here
-This chapter begins with a general framework to repair a reference model by incorporating the negative instances. In subsequent sections, we propose a concrete solution to implement the modules in the framework. 
+This chapter begins with a general framework to repair a reference process model by incorporating the negative instances. A concrete algorithm within the framework is proposed in the subsequent sections. 
 %our repair algorithm to incorporate the negative instances on process enhancement. In the beginning, the architecture of this algorithm is provided to give an overview. Details of main steps are represented in the following order. Firstly, the impact of the existing model, positive and negative instances are balanced in the media of the directly-follow relations. Inductive Miner is then applied to mine process models from those directly-follows relations. Next, we detect and add long-term dependency on the generated process models. Furthermore, the model in Petri net with long-term dependency is  post-processed for the sake of simplicity. 
-\section{General Framework}
+\section{General Framework for Repairing Process Models}
 %% Describe the 
-Figure \ref{fig:framework} shows our proposed framework to repair a process model with negative information. The inputs are a reference process model and an labeled event log. The reference process model can be in multiple types, like Petri net, process tree. Traces in the labeled event log are classified as positive or negative in respect to some KPIs of business processes. The output is a repaired process model with the same type as the reference model.
+Figure \ref{fig:framework} shows our proposed framework to repair a process model with negative information. The inputs are a reference process model and a labeled event log. The reference process model can be in multiple types, e.g. Petri net, process tree. Traces in the labeled event log are classified as positive or negative in respect to some KPIs of business processes. The output is a repaired process model with the same type as the reference model.
 
 The basic idea behind the framework is to unify the impact from the reference model $M$, positive sublog $L^+$ and negative sublog $L^-$ into data models. Those data models are of the same type and denoted as $D^M$, $D^+$ and $D^-$ respectively. Then we consider all impact from models and generate a new data model $D^n$. $D^n$ is later transformed into a process model $M^r$ as the output. Several post-processes are optional to improve the repaired model $M^r$.
 
-After defining a data model to unify the impact and implementing the process modules in the general framework, a solution to repair model which also considers the negative information is able to find. 
+After defining a data model to unify the impact and implementing the process modules in the general framework, a solution which also considers the negative information on model repair is developed. 
 \begin{figure}
 	\includegraphics{figures/algorithm/FD_framework.pdf}
-	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and data models in eclipse shape. Input event log and the reference model are in blue. Output in blue is a repaired model with the same type as the reference model.}
+	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and data models in eclipse shape. Input event log and the reference model are in blue, while the repaired model is in green.}
 	\label{fig:framework}
 \end{figure} 
 \section{Algorithm}
-Given the inputs as shown in the problem scope Figure \ref{fig:scope}, an event log and a Petri net as the reference process model M, we repair the Petri net with actual data in the event log and output the repaired Petri net. 
+Given the inputs, an event log and a Petri net as the reference process model M, our task is to repair the referenced Petri net based on the actual event log with consideration of negative information. 
 
-Based on those input and the condition with output, we give our algorithm to implement the modules to repair the reference Petri net. First of all, we define a proper data model to represent the impact from Petri net M, and the event log L. Then, we list all the modules  and describe our basic ideas to implement them. 
+Based on those scope, the main modules in the framework in Figure \ref{fig:framework}is designed and developed to repair the reference Petri net. First of all, we define a proper data model to represent the impact from Petri net M, and the event log L. Then, we list all the modules  and describe our basic ideas to implement them. 
 % here to point out our input and output
 \subsection{Unified Data Model}
-We choose directly-follows graph as the basis of our unified data model to represent the impact from the reference model and the event log. The reasons are, (1) directly-follows relation for building a directly-follows graph can be obtained from an event log and a reference model;(2) the cardinality of directly-follows graphs can be used to express the impact strength; (3) there exist transformation algorithms to extract a directly-follows graph from an event log and to convert directly-follows graph into process tree or Petri net, which saves our effort.
+We choose the directly-follows graph as the basis of our unified data model to represent the impact from the reference model and the event log. The reasons are, (1) there exist transformation algorithms to extract a directly-follows graph from an event log and to convert directly-follows graph into process tree or Petri net, which saves our effort;(2) the cardinality of directly-follows graphs can be used to express the impact strength.
 
-Although we can derive three directly-follows graphs from the reference model, the positive and negative event logs respectively, their cardinalities are in different level and disable to incorporate with each other. So we introduce a concept called unified cardinality to bring all the impact into the same level, which is the percentage to the sum of total cardinalities with a range [0-1].
+Although we can derive three directly-follows graphs from the reference model, the positive and negative event logs respectively, their cardinalities are in different level and not able to incorporate with each other. So we introduce a concept called unified cardinality to bring all the impact into the same level, which is the percentage to the sum of total cardinalities with a range [0-1].
 % here we already changed the definitions for the unifications..now it became as the percentage of the cardinality to its whole cardinality. No matter negative or positive ones...we can do it, right? 
 \begin{definition}[Unified cardinality] 
 	\label{def:car-unification}
@@ -56,33 +56,33 @@ After fixing the unified data models, in order to repair the reference model, th
 	The event log $L$ is split into an event log $L^+$ with only positive traces and an event log $L^-$with negative traces.
 	\item \emph{Convert event logs into unified directly-follows graphs, $D^+, D^-$}\quad 
 	Two unified directly-follows graphs are generated respectively for the positive instance and negative instances from the event log.
-	\item \emph{Convert process model into unified directly-follows graph $D^M$}\quad 
+	\item \emph{Convert reference model into unified directly-follows graph $D^M$}\quad 
 	\item \emph{Incorporate unified directly-follows graphs} \quad
 	Three unified directly-follows  graphs $D^M, D^+, D^-$ are combined into one single directly-follows graph $D^n$ after balancing their impact.
 	\item \emph{Generate process models from $D^n$} \quad
 	Process models are mined from the repaired data model $D^n$.
-	\item \emph{Post process the process model} \quad
-	Several post-processes on the generated process model are optional to conduct, in order to improve the process model quality according to certain criteria.
+	\item \emph{Post process the repaired model} \quad
+	Several post-processes are optionally applied on the generated process model, in order to improve the process model quality according to certain criteria.
 	%Long-term dependency is detected on the intermediate models and finally added on the Petri net. To simplify the model, the reduction of silent transitions can be applied at the end.
 \end{itemize}
-In those modules, due to the simplicity, we skip the detail for the module \emph{Split event log into positive and negative sublogs}. The details of the concrete algorithms to implement other modules are provided in the subsequent sections.
-\subsection{Convert event logs into unified directly-follows graphs, $D^+, D^-$}
+In those modules,for the simplicity, we skip the details for the module \emph{Split event log into positive and negative sublogs}. The details of the concrete algorithms to implement other modules are provided in the subsequent sections.
+\subsection{Convert Event Logs into Unified Directly-follows Graphs}
 Given an event log, to retrieve its unified directly-follows graph, we need to obtain its directly-follows graph at first. There is an existing procedure \emph{IMLog2Dfg} from \cite{leemans2013discovering}. \emph{IMLog2Dfg} traverses traces in the event log, extracts directly-follows relations of activities, and generates a directly-follows graph based on those relations. 
 
 By applying \emph{IMLog2Dfg} separately on the event logs $L^+$ and $L^-$, we generate two directly-follows graphs $G(L_{pos})$ and $G(L_{neg})$.  In the next step, the cardinalities from those graphs are unified according to Definition \ref{def:car-unification} and become a part of unified data model $D(L_{pos})$ and $D(L_{neg})$
 
-\subsection{Convert process model into unified directly-follows graph $D^M$}
+\subsection{Convert Reference Model into Unified Directly-follows Graph}
 The basic idea behind this convert is to transform a reference process model into a directly-follows graph and then unify this directly-follows graph into $D^M$.
 
 
-To generate a directly-follows graph from a Petri net, we gather the model behaviors which are expressed in a transition system. By checking the transition system, directly-follows relations between activities are extracted and used later to a directly-follows graph for the reference model.
+To generate a directly-follows graph from a Petri net, we investigate the execution order of activities with help of a transition system. % how ti helos
+In a transition system, the set of activities directly before a state have to be executed to reach this state, while the activities after this state are enabled to execute only after reaching this state. This implies the set of the activities before the state is executed before the set after the state. By analyzing the transition system, directly-follows relations between activities are extracted and used later to a directly-follows graph for the reference model.
 
 From the positive and negative event logs, we can get the cardinality for corresponding directly-follows graph to represent the strength of this directly-follows relation. However, when the existing model is transformed into  directly-follows graph $G(L_{ext})$, there is no point to assign cardinality on each edge. So we just set cardinality with 1 for each arc. Based on this cardinality assignment, we attain the unified data model $D^M$ for the reference Petri net.
 
-\subsection{Incorporate unified directly-follows graphs}
-After the unification, impact from existing model, positive and negative instances is in the same level and separately represented in $D^M$,$D^+$, and $D^-$. 
-% explaination why we do Dm + D+ - D-, no need to have this, we can put the filtering step here, I will say..
-To repair a reference model w.r.t. an actual event log with labels based on directly-follows relation, the strategy is that we add directly-follow relations into the repaired data model $D^n$ if the total support from $D^M$ and $D^+$ exceeds the rejection force from $D^-$; else, we reject directly-follows relations into the repaired model $D^n$. In other words, we balance all impact by subtracting the unified cardinality of $D^-$ from the sum of unified cardinality in $D^M$ and$D^+$.
+\subsection{Incorporate Unified Directly-follows Graphs}
+After the unification, the impact from the existing model, the impact from positive and negative instances are in the same level and represented in $D^M$,$D^+$, and $D^-$. 
+The strategy to incorporate those three models is that directly-follow relations are added into the repaired data model $D^n$ if the total support from $D^M$ and $D^+$ exceeds the rejection force from $D^-$. The other directly-follows relations are rejected. Namely, we balance all impact by subtracting the unified cardinality of $D^-$ from the sum of unified cardinality in $D^M$ and$D^+$.
 \begin{definition}[Incorporating method] For any directly-follows relation from $D^M$,$D^+$, and $D^-$, we balance all forces on it in the following way. 
 	\begin{itemize}
 		\item For one directly-follows relation, \[ u^{n}(a,b) =  u^{M}(a,b)+ u^{+}(a,b)  - u^{-}(a,b) \] 
@@ -107,75 +107,36 @@ Given the control weight $w^{M}$,$w^{+}$, and $w^{-} \in [0,1]$, the weighted in
 	\[ u^{n}(a) =  w^{M} * u^{M}(a)+ w^{+} * u^{+}(a)  - w^{-} * u^{-}(a)  \]
 \end{itemize}	
 \end{definition}
-By adjusting the weight of $w^{M}$,$w^{+}$, and $w^{-}$, different focus can be reflected by the model. For example, by setting $w^{M}=0, w^{+}=1,w^{-}=1$, the existing model is ignored in the repair, while  the original model is kept in situation $w^{M}=1, w^{+}=0,w^{-}=0$.
+By adjusting the weights of $w^{M}$,$w^{+}$, and $w^{-}$, different focus can be reflected by the model. For example, by setting $w^{M}=0, w^{+}=1,w^{-}=1$, the existing model is ignored in the repair, while  the original model is kept in situation $w^{M}=1, w^{+}=0,w^{-}=0$.
 
-Next, we filter the directly-follows relation according to its weighted cardinality. If the cardinality over one certain threshold, it indicates a significant support to add this relation into the repaired data model $D^n$. By adding those directly-follows relation, we build a unified directly-follow graph $D^n$ over this threshold t. The algorithm is listed in Algorithm ??. 
-\begin{algorithm}[H]
-	\SetAlgoLined
-	\KwResult{The repaired data model $D^n$}
-	$D^n=(A=\emptyset, F=\emptyset , A_{start}=\emptyset, A_{end}=\emptyset,u=\emptyset)$\;
-	Given a threshold $t \in [0,1]$, 
-	the weighted unified cardinality set from $D^M$,$D^+$, and $D^-$, \quad 
-	$U^{n}:F^{M} \cup F^{+} \cup F^{-} \rightarrow \mathbb{R}$\;
-	\For{Each weighted unified cardinality $u^n(a,b)$}{
-		\If{$u^n(a,b)$ > t}{
-			\If{$u^n$ > 1.0}{
-				$u^n$ = 1.0
-		    }
-	    	$A=A\cup \{a\} \cup\{b\}$ \;
-			$F=F\cup \{(a,b)\}$ \;
-			$u=u\cup \{(a,b) \rightarrow u^{n}\}$;
-		}
-	}
-	\For{Each weighted unified cardinality for the start activity $u^n(a)$}{
-		\If{$u^n(a)$ > t}{
-			\If{$u^n$ > 1.0}{
-				$u^n$ = 1.0
-			}
-		    $A = A\cup\{a\}$\;
-			$A_{start}=A_{start}\cup \{a\} $ \;
-			$u=u\cup \{(a) \rightarrow u^{n}\}$\;
-		}
-	}
-	\For{Each weighted unified cardinality for the end activity $u^n(a)$}{
-		\If{$u^n(a)$ > t}{
-			\If{$u^n$ > 1.0}{
-				$u^n$ = 1.0
-			}
-			$A = A\cup\{a\}$\;
-			$A_{end}=A_{end}\cup \{a\} $ \;
-			$u=u\cup \{(a) \rightarrow u^{n}\}$\;
-		}
-	}
-	\caption{Build data model $D^n$ after incorporating $D^M$,$D^+$, and $D^-$ }
-\end{algorithm}
+Next, we filter the directly-follows relation according to its weighted cardinality. If the cardinality over one certain threshold, it indicates a significant support to add this relation into the repaired data model $D^n$. By adding those directly-follows relation, we build a unified directly-follow graph $D^n$ over this threshold t. 
 % here to explain the building method for the new data model and the way from it?? But should we do it here, or later?? 
 %After getting the weighted unification, we can assign cardinality for the directly-follows graph $G_{new}$ by multiplying weighted unification with the total number of cardinalities of $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$. 
 \subsection{Generate process models from $D^n$}
 % generate dfg from unified one
 % derive models from dfg
-The result from the last step above is a unified directly-follows graph $D^n$ with weighted cardinality. To generate a process model from it, we convert $D^n$ firstly into a general directly-follows graph $G^n$. Analyzing the weighted cardinality, we know all of them are in range [0,1]. We transform the weighted cardinality by multiplying the sum of cardinalities of $G(L^{+})$, $G(L^-)$ and $G(L^{M})$.  
+The result of the last step above is a unified directly-follows graph $D^n$ with weighted cardinality. To generate a process model from it, we convert $D^n$ firstly into a general directly-follows graph $G^n$. Analyzing the weighted cardinality, we transform the weighted cardinality by multiplying the number of traces in labeled event log.
+%the sum of cardinalities of $G(L^{+})$, $G(L^-)$ and $G(L^{M})$.  
 
 
-Later, based on $G^n$, an existing procedure called \emph{Dfg2ProcessTree} is applied to mine process models like process tree and Petri net.  This procedure was introduced with Inductive Miner\cite{leemans2013discovering}. It finds the most prominent split from the set of exclusive choice, sequence, parallelism, and loop splits on  a directly-follows graph.  Afterward, the corresponding operator to the split is used to build a block-structured process model called a process tree. Iteratively, the split sub graphs are passed as inputs for the same procedure until one single activity is reached and no split is available. A process tree is output as the mined process model and can be converted into another process model called Petri net.
+Later, based on $G^n$, an existing procedure called \emph{Dfg2ProcessTree} is applied to mine process models like process tree and Petri net\cite{leemans2013discovering}. It finds the most prominent split from the set of exclusive choice, sequence, parallelism, and loop splits on  a directly-follows graph.  Afterward, the corresponding operator to the split is used to build a block-structured process model called a process tree. Iteratively, the split sub graphs are passed as inputs for the same procedure until one single activity is reached and no split is available. A process tree is output as the mined process model and can be converted into another process model called Petri net.
 %% To write the procedure for it 
-
 \subsection{Post process on the process model}
-Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. To make the generated model preciser, as one post process, we detect the long-term dependency and add it on the process model.  What's more, to simplify the model, we can delete redundant silent transitions and places as another post process.  
+Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. To improve precision of the generated model, we propose one post process to add the long-term dependencies to the model. Additionally, another post process to simplify the model is introduced by deleting redundant silent transitions and places.
 \subsubsection{Add long-term dependency}
 Obviously, long-term dependency relates the structure of choices in process model, such as exclusive choice, loop and or structure. Due to the complexity of or and loop structure, we only deal with the long-term dependency in the exclusive choice structure. 
 
-To analyze the exclusive choice structure, we use process tree as an intermediate process model due to several reasons: (1) easy to extract the exclusive choice structure from process tree, since process tree is block-structured. (2) easy to transform a process tree to a Petri net. 
+The generated process tree mined by Inductive Miner is used as an intermediate process model to detect long-term dependency.  A process tree is  (1) easy to extract the exclusive choice structure, since it is block-structured. (2) easy to transform a process tree to a Petri net as the final model.
 %% Here we need to add the relation of process to the long-term dependency
 
-An exclusive choice structure be represented as \textbf{\emph{xor block}} in a process tree. For the sake for convenience, we name a subtree of an xor block as one \textbf{\emph{xor branch}}, and denote the set of xor blocks B(Q) as and the set of xor branches as BB(Q) for a tree Q.
-For two arbitrary xor branches with long-term dependency, they have to satisfy the conditions: (1) they have a sequential order;(2) they have significant correlation.
+An exclusive choice structure is represented as \textbf{\emph{xor block}} in a process tree. For the sake for convenience, we name a subtree of an xor block as one \textbf{\emph{xor branch}}, and denote the set of xor blocks B(Q) as and the set of xor branches as BB(Q) for a tree Q.
+For two arbitrary xor branches with long-term dependency, they have to satisfy the conditions: (1) they have a sequential order;(2) they always happen together, namely with significant correlation.
 The order of xor branch follows the same rule of node in process tree which is explained in the following.
 \begin{definition}[Order of nodes in process tree]
-	Node $X$ is before node $Y$, written in $X \prec Y$, if $X$ is always executed before $Y$.  In the aspect of process tree structure, $X \prec Y$, if the least common ancestor of $X$ and $Y$ is a sequential node, and $X$ positions before $Y$.
+	Node $X$ is before node $Y$, written in $X \prec Y$, if $X$ is always executed before $Y$.  In the context of process tree structure, $X \prec Y$, if the least common ancestor of $X$ and $Y$ is a sequential node, and $X$ positions before $Y$.
 \end{definition} 
 
-The correlation of xor branches is significant if they always happen together. To define it, several concepts listed below are necessary. 
+To define the correlation of xor branches, several concepts listed below are necessary. 
 \begin{definition}[Xor branch frequency]
 	The frequency for an xor branch $X$ in event log L is the count of traces, $f: X \rightarrow N$.   
 	\[f_{L}(X) = \sum_{\sigma \in L} |\{\sigma \vert \sigma \models X\} |\]

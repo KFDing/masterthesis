@@ -19,18 +19,18 @@
 %%% TOC
 
 \chapter*{Acknowledgments}\addcontentsline{toc}{chapter}{Aknowledgement}
-The acknowledgments and the people to thank go here, don't forget to include your project advice. 
-
+%The acknowledgments and the people to thank go here, don't forget to include your project advice. 
+\input{chapters/acknowledgements.tex}
 
 %\begin{abstract}
 \chapter*{Abstract} \addcontentsline{toc}{chapter}{Abstract}
 \input{chapters/abstract.tex}
 %\end{abstract}
-\iffalse
+%\iffalse
 \tableofcontents
 \listoffigures
 \listoftables
-\fi
+%\fi
 %\setcounter{page}{1}
 \cleardoublepage
 %%% Begin document
@@ -46,23 +46,23 @@ The acknowledgments and the people to thank go here, don't forget to include you
 
 
 
-\chapter{Preliminaries} \label{chap:prelim}\pagenumbering{arabic}
+\chapter{Preliminaries} \label{chap:prelim}%\pagenumbering{arabic}
 \input{chapters/preliminary.tex}
 
-
+\fi
 \chapter{Algorithm} \label{chap:alg}
 \input{chapters/algorithm.tex}
 
-
+\iffalse
 \chapter{Implementation} \label{chap:impl}
 \input{chapters/implementation.tex}
-\fi
+%\fi
 \chapter{Evaluation} \label{chap:eval}
 \input{chapters/evaluation.tex}
 
 \chapter{Conclusion} \label{chap:conclusion}
 \input{chapters/conclusion.tex}
-
+\fi
 %%% add ``References'' section to TOC
 %\phantomsection
 

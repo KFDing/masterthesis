@@ -6,11 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.deckfour.xes.classification.XEventClass;
+import org.deckfour.xes.classification.XEventClassifier;
+import org.deckfour.xes.model.XLog;
+import org.processmining.framework.connections.ConnectionCannotBeObtained;
+import org.processmining.framework.plugin.PluginContext;
+import org.processmining.incorporatenegativeinformation.algorithms.PN2DfgTransform;
+import org.processmining.incorporatenegativeinformation.help.Configuration;
+import org.processmining.incorporatenegativeinformation.help.EventLogUtilities;
 import org.processmining.incorporatenegativeinformation.help.ProcessConfiguration;
+import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.plugins.InductiveMiner.dfgOnly.Dfg;
 import org.processmining.plugins.InductiveMiner.dfgOnly.DfgImpl;
 import org.processmining.plugins.InductiveMiner.dfgOnly.DfgMiningParameters;
+import org.processmining.plugins.InductiveMiner.dfgOnly.log2logInfo.IMLog2IMLogInfoDefault;
 import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.IMdProcessTree;
+import org.processmining.plugins.InductiveMiner.mining.logs.IMLog;
+import org.processmining.plugins.InductiveMiner.mining.logs.IMLogImpl;
 import org.processmining.processtree.ProcessTree;
 
 /**
@@ -49,6 +61,27 @@ public class DfMatrix {
 
 	public long getStandardCardinality() {
 		return standardCardinality;
+	}
+
+	public static DfMatrix createDfMatrix(PluginContext context, XLog log, Petrinet net, Marking marking, XEventClassifier classifier) throws ConnectionCannotBeObtained {
+		Dfg dfg = PN2DfgTransform.transformPN2Dfg(context, net, marking);
+		// int num = XLogInfoFactory.createLogInfo(log).getNumberOfTraces();
+		// PN2DfgTransform.setCardinality(dfg, num);
+		// -- incorporate the negative information and give out the Dfg and Petri net model
+		XLog[] result = EventLogUtilities.splitLog(log, Configuration.POS_LABEL, "true");
+		XLog pos_log = result[0];
+		XLog neg_log = result[1];
+		
+		IMLog IM_poslog = new IMLogImpl(pos_log, classifier, null);
+		Dfg pos_dfg = new IMLog2IMLogInfoDefault().createLogInfo(IM_poslog).getDfg();
+		
+		IMLog IM_neglog = new IMLogImpl(neg_log, classifier, null);
+		Dfg neg_dfg = new IMLog2IMLogInfoDefault().createLogInfo(IM_neglog).getDfg();
+		
+		// get a new dfg, how to get it, new start activity, end activity, and also the direct follow
+		DfMatrix dfMatrix = DfMatrix.createDfMatrix(dfg, pos_dfg, neg_dfg);
+		dfMatrix.setStandardCardinality(pos_log.size() + neg_log.size());
+		return dfMatrix;
 	}
 
 	public static DfMatrix createDfMatrix(Dfg dfg, Dfg pos_dfg, Dfg neg_dfg) {
