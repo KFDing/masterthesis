@@ -132,27 +132,50 @@ Based on the filtered data, we derive corresponding Petri nets as reference proc
 	\caption{Generated reference models for test}
 	\label{tab:ref-models}
 	\resizebox{\textwidth}{!}{
-	\begin{tabular}{llll|llllllll}
+	\begin{tabular}{|llll|lllllllll|}
 		\hline
 		\multirow{2}{*}{\thead{Model\\ ID}} & \multirow{2}{*}{\thead{Used \\Data}} & \multirow{2}{*}{\thead{Setting}}  &  
 		\multirow{2}{*}{\thead{Event\\Class}} & \multicolumn{8}{c}{\thead{CM Evaluation}}                     \\ 
-		\cline{5-12}
-		&                                                                           &                                                                             &                                                                            & TP & FP & TN & FN & recall & precision & accuracy & F1 \\ \hline
-		M1                                                                      & D1                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 20} & 20                                                                         &    &    &    &    &        &           &          &    \\
-		M2                                                                      & D1                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 50} & 20                                                                         &    &    &    &    &        &           &          &    \\
-		M3                                                                      & D2                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 20} & 12                                                                         &    &    &    &    &        &           &          &    \\
-		M4                                                                      & D2                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 50} & 12                                                                         &    &    &    &    &        &           &          &\\   
+		\cline{5-13}
+		&                                                                           &                                                                             &                                                                            &Data & TP & FP & TN & FN & recall & precision & accuracy & F1 \\ \hline
+		M1                                                                      & D1                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 20} & 20                                                                         & D3.3 & 112   & 40   & 106   & 237   & 0.321       &0.737           &   0.440       &   0.447 \\
+		
+		&                                                                      & &                                                                          & D4.3 & 131   &  21  &  128  & 215   & 0.379       & 0.862           & 0.523          & 0.526    \\
+		
+		\hline
+		M2                                                                      & D1                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 50} & 20                                                                         & D3.3 & 106   & 39   &  107  & 243    & 0.304        &  0.731         &0.430          &0.429    \\
+		
+		&                                                                      & &                                                                          & D4.3 & 125   &   20 & 129   &221    &    0.361    & 0.862           & 0.513          &0.509    \\
+		\hline
+		
+		M3                                                                      & D2                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 20} & 12                                                                         &D3.3 &  0  & 0   & 146   & 349   & 0       &NaN           &    0.295      & 0   \\
+		
+		&                                                                      & &                                                                          & D4.3 &  0  & 0   & 149   & 346   & 0       & NaN           &  0.301        &0    \\
+		\hline 
+		
+		M4                                                                      & D2                                                                        & \makecell[l]{IM-infrequent: \\ Noise Setting: 50} & 12                                                                         &D3.3 &  0  &  0  &  146  & 349   & 0       & NaN           &     0.295     & 0\\   
+		&                                                                      & &                                                                          & D4.3 &  0  & 0   & 149   & 346   & 0       & NaN           &  0.301        &0    \\
+		
 		\hline
 	\end{tabular}
  }
 \end{table}
-
+As seen in table above, the reference models don't apply well to the corresponding event logs. So changes on the models are in demand, to reflect better the reality and also to enforce the positive instances and avoid negative instances. 
 
 \subsubsection{Test Result}
 % we don't need to transfer page to landscape view, because we have many rows too.
-	\begin{table}[]
+We conduct experiments in the following types.
+\begin{itemize}
+	\item \textbf{Type 1} Inductive Miner only on the positive event log to discover a model. The default setting with infrequent variant and noise threshold as 20 is chosen. Later, the mined model is checked on the labeled event with positive and negative instances. This method is abbreviated as IM.
+	\item \textbf{Type 2} Repair Model from \cite{fahland2015model} is applied on the positive event log to discover a model. The default setting is chosen. Later, the mined model is checked on the labeled event with positive and negative instances. This method is abbreviated as Fahland, named after the name of main author.
+	\item \textbf{Type 3} The method proposed from our thesis, is applied on the labeled event log with positive and negative instances. Default setting  for the control parameters is 1.0 while the parameters to generate Petri nets from directly-follows graph are set as the same as experiment Type 1.  Later, the repaired model is evaluated on the labeled data. This method is abbreviated as Dfg.
+\end{itemize}
+Those types are applied on event log groups of {D3.1,D3.2,D3.3} and {D4.1,D4.2,D4.3} listed in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The experiment result is shown in the Table \ref{tab:result}. 
+
+	\begin{table}[h]
 		\centering
 		\caption{Test Result on BPI15-M1 data}
+		\label{tab:result}
 		\resizebox{\textwidth}{!}{
 		\begin{tabular}{lll|llllllll|ll}
 			\hline
@@ -161,42 +184,93 @@ Based on the filtered data, we derive corresponding Petri nets as reference proc
 			 &  &     &
 			  \thead{TP}  & \thead{FP} & \thead{TN}  & \thead{FN}  & \thead{recall} & \thead{precision} & \thead{accuracy} & \thead{F1}   & \thead{fitness}           & \thead{precision}           \\
 			  \hline
-			D3.1      & M1              & IM & 137 & 48 & 118 & 289 & 0.32   & 0.74      & 0.43     & 0.45 & ?                 & ?                   \\
-			D3.1      & M1              & Fahland   & 0   & 0  &     &     &        &           &          &      &                   &                     \\
-			D3.3      & M1              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.3      & M1              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.1      & M2              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.1      & M2              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.3      & M2              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.3      & M2              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.1      & M3              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.1      & M3              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.3      & M3              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.3      & M3              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.1      & M4              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.1      & M4              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.3      & M4              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
-			D3.3      & M4              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
-			D4.1      & M1              & IM &     &    &     &     &        &           &          &      &                   &                     \\
-			D4.1      & M1              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
-			D4.3      & M1              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
-			D4.3      & M1              & dfg       &     &    &     &     &        &           &          &      &                   &                     \\
-			D4.1      & M2              & IM  &     &    &     &     &        &           &          &      &                   &                     \\
-			D4.1      & M2              & Fahland   &     &    &     &     &        &           &          &      &                   &                     \\
-			D4.3      & M2              & Dees      &     &    &     &     &        &           &          &      &                   &                     \\
-			D4.3      & M2              & dfg       &     &    &     &     &        &           &          &      &                   &      
-			\\ \hline              
+			D3.1      & M1,M2,M3,M4              & IM & 137 & 48 & 118 & 289 & 0.32   & 0.74      & 0.43     & 0.45 & ?                 & ?                   \\
+			D3.1      & M1              & Fahland   & 343   & 136  &10     &6     &0.983        & 0.716           &   0.713       & 0.829     &        ?           &         ?            \\
+			
+			D3.3      & M1              & dfg       &  124   &  52  &  94   &    225 &   0.355     &     0.705      & 0.44         & 0.472      & ?                   &             ?        \\
+			
+			\hline
+			D3.1      & M2              & Fahland   & 317    & 133   &   13  & 32    &  0.908      &    0.704       & 0.667         &  0.793    &      ?             &     ?                \\
+			
+			D3.3      & M2              & dfg       & 124    &   52 &   94  & 225    &  0.355      &   0.705        &  0.44         &  0.472    &                   &                     \\
+			
+			\hline
+			D3.1      & M3              & Fahland   & 349    & 145   &  1   &  0   &  1.0      &   0.706        &   0.707       &  0.828    &                   &                     \\
+		
+			D3.3      & M3              & dfg       &  0   &   0 &  349   &  146   &  0      &   NaN        &  0.295        &   0   &                   &                     \\
+			\hline
+			
+			D3.1      & M4              & Fahland   &  271   & 107   &  77   &  39   & 0.779       &   0.718        &   0.628       &  0.747    &      ?             &          ?           \\
+			
+			D3.3      & M4              & dfg       &  0   &  0  &   349  &  146   &   0     &      NaN     & 0.295         &    0  &           ?        &    ?                 \\
+		\hline
+			D4.1      & M1              & IM &  131   &  21  & 128    &  215   &    0.379    & 0.862           &   0.523       &    0.526  &           ?        &      ?               \\
+			D4.1      & M1              & Fahland   &  325   &  133  &  16   & 21    &   0.939     &  0.710         &  0.689       & 0.808     &                   &                     \\
+			
+			D4.3      & M1              & dfg       &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534   &                   &                     \\
+			\hline
+			D4.1      & M2              & Fahland   & 325    &  130  & 19    &  21   & 0.939       &    0.714       &  0.695        &  0.811    &                   &                     \\
+		
+			D4.3      & M2              & dfg     &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534   &                   &                     \\
+			\hline
+			D4.1      & M3              & Fahland   & 87    &  29  & 120    &  259   & 0.251       &    0.75       &  0.418        &  0.377    &                   &                     \\
+		
+			D4.3      & M3              & dfg       &  0   &  0  & 346    &  149   &  0      &   NaN        &   0.303       &  0    &                   &   \\ 
+			\hline
+			D4.1      & M4              & Fahland   & 63    &  20  & 129    &  283   & 0.182       &    0.759       &  0.388        &  0.294    &                   &                     \\
+		
+			D4.3      & M4              & dfg       &   0  & 0   &  346   & 149    &   0     &    NaN       &     0.303     &  0    &                   &   \\    
+			 \hline              
 		\end{tabular}}
-	
 	\end{table}
-\subsubsection{Result Analysis}
-Due to the different settings in our method, forces from the reference model, positive, and negative event logs are balanced differently during repair, which results in different process models. 
+
+With the similar measurements, it is observed that the repaired models from \textbf{Type 2} are more complex that Dfg method. One example is given for the tests of M1 on event log D4.1 for \textbf{Type 2} and M1 on event log D4.3. 
+\begin{figure}[htp]
+	\centering
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\includegraphics[width=0.5\linewidth, height=0.7\textheight]{figures/evaluation/PN-result-D5-3-M1-fahland.pdf}
+		\caption{repaired model with techniques in \cite{fahland2015model}}
+		\label{fig:model_fahland}
+	\end{subfigure}%
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\includegraphics[width=0.5\linewidth, height=0.7\textheight]{figures/evaluation/PN-result-D5-3-M1-dfg-1-1-1.pdf}
+		\caption{repaired model with }
+		\label{fig:model_dfg}
+	\end{subfigure}
+	\caption{example for situation 1 where $M_{1.1}$ is repaired by adding subprocess in the form of loops, which results in lower precision compared with the expected model $M_{1.2}$.}
+	\label{fig:model_change_1}
+\end{figure}
 
 
-Next we show the tendency of evaluation results on the parameters for the existing model, positive and negative event logs. 
 
-From the Figure \ref{}, with the parameter for the existing model going up, recall goes up while accuracy and precision goes down. The reason behind it is possibly ????.
+Due to the different settings in our method, forces from the reference model, positive, and negative event logs are balanced differently during repair, which results in different process models. To investigate the effect of those setting on the repaired model, we repeat our experiments on the following setting. 
 
-Figure \ref{} shows that if the parameter for negative event log increases, precision and accuracy go up. By addressing negative force, our techniques tend to block behavior which leads to low performance output. However, if the negative force is over the force from positive event log and the existing model, certain behavior which contributes to positive performance will also be deleted from the models. In contrast, this creates a model with less recall. 
+Each of three control parameters for the existing model, positive and negative instances changes value from 0.0 to 1.0 with step 0.1. With this setting, directly-follows relation is generated. Afterward, the default setting of Inductive Miner Infrequent with noise threshold 20 is used to mine Petri nets from the generated directly-follows graph. 
 
-Figure \ref{} displays the tendency with the parameter for positive event log. When the positive parameter rises, the recall increases. Precision and accuracy also increases but with ???.
+
+So in total, we conduct over thousand experiments to investigate our methods. Based on those results, we draw plots to show the tendency of evaluation results on the parameters for the existing model, positive and negative event logs. 
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-ext-weight-plot.pdf}
+	\caption{result with control parameter for existing model on event log D3.3 and model M3}
+	\label{fig:ext-weight}
+\end{figure} 
+From the Figure \ref{fig:ext-weight}, with the parameter for the existing model going up, recall goes up while accuracy and precision goes down. The reason behind it is possibly ????.
+
+
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-neg-weight-plot.pdf}
+	\caption{result with control parameter for negative instance on event log D3.3 and model M3}
+	\label{fig:neg-weight}
+\end{figure}
+Figure \ref{fig:neg-weight} shows that if the parameter for negative event log increases, precision and accuracy go up. By addressing negative force, our techniques tend to block behavior which leads to low performance output. However, if the negative force is over the force from positive event log and the existing model, certain behavior which contributes to positive performance will also be deleted from the models. In contrast, this creates a model with less recall. 
+
+
+\begin{figure}[h]
+	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-pos-weight-plot.pdf}
+	\caption{result with control parameter for positive instance on event log D3.3 and model M3}
+	\label{fig:pos-weight}
+\end{figure}
+Figure \ref{fig:pos-weight} displays the tendency with the parameter for positive event log. When the positive parameter rises, the recall increases. Precision and accuracy also increases but with ???.

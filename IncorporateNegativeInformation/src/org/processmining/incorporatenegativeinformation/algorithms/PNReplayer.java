@@ -1,6 +1,7 @@
 package org.processmining.incorporatenegativeinformation.algorithms;
 
 import java.util.List;
+import java.util.Set;
 
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.info.XLogInfo;
@@ -31,7 +32,7 @@ public class PNReplayer {
 	Petrinet net;
 	TransEvClassMapping mapping ;
 	CostBasedCompleteParam parameter;
-	public PNReplayer(XLog xlog, Petrinet pnet, Marking initMarking, Marking finalMarking) {
+	public PNReplayer(XLog xlog, Petrinet pnet, Marking initMarking, Set<Marking> finalMarking) {
 		log = xlog;
 		net = pnet;
 		
@@ -62,7 +63,13 @@ public class PNReplayer {
 		parameter.setGUIMode(false);
 		parameter.setCreateConn(false);
 		parameter.setInitialMarking(initMarking);
-		parameter.setFinalMarkings(new Marking[] {finalMarking});
+		Marking[] fMList = new Marking[finalMarking.size()];
+		int i=0;
+		for(Marking fM: finalMarking) {
+			fMList[i] = fM;
+			i++;
+		}
+		parameter.setFinalMarkings(fMList);
 		parameter.setMaxNumOfStates(200000);
 		
 	}
