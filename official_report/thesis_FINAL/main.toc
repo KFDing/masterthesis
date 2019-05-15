@@ -1,19 +1,19 @@
-\contentsline {chapter}{Aknowledgement}{iii}{chapter*.1}
-\contentsline {chapter}{Abstract}{v}{chapter*.2}
-\contentsline {chapter}{\numberline {1}Algorithm}{xiii}{chapter.1}
-\contentsline {section}{\numberline {1.1}General Framework for Repairing Process Models}{xiii}{section.1.1}
-\contentsline {section}{\numberline {1.2}Algorithm}{xiii}{section.1.2}
-\contentsline {subsection}{\numberline {1.2.1}Unified Data Model}{xv}{subsection.1.2.1}
-\contentsline {subsection}{\numberline {1.2.2}Modules List}{xv}{subsection.1.2.2}
-\contentsline {subsection}{\numberline {1.2.3}Convert Event Logs into Unified Directly-follows Graphs}{xvi}{subsection.1.2.3}
-\contentsline {subsection}{\numberline {1.2.4}Convert Reference Model into Unified Directly-follows Graph}{xvi}{subsection.1.2.4}
-\contentsline {subsection}{\numberline {1.2.5}Incorporate Unified Directly-follows Graphs}{xvii}{subsection.1.2.5}
-\contentsline {subsection}{\numberline {1.2.6}Generate process models from $D^n$}{xviii}{subsection.1.2.6}
-\contentsline {subsection}{\numberline {1.2.7}Post process on the process model}{xviii}{subsection.1.2.7}
-\contentsline {subsubsection}{\numberline {1.2.7.1}Add long-term dependency}{xviii}{subsubsection.1.2.7.1}
-\contentsline {subsubsection}{\numberline {1.2.7.2}Cases Analysis}{xix}{subsubsection.1.2.7.2}
-\contentsline {subsubsection}{\numberline {1.2.7.3}Way to express long-term dependency}{xx}{subsubsection.1.2.7.3}
-\contentsline {subsubsection}{\numberline {1.2.7.4}Soundness Analysis}{xxii}{subsubsection.1.2.7.4}
-\contentsline {subsection}{\numberline {1.2.8}Reduce Silent Transitions}{xxiv}{subsection.1.2.8}
-\contentsline {subsection}{\numberline {1.2.9}Concrete Architecture}{xxiv}{subsection.1.2.9}
-\contentsline {chapter}{Bibliography}{xxviii}{chapter*.12}
+\contentsline {chapter}{Aknowledgement}{iii}{chapter*.1}% 
+\contentsline {chapter}{Abstract}{v}{chapter*.2}% 
+\contentsline {chapter}{\numberline {1}Algorithm}{xiii}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}General Framework for Repairing Process Models}{xiii}{section.1.1}% 
+\contentsline {section}{\numberline {1.2}Algorithm}{xiii}{section.1.2}% 
+\contentsline {subsection}{\numberline {1.2.1}Unified Data Model}{xv}{subsection.1.2.1}% 
+\contentsline {subsection}{\numberline {1.2.2}Modules List}{xv}{subsection.1.2.2}% 
+\contentsline {subsection}{\numberline {1.2.3}Convert Event Logs into Unified Directly-follows Graphs}{xvi}{subsection.1.2.3}% 
+\contentsline {subsection}{\numberline {1.2.4}Convert Reference Model into Unified Directly-follows Graph}{xvi}{subsection.1.2.4}% 
+\contentsline {subsection}{\numberline {1.2.5}Incorporate Unified Directly-follows Graphs}{xvi}{subsection.1.2.5}% 
+\contentsline {subsection}{\numberline {1.2.6}Generate process models from $D^n$}{xviii}{subsection.1.2.6}% 
+\contentsline {subsection}{\numberline {1.2.7}Post Procedure on the Process Model}{xviii}{subsection.1.2.7}% 
+\contentsline {subsubsection}{\numberline {1.2.7.1}Add Long-term Dependency}{xviii}{subsubsection.1.2.7.1}% 
+\contentsline {subsubsection}{\numberline {1.2.7.2}Cases Analysis}{xx}{subsubsection.1.2.7.2}% 
+\contentsline {subsubsection}{\numberline {1.2.7.3}Way to Express Long-term Dependency}{xxi}{subsubsection.1.2.7.3}% 
+\contentsline {subsubsection}{\numberline {1.2.7.4}Soundness Analysis}{xxii}{subsubsection.1.2.7.4}% 
+\contentsline {subsection}{\numberline {1.2.8}Reduce Silent Transitions}{xxiv}{subsection.1.2.8}% 
+\contentsline {subsection}{\numberline {1.2.9}Concrete Architecture}{xxiv}{subsection.1.2.9}% 
+\contentsline {chapter}{Bibliography}{xxviii}{chapter*.12}% 

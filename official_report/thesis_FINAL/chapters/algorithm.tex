@@ -121,10 +121,10 @@ The result of the last step above is a unified directly-follows graph $D^n$ with
 
 Later, based on $G^n$, an existing procedure called \emph{Dfg2ProcessTree} is applied to mine process models like process tree and Petri net\cite{leemans2013discovering}. It finds the most prominent split from the set of exclusive choice, sequence, parallelism, and loop splits on  a directly-follows graph.  Afterward, the corresponding operator to the split is used to build a block-structured process model called a process tree. Iteratively, the split sub graphs are passed as inputs for the same procedure until one single activity is reached and no split is available. A process tree is output as the mined process model and can be converted into another process model called Petri net.
 %% To write the procedure for it 
-\subsection{Post process on the process model}
-Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. To improve precision of the generated model, we propose one post process to add the long-term dependencies to the model. Additionally, another post process to simplify the model is introduced by deleting redundant silent transitions and places.
-\subsubsection{Add long-term dependency}
-Obviously, long-term dependency relates the structure of choices in process model, such as exclusive choice, loop and or structure. Due to the complexity of or and loop structure, we only deal with the long-term dependency in the exclusive choice structure. 
+\subsection{Post Procedure on the Process Model}
+Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. To improve precision of the generated model, we propose one post procedure to add the long-term dependencies to the model. Additionally, another post procedure to simplify the model is introduced by deleting redundant silent transitions and places.
+\subsubsection{Add Long-term Dependency}
+Obviously, long-term dependency relates to the structure of choices in process model, such as \textbf{exclusive choice}, \textbf{loop} and \textbf{or structure}. Due to the complexity of handling long-term dependency on \textbf{or} and \textbf{loop structure}, we skip them but focus only on the long-term dependency in \textbf{exclusive choice structure}. 
 
 The generated process tree mined by Inductive Miner is used as an intermediate process model to detect long-term dependency.  A process tree is  (1) easy to extract the exclusive choice structure, since it is block-structured. (2) easy to transform a process tree to a Petri net as the final model.
 %% Here we need to add the relation of process to the long-term dependency
@@ -136,7 +136,19 @@ The order of xor branch follows the same rule of node in process tree which is e
 	Node $X$ is before node $Y$, written in $X \prec Y$, if $X$ is always executed before $Y$.  In the context of process tree structure, $X \prec Y$, if the least common ancestor of $X$ and $Y$ is a sequential node, and $X$ positions before $Y$.
 \end{definition} 
 
+
 To define the correlation of xor branches, several concepts listed below are necessary. 
+\begin{definition}[The execution of a process tree Q]
+	With respect to a trace $\sigma \in L$, a process tree Q is executed in $\sigma$, denoted as $\sigma \models Q$, when
+		\begin{itemize}
+		\item for $Q=(a)$, if $\exists i, 1 \leq i \leq |\sigma| \sigma(i)=a$.
+		\item for $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, if $\forall Q_i, \sigma \models Q_i$ is executed in order.
+		\item for $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  if $\exists Q_i, \sigma \models Q_i$.
+		\item for $Q= \land (Q_1 , Q_2 ,.. Q_n)$, if $\forall Q_i, \sigma \models Q_i$.
+		\item for $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  if $ \sigma \models Q_1$ and $\exists Q_i, \sigma \models Q_i \Rightarrow  \sigma \models Q_1$ after $Q_i$.
+	\end{itemize} 
+\end{definition}
+With the definition above, we can formalize the frequency of xor branch in the event log as below.
 \begin{definition}[Xor branch frequency]
 	The frequency for an xor branch $X$ in event log L is the count of traces, $f: X \rightarrow N$.   
 	\[f_{L}(X) = \sum_{\sigma \in L} |\{\sigma \vert \sigma \models X\} |\]
@@ -152,7 +164,28 @@ The frequency of the coexistence of multiple xor branches in positive and negati
 	\[d(X,Y)=  d^{+}(X, Y) -d^{-}(X, Y)\], where 
 	\[d^{+}(X, Y)= \frac{f_{L^+}(X, Y)}{\sum_{Y^\prime BB(Q), Y^\prime \neq X} f_{L^+}(X, Y^\prime)}, \quad d^{-}(X, Y)= \frac{f_{L^-}(X, Y)}{\sum_{Y^\prime BB(Q), Y^\prime \neq X} f_{L^-}(X, Y^\prime)}\]	
 \end{definition}
-$f_{L^+}(X, *) $ and $f_{L^-}(X, Y)$ are the frequency of the coexistence of $X$ and $Y$, respectively in positive and negative event logs.
+$f_{L^+}(X, Y) $ and $f_{L^-}(X, Y)$ are the frequency of the coexistence of $X$ and $Y$, respectively in positive and negative instances. As an example, given the same model M4 and reviewed here in Figure \ref{fig:pt-lt-demo}, and a labeled event log $L$,
+\begin{align*}
+L_1:= \{  {<A,C,D>}^{10, pos}, {<A,C,E>}^{50,pos}, {<B,C,E>}^{10,pos}, {<B,C,D>}^{40, neg}\}
+\end{align*}
+the frequencies of the coexistence of different xor branches are
+$f_{L^+}(A, D)=10$, $f_{L^+}(A, E)=50$, $f_{L^+}(B, E)=10$, and $f_{L^-}(B, D)=40$. 
+\begin{figure}
+	\centering
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{figures/algorithm/PT06_Seq_2_xor_notnested.png}
+		\caption{The reviewed process tree PT}
+		\label{fig:pt-lt-demo}
+	\end{subfigure}%
+	\quad
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Original.png}
+		\label{fig:pn-lt-demo}
+		\caption{The reviewed Petri net}
+	\end{subfigure}%
+\end{figure} 
 % here we need to define the long-term dependency
 %Based on the concepts above, we give a formal definition for long-term dependency in this thesis. 
 %\begin{definition}[Long-term dependency for xor blocks] We call two xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency, if 
@@ -170,12 +203,7 @@ There are various sorts of long-term dependencies that are able to happen for tw
 \end{definition}
 At the same time, we use $S $ and $T$ to represent the set of xor branches for source and target xor block with long-term dependency.
 Given an Petri net in Figure \ref{fig:seq-2-original}, two xor blocks are contained in the model which allows the following long-term situations.
-\begin{figure}
-	\centering
-	\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Original.png}
-	\label{fig:seq-2-original}
-	\caption{One Petri net with two two xor blocks}
-\end{figure}
+% make it two graphs here, one is the process tree, one is the Petri net.
 \begin{enumerate}
 	\item $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow D, B\rightsquigarrow D\}$. \\
 	$LT_S = \{A,B\}, LT_T=\{D,E\}, \vert LT \vert = \vert S \vert * \vert T \vert  $, which means long-term dependency has all combinations of source and target xor branches. 
@@ -197,7 +225,7 @@ Given an Petri net in Figure \ref{fig:seq-2-original}, two xor blocks are contai
 \end{enumerate}
 In the following, we propose a method to express long-term dependency on Petri net. 
 %% should we write down here to prove the correctness of available situations, or we need to wait??
-\subsubsection{Way to express long-term dependency}
+\subsubsection{Way to Express Long-term Dependency}
 Adding places to Petri net can limit the behavior\cite{bergenthum2007process}, since its output transitions demand a token from it to fire themselves. When there is no token at this place, the transitions are enabled. By injecting extra places on Petri net, it can block negative behaviors which are not expected in the aspect of business performance. 
 
 Long-term dependency limits the available choices to fire transitions after the previous xor branch executes. So to express long-term dependency, our basic idea is to add places to the Petri net model. What's more, because one xor branch can be as a source to multiple long-term dependencies and one xor branch can be as a target to multiple long-term dependencies, silent transitions are also needed to address a long-term dependency explicitly. 

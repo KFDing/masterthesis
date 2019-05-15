@@ -134,14 +134,13 @@ Process tree operators represent different block relations of each subtree. Thei
 	\label{fig:pn_pt_correspondings}
 \end{figure}
 \begin{definition}[Operator Semantics] 
-	The semantics of operators $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright \}$ are,
-	\begin{itemize}
-		\item if $Q=(a)$, the tree only has one leaf node. With respect to a trace $\sigma \in L$, Q is executed in $\sigma$, denoted as $\sigma \models Q$, if $\exists i, 1 \leq i \leq |\sigma| \sigma(i)=a$.
-		\item if $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, the subtrees have a sequential relation and are executed in order of $Q_1,Q_2,..Q_n$. For a trace $\sigma$,$\sigma \models Q$, iff $\forall Q_i, \sigma \models Q_i$ in order.
+	The semantics of operators $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright \}$ are defined firstly in the context of its structure. The semantics with respect to a trace $\sigma$ are also given. 
+		\begin{itemize}
+		\item if $Q=(a)$, the tree only has one leaf node. 
+		\item if $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, the subtrees have a sequential relation and are executed in order of $Q_1,Q_2,..Q_n$. 
 		\item if $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have an exclusive choice relation and only one subtree of $Q_1,Q_2,..Q_n$  can be executed. 
-		For a trace $\sigma$,$\sigma \models Q$, if $\exists Q_i, \sigma \models Q_i$.
-		\item if $Q= \land (Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a parallel relation and $Q_1,Q_2,..Q_n$ they can be executed in parallel. For a trace $\sigma$,$\sigma \models Q$, if $\forall Q_i, \sigma \models Q_i$.
-		\item if $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a loop relation for $\{Q_1,Q_2,..Q_n\}$. $\{Q_2,..Q_n\}$ have an exclusive relation. $Q_1$ executes at first and is triggered again once one subtree of $\{Q_2,..Q_n\}$ executes. For a trace $\sigma$,$\sigma \models Q$, if $ \sigma \models Q_1$ and $\exists Q_i, \sigma \models Q_i \Rightarrow  \sigma \models Q_1$ after $Q_i$.
+		\item if $Q= \land (Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a parallel relation and $Q_1,Q_2,..Q_n$ they can be executed in parallel.
+		\item if $Q= \circlearrowright(Q_1 , Q_2 ,.. Q_n)$,  the subtrees have a loop relation for $\{Q_1,Q_2,..Q_n\}$. $\{Q_2,..Q_n\}$ have an exclusive relation. $Q_1$ executes at first and is triggered again once one subtree of $\{Q_2,..Q_n\}$ executes. 
 	\end{itemize}
 \end{definition}
 According to the corresponding semantic relations,  a process tree can be easily transformed into Petri net. In Figure \ref{fig:IM-split}, it is the process model in process tree which describes the same process as in Figure \ref{fig:pn-seq-2}. 

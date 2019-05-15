@@ -1,5 +1,4 @@
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Model Repair Architecture}}{xiv}{figure.caption.6}
-\contentsline {figure}{\numberline {1.2}{\ignorespaces One Petri net with two two xor blocks\relax }}{xx}{figure.caption.7}
-\contentsline {figure}{\numberline {1.3}{\ignorespaces Model with long-term dependency $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $ \relax }}{xxii}{figure.caption.9}
-\contentsline {figure}{\numberline {1.5}{\ignorespaces Model Repair Architecture}}{xxvi}{figure.caption.11}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Model Repair Architecture}}{xiv}{figure.caption.6}% 
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Model with long-term dependency $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $ \relax }}{xxi}{figure.caption.9}% 
+\contentsline {figure}{\numberline {1.5}{\ignorespaces Model Repair Architecture}}{xxvi}{figure.caption.11}% 
