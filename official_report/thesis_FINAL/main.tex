@@ -36,11 +36,11 @@
 %%% Begin document
 \pagestyle{fancy}
 \pagenumbering{arabic}
-\iffalse
-\chapter{Introduction} \label{chap:intro}\pagenumbering{arabic}
+
+\chapter{Introduction} \label{chap:intro}
 \input{chapters/introduction.tex}
 
-
+\iffalse
 \chapter{Related Work} \label{chap:backgrd}
 \input{chapters/background.tex}
 
@@ -52,11 +52,11 @@
 
 \chapter{Algorithm} \label{chap:alg}
 \input{chapters/algorithm.tex}
-\fi
+%\fi
 
 \chapter{Implementation} \label{chap:impl}
 \input{chapters/implementation.tex}
-%\fi
+\fi
 \chapter{Evaluation} \label{chap:eval}
 \input{chapters/evaluation.tex}
 

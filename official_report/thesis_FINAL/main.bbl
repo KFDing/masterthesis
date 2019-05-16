@@ -5,16 +5,11 @@
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Process Mining~Group()]{ProM}
-Eindhoven Technical University. ©~2010. Process Mining~Group.
-\newblock Prom introduction.
-\newblock URL \url{http://www.promtools.org/doku.php}.
-
-\bibitem[Ding()]{MyPlugin}
-Kefang Ding.
-\newblock Incorporatenegativeinformation.
-\newblock URL
-  \url{http://ais-hudson.win.tue.nl:8080/job/IncorporateNegativeInformation/}.
+\bibitem[Van Der~Aalst(2011)]{van2011process}
+Wil Van Der~Aalst.
+\newblock \emph{Process mining: discovery, conformance and enhancement of
+  business processes}, volume~2.
+\newblock Springer, 2011.
 
 \bibitem[Fahland and van~der Aalst(2012)]{fahland2012repairing}
 Dirk Fahland and Wil~MP van~der Aalst.
@@ -22,15 +17,22 @@ Dirk Fahland and Wil~MP van~der Aalst.
 \newblock In \emph{International Conference on Business Process Management},
   pages 229--245. Springer, 2012.
 
+\bibitem[Ghasemi and Amyot(2019)]{ghasemi2019event}
+Mahdi Ghasemi and Daniel Amyot.
+\newblock From event logs to goals: a systematic literature review of
+  goal-oriented process mining.
+\newblock \emph{Requirements Engineering}, pages 1--27, 2019.
+
+\bibitem[Dees et~al.(2017)Dees, de~Leoni, and Mannhardt]{dees2017enhancing}
+Marcus Dees, Massimiliano de~Leoni, and Felix Mannhardt.
+\newblock Enhancing process models to improve business performance: a
+  methodology and case studies.
+\newblock In \emph{OTM Confederated International Conferences" On the Move to
+  Meaningful Internet Systems"}, pages 232--251. Springer, 2017.
+
 \bibitem[Fahland and van~der Aalst(2015)]{fahland2015model}
 Dirk Fahland and Wil~MP van~der Aalst.
 \newblock Model repair—aligning process models to reality.
 \newblock \emph{Information Systems}, 47:\penalty0 220--243, 2015.
-
-\bibitem[Mannhardt et~al.(2015)Mannhardt, De~Leoni, and
-  Reijers]{mannhardt2015multi}
-Felix Mannhardt, Massimiliano De~Leoni, and Hajo~A Reijers.
-\newblock The multi-perspective process explorer.
-\newblock \emph{BPM (Demos)}, 1418:\penalty0 130--134, 2015.
 
 \end{thebibliography}
