@@ -81,6 +81,10 @@ However, not every Workflow net represents a correct process. To perform the bus
 		\item No dead parts. For any transition, there exists a path from source to sink place through it. 
 	\end{itemize}
 \end{definition}
+
+% should we give definitions about the redundant silent transitions and places here?? 
+% When a Petri net with silent transitions, the model becomes complex to understand. The reduction of silent transitions and places should preserve the  behavior of the Petri net and keep the model sound. 
+
 \subsection{Transition System}
 %% Here add the definition for transitions system in Process mining
 A transition system is a basic process model. As displayed in Figure \ref{fig:ts-model}, it is composed of \emph{states} and \emph{transitions}. \emph{States} are represented by black circles and include an initial and a final state. The initial state \textbf{s1} in Figure \ref{fig:ts-model} is denoted with an input arc without any label and the final state \textbf{s4} is with an output arc without label. \emph{Transitions}, also called actions, correspond to activities in the processes. They connect states by an arc.  

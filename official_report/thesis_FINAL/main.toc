@@ -1,19 +1,23 @@
-\contentsline {chapter}{Aknowledgement}{iii}{chapter*.1}% 
-\contentsline {chapter}{Abstract}{v}{chapter*.2}% 
-\contentsline {chapter}{\numberline {1}Algorithm}{xiii}{chapter.1}% 
-\contentsline {section}{\numberline {1.1}General Framework for Repairing Process Models}{xiii}{section.1.1}% 
-\contentsline {section}{\numberline {1.2}Algorithm}{xiii}{section.1.2}% 
-\contentsline {subsection}{\numberline {1.2.1}Unified Data Model}{xv}{subsection.1.2.1}% 
-\contentsline {subsection}{\numberline {1.2.2}Modules List}{xv}{subsection.1.2.2}% 
-\contentsline {subsection}{\numberline {1.2.3}Convert Event Logs into Unified Directly-follows Graphs}{xvi}{subsection.1.2.3}% 
-\contentsline {subsection}{\numberline {1.2.4}Convert Reference Model into Unified Directly-follows Graph}{xvi}{subsection.1.2.4}% 
-\contentsline {subsection}{\numberline {1.2.5}Incorporate Unified Directly-follows Graphs}{xvi}{subsection.1.2.5}% 
-\contentsline {subsection}{\numberline {1.2.6}Generate process models from $D^n$}{xviii}{subsection.1.2.6}% 
-\contentsline {subsection}{\numberline {1.2.7}Post Procedure on the Process Model}{xviii}{subsection.1.2.7}% 
-\contentsline {subsubsection}{\numberline {1.2.7.1}Add Long-term Dependency}{xviii}{subsubsection.1.2.7.1}% 
-\contentsline {subsubsection}{\numberline {1.2.7.2}Cases Analysis}{xx}{subsubsection.1.2.7.2}% 
-\contentsline {subsubsection}{\numberline {1.2.7.3}Way to Express Long-term Dependency}{xxi}{subsubsection.1.2.7.3}% 
-\contentsline {subsubsection}{\numberline {1.2.7.4}Soundness Analysis}{xxii}{subsubsection.1.2.7.4}% 
-\contentsline {subsection}{\numberline {1.2.8}Reduce Silent Transitions}{xxiv}{subsection.1.2.8}% 
-\contentsline {subsection}{\numberline {1.2.9}Concrete Architecture}{xxiv}{subsection.1.2.9}% 
-\contentsline {chapter}{Bibliography}{xxviii}{chapter*.12}% 
+\contentsline {chapter}{Aknowledgement}{iii}{chapter*.1}
+\contentsline {chapter}{Abstract}{v}{chapter*.2}
+\contentsline {chapter}{\numberline {1}Implementation}{1}{chapter.1}
+\contentsline {section}{\numberline {1.1}Implementation Platforms}{1}{section.1.1}
+\contentsline {subsection}{\numberline {1.1.1}Process Mining Platform -- ProM}{1}{subsection.1.1.1}
+\contentsline {subsection}{\numberline {1.1.2}KNIME}{1}{subsection.1.1.2}
+\contentsline {section}{\numberline {1.2}Generate a Petri net}{1}{section.1.2}
+\contentsline {section}{\numberline {1.3}Post Process to Add Long-term Dependency }{3}{section.1.3}
+\contentsline {section}{\numberline {1.4}Post Process to Reduce Redundant Silent Transitions and Places}{4}{section.1.4}
+\contentsline {section}{\numberline {1.5}Additional Feature to Show Evaluation Result}{4}{section.1.5}
+\contentsline {section}{\numberline {1.6}Integration into KNIME}{5}{section.1.6}
+\contentsline {chapter}{\numberline {2}Evaluation}{7}{chapter.2}
+\contentsline {section}{\numberline {2.1}Evaluation Measurements}{7}{section.2.1}
+\contentsline {section}{\numberline {2.2}Experiment Platforms}{9}{section.2.2}
+\contentsline {subsection}{\numberline {2.2.1}KNIME}{9}{subsection.2.2.1}
+\contentsline {subsection}{\numberline {2.2.2}ProM Evaluation Plugins}{9}{subsection.2.2.2}
+\contentsline {section}{\numberline {2.3}Experiment Results}{9}{section.2.3}
+\contentsline {subsection}{\numberline {2.3.1}Test on Demo Example}{10}{subsection.2.3.1}
+\contentsline {subsection}{\numberline {2.3.2}Test On Real life Data}{10}{subsection.2.3.2}
+\contentsline {subsubsection}{\numberline {2.3.2.1}Data Description}{10}{subsubsection.2.3.2.1}
+\contentsline {subsubsection}{\numberline {2.3.2.2}Test Result}{12}{subsubsection.2.3.2.2}
+\contentsline {chapter}{\numberline {3}Conclusion}{19}{chapter.3}
+\contentsline {chapter}{Bibliography}{21}{chapter*.21}

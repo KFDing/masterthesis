@@ -4,50 +4,50 @@ The top-level auxiliary file: main.aux
 The style file: unsrtnat.bst
 Database file #1: references.bib
 Warning--entry type for "ProM" isn't style-file defined
---line 228 of file references.bib
+--line 247 of file references.bib
 Warning--entry type for "MyPlugin" isn't style-file defined
---line 234 of file references.bib
+--line 253 of file references.bib
 Warning--empty year in ProM
 Warning--empty year in MyPlugin
-You've used 24 entries,
+You've used 5 entries,
             2481 wiz_defined-function locations,
-            694 strings with 8736 characters,
-and the built_in function-call counts, 10561 in all, are:
-= -- 971
-> -- 434
-< -- 22
-+ -- 172
-- -- 124
-* -- 740
-:= -- 1550
-add.period$ -- 83
-call.type$ -- 24
-change.case$ -- 47
-chr.to.int$ -- 24
-cite$ -- 26
-duplicate$ -- 572
-empty$ -- 1012
-format.name$ -- 158
-if$ -- 2368
+            581 strings with 5094 characters,
+and the built_in function-call counts, 1862 in all, are:
+= -- 169
+> -- 65
+< -- 5
++ -- 28
+- -- 18
+* -- 116
+:= -- 279
+add.period$ -- 16
+call.type$ -- 5
+change.case$ -- 10
+chr.to.int$ -- 5
+cite$ -- 7
+duplicate$ -- 97
+empty$ -- 186
+format.name$ -- 27
+if$ -- 407
 int.to.chr$ -- 1
-int.to.str$ -- 25
-missing$ -- 24
-newline$ -- 129
-num.names$ -- 72
-pop$ -- 243
+int.to.str$ -- 6
+missing$ -- 3
+newline$ -- 33
+num.names$ -- 15
+pop$ -- 50
 preamble$ -- 1
-purify$ -- 24
+purify$ -- 5
 quote$ -- 0
-skip$ -- 369
+skip$ -- 72
 stack$ -- 0
-substring$ -- 598
-swap$ -- 149
-text.length$ -- 12
+substring$ -- 92
+swap$ -- 20
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 162
+type$ -- 35
 warning$ -- 2
-while$ -- 97
+while$ -- 17
 width$ -- 0
-write$ -- 326
+write$ -- 69
 (There were 4 warnings)

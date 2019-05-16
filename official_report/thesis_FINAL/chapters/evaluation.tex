@@ -7,7 +7,7 @@
 %   ==> synthetic data
 %   ==> Real life data
 %   ++ Data to test the property
-This chapter presents an experimental evaluation of our repair techniques. At first, we define the evaluation criteria. Next, we briefly introduce the test platforms KNIME and relevant ProM plugins tools. Then, we conduct two kinds of tests. One is based one the demo example proposed in the introduction part, one is on the real life data. 
+In this chapter, we evaluate our repair techniques based on the quality of repaired model. At first, we define the evaluation criteria. Next, we briefly introduce the test platforms KNIME and relevant ProM plugins tools. Then, we conduct two kinds of tests. One is based one the demo example proposed in the introduction part, one is on the real life data. 
 \section{Evaluation Measurements}
 % First talk about our data and our model, then choose the confusion matrix as one measurements. But we should review the traditional measuremtns on process mining before introducing the confusion matrix. but we should also focus on the accuracy part and f-score.
 We evaluate repair techniques based on the quality of repaired models with respect to the given event logs. In process mining, there are four quality dimensions generally used to compare the process models with event logs. 
@@ -63,17 +63,20 @@ KNIME supports automation of test workflow mainly through the following mechanis
 	\item Loop Control Structure. KNIME provides a bunch of control nodes which support re-executing workflow parts.  Nodes representing \emph{Loop Start} appear in pairs with nodes for \emph{Loop Nodes}, the workflow between pairs is executed recursively in a fixed number, or until certain conditions are met. In our test, we repeat our repair techniques for different parameter settings by applying loop structure into KNIME workflow.
 	\item Flow Variables. Flow Variables are used inside a KNIME workflow to parameter node settings dynamically. When it combines with loop control structure, tests with different settings is able to conduct automatically.
 \end{itemize}
-What's more, there are nodes provided by KNIME to optimize the value of some parameters with respect to a cost function. As long as a cost function is provides, KNIME is able to automatically optimize any kind of parameters. 
+Furthermore, there are nodes provided by KNIME to optimize the value of some parameters with respect to a cost function. As long as a cost function is provides, KNIME is able to automatically optimize any kind of parameters. 
+
 \subsection{ProM Evaluation Plugins}
 %Here we discuss the plugins to test other aspects of our methods. 
-Although KNIME offers a powerful approach to conduct experiments, the integration of traditional process mining evaluation plugins into KNIME is out of our capability due to the time limits. To evaluate repaired models with traditional metrics, we use an existing ProM plugin called \textbf{\emph{Multi-perspective Process Explorer}} \cite{mannhardt2015multi}. This plugin accepts  Petri net and an event log as inputs, and gives out fitness, and precision measurements which are based on the traditional alignment conformance checking. 
+Although KNIME offers a powerful approach to conduct experiments, the integration of traditional process mining evaluation plugins into KNIME is out of our capability due to the time limits. To complete the experiments, the following plugins in \footnote{ProM\url{http://www.promtools.org}} are in need. 
+\begin{itemize}
+	\item Model Repair. This plugin is developed on the work in \cite{fahland2012repairing,fahland2015model}. It repairs a Petri net according to an event log.
+	\item PNetReplayer. It checks conformance of the process model in Petri net with an event log.
+\end{itemize}
 \section{Experiment Results}
+We conduct our experiments into two main parts, one is to verify if our method overcomes the limits of current repair algorithms and provides a repaired model like expected. This experiment is based on the synthetic data and models from Introduction chapter. Next, real life data is used to test our method. 
 \subsection{Test on Demo Example}
 In this experiment, we aim to answer the question: Will our repair method overcome shortcomings of current techniques which are shown in the introduction chapter?  
 
-% for situation 1, we can not get the ideal model, the reason is that we can not keep the model like just as it states, we can 
-
-\subsection{Comparison To Other Techniques}
 This section represents some situations where current repair techniques can't handle properly, while our algorithm gives out an improved repaired model. 
 
 \emph{Situation 1}, unfit part!! added subprocess are too much!! Where the addition of subprocesses and loops are allowed, while the structure changes are impossible, 
@@ -104,10 +107,7 @@ The data set for BPI Challenge 2015 contain 5 event logs which are provided by f
 	So, this data set gives us a basic process but also allows deviations of the actual event logs and predefined process, which builds the environment for repair techniques.
 \end{itemize}
 Firstly, we conduct our experiments on event log called \textbf{BPIC15\_1.xes.xml}. This event log includes 1199 cases and 52217 events. But the event classes for those events are  with the sum of 398. So we preprocess the event log and get a proper subset of data as our user case. 
-
-We filter the raw event log by \textbf{\emph{Filter Log By Simple Heuristic}} in ProM with the following setting. 40 for the start, end  activities and the events between them, at end. We get the event log $D1$. After this, we calculate the throughput time for each trace and add it as a trace attribute \textbf{throughput time}. 
-Then we classify traces according to  \textbf{SUMleges} and  \textbf{throughput time} separately. When our performance goal is to reduce the cost of application, if \textbf{SUMleges} of one trace is over 0.7 of the whole traces, this trace is treated as negative, else as positive. The similar strategy is applied on the attribute \textbf{throughput time}. A trace with \textbf{throughput time} higher than 0.7 of all traces is considered as a negative instance. Following this preprocess, we have event logs in Table \ref{tab:event-log} available for our tests. 
-\begin{table}	
+\begin{table}[h]	
 	\caption{Test event log from real life data BPI15-1}
 	\label{tab:event-log}
 	\begin{tabular}{|l|l|l|l|l|}
@@ -124,11 +124,11 @@ Then we classify traces according to  \textbf{SUMleges} and  \textbf{throughput 
 	\end{tabular}
 \end{table}
 
-Based on the filtered data, we derive corresponding Petri nets as reference process models. The Table \ref{tab:ref-models} lists the models with different setting. \textbf{IM-infrequent} is one variant of Inductive Miner working on event logs with infrequent traces. \textbf{Noise} is set as the threshold to filter out infrequent traces. After mining a reference model, we compare them with  corresponding event logs to get the basis lines for later evaluation.
-% should we explain the data and the model, they are different with old files!!
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
-\begin{table}[h]
+We filter the raw event log by \textbf{\emph{Filter Log By Simple Heuristic}} in ProM with the following setting. 40 for the start, end  activities and the events between them, at end. We get the event log $D1$. After this, we calculate the throughput time for each trace and add it as a trace attribute \textbf{throughput time}. 
+Then we classify traces according to  \textbf{SUMleges} and  \textbf{throughput time} separately. When our performance goal is to reduce the cost of application, if \textbf{SUMleges} of one trace is over 0.7 of the whole traces, this trace is treated as negative, else as positive. The similar strategy is applied on the attribute \textbf{throughput time}. A trace with \textbf{throughput time} higher than 0.7 of all traces is considered as a negative instance. Following this preprocess, we have event logs in Table \ref{tab:event-log} available for our tests. 
+
+
+\begin{table}[htp]
 	\caption{Generated reference models for test}
 	\label{tab:ref-models}
 	\resizebox{\textwidth}{!}{
@@ -160,8 +160,12 @@ Based on the filtered data, we derive corresponding Petri nets as reference proc
 	\end{tabular}
  }
 \end{table}
-As seen in table above, the reference models don't apply well to the corresponding event logs. So changes on the models are in demand, to reflect better the reality and also to enforce the positive instances and avoid negative instances. 
+Based on the filtered data, we derive corresponding Petri nets as reference process models. The Table \ref{tab:ref-models} lists the models with different setting. \textbf{IM-infrequent} is one variant of Inductive Miner working on event logs with infrequent traces. \textbf{Noise} is set as the threshold to filter out infrequent traces. After mining a reference model, we compare them with  corresponding event logs to get the basis lines for later evaluation.
+% should we explain the data and the model, they are different with old files!!
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
 
+As seen in table above, the reference models don't apply well to the corresponding event logs. So changes on the models are in demand, to reflect better the reality and also to enforce the positive instances and avoid negative instances. 
 \subsubsection{Test Result}
 % we don't need to transfer page to landscape view, because we have many rows too.
 We conduct experiments in the following types.
@@ -170,62 +174,62 @@ We conduct experiments in the following types.
 	\item \textbf{Type 2} Repair Model from \cite{fahland2015model} is applied on the positive event log to discover a model. The default setting is chosen. Later, the mined model is checked on the labeled event with positive and negative instances. This method is abbreviated as Fahland, named after the name of main author.
 	\item \textbf{Type 3} The method proposed from our thesis, is applied on the labeled event log with positive and negative instances. Default setting  for the control parameters is 1.0 while the parameters to generate Petri nets from directly-follows graph are set as the same as experiment Type 1.  Later, the repaired model is evaluated on the labeled data. This method is abbreviated as Dfg.
 \end{itemize}
-Those types are applied on event log groups of {D3.1,D3.2,D3.3} and {D4.1,D4.2,D4.3} listed in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The experiment result is shown in the Table \ref{tab:result}. 
-
-	\begin{table}[h]
+Those types are applied on pairs of event log groups of {D3.1,D3.2,D3.3} and {D4.1,D4.2,D4.3} in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The experiment result is shown in the Table \ref{tab:result}. 
+\begin{table}[h]
 		\centering
 		\caption{Test Result on BPI15-M1 data}
 		\label{tab:result}
 		\resizebox{\textwidth}{!}{
-		\begin{tabular}{lll|llllllll|ll}
+		\begin{tabular}{lll|llllllll|}
 			\hline
-			\multirow{2}{*}{\thead{event \\ log}} & \multirow{2}{*}{\thead{reference \\ model} }                &    \multirow{2}{*}{\thead{method}}       & \multicolumn{8}{l}{ \thead{confusion matrix metrics}}                              & \multicolumn{2}{|l}{\thead{traditional metrics}} \\
-			\cline{4-13}
+			\multirow{2}{*}{\thead{event \\ log}} & \multirow{2}{*}{\thead{reference \\ model} }                &    \multirow{2}{*}{\thead{method}}       & \multicolumn{8}{l}{ \thead{confusion matrix metrics}}                                \\
+			\cline{4-10}
 			 &  &     &
-			  \thead{TP}  & \thead{FP} & \thead{TN}  & \thead{FN}  & \thead{recall} & \thead{precision} & \thead{accuracy} & \thead{F1}   & \thead{fitness}           & \thead{precision}           \\
+			  \thead{TP}  & \thead{FP} & \thead{TN}  & \thead{FN}  & \thead{recall} & \thead{precision} & \thead{accuracy} & \thead{F1}             \\
 			  \hline
-			D3.1      & M1,M2,M3,M4              & IM & 137 & 48 & 118 & 289 & 0.32   & 0.74      & 0.43     & 0.45 & ?                 & ?                   \\
-			D3.1      & M1              & Fahland   & 343   & 136  &10     &6     &0.983        & 0.716           &   0.713       & 0.829     &        ?           &         ?            \\
+			D3.1      & M1,M2,M3,M4              & IM & 137 & 48 & 118 & 289 & 0.32   & 0.74      & 0.43     & 0.45                \\
+			D3.1      & M1              & Fahland   & 343   & 136  &10     &6     &0.983        & 0.716           &   0.713       & 0.829         \\
 			
-			D3.3      & M1              & dfg       &  124   &  52  &  94   &    225 &   0.355     &     0.705      & 0.44         & 0.472      & ?                   &             ?        \\
-			
-			\hline
-			D3.1      & M2              & Fahland   & 317    & 133   &   13  & 32    &  0.908      &    0.704       & 0.667         &  0.793    &      ?             &     ?                \\
-			
-			D3.3      & M2              & dfg       & 124    &   52 &   94  & 225    &  0.355      &   0.705        &  0.44         &  0.472    &                   &                     \\
+			D3.3      & M1              & dfg       &  124   &  52  &  94   &    225 &   0.355     &     0.705      & 0.44         & 0.472            \\
 			
 			\hline
-			D3.1      & M3              & Fahland   & 349    & 145   &  1   &  0   &  1.0      &   0.706        &   0.707       &  0.828    &                   &                     \\
+			D3.1      & M2              & Fahland   & 317    & 133   &   13  & 32    &  0.908      &    0.704       & 0.667         &  0.793   \\
+			
+			D3.3      & M2              & dfg       & 124    &   52 &   94  & 225    &  0.355      &   0.705        &  0.44         &  0.472      \\
+			
+			\hline
+			D3.1      & M3              & Fahland   & 349    & 145   &  1   &  0   &  1.0      &   0.706        &   0.707       &  0.828    \\
 		
-			D3.3      & M3              & dfg       &  0   &   0 &  349   &  146   &  0      &   NaN        &  0.295        &   0   &                   &                     \\
+			D3.3      & M3              & dfg       &  0   &   0 &  349   &  146   &  0      &   NaN        &  0.295        &   0      \\
 			\hline
 			
-			D3.1      & M4              & Fahland   &  271   & 107   &  77   &  39   & 0.779       &   0.718        &   0.628       &  0.747    &      ?             &          ?           \\
+			D3.1      & M4              & Fahland   &  271   & 107   &  77   &  39   & 0.779       &   0.718        &   0.628       &  0.747         \\
 			
-			D3.3      & M4              & dfg       &  0   &  0  &   349  &  146   &   0     &      NaN     & 0.295         &    0  &           ?        &    ?                 \\
+			D3.3      & M4              & dfg       &  0   &  0  &   349  &  146   &   0     &      NaN     & 0.295         &    0   \\
 		\hline
-			D4.1      & M1              & IM &  131   &  21  & 128    &  215   &    0.379    & 0.862           &   0.523       &    0.526  &           ?        &      ?               \\
-			D4.1      & M1              & Fahland   &  325   &  133  &  16   & 21    &   0.939     &  0.710         &  0.689       & 0.808     &                   &                     \\
+			D4.1      & M1              & IM &  131   &  21  & 128    &  215   &    0.379    & 0.862           &   0.523       &    0.526     \\
+			D4.1      & M1              & Fahland   &  325   &  133  &  16   & 21    &   0.939     &  0.710         &  0.689       & 0.808                \\
 			
-			D4.3      & M1              & dfg       &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534   &                   &                     \\
+			D4.3      & M1              & dfg       &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534                   \\
 			\hline
-			D4.1      & M2              & Fahland   & 325    &  130  & 19    &  21   & 0.939       &    0.714       &  0.695        &  0.811    &                   &                     \\
+			D4.1      & M2              & Fahland   & 325    &  130  & 19    &  21   & 0.939       &    0.714       &  0.695        &  0.811                \\
 		
-			D4.3      & M2              & dfg     &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534   &                   &                     \\
+			D4.3      & M2              & dfg     &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534              \\
 			\hline
-			D4.1      & M3              & Fahland   & 87    &  29  & 120    &  259   & 0.251       &    0.75       &  0.418        &  0.377    &                   &                     \\
+			D4.1      & M3              & Fahland   & 87    &  29  & 120    &  259   & 0.251       &    0.75       &  0.418        &  0.377                    \\
 		
-			D4.3      & M3              & dfg       &  0   &  0  & 346    &  149   &  0      &   NaN        &   0.303       &  0    &                   &   \\ 
+			D4.3      & M3              & dfg       &  0   &  0  & 346    &  149   &  0      &   NaN        &   0.303       &  0       \\ 
 			\hline
-			D4.1      & M4              & Fahland   & 63    &  20  & 129    &  283   & 0.182       &    0.759       &  0.388        &  0.294    &                   &                     \\
+			D4.1      & M4              & Fahland   & 63    &  20  & 129    &  283   & 0.182       &    0.759       &  0.388        &  0.294                 \\
 		
-			D4.3      & M4              & dfg       &   0  & 0   &  346   & 149    &   0     &    NaN       &     0.303     &  0    &                   &   \\    
+			D4.3      & M4              & dfg       &   0  & 0   &  346   & 149    &   0     &    NaN       &     0.303     &  0      \\    
 			 \hline              
 		\end{tabular}}
 	\end{table}
 
+
 With the similar measurements, it is observed that the repaired models from \textbf{Type 2} are more complex that Dfg method. One example is given for the tests of M1 on event log D4.1 for \textbf{Type 2} and M1 on event log D4.3. 
-\begin{figure}[htp]
+\begin{figure}[h]
 	\centering
 	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
@@ -252,7 +256,7 @@ Each of three control parameters for the existing model, positive and negative i
 
 So in total, we conduct over thousand experiments to investigate our methods. Based on those results, we draw plots to show the tendency of evaluation results on the parameters for the existing model, positive and negative event logs. 
 
-\begin{figure}
+\begin{figure}[h]
 	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-ext-weight-plot.pdf}
 	\caption{result with control parameter for existing model on event log D3.3 and model M3}
 	\label{fig:ext-weight}

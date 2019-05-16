@@ -67,7 +67,7 @@ After fixing the unified data models, in order to repair the reference model, th
 \end{itemize}
 In those modules,for the simplicity, we skip the details for the module \emph{Split event log into positive and negative sublogs}. The details of the concrete algorithms to implement other modules are provided in the subsequent sections.
 \subsection{Convert Event Logs into Unified Directly-follows Graphs}
-Given an event log, to retrieve its unified directly-follows graph, we need to obtain its directly-follows graph at first. There is an existing procedure \emph{IMLog2Dfg} from \cite{leemans2013discovering}. \emph{IMLog2Dfg} traverses traces in the event log, extracts directly-follows relations of activities, and generates a directly-follows graph based on those relations. 
+Given an event log, to retrieve its unified directly-follows graph, we need to obtain its directly-follows graph at first. There is an existing procedure \emph{IMLog2Dfg} from  \cite{leemans2013discovering}. \emph{IMLog2Dfg} traverses traces in the event log, extracts directly-follows relations of activities, and generates a directly-follows graph based on those relations. 
 
 By applying \emph{IMLog2Dfg} separately on the event logs $L^+$ and $L^-$, we generate two directly-follows graphs $G(L_{pos})$ and $G(L_{neg})$.  In the next step, the cardinalities from those graphs are unified according to Definition \ref{def:car-unification} and become a part of unified data model $D(L_{pos})$ and $D(L_{neg})$
 
@@ -112,25 +112,29 @@ By adjusting the weights of $w^{M}$,$w^{+}$, and $w^{-}$, different focus can be
 Next, we filter the directly-follows relation according to its weighted cardinality. If the cardinality over one certain threshold, it indicates a significant support to add this relation into the repaired data model $D^n$. By adding those directly-follows relation, we build a unified directly-follow graph $D^n$ over this threshold t. 
 % here to explain the building method for the new data model and the way from it?? But should we do it here, or later?? 
 %After getting the weighted unification, we can assign cardinality for the directly-follows graph $G_{new}$ by multiplying weighted unification with the total number of cardinalities of $G(L_{pos})$, $G(L_{neg})$ and $G(L_{ext})$. 
-\subsection{Generate process models from $D^n$}
+\subsection{Generate Process Models from $D^n$}
 % generate dfg from unified one
 % derive models from dfg
 The result of the last step above is a unified directly-follows graph $D^n$ with weighted cardinality. To generate a process model from it, we convert $D^n$ firstly into a general directly-follows graph $G^n$. Analyzing the weighted cardinality, we transform the weighted cardinality by multiplying the number of traces in labeled event log.
 %the sum of cardinalities of $G(L^{+})$, $G(L^-)$ and $G(L^{M})$.  
 
 
-Later, based on $G^n$, an existing procedure called \emph{Dfg2ProcessTree} is applied to mine process models like process tree and Petri net\cite{leemans2013discovering}. It finds the most prominent split from the set of exclusive choice, sequence, parallelism, and loop splits on  a directly-follows graph.  Afterward, the corresponding operator to the split is used to build a block-structured process model called a process tree. Iteratively, the split sub graphs are passed as inputs for the same procedure until one single activity is reached and no split is available. A process tree is output as the mined process model and can be converted into another process model called Petri net.
+Later, based on $G^n$, an existing procedure called \emph{Dfg2ProcessTree} is applied to mine process models like process tree and Petri net \cite{leemans2013discovering}. It finds the most prominent split from the set of exclusive choice, sequence, parallelism, and loop splits on  a directly-follows graph.  Afterward, the corresponding operator to the split is used to build a block-structured process model called a process tree. Iteratively, the split sub graphs are passed as inputs for the same procedure until one single activity is reached and no split is available. A process tree is output as the mined process model and can be converted into another process model called Petri net.
 %% To write the procedure for it 
 \subsection{Post Procedure on the Process Model}
 Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. To improve precision of the generated model, we propose one post procedure to add the long-term dependencies to the model. Additionally, another post procedure to simplify the model is introduced by deleting redundant silent transitions and places.
 \subsubsection{Add Long-term Dependency}
-Obviously, long-term dependency relates to the structure of choices in process model, such as \textbf{exclusive choice}, \textbf{loop} and \textbf{or structure}. Due to the complexity of handling long-term dependency on \textbf{or} and \textbf{loop structure}, we skip them but focus only on the long-term dependency in \textbf{exclusive choice structure}. 
+Obviously, long-term dependency relates to the structure of choices in process model, such as exclusive choice, loop and or structure. Due to the complexity of handling long-term dependency on or and loop structure, we skip them but focus only on the long-term dependency in \textbf{exclusive choice structure}. 
 
 The generated process tree mined by Inductive Miner is used as an intermediate process model to detect long-term dependency.  A process tree is  (1) easy to extract the exclusive choice structure, since it is block-structured. (2) easy to transform a process tree to a Petri net as the final model.
 %% Here we need to add the relation of process to the long-term dependency
 
-An exclusive choice structure is represented as \textbf{\emph{xor block}} in a process tree. For the sake for convenience, we name a subtree of an xor block as one \textbf{\emph{xor branch}}, and denote the set of xor blocks B(Q) as and the set of xor branches as BB(Q) for a tree Q.
-For two arbitrary xor branches with long-term dependency, they have to satisfy the conditions: (1) they have a sequential order;(2) they always happen together, namely with significant correlation.
+An exclusive choice structure is represented as \textbf{\emph{xor block}} in a process tree. For the sake for convenience, we name a subtree of an xor block as one \textbf{\emph{xor branch}}. %denote the set of xor blocks B(Q) as and the set of xor branches as BB(Q) for a tree Q.
+For two arbitrary xor branches X,Y with long-term dependency, denoted as $ X\rightsquigarrow Y$, they have to satisfy the conditions: 
+\begin{itemize}
+	\item they have a sequential order;
+	\item they have significant correlation. In this thesis, we assume, the more frequent they are executed in the same traces, the more significant correlation they have.
+\end{itemize} 
 The order of xor branch follows the same rule of node in process tree which is explained in the following.
 \begin{definition}[Order of nodes in process tree]
 	Node $X$ is before node $Y$, written in $X \prec Y$, if $X$ is always executed before $Y$.  In the context of process tree structure, $X \prec Y$, if the least common ancestor of $X$ and $Y$ is a sequential node, and $X$ positions before $Y$.
@@ -141,7 +145,7 @@ To define the correlation of xor branches, several concepts listed below are nec
 \begin{definition}[The execution of a process tree Q]
 	With respect to a trace $\sigma \in L$, a process tree Q is executed in $\sigma$, denoted as $\sigma \models Q$, when
 		\begin{itemize}
-		\item for $Q=(a)$, if $\exists i, 1 \leq i \leq |\sigma| \sigma(i)=a$.
+		\item for $Q=(a)$, if $\exists i, 1 \leq i \leq |\sigma|, \sigma(i)=a$.
 		\item for $Q= \rightarrow(Q_1 , Q_2 ,.. Q_n)$, if $\forall Q_i, \sigma \models Q_i$ is executed in order.
 		\item for $Q= \times(Q_1 , Q_2 ,.. Q_n)$,  if $\exists Q_i, \sigma \models Q_i$.
 		\item for $Q= \land (Q_1 , Q_2 ,.. Q_n)$, if $\forall Q_i, \sigma \models Q_i$.
@@ -154,6 +158,12 @@ With the definition above, we can formalize the frequency of xor branch in the e
 	\[f_{L}(X) = \sum_{\sigma \in L} |\{\sigma \vert \sigma \models X\} |\]
 	For multiple xor branches, the frequency of their coexistence in event log L is defined as the count of traces with all the occurrence of xor branches ${Xi}$ , \[f_{L}(X_1, X_2,...,X_n)= \sum_{\sigma \in L} |\{\sigma \vert \forall X_i, \sigma \models X_i\} | \]
 \end{definition}
+As an example, given the same model M4 and reviewed here in Figure \ref{fig:pt-lt-demo}, and a labeled event log $L$,
+\begin{align*}
+L:= \{  {<A,C,D>}^{10, pos}, {<A,C,E>}^{30,pos}, {<B,C,E>}^{10,pos}, {<B,C,D>}^{40, neg}\}
+\end{align*} the frequencies of the coexistence of different xor branches are
+$f_{L^+}(A, D)=10$, $f_{L^+}(A, E)=30$, $f_{L^+}(B, E)=10$, and $f_{L^-}(B, D)=40$.
+
 The frequency of the coexistence of multiple xor branches in positive and negative event logs reflects the correlation of those xor branches. The long-term dependency in the existing model also affects the long-term dependency in the repaired model. However, since the repaired model possibly differs from the existing model, the impact of long-term dependency from the existing model becomes difficult to detect. With limits of time, we only consider the impact from positive and negative instances on the long-term dependency.
 %In one way, it has explicit long-term dependencies that should be kept. In another way, the existence of xor branches implies a full-connected long-term dependency. To incorporate the influence from the existing model, we give the definition for xor branch correlation.
 % but to detect the explict long-term dependency, we need one pre-process?? But how ?? Also, how to combine the effect into the model then??
@@ -162,14 +172,11 @@ The frequency of the coexistence of multiple xor branches in positive and negati
 %% combine the existing model factor together. How about we record the long-term dependency from the existing model?? How to extract the long-term dependency from the model?? No method currently
 \begin{definition}[Correlation of xor branch] The correlation to express dependency of two branches $X,Y \in BB(Q)$ is expressed into
 	\[d(X,Y)=  d^{+}(X, Y) -d^{-}(X, Y)\], where 
-	\[d^{+}(X, Y)= \frac{f_{L^+}(X, Y)}{\sum_{Y^\prime BB(Q), Y^\prime \neq X} f_{L^+}(X, Y^\prime)}, \quad d^{-}(X, Y)= \frac{f_{L^-}(X, Y)}{\sum_{Y^\prime BB(Q), Y^\prime \neq X} f_{L^-}(X, Y^\prime)}\]	
+	\[d^{+}(X, Y)= \frac{f_{L^+}(X, Y)}{\sum_{Y^\prime \in BB(Q), Y^\prime \neq X} f_{L^+}(X, Y^\prime)}, \quad d^{-}(X, Y)= \frac{f_{L^-}(X, Y)}{\sum_{Y^\prime \in BB(Q), Y^\prime \neq X} f_{L^-}(X, Y^\prime)}.\]
+In this thesis, we call the correlation strong with respect to one threshold t, if 
+\[d(X,Y) > t.\]	
 \end{definition}
-$f_{L^+}(X, Y) $ and $f_{L^-}(X, Y)$ are the frequency of the coexistence of $X$ and $Y$, respectively in positive and negative instances. As an example, given the same model M4 and reviewed here in Figure \ref{fig:pt-lt-demo}, and a labeled event log $L$,
-\begin{align*}
-L_1:= \{  {<A,C,D>}^{10, pos}, {<A,C,E>}^{50,pos}, {<B,C,E>}^{10,pos}, {<B,C,D>}^{40, neg}\}
-\end{align*}
-the frequencies of the coexistence of different xor branches are
-$f_{L^+}(A, D)=10$, $f_{L^+}(A, E)=50$, $f_{L^+}(B, E)=10$, and $f_{L^-}(B, D)=40$. 
+Following the example above, the correlations of their xor branches are $d(A, D)=0.2,  d(A, E)=0.6, d(B, E)=0.2, d(B, D)=-1$. Since the xor branches of those pairs are already in order, if the threshold for long-term dependency is set as $t=0$, we get a long-term dependency set, $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\},$ for the process tree.   
 \begin{figure}
 	\centering
 	\begin{subfigure}[b]{0.48\textwidth}
@@ -182,8 +189,8 @@ $f_{L^+}(A, D)=10$, $f_{L^+}(A, E)=50$, $f_{L^+}(B, E)=10$, and $f_{L^-}(B, D)=4
 	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{figures/algorithm/LT_Seq_01_Original.png}
-		\label{fig:pn-lt-demo}
 		\caption{The reviewed Petri net}
+		\label{fig:pn-lt-demo}
 	\end{subfigure}%
 \end{figure} 
 % here we need to define the long-term dependency
@@ -193,20 +200,20 @@ $f_{L^+}(A, D)=10$, $f_{L^+}(A, E)=50$, $f_{L^+}(B, E)=10$, and $f_{L^-}(B, D)=4
 %\end{definition}
 \subsubsection{Cases Analysis}
 % Here we need to check the combination for all xor branches, but with one example.
-There are various sorts of long-term dependencies that are able to happen for two xor blocks. To explain those situations better, we define concepts called sources and targets of long-term dependency and then give an example of one Petri net with long-term dependency.
-\begin{definition}[Source and target set of Long-term Dependency]
+There are various types  of long-term dependencies that are able to happen for two xor blocks. To explain those situations better, we define concepts called sources and targets of long-term dependency and then give an example of one Petri net with long-term dependency.
+\begin{definition}[Source and target set of long-term dependency]
 	The source set of the long-term dependency in two xor blocks is the set of all  xor branches, $LT_S:= \{X \vert \exists Y, X\rightsquigarrow Y  \in LT \} $, and target set is $LT_T:= \{Y \vert \exists X, X\rightsquigarrow Y \in LT \} $. \\
-	For one xor branch $X \in S$, the target xor branch set relative to it with long-term dependency is defined as:
+	For one xor branch $X \in S$, the target xor branch set relative to it with long-term dependency is 
 	$ LT_T(X)= \{Y \vert  X\rightsquigarrow Y \in LT \}$
-	Respectively, the source xor branch relative to one xor branch in target is
+	Similarly, the source set related to one target xor branch is
 	$ LT_S(Y)= \{X \vert  X\rightsquigarrow Y \in LT \}$
 \end{definition}
 At the same time, we use $S $ and $T$ to represent the set of xor branches for source and target xor block with long-term dependency.
-Given an Petri net in Figure \ref{fig:seq-2-original}, two xor blocks are contained in the model which allows the following long-term situations.
+Given a process tree in Figure \ref{fig:pt-lt-demo}, two xor blocks are contained in the model. They are able to have the following long-term dependencies.
 % make it two graphs here, one is the process tree, one is the Petri net.
 \begin{enumerate}
-	\item $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow D, B\rightsquigarrow D\}$. \\
-	$LT_S = \{A,B\}, LT_T=\{D,E\}, \vert LT \vert = \vert S \vert * \vert T \vert  $, which means long-term dependency has all combinations of source and target xor branches. 
+	\item $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow D, B\rightsquigarrow E\}$. \\
+	$LT_S = \{A,B\}, LT_T=\{D,E\}, \vert LT \vert = \vert S \vert * \vert T \vert  $, which is a full long-term dependency where all combinations of source and target xor branches have significant correlation. 
 	\item $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $\\
 	$LT_S = \{A,B\}, LT_T=\{D,E\}$
 	$LT_S = S $ and $LT_T = T, \vert LT \vert < \vert S \vert * \vert T \vert $. it doesn't cover all combinations. But for one xor branch $X \in S, LT_T(X)= T$, it has all the full long-term dependency with $T$. 
@@ -223,15 +230,21 @@ Given an Petri net in Figure \ref{fig:seq-2-original}, two xor blocks are contai
 	There exists at least one xor branch in source $X \in S$  and one xor target xor branch which has no long-term dependency on it.
 	\item $ \emptyset$ . There is no long-term dependency on this set. 
 \end{enumerate}
-In the following, we propose a method to express long-term dependency on Petri net. 
+% here already to dispose several situations here and then 
+%However, when the long-term dependency is full connected where each combination of xor branches from source and target xor block has long-term dependency, namely xor branches can be chosen freely, we don't add any places and silent transitions on the model.
+In the listed situations, situation 1 is a full long-term dependency, which allows all combinations like the original models, and no changes is necessary on the model. Situation 7 has no long-term dependency, where the correlation of them is either not so strong from the positive instances or rejected from negative instances. In this thesis, we don't take those two situations into consideration.  
+
 %% should we write down here to prove the correctness of available situations, or we need to wait??
 \subsubsection{Way to Express Long-term Dependency}
-Adding places to Petri net can limit the behavior\cite{bergenthum2007process}, since its output transitions demand a token from it to fire themselves. When there is no token at this place, the transitions are enabled. By injecting extra places on Petri net, it can block negative behaviors which are not expected in the aspect of business performance. 
+% but how to come from the process tree to Petri net??? 
+After detecting long-term dependencies with xor branches in process tree, it is not possible to express those dependencies on process tree by using the current process tree operators. Moreover, the final output of our task demands a Petri net. Therefore, we convert the generated process tree into a Petri net and express long-term dependency on the Petri net with corresponding structures.
 
-Long-term dependency limits the available choices to fire transitions after the previous xor branch executes. So to express long-term dependency, our basic idea is to add places to the Petri net model. What's more, because one xor branch can be as a source to multiple long-term dependencies and one xor branch can be as a target to multiple long-term dependencies, silent transitions are also needed to address a long-term dependency explicitly. 
+According to \cite{bergenthum2007process}, adding places to transitions in Petri net can limit the model behavior. Any transition demands a token from its input places to fire. When there is no token at this place, the transitions are not enabled. By adding extra places to the Petri net, it can block negative behaviors which are not expected in the aspect of business performance. 
+
+Long-term dependency limits the available choices to fire transitions after the previous xor branch executes. So to express long-term dependency, our basic idea is to add places connected to transitions in the Petri net. In addition, because one xor branch can be as a source to multiple long-term dependencies and one xor branch can be as a target to multiple long-term dependencies, silent transitions are also needed to explicitly address a long-term dependency. 
 
 
-Given arbitrary two xor blocks, $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$, we add places after the source xor branches,  $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$, and places before target xor branches,$P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$. For each long-term dependency $X_{i} \rightsquigarrow Y_{j}$ in LT, there is silent transition t with $p_{X_i} \rightarrow t \rightarrow p_{Y_{j}}$. The steps to add silent transitions and places according to the long-term dependency are listed in algorithm \ref{alg: Adding method}.
+Firstly, the long-term dependency set from process tree is mapped to the corresponding Petri net. For an arbitrary long-term dependency set $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$ with $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ in Petri net, we add places after the source xor branches in Petri net,  $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$, and places before target xor branches,$P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$. For each long-term dependency $X_{i} \rightsquigarrow Y_{j}$ in LT, there is silent transition t with $p_{X_i} \rightarrow t \rightarrow p_{Y_{j}}$. The steps to add silent transitions and places according to the long-term dependency are listed in algorithm \ref{alg: Adding method}.
 
 % An algorithm is given to show how to add the long-term dependency
 \begin{algorithm}[!ht]
@@ -266,17 +279,17 @@ Given arbitrary two xor blocks, $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ 
 \end{algorithm}
 \begin{figure}
 	\includegraphics[width=\textwidth]{figures/algorithm/LT_Seq_01_Silent_01.png}
-	\label{fig:add-algorithm-example}
 	\caption{Model with long-term dependency $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $ }
+	\label{fig:pn-demo-with-lt}
 \end{figure}
-One simple example is given in the Figure \ref{fig:add-algorithm-example} to explain this algorithm. Given the long-term dependencies $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}$, two extra places are added respectively after A and B; Next, two places before D and E are created to express that the xor branches are involved with long-term dependency. At end, for each long-term dependency, a silent transition is generated to connect the extra places after the source xor branch to the place before target place. 
+Reviewing the example of process tree of Figure \ref{fig:pt-lt-demo}, it has long-term dependency set $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}$. To express long-term dependency,  the process tree is firstly transformed into the Petri net as Figure \ref{fig:pn-lt-demo}. Then two extra places are added respectively after A and B; Next, two places before D and E are created to express that the xor branches are involved with long-term dependency. At end, for each long-term dependency, a silent transition is generated to connect the extra places after the source xor branch to the place before target place. The generated model with long-term dependency is displayed in Figure \ref{fig:pn-demo-with-lt}.
 
 \subsubsection{Soundness Analysis}
 % this section is used to select the sound situations. 
 % next time I can go to library at Tuesday with the laptop and study there..
-Following algorithm \ref{alg: Adding method} by adding silent transitions and places to express long-term dependency, the model soundness can be violated. In the following section, we discuss the soundness in different situations. 
+With Algorithm \ref{alg: Adding method} by adding silent transitions and places to express long-term dependency, the model soundness can be violated. In the following section, we discuss the soundness in different situations. 
 
-Given a Petri net with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$ on two xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$, following the Algorithm \ref{alg: Adding method}, $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$ , $P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$, and silent transitions $ E = \{\epsilon \vert p_{X_i} \rightarrow \epsilon
+Given a Petri net with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$ on two xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$. After applying the Algorithm \ref{alg: Adding method}, $P_S=\{p_{X_i} \vert X_i \in LT_{S} \}$ , $P_T=\{p_{Y_j} \vert Y_i \in LT_{T} \}$, and silent transitions $ E = \{\epsilon \vert p_{X_i} \rightarrow \epsilon
 \rightarrow p_{Y_{j}} \}$ are added. 
  
 The Petri net is sound if and only if (1)the soundness outside xor blocks with long-term dependency is not violated; and  (2) soundness between xor blocks is kept. In the following, we check the model soundness with long-term dependency after applying Algorithm \ref{alg: Adding method}. \\\\
@@ -285,14 +298,14 @@ The Petri net is sound if and only if (1)the soundness outside xor blocks with l
 %% begin to prove the soundness inside xor block
 \\\\
 \textbf{Soundness inside xor blocks.}\\
-For all xor branches in S, only one branch can be fired. Without loss of generality, $X_i$ is assumed to be enabled. After firing $X_i$, the marking distribution on the extra places are  
+For the xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert 1 \leq i \leq m, 1 \leq j \leq n \}$, only one xor branch can be fired in S. Without loss of generality, $X_i$ is assumed to be enabled. After firing $X_i$, the marking distribution on the extra places are  
 \[ M(p_{X_i}) = 1; \quad 
 \forall p_{X_i^\prime} \in P_S, i^\prime \neq i, M(p_{X_i^\prime})=0 \]
 %% here we need to divide them into different situations...
 If $ LT_S = S, LT_T=T$, adding the long-term dependency in this situation doesn't violate the model soundness, we prove it in the following part.
 %the following conditions are checked. 
 \begin{itemize}
-	\item safeness. Places cannot hold multiple tokens at the same time.\\
+	\item Safeness. Places cannot hold multiple tokens at the same time.\\
 	For all extra places $p_{X_i}$ and $p_{Y_j}$, 
 	\[\forall p_{X_i} \in P_S, \sum M(p_{X_i})=1\]
 	Because $ LT_S = S, X_i \in S$, so $X_i \in LT_S$, there exists one $Y_j$ with $X_i \rightarrow Y_j$ and one $\epsilon, p_{X_i} \rightarrow \epsilon
@@ -301,54 +314,46 @@ If $ LT_S = S, LT_T=T$, adding the long-term dependency in this situation doesn'
 	\forall p_{Y_j^\prime} \in P_T, j^\prime \neq j,  M(p_{Y_i})=0 \]
 	So whenever the marking distribution in the extra places are
 	\[\sum M(p_{X_i}) \leq 1,  \sum M(p_{Y_j}) \leq 1 \] 
-	\item proper completion. If the sink place is marked, all other places are empty. \\
+	\item Proper completion. If the sink place is marked, all other places are empty. \\
 	After firing $Y_j$, all the extra places hold no token. So it does not violate the proper completion.
-	\item option to complete.  It is always possible to reach the final marking just for the sink place. \\
+	\item Option to complete.  It is always possible to reach the final marking just for the sink place. \\
 	There is always one $Y_j$ enabled after firing $X_i$ to continue the subsequent execution.
-	\item no dead part. For any transition there is a path from source to sink place through it. \\
+	\item No dead part. For any transition there is a path from source to sink place. \\
 	Because all $Y_j \in T$ are also in $LT_T$, there exists at least one $X_i\in S$ with long-term dependency with $Y_j$. After $X_i$ is fired, one token is generated on the extra place $p_{X_i}$ and can be consumed by silent transition $\epsilon$ in  $p_{X_i} \rightarrow \epsilon \rightarrow p_{Y_{j}}$ to produce a token in $p_{Y_j}$, which enables xor branch $Y_j$ and leaves no dead part.
 \end{itemize}
-Else, in other situation, the model becomes unsound. \\
+In other situation, the model becomes unsound. \\
 \indent If $LT_S \neq S,or\quad LT_T \neq \emptyset$, there exists one xor branch $X_i$ with $X_i \notin LT_S$. When $X_i$ is fired, it generates one token at place $p_{X_i}$, this token cannot be consumed by any $Y_j$. So it violates the proper completion. \\  
-\indent If $LT_T \neq T$, there exists one $Y_j \notin LT_T, \nexists X_i, X_i \rightsquigarrow Y_j$, so with two input places but $Token(p_{Y_j})=0$,  $Y_j$ becomes the dead part, which violates the soundness again. \\
-
-As a conclusion, to keep Petri net with long-term dependency sound, only situation $ LT_S = S, LT_T=T$ is considered. However, when the long-term dependency is full connected where each combination of xor branches from source and target xor block has long-term dependency, namely xor branches can be chosen freely, we don't add any places and silent transitions on the model. 
+\indent If $LT_T \neq T$, there exists one $Y_j \notin LT_T, \nexists X_i, X_i \rightsquigarrow Y_j$, so with two input places but $Token(p_{Y_j})=0$,  $Y_j$ becomes the dead part, which violates the soundness again. 
+As a conclusion, to keep Petri net with long-term dependency sound, only situations with $ LT_S = S, LT_T=T$ are considered.  
 \subsection{Reduce Silent Transitions}
 %% We reduce the silent transition when there is no 
-Our method to represent long-term dependency can introduce redundant silent transitions and places, which complicates the model. So, we post process the Petri net with long-term dependency to delete redundant silent transitions and places.
-% ; on the other hand, it causes the model unsound where the extra silent transitions suspend the execution and therefore violates the soundness condition of proper completion.
-\begin{proposition}
-	Given a silent transition $\epsilon$ in Petri net with one input place $P_{in}$ and one output place $P_{out}$, if $\vert Outedges({P_{in}) }\vert \geq 2 \quad and \quad \vert Inedges(P_{out}) \vert \geq 2 $, the silent transitions can not be deleted. Else, the silent transitions is able to delete, meanwhile the $P_{in}$ and $P_{out}$ can be merged into one place. This reduction does not violate the soundness and does not change the model behavior.
-\end{proposition}
-\begin{proof}[Soundness Proof]
-	If a silent transition t is able to delete, then
-	\[\vert Outedges({P_{in}) }\vert \leq 1	\quad (1) \quad or, \]
-	\[\vert Inedges({P_{out}) }\vert \leq 1\quad (2).\]
-	When in case (1), $P_{in}$ contains a token that is always passed to $P_{out}$ by silent transitions t. After deleting the silent transition, the token is generated directly on $P_{out}$. Since t is silent transition, it won't affect the model behavior. \\ 
-	when in case (2), $P_{out}$ contains a token that is always passed from $P_{in}$ by silent transitions t. After deleting the silent transition, the token is remained on $P_{in}$, which enables the later execution after the original $P_{out}$. Since t is silent transition, it won't affect the model behavior. \\
-	In other cases, $Outedges({P_{in}) }\vert \geq 2 \quad and \quad \vert Inedges(P_{out}) \vert \geq 2$, which means that the source xor branch with output place $P_{in}$ has at lest two long-term dependencies; the target xor branch with input place $P_{out}$ has at least two long-term dependencies. If we delete this silent transitions, the long-term dependencies are mixed together which allows more unexpected behaviors. Therefore, silent transition in this situation is necessary to hold long-term dependency.
-\end{proof}
+Our method to represent long-term dependency can introduce redundant silent transitions and places, which complicates the model. So, we post process the Petri net with long-term dependency and delete redundant silent transitions and places in it. 
+% definition of redundant transitions and places
+Silent transitions and places of a Petri net are redundant when the Petri net preserves the behavior without those transitions and places \cite{murata1989petri, verbeek2017decomposed}. There is an existing algorithm developed in work of \cite{verbeek2017decomposed}. We reuse it as one post procedure in our thesis. 
+
 %% here we need to prove this proposition
 One example is given in the following graph. $M_{lt}$ in Figure \ref{fig:with-lt} has long-term dependency expressed in the silent transitions and places. The silent transition for $S2 \rightsquigarrow B1 $ and silent transition for $B1 \rightsquigarrow T2$ belongs to the case (1). So they are kept in the model, while the other silent transitions are deleted. After reducing the redundant silent transitions, the model becomes $M_r$ shown in Figure \ref{fig:reduced-lt}. Those two models have the same behavior, yet the reduced model is simpler.
 \begin{figure}[!h]
 	\centering
 	\begin{subfigure}[a]{\textwidth}
 		\includegraphics[width=\textwidth]{figures/algorithm/dfg-IM-pn-with-lt.png}
-		\label{fig:with-lt}
+		
 		\caption{A Petri net $M_{lt}$ with redundant silent transitions}
+		\label{fig:with-lt}
 	\end{subfigure}
 	\hfill
 	\begin{subfigure}[b]{\textwidth}
 		\centering
 		\includegraphics[width=\linewidth]{figures/algorithm/dfg-IM-pn-with-lt-reduced.png}
-		\label{fig:reduced-lt}
+		
 		\caption{Petri net $M_r$ with reduced silent transitions}
+		\label{fig:reduced-lt}
 	\end{subfigure}
 \end{figure}
 \subsection{Concrete Architecture}
 At last, we assemble all the modules together and give an overview architecture of our repair techniques.  We reuse existing modules in gray rectangles in Figure \ref{fig:architecture}, e.g. IMLog2Dfg to convert an event log into directly-follow graph, Petrinet2TransitionSystem to transform a Petri net into a transition system. The other modules are programmed according to our specific needs and achieve the repair algorithm mentioned before. To achieve a preciser Petri net, the module to add long-term dependency becomes a necessary part. Yet, reduction on redundant places and silent transitions is optional. 
 \begin{figure}
-	\includegraphics[height=0.9\textheight]{figures/algorithm/FD_architeccture_detail.pdf}
+	\includegraphics[height=0.9\textheight]{figures/algorithm/FD_architeccture_details.pdf}
 	\caption[Model Repair Architecture]{Model Repair Architecture -- \small Rectangles represents processes and output data in eclipse shape, especially customized processes and data are in doubled lattice shape. Input event log and existing model are in blue, KPIs are in cloud. The output is a petri net in purple.}
 	\label{fig:architecture}
 \end{figure} 

@@ -35,7 +35,7 @@
 \cleardoublepage
 %%% Begin document
 \pagestyle{fancy}
-
+\pagenumbering{arabic}
 \iffalse
 \chapter{Introduction} \label{chap:intro}\pagenumbering{arabic}
 \input{chapters/introduction.tex}
@@ -49,11 +49,11 @@
 \chapter{Preliminaries} \label{chap:prelim}%\pagenumbering{arabic}
 \input{chapters/preliminary.tex}
 
-\fi
+
 \chapter{Algorithm} \label{chap:alg}
 \input{chapters/algorithm.tex}
+\fi
 
-\iffalse
 \chapter{Implementation} \label{chap:impl}
 \input{chapters/implementation.tex}
 %\fi
@@ -62,7 +62,7 @@
 
 \chapter{Conclusion} \label{chap:conclusion}
 \input{chapters/conclusion.tex}
-\fi
+
 %%% add ``References'' section to TOC
 %\phantomsection
 
