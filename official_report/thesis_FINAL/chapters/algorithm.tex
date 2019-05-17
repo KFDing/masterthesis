@@ -30,7 +30,7 @@ After defining a data model to unify the impact and implementing the process mod
 \section{Algorithm}
 Given the inputs, an event log and a Petri net as the reference process model M, our task is to repair the referenced Petri net based on the actual event log with consideration of negative information. 
 
-Based on those scope, the main modules in the framework in Figure \ref{fig:framework}is designed and developed to repair the reference Petri net. First of all, we define a proper data model to represent the impact from Petri net M, and the event log L. Then, we list all the modules  and describe our basic ideas to implement them. 
+Based on those scope, the main modules in the framework in Figure \ref{fig:framework} is designed and developed to repair the reference Petri net. We denote our repair algorithm as \textbf{dfg-repair}. First of all, we define a proper data model to represent the impact from Petri net M, and the event log L. Then, we list all the modules  and describe our basic ideas to implement them. 
 % here to point out our input and output
 \subsection{Unified Data Model}
 We choose the directly-follows graph as the basis of our unified data model to represent the impact from the reference model and the event log. The reasons are, (1) there exist transformation algorithms to extract a directly-follows graph from an event log and to convert directly-follows graph into process tree or Petri net, which saves our effort;(2) the cardinality of directly-follows graphs can be used to express the impact strength.
