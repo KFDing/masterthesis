@@ -18,14 +18,16 @@
     	<dependency org="prom" name="Log" rev="latest" changing="true" transitive="true" />
        <dependency org="prom" name="GraphViz" rev="latest" changing="true" transitive="true" />
        <dependency org="prom" name="InductiveVisualMiner" rev="latest" changing="true" transitive="false" />
-       <dependency org="prom" name="InductiveMinerDeprecated" rev="latest" changing="true" transitive="true" /> 
+	<dependency org="prom" name="ProcessTree" rev="latest" changing="true" transitive="false" /> 
+	<dependency org="prom" name="InductiveMinerDeprecated" rev="latest" changing="true" transitive="true" /> 
+     
      	<dependency org="prom" name="TransitionSystems" rev="latest" changing="true" transitive="true" />
      	<dependency org="prom" name="InteractiveLocalizedPlaceAnalysis" rev="latest" changing="true" transitive="true" />
      	<dependency org="prom" name="PNetReplayer" rev="latest" changing="true" transitive="true" />
      	<!-- 
+     	     
      	<dependency org="prom" name="Alignment" rev="latest" changing="true" transitive="true" />
-     	
-     	<dependency org="prom" name="ModelRepair" rev="latest" changing="true" transitive="true" />
+     	  <dependency org="prom" name="ModelRepair" rev="latest" changing="true" transitive="true" />
 <dependency org="prom" name="KPIProcessEnhancementWorkflow" rev="latest" changing="true" transitive="true" />
 
      	!--> 

@@ -59,7 +59,7 @@ public class PNReplayer {
 		
 		// initialize the parameters for replayer
 		parameter = new CostBasedCompleteParam(logInfo.getEventClasses().getClasses(),
-				evClassDummy, net.getTransitions(), 2, 5);
+				evClassDummy, net.getTransitions(), 1, 1);
 		parameter.setGUIMode(false);
 		parameter.setCreateConn(false);
 		parameter.setInitialMarking(initMarking);

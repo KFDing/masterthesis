@@ -2,6 +2,7 @@ package org.processmining.incorporatenegativeinformation.plugins;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.deckfour.xes.model.XAttributeBoolean;
@@ -55,8 +56,8 @@ public class EvaluateResult {
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive CC with AcceptingPetriNet", requiredParameterLabels = { 0, 1 })
 	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, AcceptingPetriNet anet) { // Marking 
-		anet.getFinalMarkings();
-		return naiveCheckPNPlugin(context, log, anet.getNet(), anet.getInitialMarking(), anet.getFinalMarkings());
+		
+		return naiveCheckPN(log, anet);
 	}
 	
 	
@@ -66,12 +67,12 @@ public class EvaluateResult {
 	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, Petrinet net) { // Marking 
 		Marking initmarking = NetUtilities.guessInitialMarking(net);
 		Set<Marking> finalmarking = NetUtilities.guessFinalMarking(net);
-		return naiveCheckPNPlugin(context, log, net, initmarking, finalmarking);
+		return naiveCheckPN(log, net, initmarking, finalmarking);
 	}
 
 	@UITopiaVariant(affiliation = "RWTH Aachen", author = "Kefang", email = "***@gmail.com")
 	@PluginVariant(variantLabel = "Petrinet Naive Conformance Checking", requiredParameterLabels = { 0, 1, 2, 3 })
-	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, Petrinet net, Marking initmarking, Set<Marking> set) { // Marking 
+	public ArrayList<Integer> naiveCheckPNPlugin(PluginContext context, XLog log, Petrinet net, Marking initmarking, Marking finalMarking) { // Marking 
 		// given log, should we first to organize them into variants and then do such stuff??? 
 		// not really, because anyway we need to check one trace by another...How about we store such trace variants,
 		// and compare them, if they matches, so we know if they get matched , or not 
@@ -90,8 +91,9 @@ public class EvaluateResult {
 			}
 		} catch (ConnectionCannotBeObtained e) {
 		}
-
-		return naiveCheckPN(log, net, initmarking, set);
+		Set<Marking> fSet = new HashSet<>();
+		fSet.add(finalMarking);
+		return naiveCheckPN(log, net, initmarking, fSet);
 
 	}
 

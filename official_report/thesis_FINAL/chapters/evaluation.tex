@@ -7,21 +7,23 @@
 %   ==> synthetic data
 %   ==> Real life data
 %   ++ Data to test the property
-In this chapter, we evaluate the proposed repair techniques based on the quality of repaired model. At first, we define the evaluation criteria. Next, we briefly introduce the test platforms KNIME and relevant ProM plugins tools. Then, we conduct two kinds of tests. One is based one the demo example proposed in the introduction part, one is on the real life data. 
-\section{Evaluation Measurements}
+In this chapter, we evaluate the proposed repair techniques based on the quality of repaired model. At first, we define the evaluation criteria. Next, we briefly introduce the test platforms KNIME and relevant ProM plugins tools. Then, we conduct two kinds of tests. One is based one the demo example proposed in the introduction part, and the other is on the real life data. 
+\section{Evaluation Criteria}
 % First talk about our data and our model, then choose the confusion matrix as one measurements. But we should review the traditional measuremtns on process mining before introducing the confusion matrix. but we should also focus on the accuracy part and f-score.
 We evaluate the repair techniques based on the quality of repaired models with respect to the given event logs. In process mining, there are four quality dimensions generally used to compare the process models with event logs. 
 \begin{itemize}
-	\item \emph{Fitness.} It quantifies the extent of a model to reproduce the traces recorded in an event log which is used to build the model.   
+	\item \emph{Fitness.} It quantifies the extent how well the model reproduces traces in the event log which is used to build the model.   
 	\item \emph{Precision.} It quantifies the extent how the discovered model limits the completely unrelated behavior that doesn't show in the event log. 
 	\item \emph{Generalization.} It addresses the over-fitting problem when a model strictly matches to only seen behavior but is unable to generalize the example behavior seen in the event log. 
 	\item \emph{Simplicity.} This dimension captures the model complexity. According to Occam's razor principle, the model should be as simple as possible.
 \end{itemize}
 % How to come to confusion matrix?? 
-The four traditional quality criteria are proposed in the environment where only positive instances are available. Therefore, when it comes to the model performance, where negative instances are also possible, the measurement metrics need to be adjusted. With labeled traces in the event log, the repaired model can be seen as a binary prediction model where the positive instances are supported while the negative ones are rejected. Consequently, the model evaluation becomes a classifier evaluation and confusion matrix is applied in our experiments.
+The four traditional quality criteria are proposed in the environment where only positive instances are available. Therefore, when it comes to the model performance, where negative instances are also possible, the measurement metrics need to be adjusted. 
+
+With labeled traces in the event log, the repaired model can be seen as a binary prediction model where the positive instances are supported while the negative ones are rejected. Consequently, the model evaluation becomes a classifier evaluation and confusion matrix is applied in our experiments.
 
 % Describe its features and some derived measurements. 
-Confusion matrix has a long history to evaluate the performance of a  classification model. A confusion matrix is a table with columns to describe the prediction model and rows for actual classification on data.  The repaired model can be seen a binary classifier and produces four outcomes- true positive, true negative, false positive and false negative shown in the Table \ref{tab:cm}.
+Confusion matrix has a long history to evaluate the performance of a  classification model. A confusion matrix is a table with columns to describe the prediction model and rows for actual classification on data.  As seen as a binary classifier, the repaired model produces four outcomes according to confusion matrix -- true positive, true negative, false positive and false negative, which is shown in the Table \ref{tab:cm}.
 \begin{itemize}
 	\item True Positive(TP): The execution allowed by the process model has a positive performance outcome.
 	\item False Positive(FP): The execution allowed by the process model has a negative performance outcome.
@@ -40,7 +42,7 @@ Confusion matrix has a long history to evaluate the performance of a  classifica
 		\multicolumn{1}{|l|}{}                                                                        & negative instance & FP                                    & TN                                        \\ \hline
 	\end{tabular}
 \end{table}
-Various measurements can be derived from confusion matrix. According to our model, we choose the following ones as the potential measurements. 
+Various measurements can be derived from confusion matrix. According to our application, the following criteria are chosen. Generally, there is a trade-off between the quality criteria. So the measurements below are only used to evaluate specific aspects of repair techniques.
 \begin{itemize}
 	\item Recall. It represents the true positive rate and is calculated as the number of correct positive predictions divided by the total number of positives.
 	\[Recall = \frac{TP}{TP + FN}\]
@@ -53,17 +55,17 @@ Various measurements can be derived from confusion matrix. According to our mode
 	\item F-score is is the harmonic mean of precision and recall.
 	\[F_1 = \frac{2*Recall*Precision}{Precision + Recall}\]
 \end{itemize}
-Generally, there is a trade-off between the quality criteria. So the measurements are only used to compare specific aspects of our techniques.
+
 \section{Experiment Platforms}
-KNIME, as a scientific workflow analytic platform, supports automation of test workflow, which helps us repeat experiments efficiently. Yet, traditional evaluation plugins in ProM are not integrated into KNIME due to the time limits. So partial experiments are still conducted in ProM.
+KNIME, as a scientific workflow analytic platform, supports automation of test workflow, which helps us repeat experiments efficiently. Yet, the integration of traditional process mining plugins into KNIME is out of our capability due to the time limit. Therefore, partial experiments with current repair techniques are still conducted in ProM. 
 \subsection{KNIME}
 % this section describes how KNIME supports automatic test, FlowVariable and optimization parts of it.
 KNIME supports automation of test workflow mainly through the following mechanisms. 
 \begin{itemize}
-	\item Loop Control Structure. KNIME provides a bunch of control nodes which support re-executing workflow parts.  Nodes representing \emph{Loop Start} appear in pairs with nodes for \emph{Loop Nodes}, the workflow between pairs is executed recursively in a fixed number, or until certain conditions are met. In our test, we repeat our repair techniques for different parameter settings by applying loop structure into KNIME workflow.
-	\item Flow Variables. Flow Variables are used inside a KNIME workflow to parameter node settings dynamically. When it combines with loop control structure, tests with different settings is able to conduct automatically.
+	\item Loop Control Structure. KNIME provides a bunch of control nodes which support re-executing workflow parts.  Two nodes \emph{Loop Start} and \emph{Loop End} explicitly express the beginning and end of a loop structure, where the workflow between those two node is the loop body and is executed recursively in a fixed number, or until certain conditions are met. In our test, we repeat our repair techniques for different parameter settings by applying loop structure into KNIME workflow.
+	\item Flow Variables. Flow Variables are used inside a KNIME workflow to parameterize node settings dynamically. When it combines with loop control structure, tests with different settings is able to conduct automatically.
 \end{itemize}
-Furthermore, there are nodes provided by KNIME to optimize the value of some parameters with respect to a cost function. As long as a cost function is provides, KNIME is able to automatically optimize any kind of parameters. 
+Furthermore, there are nodes provided by KNIME to optimize the value of some parameters with respect to a cost function. As long as the cost function is provided, KNIME is able to automatically optimize the corresponding parameters. 
 
 \subsection{ Experiments with ProM Plugins}
 Due to the frequent errors on the corresponding plugin, we exclude the tests on repair techniques in \cite{dees2017enhancing} and conduct experiments with the following types. 
@@ -74,14 +76,18 @@ Due to the frequent errors on the corresponding plugin, we exclude the tests on 
 \end{itemize}
 
 \section{Experiment Results}
-We conduct our experiments into two main parts, one is to verify if our method overcomes the limits of current repair algorithms and provides a repaired model like expected. This experiment is based on the synthetic data and models from Introduction chapter. Next, real life data is used to test our method. For convenience,we refer the repair methods in \cite{fahland2015model} by the main auther's name Fahland, and the repair techniques in \cite{dees2017enhancing} as Dees. The Inductive Miner is abbreviated as IM. Our method which built on directly-follows graph is denoted as Dfg-repair. 
+We conduct our experiments into two main parts. One is to verify if our method overcomes the limits of current repair algorithms. This experiment is based on the synthetic data and models from Introduction chapter. The other experiment is based on real life data, in order to test the feasibility of our repair techniques.
+%For convenience,we refer the repair methods in \cite{fahland2015model} by the main auther's name Fahland, and the repair techniques in \cite{dees2017enhancing} as Dees. The Inductive Miner is abbreviated as IM. Our method which built on directly-follows graph is denoted as Dfg-repair. 
  
 \subsection{Test on Demo Example}
-In this part, experiments are performed on the motivating examples which are listed in Introduction. Thereby, we are able to answer the question: Will our repair method overcome shortcomings of current techniques which are shown in the introduction chapter? 
+In this part, experiments are performed on the motivating examples which are listed in Introduction. Thereby, we are able to answer whether our repair method overcomes shortcomings of current techniques which are shown in the introduction chapter. 
 \subsubsection{Answer to Situation 1}
-\emph{Situation 1} in Introduction shows the drawbacks of current repair methods \cite{fahland2015model, dees2017enhancing}. Additional activities \textbf{x1,x2} lead to good performance as shown in the actual event log $L_1$. Given the original Petri net $M_0$ and event log $L_1$, subprocesses for \textbf{x1,x2} are added as loops in the model, which brings more unexpected behaviors in the model. Rediscover strategy doesn't take the original model into account and generates a new model $M_{1.2}$ in Figure \ref{fig:demo_s1_IM} that deviates from the original model $M_0$. 
+\emph{Situation 1} shows the drawbacks of current repair methods \cite{fahland2015model, dees2017enhancing} that unexpected behaviors are introduced into model by adding subprocess in the form of loops. Moreover, rediscover strategy with IM doesn't take the original model into account and generates a new model that deviates from the original model. 
 
-When we apply our repair techniques on all situations listed on Introduction, and get repaired models listed in Figure \ref{fig:demo_dfg}. The parameters for our method are set in the following : weight for the existing model is 0.45, weight for positive examples is 1.0, the Inductive Miner for Infrequent is chosen and has a noise with 20, the same setting as the rediscovery method by Inductive Miner in Introduction. As seen in Figure \ref{fig:demo_dfg_s1}, the subprocesses for \textbf{x1,x2} are added in a sequence with others and can be skipped by the silent transition. In this way, $M_{1.3}$ is able to reflect the deviations in positive instances while keeping similar to the reference model $M_0$. Compared to techniques in \cite{fahland2015model}, it increases the precision without loops.
+
+Given the process model $M_0$ and the event log $L_1$, additional activities \textbf{x1,x2} in $L_1$ lead to good performance and need to be added into the model $M_0$. Applying proposed repair techniques dfg-repair, we obtain the  repaired model listed in Figure \ref{fig:demo_dfg_s1}. The parameters for our method are set in the following : weight for the existing model is 0.45, weight for positive examples is 1.0, the Inductive Miner for Infrequent is chosen and has a noise with 20, which is the same setting as the rediscovery method by Inductive Miner in Introduction. 
+
+As seen in Figure \ref{fig:demo_dfg_s1}, the subprocesses for \textbf{x1,x2} are added in a sequence with others. In this way, $M_{1.3}$ is able to reflect the deviations in positive instances while keeping similar to the reference model $M_0$. Compared to techniques in \cite{fahland2015model}, it increases the precision without loops.
 % we should give our confusion matrix result
 \begin{figure}[htp]
 	\centering
@@ -113,15 +119,15 @@ Situation 2 describes the inability of current repair methods that fitting trace
 % some explaination about the situation.
 The execution order of \textbf{e1, e2} affects the performance outcomes and \textbf{e1} is expected to position before \textbf{e2}. Without negative information, the repaired models have the same structure as the reference ones, because the execution of \textbf{e2} before \textbf{e1} brings also the positive outcomes. 
 
-If we apply our repair methods on the model $M_0$ and event log $L_2$, with setting 1.0 for all control weights, and the same Inductive Miner-Infrequent with noise 20, the repaired model $M_{2.3}$ is obtained. In $M_{2.3}$, \textbf{e1} is executed before \textbf{e2}. The reason behind our method is that it incorporates the negative information and balances the forces from the existing model, positive and negative instances. 
+If we apply our repair methods on the model $M_0$ and event log $L_2$, with 1.0 for all control weights, and the same Inductive Miner-Infrequent with noise 20, the repaired model $M_{2.3}$ is obtained. In $M_{2.3}$, \textbf{e1} is executed before \textbf{e2}. It shows that our method is able to incorporate the negative information and balance the forces from the existing model, positive and negative instances. 
 
 \subsubsection{Answer to Situation 3}
 % Conclusion part
-Situation 3 concerns the long-term dependency in Petri nets. As observed in event log, there exists the long-term dependency set, $LT=\{ a1\rightsquigarrow d1, a2\rightsquigarrow d2\}$.  With adding long-term dependency as expected in Figure \ref{fig:demo_s3_expected}, precision and accuracy increase, since the model limits activity selection and blocks the negative behavior due to free execution of xor branches. Yet none of the current repair  and rediscovery techniques are able to detect and add long-term dependencies in the Petri net. 
+Situation 3 concerns the long-term dependency in Petri nets, which is not handled in current repair and rediscovery techniques. As observed in event log, there exists the long-term dependency set, $LT=\{ a1\rightsquigarrow d1, a2\rightsquigarrow d2\}$.  With adding long-term dependency as expected in Figure \ref{fig:demo_s3_expected}, precision and accuracy increase, since the model limits activity selection and blocks the negative behavior due to free execution of xor branches. Yet none of the current repair  and rediscovery techniques are able to detect and add long-term dependencies in the Petri net. 
 
 In our repair techniques, the long-term dependency is taken into account with negative information. With inputs of the Petri net $M_0$ and event log $L_3$, our methods produces the repaired model $M_{3.3}$ with long-term dependency. Two silent transitions that are used to explicitly represent the long-term dependencies can be deleted with post procedure to reduce the redundant silent transitions and places. After reduction, our repaired model is simplified as the model $M_{3}$. 
 \subsubsection{Comparison with Confusion Matrix}
-In this section, we list the evaluation results of the repaired models based on confusion matrix. In Table \ref{tab:demo-result}, for Situation 1 with only positive instances, the repair techniques give us the same confusion matrix result. However,  $M_{1.2}$  with loops implicates a lower precision. In Situation 2, with current techniques or rediscovery methods in IM, the model stays the same as the reference  model $M_0$. Since no negative instance is rejected, the recall has the value 1 but precision below 0.6.  In comparison, our method uses the negative instances and adjusts the model correspondingly. Therefore, the repaired model $M_{2.3}$ has higher precision, accuracy and F1 score. In Situation 3 with long-term dependency, our method succeeds to detect and add long-term dependency in the model. Thereby, it has no false positive or false negative instances in the confusion matrix, and holds the highest values for all listed measurements.
+In this section, we list the evaluation results of the repaired models based on confusion matrix. In Table \ref{tab:demo-result}, for Situation 1 with only positive instances, the repair techniques give the same confusion matrix result. However,  $M_{1.2}$  with loops implicates a lower precision. In Situation 2, with current techniques or rediscovery methods in IM, the model stays the same as the reference  model $M_0$. Since no negative instance is rejected, the recall is 1 but precision is below 0.6.  In comparison, dfg-repair uses the negative instances and adjusts the model correspondingly. Therefore, the repaired model $M_{2.3}$ has higher precision, accuracy and F1 score. In Situation 3 with long-term dependency, our method succeeds to detect and add the  long-term dependency in the model. In this way, no false positive or false negative instances are in the confusion matrix, and the repaired model holds the highest values for all listed measurements.
 \begin{table}[h]
 	\centering
 	\caption{Test Result on BPI15-M1 data}
@@ -152,20 +158,20 @@ In this section, we list the evaluation results of the repaired models based on 
 	\end{tabular}}
 \end{table}
 
-As conclusion, our proposed method is able to overcome shortcomings of current techniques which are shown in the Introduction chapter. It avoids the loops in model by repairing the model with additional activities, incorporates the negative information in the data to adjust the model, also detect and add the long-term dependency into model. In this way, the repaired model has better  recall, accuracy.
+In conclusion, our proposed method is able to overcome shortcomings of current techniques mentioned in the Introduction. It avoids the loops in model by repairing the model with additional activities, incorporates the negative information in the data to adjust the model, also detect and add the long-term dependency into model. In this way, the repaired model has better  recall, and accuracy.
 
-\subsection{Test On Real life Data}
+\subsection{Test on Real Life Data}
 % here we will list all the data here but before describe the test data
-We choose a publicly available event log from BPI challenge 2015 as our user cases and compare current repair techniques on it. 
+We choose publicly available event logs from BPI challenge 2015 and build a data set from them to test the feasibility of proposed repair techniques.
 \subsubsection{Data Description}
 The data set for BPI Challenge 2015 contain 5 event logs which are provided by five Dutch municipalities respectively. Those event logs describe the building permit application around four years. We choose it as our user cases due to the following reasons.
 \begin{itemize}
-	\item The event logs hold attributes as potential KPIs to classify traces. Attribute \textbf{SUMleges} which records the cost of the application is a candidate to label traces as positive or negative if its value  is over one threshold. What's more, we can take the throughput time of the application as another potential KPI. \\
+	\item The event logs hold attributes as potential KPIs to classify traces. Attribute \textbf{SUMleges} which records the cost of the application is a candidate to label traces as positive or negative if its value  is over the threshold. What's more, we can take the throughput time of the application as another potential KPI. \\
 	In a word, this data set provides us information to reasonably label traces.
 	\item The five event logs describe an identical process, but includes deviations caused by the different procedures, regulations in those municipalities. Also, the underlying processes have changes over four years.\\
 	So, this data set gives us a basic process but also allows deviations of the actual event logs and predefined process, which builds the environment for repair techniques.
 \end{itemize}
-Firstly, we conduct our experiments on event log called \textbf{BPIC15\_1.xes.xml}. This event log includes 1199 cases and 52217 events. But the activities for those events are  with the sum of 398. So we preprocess the event log and get a proper subset of data as our user case. 
+We conduct our experiments on those event logs. However, due to the time limits, we only managed to get the result on experiments with the event log \textbf{BPIC15\_1.xes.xml}. This event log includes 1199 cases and 52217 events in 398 classes. We preprocess the event log and get a proper subset of data as our user case.  
 \begin{table}[h]	
 	\caption{Test event log from real life data BPI15-1}
 	\label{tab:event-log}
@@ -227,7 +233,7 @@ Based on the filtered data, we derive corresponding Petri nets as reference proc
 As seen in table above, the reference models don't apply well to the corresponding event logs. So changes on the models are in demand, to reflect better the reality and also to enforce the positive instances and avoid negative instances. 
 \subsubsection{Test Result}
 % we don't need to transfer page to landscape view, because we have many rows too.
-Those types are applied on pairs of event log groups of {D3.1,D3.2,D3.3} and {D4.1,D4.2,D4.3} in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The experiment result is shown in the Table \ref{tab:result}. 
+Three types of repair techniques which are called \textbf{IM}, \textbf{Fahland} and \textbf{Dfg-repair} are applied on preprocessed event log set in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The experiment result is shown in the Table \ref{tab:result}. 
 \begin{table}[h]
 		\centering
 		\caption{Test Result on BPI15-M1 data}
@@ -243,44 +249,53 @@ Those types are applied on pairs of event log groups of {D3.1,D3.2,D3.3} and {D4
 			D3.1      & -              & IM & 137 & 48 & 118 & 289 & 0.32   & 0.74      & 0.43     & 0.45                \\
 			D3.1      & M1              & Fahland   & 343   & 136  &10     &6     &0.983        & 0.716           &   0.713       & 0.829         \\
 			
-			D3.3      & M1              & Dfg-repair       &  124   &  52  &  94   &    225 &   0.355     &     0.705      & 0.44         & 0.472            \\
-			
+			D3.3      & M1              & Dfg-repair:1-1-1       &  124   &  52  &  94   &    225 &   0.355     &     0.705      & 0.44         & 0.472            \\
+			D3.3      & M1              & Dfg-repair:0.5-1-0.5       &  155   &  66  &  80   &    194 &   0.444     &     0.701     & 0.474         & 0.544            \\
 			\hline
 			D3.1      & M2              & Fahland   & 317    & 133   &   13  & 32    &  0.908      &    0.704       & 0.667         &  0.793   \\
 			
-			D3.3      & M2              & Dfg-repair       & 124    &   52 &   94  & 225    &  0.355      &   0.705        &  0.44         &  0.472      \\
+			D3.3      & M2              & Dfg-repair:1-1-1       & 124    &   52 &   94  & 225    &  0.355      &   0.705        &  0.44         &  0.472      \\
 			
+			D3.3      & M2              & Dfg-repair:0.5-1-0.5       & 155    &   66 &   80  & 194    &  0.444      &   0.701        &  0.475         &  0.544      \\
 			\hline
 			D3.1      & M3              & Fahland   & 349    & 145   &  1   &  0   &  1.0      &   0.706        &   0.707       &  0.828    \\
 		
-			D3.3      & M3              & Dfg-repair       &  0   &   0 &  349   &  146   &  0      &   NaN        &  0.295        &   0      \\
+			D3.3      & M3              & Dfg-repair:1-1-1       &  0   &   0 &  146   &  349   &  0      &   NaN        &  0.295       &   0      \\
+			D3.3      & M3              & Dfg-repair:0.5-1-0.5       &  132   &   63 &  83   &  217   &  0.378      &   0.677        &  0.434        &   0.485      \\
 			\hline
 			
-			D3.1      & M4              & Fahland   &  271   & 107   &  77   &  39   & 0.779       &   0.718        &   0.628       &  0.747         \\
+			D3.1      & M4              & Fahland   &  349   & 144   &  2   &  0   & 1.0       &   0.708        &   0.709       &  0.829         \\
 			
-			D3.3      & M4              & Dfg-repair       &  0   &  0  &   349  &  146   &   0     &      NaN     & 0.295         &    0   \\
+			D3.3      & M4              & Dfg-repair:1-1-1       &  0   &  0  &   146  &  349   &  0     &      NaN     & 0.294        & 0   \\
+			D3.3      & M4              & Dfg-repair:0.5-1-0.5       &  125   &  59  &   87  &  224   &  0.358     &      0.679     & 0.428        & 0.469   \\
 		\hline
 			D4.1      & -              & IM &  131   &  21  & 128    &  215   &    0.379    & 0.862           &   0.523       &    0.526     \\
 			D4.1      & M1              & Fahland   &  325   &  133  &  16   & 21    &   0.939     &  0.710         &  0.689       & 0.808                \\
 			
-			D4.3      & M1              & Dfg-repair       &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534                   \\
+			D4.3      & M1              & Dfg-repair:1-1-1       &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534                   \\
+			D4.3      & M1              & Dfg-repair:0.5-1-0.5       &  172   & 48   & 101    &   174  &   0.497     &   0.782       &   0.552       &   0.608                   \\
 			\hline
 			D4.1      & M2              & Fahland   & 325    &  130  & 19    &  21   & 0.939       &    0.714       &  0.695        &  0.811                \\
 		
-			D4.3      & M2              & Dfg-repair     &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534              \\
+			D4.3      & M2              & Dfg-repair:1-1-1     &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534              \\
+			D4.3      & M2              & Dfg-repair:0.5-1-0.5     &  172   & 48   & 101    &   174  &   0.497     &   0.782        &   0.552       &   0.608              \\
 			\hline
 			D4.1      & M3              & Fahland   & 87    &  29  & 120    &  259   & 0.251       &    0.75       &  0.418        &  0.377                    \\
-		
-			D4.3      & M3              & Dfg-repair       &  0   &  0  & 346    &  149   &  0      &   NaN        &   0.303       &  0       \\ 
+		    D4.3      & M3              & Dfg-repair:1-1-1       &  0   &  0  & 346    &  149   &  0      &   NaN        &   0.303       &  0       \\ 
+			D4.3      & M3              & Dfg-repair:0.5-1-0.5       &  182   &  49  & 164    &  100   &  0.526      &   0.788        &   0.70       &  0.631      \\ 
+			
 			\hline
 			D4.1      & M4              & Fahland   & 63    &  20  & 129    &  283   & 0.182       &    0.759       &  0.388        &  0.294                 \\
 		
-			D4.3      & M4              & Dfg-repair       &   0  & 0   &  346   & 149    &   0     &    NaN       &     0.303     &  0      \\    
+			D4.3      & M4              & Dfg-repair:1-1-1       &   0  & 0   &  346   & 149    &   0     &    NaN       &     0.303     &  0      \\  
+			D4.3      & M4              & Dfg-repair:0.5-1-0.5       &   172  & 48   &  101   & 174    &   0.497     &    0.782       &     0.552     &  0.608      \\      
 			 \hline              
 		\end{tabular}}
 	\end{table}
+% add some analysis on them..
 
 
+% here to fix the evaluation from last step!! Better to give a good result on it!!
 With the similar measurements, it is observed that the repaired models from \textbf{Type 2} are more complex that Dfg-repair method. One example is given for the tests of M1 on event log D4.1 for \textbf{Type 2} and M1 on event log D4.3. 
 \begin{figure}[h]
 	\centering

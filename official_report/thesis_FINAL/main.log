@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  17 MAY 2019 17:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  18 MAY 2019 23:19
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1740,7 +1740,7 @@ File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 32.
+               Default added (so using `tbp') on input line 34.
 
 
 Package Fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1749,110 +1749,106 @@ Package Fancyhdr Warning: \headheight is too small (12.0pt):
  This may cause the page layout to be inconsistent, however.
 
 [2]
-Overfull \hbox (18.63646pt too wide) in paragraph at lines 61--63
+Overfull \hbox (18.63646pt too wide) in paragraph at lines 63--65
 \T1/lmr/m/n/10.95 KNIME sup-ports au-toma-tion of test work-flow mainly through
  the fol-low-ing mech-a-nisms. 
  []
 
 [3]
-
-LaTeX Warning: Reference `fig:demo_s1_IM' on page 4 undefined on input line 82.
-
-
-<figures/evaluation/PN-result-demo-s1-dfg.pdf, id=186, 341.275pt x 2706.11pt>
+<figures/evaluation/PN-result-demo-s1-dfg.pdf, id=184, 341.275pt x 2706.11pt>
 File: figures/evaluation/PN-result-demo-s1-dfg.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-demo-s1-dfg.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-demo-s1-dfg.pdf  used on 
-input line 90.
+input line 96.
 (pdftex.def)             Requested size: 99.22758pt x 521.22716pt.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 91.
+(Font)              <10> on input line 97.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 91.
+(Font)              <7> on input line 97.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 91.
-<figures/evaluation/PN-result-demo-s2-dfg.pdf, id=187, 179.34001pt x 1418.62994
+(Font)              <5> on input line 97.
+<figures/evaluation/PN-result-demo-s2-dfg.pdf, id=185, 179.34001pt x 1418.62994
 pt>
 File: figures/evaluation/PN-result-demo-s2-dfg.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-demo-s2-dfg.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-demo-s2-dfg.pdf  used on 
-input line 97.
+input line 103.
 (pdftex.def)             Requested size: 99.22838pt x 521.24826pt.
-<figures/evaluation/PN-result-demo-s3-dfg.pdf, id=188, 323.2075pt x 2417.03pt>
+<figures/evaluation/PN-result-demo-s3-dfg.pdf, id=186, 323.2075pt x 2417.03pt>
 File: figures/evaluation/PN-result-demo-s3-dfg.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-demo-s3-dfg.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-demo-s3-dfg.pdf  used on 
-input line 104.
+input line 110.
 (pdftex.def)             Requested size: 102.4323pt x 521.2372pt.
+
+
+LaTeX Warning: Reference `fig:demo_s3_expected' on page 4 undefined on input li
+ne 126.
+
 [4] [5 <./figures/evaluation/PN-result-demo-s1-dfg.pdf> <./figures/evaluation/P
 N-result-demo-s2-dfg.pdf> <./figures/evaluation/PN-result-demo-s3-dfg.pdf>]
-
-LaTeX Warning: Reference `fig:demo_s3_expected' on page 6 undefined on input li
-ne 120.
-
-
-Overfull \vbox (6.0pt too high) detected at line 152
+Overfull \vbox (6.0pt too high) detected at line 158
  []
 
 [6] [7]
-Overfull \vbox (6.0pt too high) detected at line 220
+Overfull \vbox (6.0pt too high) detected at line 226
  []
 
 
-Overfull \vbox (6.0pt too high) detected at line 220
+Overfull \vbox (6.0pt too high) detected at line 226
  []
 
 
-Overfull \vbox (6.0pt too high) detected at line 220
+Overfull \vbox (6.0pt too high) detected at line 226
  []
 
 
-Overfull \vbox (6.0pt too high) detected at line 280
+Overfull \vbox (6.0pt too high) detected at line 293
  []
 
 
-Overfull \vbox (6.0pt too high) detected at line 280
+Overfull \vbox (6.0pt too high) detected at line 293
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<figures/evaluation/PN-result-D5-3-M1-fahland.pdf, id=226, 2768.3425pt x 9338.8
+<figures/evaluation/PN-result-D5-3-M1-fahland.pdf, id=225, 2768.3425pt x 9338.8
 9pt>
 File: figures/evaluation/PN-result-D5-3-M1-fahland.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-D5-3-M1-fahland.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-D5-3-M1-fahland.pdf  used
- on input line 289.
+ on input line 304.
 (pdftex.def)             Requested size: 102.39326pt x 455.99937pt.
-<figures/evaluation/PN-result-D5-3-M1-dfg-1-1-1.pdf, id=229, 919.435pt x 6464.1
+<figures/evaluation/PN-result-D5-3-M1-dfg-1-1-1.pdf, id=228, 919.435pt x 6464.1
 5pt>
 File: figures/evaluation/PN-result-D5-3-M1-dfg-1-1-1.pdf Graphic file (type pdf
 )
 <use figures/evaluation/PN-result-D5-3-M1-dfg-1-1-1.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-D5-3-M1-dfg-1-1-1.pdf  us
-ed on input line 295.
+ed on input line 310.
 (pdftex.def)             Requested size: 102.42886pt x 456.0876pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [8]
-<figures/evaluation/M3-D43-ext-weight-plot.pdf, id=236, 803.0pt x 602.25pt>
+<figures/evaluation/M3-D43-ext-weight-plot.pdf, id=234, 803.0pt x 602.25pt>
 File: figures/evaluation/M3-D43-ext-weight-plot.pdf Graphic file (type pdf)
 <use figures/evaluation/M3-D43-ext-weight-plot.pdf>
 Package pdftex.def Info: figures/evaluation/M3-D43-ext-weight-plot.pdf  used on
- input line 310.
+ input line 325.
 (pdftex.def)             Requested size: 426.79135pt x 320.10074pt.
-<figures/evaluation/M3-D43-neg-weight-plot.pdf, id=238, 803.0pt x 602.25pt>
+<figures/evaluation/M3-D43-neg-weight-plot.pdf, id=236, 803.0pt x 602.25pt>
 File: figures/evaluation/M3-D43-neg-weight-plot.pdf Graphic file (type pdf)
 <use figures/evaluation/M3-D43-neg-weight-plot.pdf>
 Package pdftex.def Info: figures/evaluation/M3-D43-neg-weight-plot.pdf  used on
- input line 318.
+ input line 333.
 (pdftex.def)             Requested size: 426.79135pt x 320.10074pt.
-<figures/evaluation/M3-D43-pos-weight-plot.pdf, id=240, 803.0pt x 602.25pt>
+<figures/evaluation/M3-D43-pos-weight-plot.pdf, id=238, 803.0pt x 602.25pt>
 File: figures/evaluation/M3-D43-pos-weight-plot.pdf Graphic file (type pdf)
 <use figures/evaluation/M3-D43-pos-weight-plot.pdf>
 Package pdftex.def Info: figures/evaluation/M3-D43-pos-weight-plot.pdf  used on
- input line 326.
+ input line 341.
 (pdftex.def)             Requested size: 426.79135pt x 320.10074pt.
 ) [9] [10 <./figures/evaluation/PN-result-D5-3-M1-fahland.pdf> <./figures/evalu
 ation/PN-result-D5-3-M1-dfg-1-1-1.pdf>] [11 <./figures/evaluation/M3-D43-ext-we
@@ -1876,7 +1872,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 71.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 71.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 71.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: DDF1C1EA46C89B80034D409827C1DB40;724.
+(rerunfilecheck)             Checksum: 08DFD01E8892C07E4C1A8BEC1F373955;720.
 
 
 LaTeX Warning: There were undefined references.
@@ -1884,13 +1880,13 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 71.
  ) 
 Here is how much of TeX's memory you used:
- 37003 strings out of 494847
- 852529 string characters out of 6179079
- 1072903 words of memory out of 5000000
- 39553 multiletter control sequences out of 15000+600000
+ 37002 strings out of 494847
+ 852513 string characters out of 6179079
+ 1079903 words of memory out of 5000000
+ 39552 multiletter control sequences out of 15000+600000
  91634 words of font info for 75 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 76i,20n,121p,1020b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 76i,20n,121p,1034b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share
 /texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm
@@ -1905,10 +1901,10 @@ lmss10.pfb></usr/share/texmf/fonts/type1/public/lm/lmssbx10.pfb></usr/share/tex
 mf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/public/lm/lmt
 t10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam
 10.pfb>
-Output written on main.pdf (30 pages, 1413462 bytes).
+Output written on main.pdf (30 pages, 1413400 bytes).
 PDF statistics:
- 434 PDF objects out of 1000 (max. 8388607)
- 361 compressed objects within 4 object streams
+ 432 PDF objects out of 1000 (max. 8388607)
+ 359 compressed objects within 4 object streams
  87 named destinations out of 1000 (max. 500000)
  154 words of extra memory for PDF output out of 10000 (max. 10000000)
 
