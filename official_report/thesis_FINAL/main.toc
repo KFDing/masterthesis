@@ -1,18 +1,18 @@
-\contentsline {chapter}{Aknowledgement}{iii}{chapter*.1}
-\contentsline {chapter}{Abstract}{v}{chapter*.2}
-\contentsline {chapter}{\numberline {1}Evaluation}{1}{chapter.1}
-\contentsline {section}{\numberline {1.1}Evaluation Criteria}{1}{section.1.1}
-\contentsline {section}{\numberline {1.2}Experiment Platforms}{3}{section.1.2}
-\contentsline {subsection}{\numberline {1.2.1}KNIME}{3}{subsection.1.2.1}
-\contentsline {subsection}{\numberline {1.2.2} Experiments with ProM Plugins}{3}{subsection.1.2.2}
-\contentsline {section}{\numberline {1.3}Experiment Results}{4}{section.1.3}
-\contentsline {subsection}{\numberline {1.3.1}Test on Demo Example}{4}{subsection.1.3.1}
-\contentsline {subsubsection}{\numberline {1.3.1.1}Answer to Situation 1}{4}{subsubsection.1.3.1.1}
-\contentsline {subsubsection}{\numberline {1.3.1.2}Answer to Situation 2}{4}{subsubsection.1.3.1.2}
-\contentsline {subsubsection}{\numberline {1.3.1.3}Answer to Situation 3}{6}{subsubsection.1.3.1.3}
-\contentsline {subsubsection}{\numberline {1.3.1.4}Comparison with Confusion Matrix}{6}{subsubsection.1.3.1.4}
-\contentsline {subsection}{\numberline {1.3.2}Test on Real Life Data}{7}{subsection.1.3.2}
-\contentsline {subsubsection}{\numberline {1.3.2.1}Data Description}{7}{subsubsection.1.3.2.1}
-\contentsline {subsubsection}{\numberline {1.3.2.2}Test Result}{8}{subsubsection.1.3.2.2}
-\contentsline {chapter}{\numberline {2}Conclusion}{15}{chapter.2}
-\contentsline {chapter}{Bibliography}{18}{chapter*.16}
+\contentsline {chapter}{Aknowledgement}{iii}{chapter*.1}% 
+\contentsline {chapter}{Abstract}{v}{chapter*.2}% 
+\contentsline {chapter}{\numberline {1}Evaluation}{1}{chapter.1}% 
+\contentsline {section}{\numberline {1.1}Evaluation Criteria}{1}{section.1.1}% 
+\contentsline {section}{\numberline {1.2}Experiment Platforms}{2}{section.1.2}% 
+\contentsline {subsection}{\numberline {1.2.1}KNIME}{3}{subsection.1.2.1}% 
+\contentsline {subsection}{\numberline {1.2.2} Experiments with ProM Plugins}{3}{subsection.1.2.2}% 
+\contentsline {section}{\numberline {1.3}Experiment Results}{3}{section.1.3}% 
+\contentsline {subsection}{\numberline {1.3.1}Test on Demo Example}{3}{subsection.1.3.1}% 
+\contentsline {subsubsection}{\numberline {1.3.1.1}Answer to Situation 1}{4}{subsubsection.1.3.1.1}% 
+\contentsline {subsubsection}{\numberline {1.3.1.2}Answer to Situation 2}{4}{subsubsection.1.3.1.2}% 
+\contentsline {subsubsection}{\numberline {1.3.1.3}Answer to Situation 3}{4}{subsubsection.1.3.1.3}% 
+\contentsline {subsubsection}{\numberline {1.3.1.4}Comparison with Confusion Matrix}{6}{subsubsection.1.3.1.4}% 
+\contentsline {subsection}{\numberline {1.3.2}Test on Real Life Data}{6}{subsection.1.3.2}% 
+\contentsline {subsubsection}{\numberline {1.3.2.1}Data Description}{6}{subsubsection.1.3.2.1}% 
+\contentsline {subsubsection}{\numberline {1.3.2.2}Test Result}{8}{subsubsection.1.3.2.2}% 
+\contentsline {chapter}{\numberline {2}Conclusion}{15}{chapter.2}% 
+\contentsline {chapter}{Bibliography}{18}{chapter*.17}% 
