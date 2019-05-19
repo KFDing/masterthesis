@@ -20,7 +20,7 @@ However, the current repair methods have limits. Model repair techniques fix the
 
 In the following sections, motivating examples are given to describe those limits of the current repair techniques in several situations. Then we propose research questions to overcome those limits and define our research scope. At the end, we give the outline for the whole thesis.
 %% Motivation
-\section{Motivating Examples}
+\section{Motivating Examples}\label{sec:demo}
 
 For better understanding, examples are extracted from the common master thesis procedure to illustrate those situations. The process is described by the Petri net $M_0$ in Figure \ref{fig:demo-M0}. Activities are denoted as rectangle and connected by circles called places. The directed arcs in the Petri net indicate the execution order of activities. And the black dots in places of the model represents current execution states. In addition, those dots can be substituted by other symbols due to visualization tools, like numbers in places.
 
@@ -42,7 +42,7 @@ For convenience, the real process is recorded in the event log $L_1$ in the foll
 When using rediscovery strategy with setting, the Inductive Miner for Infrequent and noise threshold with 20, a new  model $M_{1.2}$ based on the positive instances of $L_1$ is generated in Figure \ref{fig:demo_s1_IM}. \textbf{x1, x2} position with exclusive choices as implied by event log $L_1$. However, \textbf{a1} is kept in the new model and \textbf{a2} has been deleted, because no traces in $L_1$ includes \textbf{a2}.
 		
 		
-Because the existing repair techniques  \cite{fahland2015model} don't consider the performance of traces in event log, all instances with negative labels are ignored to compute the deviations. $L_1$ has deviations of \textbf{x1, x2} at the same place without order. The corresponding subprocesses for them are added in the loop as shown in Figure \ref{fig:demo_s1_fahland}, which brings more behavior than expected into model.
+Because the existing repair techniques  \cite{fahland2015model} do not consider the performance of traces in event log, all instances with negative labels are ignored to compute the deviations. $L_1$ has deviations of \textbf{x1, x2} at the same place without order. The corresponding subprocesses for them are added in the loop as shown in Figure \ref{fig:demo_s1_fahland}, which brings more behavior than expected into model.
 \begin{figure}[htp]
 	\centering
 	\begin{subfigure}[b]{0.48\textwidth}
@@ -77,7 +77,7 @@ L_2:=\{ & { < a1, b, c, d2, \textbf{e1, e2}, f>}^{30, pos} , \\
 &{< a1, b, c, d1, \textbf{e2, e1}, f>}^{20, pos}; 
 & {<a2, b, c, d1, \textbf{e1, e2}, f>}^{5, neg}  \}
 \end{align*}
-Compared to $M_0$, the event log $L_2$ contains no deviation. When we apply the techniques in  \cite{fahland2015model} and  \cite{dees2017enhancing} to repair the model, the model remains unchanged. Also, IM mines the same model as the original one. Apparently, the fact that those two methods can't incorporate the negative information in fitting traces causes this shortcoming. A model as $M_2$ is expected because it enforces the positive instances and avoids the negative instance. Unfortunately, the current methods don't allow us to obtain such results. 
+Compared to $M_0$, the event log $L_2$ contains no deviation. When we apply the techniques in  \cite{fahland2015model} and  \cite{dees2017enhancing} to repair the model, the model remains unchanged. Also, IM mines the same model as the original one. Apparently, the fact that those two methods can not incorporate the negative information in fitting traces causes this shortcoming. A model as $M_2$ is expected because it enforces the positive instances and avoids the negative instance. Unfortunately, the current methods do not allow us to obtain such results. 
 \begin{figure}[htp]
 	\centering
 	\begin{subfigure}[b]{0.5\textwidth}
@@ -95,7 +95,7 @@ Compared to $M_0$, the event log $L_2$ contains no deviation. When we apply the 
 	\caption[Motivating examples for situation 2 and 3]{Motivating examples for situation 2 and 3. Current repair techniques keep the original models unchanged and can not output $M_{2}$ and $M_{3}$. $M_2$ with order changes of e1 and e2 is able to enforce positive and block negative instances. $M_{3}$ with long-term dependency leads to better precision.}
 	\label{fig:model_demo_2_3}
 \end{figure}
-\subsection{Situation 3: \small{Disable to Detect Long-term Dependency}}
+\subsection{Situation 3: \small{Unable to Detect Long-term Dependency}}
 Another problem is that current methods are unable to detect the long-term dependency in the Petri net, which causes a lower precision. The long-term dependency describes the phenomenon that the execution of an activity decides the execution of activities that do not follow directly. Due to the long distance of this dependency, current methods cannot detect it and improve the precision by adding long-term dependency on the model. One example  on $M_0$ is used to demonstrate this problem.
  
 
@@ -110,7 +110,7 @@ L_3:= \{ & { <\textbf{a1}, b, c, \textbf{d1}, e1, e2, f >}^{50, pos}, \\
 \end{align*}
 
 As observed, \textbf{\emph{c1}} decides \textbf{\emph{f1}} while \textbf{\emph{c2}} decides \textbf{\emph{f2}}. They have long-term dependencies.
-However, there are no deviations of the model and event log $L_3$ according to the  algorithms in  \cite{fahland2015model} and  \cite{dees2017enhancing}. Also, the Inductive Miner can't detect long-term dependency. Therefore, the original model stays the same and negative instances can't be blocked.
+However, there are no deviations of the model and event log $L_3$ according to the  algorithms in  \cite{fahland2015model} and  \cite{dees2017enhancing}. Also, the Inductive Miner can not detect long-term dependency. Therefore, the original model stays the same and negative instances can not be blocked.
 
 Clearly, the use of negative information can bring significant benefits, e.g, enable a controlled generalization of a process model: the patterns to generalize should never include negative instances. This leads to the demand of improving current repair model techniques with incorporating negative instances. In the next section, the demand is analyzed and defined in a formal way.
 

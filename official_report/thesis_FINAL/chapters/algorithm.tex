@@ -122,7 +122,7 @@ The result of the last step above is a unified directly-follows graph $D^n$ with
 Later, based on $G^n$, an existing procedure called \emph{Dfg2ProcessTree} is applied to mine process models like process tree and Petri net \cite{leemans2013discovering}. It finds the most prominent split from the set of exclusive choice, sequence, parallelism, and loop splits on  a directly-follows graph.  Afterward, the corresponding operator to the split is used to build a block-structured process model called a process tree. Iteratively, the split sub graphs are passed as inputs for the same procedure until one single activity is reached and no split is available. A process tree is output as the mined process model and can be converted into another process model called Petri net.
 %% To write the procedure for it 
 \subsection{Post Procedure on the Process Model}
-Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can't be discovered. To improve precision of the generated model, we propose one post procedure to add the long-term dependencies to the model. Additionally, another post procedure to simplify the model is introduced by deleting redundant silent transitions and places.
+Due to the intrinsic characters of Inductive Miner, the dependency from activities which are not directly-followed can not be discovered. To improve precision of the generated model, we propose one post procedure to add the long-term dependencies to the model. Additionally, another post procedure to simplify the model is introduced by deleting redundant silent transitions and places.
 \subsubsection{Add Long-term Dependency}
 Obviously, long-term dependency relates to the structure of choices in process model, such as exclusive choice, loop and or structure. Due to the complexity of handling long-term dependency on or and loop structure, we skip them but focus only on the long-term dependency in \textbf{exclusive choice structure}. 
 
@@ -216,7 +216,7 @@ Given a process tree in Figure \ref{fig:pt-lt-demo}, two xor blocks are containe
 	$LT_S = \{A,B\}, LT_T=\{D,E\}, \vert LT \vert = \vert S \vert * \vert T \vert  $, which is a full long-term dependency where all combinations of source and target xor branches have significant correlation. 
 	\item $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $\\
 	$LT_S = \{A,B\}, LT_T=\{D,E\}$
-	$LT_S = S $ and $LT_T = T, \vert LT \vert < \vert S \vert * \vert T \vert $. it doesn't cover all combinations. But for one xor branch $X \in S, LT_T(X)= T$, it has all the full long-term dependency with $T$. 
+	$LT_S = S $ and $LT_T = T, \vert LT \vert < \vert S \vert * \vert T \vert $. it does not cover all combinations. But for one xor branch $X \in S, LT_T(X)= T$, it has all the full long-term dependency with $T$. 
 	\item $LT=\{ A\rightsquigarrow D, B\rightsquigarrow E\}. $\\
 	$LT_S = \{A,B\}, LT_T=\{D,E\}$
 	$LT_S = S $ and $LT_T = T, \vert LT \vert < \vert S \vert * \vert T \vert $. For all xor branch $X \in S, LT_T(X) \subsetneq T$, none of xor branch X has long-term dependency with $T$.
@@ -231,8 +231,8 @@ Given a process tree in Figure \ref{fig:pt-lt-demo}, two xor blocks are containe
 	\item $ \emptyset$ . There is no long-term dependency on this set. 
 \end{enumerate}
 % here already to dispose several situations here and then 
-%However, when the long-term dependency is full connected where each combination of xor branches from source and target xor block has long-term dependency, namely xor branches can be chosen freely, we don't add any places and silent transitions on the model.
-In the listed situations, situation 1 is a full long-term dependency, which allows all combinations like the original models, and no changes is necessary on the model. Situation 7 has no long-term dependency, where the correlation of them is either not so strong from the positive instances or rejected from negative instances. In this thesis, we don't take those two situations into consideration.  
+%However, when the long-term dependency is full connected where each combination of xor branches from source and target xor block has long-term dependency, namely xor branches can be chosen freely, we do not add any places and silent transitions on the model.
+In the listed situations, situation 1 is a full long-term dependency, which allows all combinations like the original models, and no changes is necessary on the model. Situation 7 has no long-term dependency, where the correlation of them is either not so strong from the positive instances or rejected from negative instances. In this thesis, we do not take those two situations into consideration.  
 
 %% should we write down here to prove the correctness of available situations, or we need to wait??
 \subsubsection{Way to Express Long-term Dependency}
@@ -294,7 +294,7 @@ Given a Petri net with long-term dependency $LT=\{X_i \rightsquigarrow Y_j \vert
  
 The Petri net is sound if and only if (1)the soundness outside xor blocks with long-term dependency is not violated; and  (2) soundness between xor blocks is kept. In the following, we check the model soundness with long-term dependency after applying Algorithm \ref{alg: Adding method}. \\\\
 \textbf{Soundness outside xor blocks.}\\
-	\emph{Proof:} he added silent transitions and places do not violate the execution outside of the xor blocks, because the extra tokens that are generated due to long-term dependency are constrained in the xor blocks, and it doesn't affect the token flows outside. As we know, the original model is sound. So the soundness outside xor blocks is not violated.
+	\emph{Proof:} he added silent transitions and places do not violate the execution outside of the xor blocks, because the extra tokens that are generated due to long-term dependency are constrained in the xor blocks, and it does not affect the token flows outside. As we know, the original model is sound. So the soundness outside xor blocks is not violated.
 %% begin to prove the soundness inside xor block
 \\\\
 \textbf{Soundness inside xor blocks.}\\
@@ -302,7 +302,7 @@ For the xor blocks $S=\{X_1,X2,...X_m\}$ and $T=\{Y_1,Y_2,...Yn\}$ with long-ter
 \[ M(p_{X_i}) = 1; \quad 
 \forall p_{X_i^\prime} \in P_S, i^\prime \neq i, M(p_{X_i^\prime})=0 \]
 %% here we need to divide them into different situations...
-If $ LT_S = S, LT_T=T$, adding the long-term dependency in this situation doesn't violate the model soundness, we prove it in the following part.
+If $ LT_S = S, LT_T=T$, adding the long-term dependency in this situation does not violate the model soundness, we prove it in the following part.
 %the following conditions are checked. 
 \begin{itemize}
 	\item Safeness. Places cannot hold multiple tokens at the same time.\\
