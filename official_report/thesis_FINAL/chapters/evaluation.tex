@@ -111,7 +111,7 @@ As seen in Figure \ref{fig:demo_dfg_s1}, the subprocesses for \textbf{x1,x2} are
 	\caption{ $M_{3.3}$ for situation 3}
 	\label{fig:demo_dfg_s3}
 \end{subfigure}
-	\caption{repaired models with our techniques for situation 1,2 and 3 in Introduction part. The green place is the initial marking of the Petri net and the doubled place is the final marking.}
+	\caption[Repaired models with Dfg-repair based on motivating examples]{repaired models with our techniques for situation 1,2 and 3 in Introduction part. The green place is the initial marking of the Petri net and the doubled place is the final marking.}
 	\label{fig:demo_dfg}
 \end{figure}
 \subsubsection{Answer to Situation 2}
@@ -259,8 +259,9 @@ As a comparison, we change the control parameter setting to 0.5 for the existing
 \caption{repaired model with IM}
 \label{fig:rl_IM}
 \end{subfigure}%
-\caption{The left model is the reference model M3. The rediscovery algorithm IM generates a new model based on the positive instances which is shown in the right side.}
+\caption[Reference model M3 and the rediscovered model for it with IM]{The left model is the reference model M3. The rediscovery algorithm IM generates a new model based on the positive instances which is shown in the right side.}
 \end{figure}
+
 %two figures to show the reference models and IM generated model
 \begin{figure}[htp]
 	\centering
@@ -276,7 +277,7 @@ As a comparison, we change the control parameter setting to 0.5 for the existing
 		\caption{repaired model with Dfg-repair}
 		\label{fig:rl_dfg}
 	\end{subfigure}
-	\caption{Repaired model for $M_3$ based on event log D3.1 with positive instances for Fahland's repair techniques  while event log D3.3 with both positive and negative instances for Dfg-repair. The weight setting for Dfg-repair is 0.5 for the existing model, 1 for positive and 0.5 for negative instances. Default setting is chosen for Fahland's method.}
+	\caption[Repaired models with Fahland and Dfg-repair techniques]{Repaired model for $M_3$ based on event log D3.1 with positive instances for Fahland's repair techniques  while event log D3.3 with both positive and negative instances for Dfg-repair. The weight setting for Dfg-repair is 0.5 for the existing model, 1 for positive and 0.5 for negative instances. Default setting is chosen for Fahland's method.}
 \end{figure}
 
 
@@ -352,21 +353,21 @@ After filtering out the data with missing value NaN, we average the confusion ma
 
 \begin{figure}[htb]
 	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-ext-weight-plot.pdf}
-	\caption{result with control parameter for existing model on event log D3.3 and model M3}
+	\caption{result with weight for existing model on event log D3.3 and model M3}
 	\label{fig:ext-weight}
 \end{figure} 
 For the experiments on From the Figure \ref{fig:ext-weight}, with the parameter for the existing model going up, recall, accuracy and F1 go down firstly and then become stable. Because the reference model M3 leads to block positive behavior from model, with the weight for the existing model going up, the force to keep the model as M3 increases. Thereby, the repaired model fits less positive instances and the recall goes lower. 
 
 \begin{figure}[htb]
 	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-pos-weight-plot.pdf}
-	\caption{result with control parameter for positive instance on event log D3.3 and model M3}
+	\caption{result with weight for positive instance on event log D3.3 and model M3}
 	\label{fig:pos-weight}
 \end{figure}
 Figure \ref{fig:pos-weight} displays the tendency with the weight for positive event log. When the weight rises, recall, precision and accuracy increase. The reason might be the forces from the existing model and negative event logs tend to block the positive behavior. With higher values, the force for the positive instances adjusts the model with better balance. Therefore, as the weight for positive event log increases, the repaired model allows for more positive behavior and leads to the increase of all criteria related to confusion matrix.
 
 \begin{figure}[htb]
 	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-neg-weight-plot.pdf}
-	\caption{result with control parameter for negative instance on event log D3.3 and model M3}
+	\caption{result with weight for negative instance on event log D3.3 and model M3}
 	\label{fig:neg-weight}
 \end{figure}
 Figure \ref{fig:neg-weight} shows the tendency with the weight  for negative event log. With lower value, the weight leads to higher recall, precision and accuracy. The negative force is possibly over the force from positive event log. When the weight increases,  behavior which contributes to positive performance is likely to deleted from the models. In this way, the measurements go down with the weight going up.

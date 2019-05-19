@@ -1,20 +1,20 @@
 %\documentclass[../main.tex]{subfiles}
 %\begin{document}
-\emph{Process mining} is a relatively new discipline that bridges the gap of data mining and business process management. The objective of process mining is to support the analysis of business processes, provide valuable insights in processes and further improve the business execution based on the business execution data which is recorded in event logs. According to  \cite{van2011process}, process mining techniques are divided into three categories: \emph{process discovery}, \emph{conformance checking}, and \emph{process enhancement}. \emph{Process discovery} techniques derive visual models from event logs of the information system, aiming at a better understanding of real business processes. \emph{Conformance checking} analyzes the deviations between a referenced process model and observed behaviors driven from its execution. \emph{Process enhancement} adapts and improves existing process models by extending the models with additional data perspectives or repairing the reference models to accurately reflect observed behaviors. 
+\emph{Process mining} is a relatively new discipline that bridges the gap of data mining and business process management. The objective of process mining is to support the analysis of business processes, provide valuable insights in processes and further improve the business execution based on the business execution data which are recorded in event logs. According to  \cite{van2011process}, process mining techniques are divided into three categories: \emph{process discovery}, \emph{conformance checking}, and \emph{process enhancement}. \emph{Process discovery} techniques derive visual models from event logs of information systems, aiming at a better understanding of real business processes. \emph{Conformance checking} analyzes the deviations between a reference process model and observed behaviors driven from its execution. \emph{Process enhancement} adapts and improves existing process models by extending the models with additional data perspectives or repairing the reference models to accurately reflect observed behaviors. 
 
-Most of the organizations have predefined process execution rules of activities which are captured in a process model. One execution of related activities in this model is called a trace. A trace which has no deviation to the model is a fitting trace. However, in real life, business processes often encounter exceptional situations where it is necessary to execute process differing from the reference model. With accumulation of deviations, the reference process model needs amending to reflect reality. 
+Most of the organizations have predefined process execution rules of activities which are captured in a process model. One execution of related activities in this model is called a trace. A trace which has no deviation to the model is a fitting trace. However, in practice, business processes often encounter exceptional situations where it is necessary to execute process differing from the reference model. With accumulation of deviations, the reference process model needs amending to reflect reality. 
 
 
-Basically, one can apply process discovery techniques again  on the event log to obtain a new model only based. This method is referred as process rediscovery. However, there is a need that the improved model should be as similar as possible to the original model while replaying the current process execution \cite{fahland2012repairing}. In this situation, the rediscovery method tends to fail due to the ignorance of the impact from the existing model. To meet this need, \textbf{model repair} techniques are proposed in  \cite{fahland2012repairing}.
+Basically, one can apply process discovery techniques again on the event log to obtain a new model. This method is referred as process rediscovery.  Without consideration of the reference models, the rediscovered models are likely to differ a lot from the reference ones. However, there is a need that the improved model should be as similar as possible to the original model while replaying the current process execution \cite{fahland2012repairing}. In this situation, the rediscovery method tends to fail due to the ignorance of the impact from the existing model. To meet this need, \textbf{model repair} techniques are proposed in  \cite{fahland2012repairing}.
 
-\emph{Model repair} belongs to process enhancement \cite{fahland2012repairing}. It analyzes the workflow deviations between an event log and a process model, and fixes the deviations mainly by adding subprocesses on the model. As known, organizations are goal-oriented and aim to have high performance according to a set of Key Performance Indicator(KPI)s, e.g. the production time for a car industry, the logistic cost for importer companies.  However, little research in process mining is conducted on the basis of business performance \cite{ghasemi2019event}.  The authors of  \cite{ghasemi2019event} point out several contributions e.g.   \cite{dees2017enhancing} to consider business performance into process mining. The work in  \cite{dees2017enhancing} divides deviations of model and the event log into positive and negative according to certain KPIs. Then it applies repair techniques in  \cite{fahland2012repairing} only with positive deviations which are deviations leading to positive KPI outcomes. This reason behind this approach  is to avoid introducing negative instances into the repaired model. 
+\emph{Model repair} belongs to process enhancement \cite{fahland2012repairing}. It analyzes the workflow deviations between an event log and a process model, and fixes the deviations mainly by adding subprocesses on the model. As known, organizations are goal-oriented and aim to have high performance according to a set of Key Performance Indicator(KPI)s, e.g., the production time for a car industry, the logistic cost for importer companies.  However, little research in process mining is conducted on the basis of business performance \cite{ghasemi2019event}.  The authors of  \cite{ghasemi2019event} point out several contributions e.g.,   \cite{dees2017enhancing} to consider business performance into process mining. The work in  \cite{dees2017enhancing} divides deviations of model and the event log into positive and negative according to certain KPIs. Then it applies repair techniques in  \cite{fahland2012repairing} only with positive deviations which are deviations leading to positive KPI outcomes. This reason behind this approach  is to avoid introducing negative instances into the repaired model. 
 
-However, the current repair methods have some limits. Model repair techniques fix the model by adding subprocesses. They guarantee that the repaired model replays the whole event log but overgeneralizes the model, such that more behaviors are allowed than expected. Furthermore, the model complexity is increased by the repair techniques in \cite{fahland2012repairing}.  Even the performance is considered in  \cite{dees2017enhancing}, but only positive deviations are used to add subprocesses, the negative information is ignored, which disables the possibility to block negative behaviors from model.
+However, the current repair methods have limits. Model repair techniques fix the model by adding subprocesses. They guarantee that the repaired model replays the whole event log but overgeneralizes the model, such that more behaviors are allowed than expected. Furthermore, the model complexity increases due to the repair techniques in \cite{fahland2012repairing}.  The work in \cite{dees2017enhancing} takes the performance into account but only uses deviations with positive performance outcomes to repair the model. Without consideration negative information, it is difficult for the repaired model to block the behavior which leads to negative performance.
  
 \begin{wrapfigure}[27]{r}{0.4\textwidth}
 	\centering
 	\includegraphics[clip, trim=8.5cm 3cm 7cm 3cm, width=0.4\textwidth, height=0.6\textheight]{figures/introduction/thesis-demo-final-original-model.pdf}
-	\caption{original master study process $M_0$}
+	\caption{The original master study process $M_0$.}
 	\label{fig:demo-M0}
 \end{wrapfigure} 
 
@@ -30,7 +30,9 @@ According to the model, a student can \textbf{select existing topics}  or \textb
 \subsection{Situation 1: \small{Add Subprocesses as Loops}} % add preparation to this model
 One obvious shortcoming of repair techniques in \cite{fahland2015model} is that subprocesses for  deviations are created and added as loops, when the deviations start and end at the same place. If there is only one such subprocess, it is fixed as a sequence in the model with post procedure. Yet, the algorithm does not discover orders between different subprocesses at overlapping locations. Therefore, the subprocesses are kept in a loop form, which causes a lower precision of the repaired model. An example is given with respect to the master study. 
 
-In some universities, before registering a master thesis, the activities \textbf{write proposal} and \textbf{check course requirement} might be necessary in the master study procedure. The real process are recorded in the event log $L_1$. Traces with either of those activities are considered as positive.  \textbf{x1, x2} represent the activities \textbf{write proposal} and \textbf{check course requirement}.
+In some universities, before registering a master thesis, the activities \textbf{write proposal}, represented by \textbf{x1}  and \textbf{check course requirement}, represented by \textbf{x1}, are necessary for the whole procedure. We assume that traces with either of those activities are considered as positive.  
+
+For convenience, the real process is recorded in the event log $L_1$ in the following way. Traces with the same activities order and the same label are summed together. The corresponding sum and label are listed above the whole sequence. For example, the first item in $L_1$ indicates that there are 50 traces which follow the order as ${<a1, b, \textbf{x1},c, d1, e1, e2, f>}$ and lead to positive performance outcomes.
 \begin{align*}
 		L_1:= \{ &  {<a1, b, \textbf{x1},c, d1, e1, e2, f>}^{50, pos}, \\   
 		  &{<a1, b, \textbf{x2},c, d2, e1, e2, f>}^{50,pos},
@@ -40,7 +42,7 @@ In some universities, before registering a master thesis, the activities \textbf
 When using rediscovery strategy with setting, the Inductive Miner for Infrequent and noise threshold with 20, a new  model $M_{1.2}$ based on the positive instances of $L_1$ is generated in Figure \ref{fig:demo_s1_IM}. \textbf{x1, x2} position with exclusive choices as implied by event log $L_1$. However, \textbf{a1} is kept in the new model and \textbf{a2} has been deleted, because no traces in $L_1$ includes \textbf{a2}.
 		
 		
-Because the existing repair techniques  \cite{fahland2015model} don't consider the performance of traces in event log, all instances with negative labels are ignored to compute the deviations. $L_1$ has deviations of \textbf{x1, x2} at the same place without order. The corresponding subprocesses for them are added in the loop as shown in Figure \ref{fig:model_b1}, which brings more behavior than expected into model.
+Because the existing repair techniques  \cite{fahland2015model} don't consider the performance of traces in event log, all instances with negative labels are ignored to compute the deviations. $L_1$ has deviations of \textbf{x1, x2} at the same place without order. The corresponding subprocesses for them are added in the loop as shown in Figure \ref{fig:demo_s1_fahland}, which brings more behavior than expected into model.
 \begin{figure}[htp]
 	\centering
 	\begin{subfigure}[b]{0.48\textwidth}
@@ -55,7 +57,7 @@ Because the existing repair techniques  \cite{fahland2015model} don't consider t
 		\caption{repaired model $M_{1.2}$ with techniques in \cite{fahland2015model}}
 		\label{fig:demo_s1_fahland}
 	\end{subfigure}%
-	\caption{example for situation 1 where $M_{1.2}$ is repaired by adding subprocess in the form of loops.}
+	\caption[Motivating examples for situation 1]{Motivating examples for situation 1 where $M_{1.1}$ is rediscovered by Inductive Miner-Infrequent with threshold 0.2, and $M_{1.2}$ is repaired with techniques in \cite{fahland2015model} by adding subprocess in the form of loops.}
 	\label{fig:demo_s1}
 \end{figure}
 
@@ -90,7 +92,7 @@ Compared to $M_0$, the event log $L_2$ contains no deviation. When we apply the 
 		\caption{model $M_{3}$ with long-term dependency}
 		\label{fig:demo_s3_expected}
 	\end{subfigure}
-	\caption{example for situation 2 and 3}
+	\caption[Motivating examples for situation 2 and 3]{Motivating examples for situation 2 and 3. Current repair techniques keep the original models unchanged and can not output $M_{2}$ and $M_{3}$. $M_2$ with order changes of e1 and e2 is able to enforce positive and block negative instances. $M_{3}$ with long-term dependency leads to better precision.}
 	\label{fig:model_demo_2_3}
 \end{figure}
 \subsection{Situation 3: \small{Disable to Detect Long-term Dependency}}
@@ -117,7 +119,7 @@ After analyzing the current model repair methods, we limit our research scope as
 \begin{figure}
 	\centering
 	\includegraphics[width=\textwidth]{figures/introduction/P06-problem-scope.pdf}
-	\caption{The resaerch problem scope}
+	\caption[The reseach problem scope]{The scope shows the inputs for our problem is an event log and a process model in Petri net. According to certain KPIs, the event log is split into two event logs that are passed to repair the model. The output is also defined to be in the form of a Petri net. }
 	\label{fig:scope}
 \end{figure}
 

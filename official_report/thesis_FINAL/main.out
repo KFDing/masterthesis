@@ -11,12 +11,12 @@
 \BOOKMARK [0][-]{chapter.3}{Preliminaries}{}% 11
 \BOOKMARK [1][-]{section.3.1}{Event Log}{chapter.3}% 12
 \BOOKMARK [1][-]{section.3.2}{Process Models}{chapter.3}% 13
-\BOOKMARK [2][-]{subsection.3.2.1}{Petri Nets}{section.3.2}% 14
+\BOOKMARK [2][-]{subsection.3.2.1}{Petri Net}{section.3.2}% 14
 \BOOKMARK [2][-]{subsection.3.2.2}{Transition System}{section.3.2}% 15
 \BOOKMARK [2][-]{subsection.3.2.3}{Process Tree}{section.3.2}% 16
 \BOOKMARK [1][-]{section.3.3}{Inductive Miner}{chapter.3}% 17
 \BOOKMARK [2][-]{subsection.3.3.1}{Construct a Directly-Follows Graph}{section.3.3}% 18
-\BOOKMARK [2][-]{subsection.3.3.2}{Split Log Into Sublogs}{section.3.3}% 19
+\BOOKMARK [2][-]{subsection.3.3.2}{Split The Event Log Into Sublogs}{section.3.3}% 19
 \BOOKMARK [0][-]{chapter.4}{Algorithm}{}% 20
 \BOOKMARK [1][-]{section.4.1}{General Framework for Repairing Process Models}{chapter.4}% 21
 \BOOKMARK [1][-]{section.4.2}{Algorithm}{chapter.4}% 22

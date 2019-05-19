@@ -279,7 +279,7 @@ Firstly, the long-term dependency set from process tree is mapped to the corresp
 \end{algorithm}
 \begin{figure}
 	\includegraphics[width=\textwidth]{figures/algorithm/LT_Seq_01_Silent_01.png}
-	\caption{Model with long-term dependency $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $ }
+	\caption[Model with long-term dependency]{Model with long-term dependency $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $ }
 	\label{fig:pn-demo-with-lt}
 \end{figure}
 Reviewing the example of process tree of Figure \ref{fig:pt-lt-demo}, it has long-term dependency set $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}$. To express long-term dependency,  the process tree is firstly transformed into the Petri net as Figure \ref{fig:pn-lt-demo}. Then two extra places are added respectively after A and B; Next, two places before D and E are created to express that the xor branches are involved with long-term dependency. At end, for each long-term dependency, a silent transition is generated to connect the extra places after the source xor branch to the place before target place. The generated model with long-term dependency is displayed in Figure \ref{fig:pn-demo-with-lt}.

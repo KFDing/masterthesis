@@ -1,29 +1,29 @@
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {1.1}{\ignorespaces original master study process $M_0$\relax }}{2}{figure.caption.6}% 
-\contentsline {figure}{\numberline {1.2}{\ignorespaces example for situation 1 where $M_{1.2}$ is repaired by adding subprocess in the form of loops.\relax }}{4}{figure.caption.7}% 
-\contentsline {figure}{\numberline {1.3}{\ignorespaces example for situation 2 and 3\relax }}{6}{figure.caption.8}% 
-\contentsline {figure}{\numberline {1.4}{\ignorespaces The resaerch problem scope\relax }}{7}{figure.caption.9}% 
+\contentsline {figure}{\numberline {1.1}{\ignorespaces The original master study process $M_0$.\relax }}{2}{figure.caption.6}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Motivating examples for situation 1}}{4}{figure.caption.7}
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Motivating examples for situation 2 and 3}}{6}{figure.caption.8}
+\contentsline {figure}{\numberline {1.4}{\ignorespaces The reseach problem scope}}{7}{figure.caption.9}
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Translation of process tree operators to Petri net\relax }}{14}{figure.caption.11}% 
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Inductive Miner to discover a process tree from event log $L_{IM}$\relax }}{16}{figure.caption.12}% 
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Translation of process tree operators to Petri net\relax }}{14}{figure.caption.11}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Inductive Miner to discover a process tree from event log $L_{IM}$\relax }}{16}{figure.caption.12}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Model Repair Architecture}}{20}{figure.caption.13}% 
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Model with long-term dependency $LT=\{ A\rightsquigarrow D, A\rightsquigarrow E, B\rightsquigarrow E\}. $ \relax }}{29}{figure.caption.16}% 
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Model Repair Architecture}}{32}{figure.caption.18}% 
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Model Repair Architecture}}{20}{figure.caption.13}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Model with long-term dependency}}{29}{figure.caption.16}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Model Repair Architecture}}{32}{figure.caption.18}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Inductive Miner Parameter Setting\relax }}{34}{figure.caption.19}% 
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Generated Petri net without long-term dependency\relax }}{34}{figure.caption.20}% 
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Petri Net with long-term dependency \relax }}{35}{figure.caption.21}% 
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Petri net with selected long-term dependency\relax }}{36}{figure.caption.22}% 
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Petri net after reducing the silent transitions\relax }}{37}{figure.caption.23}% 
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Generated Process Tree Model\relax }}{37}{figure.caption.24}% 
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Integration of our repair techniques into KNIME\relax }}{38}{figure.caption.25}% 
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Inductive Miner Parameter Setting\relax }}{34}{figure.caption.19}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Generated Petri net without long-term dependency\relax }}{34}{figure.caption.20}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Petri Net with long-term dependency \relax }}{35}{figure.caption.21}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Petri net with selected long-term dependency\relax }}{36}{figure.caption.22}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Petri net after reducing the silent transitions\relax }}{37}{figure.caption.23}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Generated Process Tree Model\relax }}{37}{figure.caption.24}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Integration of our repair techniques into KNIME\relax }}{38}{figure.caption.25}
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {6.1}{\ignorespaces repaired models with our techniques for situation 1,2 and 3 in Introduction part. The green place is the initial marking of the Petri net and the doubled place is the final marking.\relax }}{43}{figure.caption.27}% 
-\contentsline {figure}{\numberline {6.2}{\ignorespaces The left model is the reference model M3. The rediscovery algorithm IM generates a new model based on the positive instances which is shown in the right side.\relax }}{47}{figure.caption.31}% 
-\contentsline {figure}{\numberline {6.3}{\ignorespaces Repaired model for $M_3$ based on event log D3.1 with positive instances for Fahland's repair techniques while event log D3.3 with both positive and negative instances for Dfg-repair. The weight setting for Dfg-repair is 0.5 for the existing model, 1 for positive and 0.5 for negative instances. Default setting is chosen for Fahland's method.\relax }}{48}{figure.caption.32}% 
-\contentsline {figure}{\numberline {6.4}{\ignorespaces result with control parameter for existing model on event log D3.3 and model M3\relax }}{50}{figure.caption.34}% 
-\contentsline {figure}{\numberline {6.5}{\ignorespaces result with control parameter for positive instance on event log D3.3 and model M3\relax }}{51}{figure.caption.35}% 
-\contentsline {figure}{\numberline {6.6}{\ignorespaces result with control parameter for negative instance on event log D3.3 and model M3\relax }}{52}{figure.caption.36}% 
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Repaired models with Dfg-repair based on motivating examples}}{43}{figure.caption.27}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Reference model M3 and the rediscovered model for it with IM}}{48}{figure.caption.31}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Repaired models with Fahland and Dfg-repair techniques}}{49}{figure.caption.32}
+\contentsline {figure}{\numberline {6.4}{\ignorespaces result with weight for existing model on event log D3.3 and model M3\relax }}{51}{figure.caption.34}
+\contentsline {figure}{\numberline {6.5}{\ignorespaces result with weight for positive instance on event log D3.3 and model M3\relax }}{52}{figure.caption.35}
+\contentsline {figure}{\numberline {6.6}{\ignorespaces result with weight for negative instance on event log D3.3 and model M3\relax }}{53}{figure.caption.36}
 \addvspace {10\p@ }
