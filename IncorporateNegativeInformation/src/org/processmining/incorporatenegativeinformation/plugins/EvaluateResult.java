@@ -113,7 +113,7 @@ public class EvaluateResult {
 		}
 		if(finalMarking == null || finalMarking.size() < 1) {
 			System.out.println("set the final marking at first");
-			return null;
+			finalMarking = NetUtilities.guessFinalMarking(net);
 		}
 		
 		PNReplayer replayer = new PNReplayer(log, net, initmarking, finalMarking);

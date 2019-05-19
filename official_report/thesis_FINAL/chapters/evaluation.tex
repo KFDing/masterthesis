@@ -233,7 +233,7 @@ Based on the filtered data, we derive corresponding Petri nets as reference proc
 As seen in table above, the reference models don't apply well to the corresponding event logs. So changes on the models are in demand, to reflect better the reality and also to enforce the positive instances and avoid negative instances. 
 \subsubsection{Test Result}
 % we don't need to transfer page to landscape view, because we have many rows too.
-Three types of repair techniques which are \textbf{IM}, \textbf{Fahland} and \textbf{Dfg-repair}, are applied on preprocessed event log set in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The experiment result is listed in the Table \ref{tab:rl-result}. For better understanding, we give the details of one experiment set which is conducted with the reference model M3 and event log D3.1 and D3.3.  
+Three types of repair techniques which are \textbf{IM}, \textbf{Fahland} and \textbf{Dfg-repair}, are applied on preprocessed event log set in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The repaired model is evaluated on the alignment-based conformance checking with cost function 1 for all deviations. The experiment result is listed in the Table \ref{tab:rl-result}. For better understanding, we give the details of one experiment set which is conducted with the reference model M3 and event log D3.1 and D3.3.  
 
 Figure \ref{fig:rl_ref} displays the reference model M3, which has 0 TP and 0 FP compared to D3.3. It implies that M3 leads to no positive performance outcomes. Firstly, the rediscovery techniques -- Inductive Miner for infrequent traces with noise threshold 0.2 is used on the positive event log D3.1 to rediscover a model. The generated model is shown in Figure \ref{fig:rl_IM}, which has changed a lot compared to the original model M3 as shown in the Figure \ref{fig:rl_ref}. After getting the generated model, we compare it with labeled event log D3.3 and compute the confusion matrix criteria as a baseline for our comparison. 
 
@@ -305,13 +305,13 @@ As a comparison, we change the control parameter setting to 0.5 for the existing
 			
 			D3.3      & M2              & Dfg-repair:0.5-1-0.5       & 155    &   66 &   80  & 194    &  0.444      &   0.701        &  0.475         &  0.544      \\
 			\hline
-			D3.1      & M3              & Fahland   & 349    & 145   &  1   &  0   &  1.0      &   0.706        &   0.707       &  0.828    \\
+			D3.1      & M3              & Fahland   & 35    & 7   &  139   &  314   &  0.100      &   0.833        &   0.352       &  0.179    \\
 			
 			D3.3      & M3              & Dfg-repair:1-1-1       &  0   &   0 &  146   &  349   &  0      &   NaN        &  0.295       &   0      \\
 			D3.3      & M3              & Dfg-repair:0.5-1-0.5       &  132   &   63 &  83   &  217   &  0.378      &   0.677        &  0.434        &   0.485      \\
 			\hline
 			
-			D3.1      & M4              & Fahland   &  349   & 144   &  2   &  0   & 1.0       &   0.708        &   0.709       &  0.829         \\
+			D3.1      & M4              & Fahland   &  0   & 0  &  146   &  349   & 0       &   NaN        &   0.294      &  0.0         \\
 			
 			D3.3      & M4              & Dfg-repair:1-1-1       &  0   &  0  &   146  &  349   &  0     &      NaN     & 0.294        & 0   \\
 			D3.3      & M4              & Dfg-repair:0.5-1-0.5       &  125   &  59  &   87  &  224   &  0.358     &      0.679     & 0.428        & 0.469   \\
@@ -327,12 +327,12 @@ As a comparison, we change the control parameter setting to 0.5 for the existing
 			D4.3      & M2              & Dfg-repair:1-1-1     &  139   & 36   & 113    &   207  &   0.402     &   0.794        &   0.509       &   0.534              \\
 			D4.3      & M2              & Dfg-repair:0.5-1-0.5     &  172   & 48   & 101    &   174  &   0.497     &   0.782        &   0.552       &   0.608              \\
 			\hline
-			D4.1      & M3              & Fahland   & 87    &  29  & 120    &  259   & 0.251       &    0.75       &  0.418        &  0.377                    \\
+			D4.1      & M3              & Fahland   & 10    &  20  & 129    &  336   & 0.029       &    0.333       &  0.281        &  0.053                    \\
 			D4.3      & M3              & Dfg-repair:1-1-1       &  0   &  0  & 346    &  149   &  0      &   NaN        &   0.303       &  0       \\ 
 			D4.3      & M3              & Dfg-repair:0.5-1-0.5       &  182   &  49  & 164    &  100   &  0.526      &   0.788        &   0.70       &  0.631      \\ 
 			
 			\hline
-			D4.1      & M4              & Fahland   & 63    &  20  & 129    &  283   & 0.182       &    0.759       &  0.388        &  0.294                 \\
+			D4.1      & M4              & Fahland   & 5    &  14  & 135    &  341   & 0.014      &    0.263      &  0.283        &  0.027                 \\
 			
 			D4.3      & M4              & Dfg-repair:1-1-1       &   0  & 0   &  346   & 149    &   0     &    NaN       &     0.303     &  0      \\  
 			D4.3      & M4              & Dfg-repair:0.5-1-0.5       &   172  & 48   &  101   & 174    &   0.497     &    0.782       &     0.552     &  0.608      \\      
@@ -341,7 +341,11 @@ As a comparison, we change the control parameter setting to 0.5 for the existing
 \end{table}
 % add some analysis on them..
 
-Overview all the results in Table \ref{tab:rl-result}, Fahland's repair techniques from \cite{fahland2015model} tend to have high recall but low values for true and false negative. The possible reasons are that (1) it repairs the reference model with the positive instances, which addresses the fitness of positive traces. (2) it repairs the model by adding subprocesses and introduces more behavior into the model, which also allows for the negative instances. Inductive Miner rediscovers a new model from the given positive instances, while the reference models are simply ignored. As a result, the generated model in Figure \ref{fig:rl_IM} has changed a lot compared to the original model M3 as shown in the Figure \ref{fig:rl_ref}.  
+With overview all the results in Table \ref{tab:rl-result}, Inductive Miner rediscovers a new model from the given positive instances, while the reference models are simply ignored. As a result, the generated models probably change a lot compared to the original models. With respect to confusion matrix, the rediscovered models have similar measurement values with M1 and M2 but higher measurements than the reference models M3 and M4.
+
+
+Fahland's repair techniques from \cite{fahland2015model} tend to have high recall but low values for true and false negative on the M1 and M2. The possible reasons are that (1) M1 and M2 benefit already the positive outcomes.  (2) after repairing those models  by adding subprocesses, more behavior are introduced into the model, which also allows for the negative instances.   In contrast, on M3 and M4 which block all the positive behavior, it has low recall, but high values for TN and FN. The structures of original models dominates the performance outcomes. Since M3 and M4 blocks all positive instances, if the repaired models retains the main structure, it  blocks the positive behavior as well. 
+
 
 Dfg-repair techniques uses control parameters to balance the forces from the existing model, positive and negative instances. Therefore, with different setting, Dfg-repair techniques repair the model in different ways. To address this phenomenon, besides the default setting with value 1 for all parameters, another setting with 0.5 for the existing model, 1 for the positive instances, 0.5 for the negative instances is used to conduct experiments.  Compared to the default setting, the setting with values 0.5, 1 and 0.5 results in models with higher recall, accuracy, and F1 score. The reasons behind might be that the force from negative instances affects model a lot, with the weight 1.0. It possibly blocks the behavior which contributes to positive performances.  With lower value on it, the forces from the existing model, positive and negative are balanced better and the quality of the repaired model is improved. As an example, the experiments on D3.3 and M3, or D.3. and M4, which shows the quality changes due to different setting.
 
