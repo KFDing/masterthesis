@@ -26,20 +26,20 @@
 \chapter*{Abstract} \addcontentsline{toc}{chapter}{Abstract}
 \input{chapters/abstract.tex}
 %\end{abstract}
-%\iffalse
+
 \tableofcontents
 \listoffigures
 \listoftables
-%\fi
+
 %\setcounter{page}{1}
 \cleardoublepage
 %%% Begin document
 \pagestyle{fancy}
 \pagenumbering{arabic}
-\iffalse
+
+%\iffalse
 \chapter{Introduction} \label{chap:intro}
 \input{chapters/introduction.tex}
-
 
 \chapter{Related Work} \label{chap:backgrd}
 \input{chapters/background.tex}
@@ -56,7 +56,7 @@
 
 \chapter{Implementation} \label{chap:impl}
 \input{chapters/implementation.tex}
-\fi
+%\fi
 \chapter{Evaluation} \label{chap:eval}
 \input{chapters/evaluation.tex}
 

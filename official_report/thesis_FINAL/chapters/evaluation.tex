@@ -233,12 +233,9 @@ Based on the filtered data, we derive corresponding Petri nets as reference proc
 As seen in table above, the reference models don't apply well to the corresponding event logs. So changes on the models are in demand, to reflect better the reality and also to enforce the positive instances and avoid negative instances. 
 \subsubsection{Test Result}
 % we don't need to transfer page to landscape view, because we have many rows too.
-Three types of repair techniques which are called \textbf{IM}, \textbf{Fahland} and \textbf{Dfg-repair} are applied on preprocessed event log set in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The experiment result is listed in the Table \ref{tab:rl-result}. For better understanding, we give the details of one experiment set which is conducted with the reference model M3 and event log D3.1 and D3.3.  
+Three types of repair techniques which are \textbf{IM}, \textbf{Fahland} and \textbf{Dfg-repair}, are applied on preprocessed event log set in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The experiment result is listed in the Table \ref{tab:rl-result}. For better understanding, we give the details of one experiment set which is conducted with the reference model M3 and event log D3.1 and D3.3.  
 
-Figure \ref{fig:rl_ref} displays the reference model M3, which has 0 TP and 0 FP compared to D3.3. It implies that M3 leads to no positive performance outcomes. Firstly, Inductive Miner for infrequent traces with noise threshold 0.2 is used on the positive event log D3.1 to rediscover a model. The generated model is shown in Figure \ref{fig:rl_IM}, which has changed a lot compared to the original model M3 as shown in the Figure \ref{fig:rl_ref}. After getting the generated model, we compare it with labeled event log D3.3 and compute the confusion matrix criteria. As shown in Table \ref{tab:rl-result}, the repaired model tend to have high FN and low FP, because the 
-
- 
-Since IM doesn't take the reference models into account, it always output the same model based on the event log. 
+Figure \ref{fig:rl_ref} displays the reference model M3, which has 0 TP and 0 FP compared to D3.3. It implies that M3 leads to no positive performance outcomes. Firstly, the rediscovery techniques -- Inductive Miner for infrequent traces with noise threshold 0.2 is used on the positive event log D3.1 to rediscover a model. The generated model is shown in Figure \ref{fig:rl_IM}, which has changed a lot compared to the original model M3 as shown in the Figure \ref{fig:rl_ref}. After getting the generated model, we compare it with labeled event log D3.3 and compute the confusion matrix criteria as a baseline for our comparison. 
 
 After applying the Fahland's repair techniques from \cite{fahland2015model}, the reference model M3 is repaired as in Figure \ref{fig:rl_fahland}. With duplicated transitions, loops and silent transitions for adding subprocesses, it is more complicated than the reference model M3. When evaluating the repaired model with confusion matrix, we get 349 TP, 145 FP, 1 TN, and 0 FN, which leads to high recall. However, it needs to notice that the principle of Fahland repair techniques is to add subprocesses for deviations in the model. Without consideration of eliminating negative behavior, the repaired model is likely to damage the model precision and accuracy.
 
@@ -343,36 +340,37 @@ As a comparison, we change the control parameter setting to 0.5 for the existing
 \end{table}
 % add some analysis on them..
 
-As the results shown in Table \ref{tab:rl-result}, Fahland's repair techniques from \cite{fahland2015model} tend to have high recall but low values for true and false negative. The possible reasons are that (1) it repairs the reference model with the positive instances, which addresses the fitness of positive traces. (2) it repairs the model by adding subprocesses and introduces more behavior into the model, which also allows for the negative instances. Inductive Miner rediscovers a new model from the given positive instances, while the reference models are simply ignored. As a result, the generated model in Figure \ref{fig:rl_IM} has changed a lot compared to the original model M3 as shown in the Figure \ref{fig:rl_ref}.  
+Overview all the results in Table \ref{tab:rl-result}, Fahland's repair techniques from \cite{fahland2015model} tend to have high recall but low values for true and false negative. The possible reasons are that (1) it repairs the reference model with the positive instances, which addresses the fitness of positive traces. (2) it repairs the model by adding subprocesses and introduces more behavior into the model, which also allows for the negative instances. Inductive Miner rediscovers a new model from the given positive instances, while the reference models are simply ignored. As a result, the generated model in Figure \ref{fig:rl_IM} has changed a lot compared to the original model M3 as shown in the Figure \ref{fig:rl_ref}.  
 
-Dfg-repair techniques uses control parameters to balance the forces from the existing model, positive and negative instances. Therefore, with different setting, Dfg-repair techniques repair the model in different ways. To address this phenomenon, besides the default setting with value 1 for all parameters, another setting with 0.5 for the existing model, 1 for the positive instances, 0.5 for the negative instances is used to conduct experiments. As shown in the Table \ref{tab:rl-result}, with different settings, the repaired models change. Compared to the default setting, the setting with values 0.5, 1 and 0.5 results in models with higher recall, accuracy, and F1 score. The reasons behind might be that the force from negative instances affects model a lot, with the weight 1.0. It possibly blocks the behavior which contributes to positive performances.  With lower value on it, the forces from the existing model, positive and negative are balanced better and the quality of the repaired model is improved. As an example, the experiments on D3.3 and M3, or D.3. and M4, which shows the quality changes due to different setting.
+Dfg-repair techniques uses control parameters to balance the forces from the existing model, positive and negative instances. Therefore, with different setting, Dfg-repair techniques repair the model in different ways. To address this phenomenon, besides the default setting with value 1 for all parameters, another setting with 0.5 for the existing model, 1 for the positive instances, 0.5 for the negative instances is used to conduct experiments.  Compared to the default setting, the setting with values 0.5, 1 and 0.5 results in models with higher recall, accuracy, and F1 score. The reasons behind might be that the force from negative instances affects model a lot, with the weight 1.0. It possibly blocks the behavior which contributes to positive performances.  With lower value on it, the forces from the existing model, positive and negative are balanced better and the quality of the repaired model is improved. As an example, the experiments on D3.3 and M3, or D.3. and M4, which shows the quality changes due to different setting.
 
-Except for the weight for negative instances, the weight for the existing model also affects the quality of repaired model. The influence of the weights on the repaired model is analyzed later in the section. 
+Except for the weight for negative instances, the weights for the existing model and positive instances also affect the quality of repaired model. To investigate the effect of those weights on the repaired model, we conducts our experiments with the following settings.
 
 
-Due to the different settings in our method, forces from the reference model, positive, and negative event logs are balanced differently during repair, which results in different process models. To investigate the effect of those setting on the repaired model, we repeat our experiments on the following setting. 
-
-Each of three control parameters for the existing model, positive and negative instances changes value from 0.0 to 1.0 with step 0.1. With this setting, directly-follows relation is generated. Afterward, the default setting of Inductive Miner Infrequent with noise threshold 20 is used to mine Petri nets from the generated directly-follows graph. In total, thousand experiments are conducted to investigate Dfg-repair method. Based on those results, we draw plots to show the tendency of evaluation results on the parameters for the existing model, positive and negative event logs. 
+Each of three control parameters for the existing model, positive and negative instances changes value from 0.0 to 1.0 with step 0.1. With this setting, directly-follows relation is generated. Afterward, the default setting of Inductive Miner Infrequent with noise threshold 20 is used to mine Petri nets from the generated directly-follows graph. In total, 1000 experiments are conducted with proposed Dfg-repair method. 
+After filtering out the data with missing value NaN, we average the confusion matrix results fixed with the analyzed weight,  and draw plots to show the tendency of evaluation results on the weight for the existing model, positive and negative event logs, respectively. 
 
 \begin{figure}[htb]
 	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-ext-weight-plot.pdf}
 	\caption{result with control parameter for existing model on event log D3.3 and model M3}
 	\label{fig:ext-weight}
 \end{figure} 
-From the Figure \ref{fig:ext-weight}, with the parameter for the existing model going up, recall goes up while accuracy and precision goes down. The reason behind it is possibly ????.
-
-
-\begin{figure}[htb]
-	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-neg-weight-plot.pdf}
-	\caption{result with control parameter for negative instance on event log D3.3 and model M3}
-	\label{fig:neg-weight}
-\end{figure}
-Figure \ref{fig:neg-weight} shows that if the parameter for negative event log increases, precision and accuracy go up. By addressing negative force, our techniques tend to block behavior which leads to low performance output. However, if the negative force is over the force from positive event log and the existing model, certain behavior which contributes to positive performance will also be deleted from the models. In contrast, this creates a model with less recall. 
-
+For the experiments on From the Figure \ref{fig:ext-weight}, with the parameter for the existing model going up, recall, accuracy and F1 go down firstly and then become stable. Because the reference model M3 leads to block positive behavior from model, with the weight for the existing model going up, the force to keep the model as M3 increases. Thereby, the repaired model fits less positive instances and the recall goes lower. 
 
 \begin{figure}[htb]
 	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-pos-weight-plot.pdf}
 	\caption{result with control parameter for positive instance on event log D3.3 and model M3}
 	\label{fig:pos-weight}
 \end{figure}
-Figure \ref{fig:pos-weight} displays the tendency with the parameter for positive event log. When the positive parameter rises, the recall increases. Precision and accuracy also increases but with ???.
+Figure \ref{fig:pos-weight} displays the tendency with the weight for positive event log. When the weight rises, recall, precision and accuracy increase. The reason might be the forces from the existing model and negative event logs tend to block the positive behavior. With higher values, the force for the positive instances adjusts the model with better balance. Therefore, as the weight for positive event log increases, the repaired model allows for more positive behavior and leads to the increase of all criteria related to confusion matrix.
+
+\begin{figure}[htb]
+	\includegraphics[width=\linewidth]{figures/evaluation/M3-D43-neg-weight-plot.pdf}
+	\caption{result with control parameter for negative instance on event log D3.3 and model M3}
+	\label{fig:neg-weight}
+\end{figure}
+Figure \ref{fig:neg-weight} shows the tendency with the weight  for negative event log. With lower value, the weight leads to higher recall, precision and accuracy. The negative force is possibly over the force from positive event log. When the weight increases,  behavior which contributes to positive performance is likely to deleted from the models. In this way, the measurements go down with the weight going up.
+
+By applying our proposed method in the real life data, it is feasible to repair model in reality.   Compared to IM with the same rediscovery setting, it is able to output models with higher recall, accuracy and F1 score. At the same time, it keeps the models as similar to the reference models, while IM simply ignores the reference models. Compared to Fahland repair techniques, which bring more behavior into the model and cause high values with TP and FP, Dfg-repairs takes negative information into account and can produce models with higher values in TN. Moreover, the repaired models from Dfg-repair are simpler than the ones from Fahland repair techniques.  With observation, Dfg-repair also runs faster.  
+Yet, we need to notice that the optimal control parameter setting differs in various situations. Trials is in demand to find the optimal setting. 
+

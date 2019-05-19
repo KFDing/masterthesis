@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6930) (preloaded format=pdflatex 2019.2.27)  19 MAY 2019 02:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6930) (preloaded format=pdflatex 2019.2.27)  19 MAY 2019 13:58
 entering extended mode
 **./main.tex
 (main.tex
@@ -1375,7 +1375,7 @@ LaTeX Font Info:    Try loading font information for T1+lmss on input line 17.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex/latex/lm\t1lmss.fd"
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-<figures/logo/pads_logo_text.jpg, id=54, 1594.95876pt x 379.4175pt>
+<figures/logo/pads_logo_text.jpg, id=206, 1594.95876pt x 379.4175pt>
 File: figures/logo/pads_logo_text.jpg Graphic file (type jpg)
 <use figures/logo/pads_logo_text.jpg>
 Package pdftex.def Info: figures/logo/pads_logo_text.jpg  used on input line 17
@@ -1439,33 +1439,444 @@ go/pads_logo_text.jpg>] [2
 ]
 (chapters/abstract.tex) [5] [6
 
-] (main.toc)
+] (main.toc [7])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
- [7] [8
+ [8] (main.lof [9
 
-] (main.lof)
+])
 \tf@lof=\write6
 \openout6 = `main.lof'.
 
- [9] [10
-
-]
+ [10]
 (main.lot)
 \tf@lot=\write7
 \openout7 = `main.lot'.
 
- [11] [12
+ [11
+
+] [12
 
 ]
 Chapter 1.
-(chapters/evaluation.tex
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 15.
+(chapters/introduction.tex [1
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex/latex/lm\ts1lmr.fd"
+]
+<figures/introduction/thesis-demo-final-original-model.pdf, id=408, 614.295pt x
+ 794.97pt>
+File: figures/introduction/thesis-demo-final-original-model.pdf Graphic file (t
+ype pdf)
+<use figures/introduction/thesis-demo-final-original-model.pdf>
+Package pdftex.def Info: figures/introduction/thesis-demo-final-original-model.
+pdf  used on input line 16.
+(pdftex.def)             Requested size: 170.72276pt x 390.93855pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+Package Fancyhdr Warning: \headheight is too small (12.0pt): 
+Make it at least 13.59999pt.
+We now make it that large for the rest of the document.
+This may cause the page layout to be inconsistent, however.
+
+[2 <./figures/introduction/thesis-demo-final-original-model.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/introduction/thesis-demo-final-ori
+ginal-model.pdf): PDF inclusion: invalid other resource which is no dict (key '
+ProcSets', type <array>); ignored.
+>]
+
+LaTeX Warning: Reference `fig:model_b1' on page 3 undefined on input line 43.
+
+<figures/introduction/thesis-demo-s1-IM.pdf, id=433, 163.57109pt x 632.3625pt>
+File: figures/introduction/thesis-demo-s1-IM.pdf Graphic file (type pdf)
+<use figures/introduction/thesis-demo-s1-IM.pdf>
+Package pdftex.def Info: figures/introduction/thesis-demo-s1-IM.pdf  used on in
+put line 48.
+(pdftex.def)             Requested size: 163.89514pt x 521.29059pt.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 49.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 49.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 49.
+<figures/introduction/thesis-demo-s1-fahland.pdf, id=434, 163.57109pt x 632.362
+5pt>
+File: figures/introduction/thesis-demo-s1-fahland.pdf Graphic file (type pdf)
+<use figures/introduction/thesis-demo-s1-fahland.pdf>
+Package pdftex.def Info: figures/introduction/thesis-demo-s1-fahland.pdf  used 
+on input line 54.
+(pdftex.def)             Requested size: 163.89514pt x 521.29059pt.
+[3] [4 <./figures/introduction/thesis-demo-s1-IM.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/introduction/thesis-demo-s1-IM.pdf
+): PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type
+ <array>); ignored.
+> <./figures/introduction/thesis-demo-s1-fahland.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/introduction/thesis-demo-s1-fahlan
+d.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets',
+ type <array>); ignored.
+>]
+<figures/introduction/thesis-demo-s2-expected.pdf, id=483, 129.6042pt x 568.042
+18pt>
+File: figures/introduction/thesis-demo-s2-expected.pdf Graphic file (type pdf)
+<use figures/introduction/thesis-demo-s2-expected.pdf>
+Package pdftex.def Info: figures/introduction/thesis-demo-s2-expected.pdf  used
+ on input line 83.
+(pdftex.def)             Requested size: 170.73pt x 521.28766pt.
+<figures/introduction/thesis-demo-s3-lt.pdf, id=484, 156.585pt x 599.35919pt>
+File: figures/introduction/thesis-demo-s3-lt.pdf Graphic file (type pdf)
+<use figures/introduction/thesis-demo-s3-lt.pdf>
+Package pdftex.def Info: figures/introduction/thesis-demo-s3-lt.pdf  used on in
+put line 89.
+(pdftex.def)             Requested size: 170.72205pt x 521.29195pt.
+<figures/introduction/P06-problem-scope.pdf, id=488, 453.61469pt x 292.2117pt>
+File: figures/introduction/P06-problem-scope.pdf Graphic file (type pdf)
+<use figures/introduction/P06-problem-scope.pdf>
+Package pdftex.def Info: figures/introduction/P06-problem-scope.pdf  used on in
+put line 119.
+(pdftex.def)             Requested size: 426.79135pt x 274.9421pt.
+ [5] [6 <./figures/introduction/thesis-demo-s2-expected.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/introduction/thesis-demo-s2-expect
+ed.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets'
+, type <array>); ignored.
+> <./figures/introduction/thesis-demo-s3-lt.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/introduction/thesis-demo-s3-lt.pdf
+): PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type
+ <array>); ignored.
+>] [7 <./figures/introduction/P06-problem-scope.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/introduction/P06-problem-scope.pdf
+): PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type
+ <array>); ignored.
+>]) [8]
+Chapter 2.
+(chapters/background.tex [9
+
+]) [10]
+Chapter 3.
+(chapters/preliminary.tex [11
+
+]
+<figures/preliminary/simple-petrinet.pdf, id=607, 281.13028pt x 88.41031pt>
+File: figures/preliminary/simple-petrinet.pdf Graphic file (type pdf)
+<use figures/preliminary/simple-petrinet.pdf>
+Package pdftex.def Info: figures/preliminary/simple-petrinet.pdf  used on input
+ line 28.
+(pdftex.def)             Requested size: 192.0548pt x 60.39745pt.
+<figures/preliminary/transition-system.pdf, id=608, 251.0178pt x 72.27pt>
+File: figures/preliminary/transition-system.pdf Graphic file (type pdf)
+<use figures/preliminary/transition-system.pdf>
+Package pdftex.def Info: figures/preliminary/transition-system.pdf  used on inp
+ut line 36.
+(pdftex.def)             Requested size: 213.39568pt x 61.43858pt.
+ [12 <./figures/preliminary/simple-petrinet.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/preliminary/simple-petrinet.pdf): 
+PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type <a
+rray>); ignored.
+> <./figures/preliminary/transition-system.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/preliminary/transition-system.pdf)
+: PDF inclusion: invalid other resource which is no dict (key 'ProcSets', type 
+<array>); ignored.
+>]
+LaTeX Font Info:    Try loading font information for TS1+lmr on input line 68.
+ ("C:\Program Files (x86)\MiKTeX 2.9\tex/latex/lm\ts1lmr.fd"
 File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [1
+) [13]
+<figures/preliminary/PT_PN_corresponding_01_seq_PN.png, id=661, 326.21875pt x 5
+8.2175pt>
+File: figures/preliminary/PT_PN_corresponding_01_seq_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_01_seq_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_01_seq_PN.png 
+ used on input line 112.
+(pdftex.def)             Requested size: 192.0548pt x 34.27518pt.
+<figures/preliminary/PT_PN_corresponding_02_xor_PN.png, id=663, 224.84pt x 73.2
+7374pt>
+File: figures/preliminary/PT_PN_corresponding_02_xor_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_02_xor_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_02_xor_PN.png 
+ used on input line 119.
+(pdftex.def)             Requested size: 192.0548pt x 62.59154pt.
+<figures/preliminary/PT_PN_corresponding_03_and_PN.png, id=664, 385.44pt x 73.2
+7374pt>
+File: figures/preliminary/PT_PN_corresponding_03_and_PN.png Graphic file (type 
+png)
+<use figures/preliminary/PT_PN_corresponding_03_and_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_03_and_PN.png 
+ used on input line 126.
+(pdftex.def)             Requested size: 192.0548pt x 36.51042pt.
+<figures/preliminary/PT_PN_corresponding_04_loop_PN.png, id=665, 224.84pt x 78.
+2925pt>
+File: figures/preliminary/PT_PN_corresponding_04_loop_PN.png Graphic file (type
+ png)
+<use figures/preliminary/PT_PN_corresponding_04_loop_PN.png>
+Package pdftex.def Info: figures/preliminary/PT_PN_corresponding_04_loop_PN.png
+  used on input line 133.
+(pdftex.def)             Requested size: 192.0548pt x 66.87865pt.
+
+Overfull \hbox (5.79135pt too wide) in paragraph at lines 147--148
+[]\T1/lmr/m/n/10.95 if $\OML/lmm/m/it/10.95 Q \OT1/lmr/m/n/10.95 =\U/msa/m/n/10
+.95  \OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 Q[]; Q[]; ::Q[]\OT1/lmr/m/n/10.95
+ )$\T1/lmr/m/n/10.95 , the sub-trees have a loop re-la-tion for $\OMS/lmsy/m/n/
+10.95 f\OML/lmm/m/it/10.95 Q[]; Q[]; ::Q[]\OMS/lmsy/m/n/10.95 g$\T1/lmr/m/n/10.
+95 . $\OMS/lmsy/m/n/10.95 f\OML/lmm/m/it/10.95 Q[]; ::Q[]\OMS/lmsy/m/n/10.95 g$
+
+ []
+
+[14 <./figures/preliminary/PT_PN_corresponding_01_seq_PN.png> <./figures/prelim
+inary/PT_PN_corresponding_02_xor_PN.png> <./figures/preliminary/PT_PN_correspon
+ding_03_and_PN.png> <./figures/preliminary/PT_PN_corresponding_04_loop_PN.png>]
+[15]
+<figures/preliminary/IM-demo-directly-follows.pdf, id=689, 190.7928pt x 142.612
+81pt>
+File: figures/preliminary/IM-demo-directly-follows.pdf Graphic file (type pdf)
+<use figures/preliminary/IM-demo-directly-follows.pdf>
+Package pdftex.def Info: figures/preliminary/IM-demo-directly-follows.pdf  used
+ on input line 208.
+(pdftex.def)             Requested size: 170.71393pt x 127.61044pt.
+
+Underfull \hbox (badness 1412) in paragraph at lines 209--209
+[]\T1/lmr/m/n/10 (a) |The directly-follows graph from
+ []
+
+<figures/preliminary/IM-demo-split-procedure.pdf, id=690, 295.1025pt x 192.72pt
+>
+File: figures/preliminary/IM-demo-split-procedure.pdf Graphic file (type pdf)
+<use figures/preliminary/IM-demo-split-procedure.pdf>
+Package pdftex.def Info: figures/preliminary/IM-demo-split-procedure.pdf  used 
+on input line 215.
+(pdftex.def)             Requested size: 234.73654pt x 153.29987pt.
+[16 <./figures/preliminary/IM-demo-directly-follows.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/preliminary/IM-demo-directly-follo
+ws.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets'
+, type <array>); ignored.
+> <./figures/preliminary/IM-demo-split-procedure.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/preliminary/IM-demo-split-procedur
+e.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets',
+ type <array>); ignored.
+>]) [17] [18
+
+]
+Chapter 4.
+(chapters/algorithm.tex
+<figures/algorithm/FD_framework.pdf, id=746, 490.71327pt x 491.91779pt>
+File: figures/algorithm/FD_framework.pdf Graphic file (type pdf)
+<use figures/algorithm/FD_framework.pdf>
+Package pdftex.def Info: figures/algorithm/FD_framework.pdf  used on input line
+ 26.
+(pdftex.def)             Requested size: 490.71207pt x 491.91658pt.
+
+Overfull \hbox (63.92072pt too wide) in paragraph at lines 26--27
+[][] 
+ []
+
+[19] [20 <./figures/algorithm/FD_framework.pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/algorithm/FD_framework.pdf): PDF i
+nclusion: invalid other resource which is no dict (key 'ProcSets', type <array>
+); ignored.
+>]
+Overfull \hbox (28.07294pt too wide) in paragraph at lines 42--44
+[]\T1/lmr/bx/n/10.95 Definition 4.1 \T1/lmr/m/n/10.95 (Uni-fied car-di-nal-ity)
+\T1/lmr/bx/n/10.95 . []\T1/lmr/m/n/10.95 Given a directly-follows graphs $\OML/
+lmm/m/it/10.95 G\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 L\OT1/lmr/m/n/10.95 ) =
+ (\OML/lmm/m/it/10.95 A; F; A[]; A[]\OT1/lmr/m/n/10.95 )$
+ []
+
+
+Overfull \hbox (1.43068pt too wide) in paragraph at lines 57--59
+[]\T1/lmr/m/it/10.95 Convert event logs into uni-fied directly-follows graphs, 
+$\OML/lmm/m/it/10.95 D[]; D[]$ \T1/lmr/m/n/10.95 Two uni-fied directly-
+ []
+
+[21]
+Overfull \hbox (0.51598pt too wide) in paragraph at lines 74--74
+[]\T1/lmr/bx/n/12 Convert Ref-er-ence Model into Uni-fied Directly-follows Grap
+h 
+ []
+
+[22]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <12> on input line 115.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 115.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `superscript' on input line 115.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 115.
+
+[23] [24]
+Overfull \hbox (2.71907pt too wide) in paragraph at lines 164--166
+\T1/lmr/m/n/10.95 the fre-quen-cies of the co-ex-is-tence of dif-fer-ent xor br
+anches are $\OML/lmm/m/it/10.95 f[]\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A; D
+\OT1/lmr/m/n/10.95 ) = 10$\T1/lmr/m/n/10.95 , $\OML/lmm/m/it/10.95 f[]\OT1/lmr/
+m/n/10.95 (\OML/lmm/m/it/10.95 A; E\OT1/lmr/m/n/10.95 ) =
+ []
+
+<figures/algorithm/PT06_Seq_2_xor_notnested.png, id=831, 621.32124pt x 210.7875
+pt>
+File: figures/algorithm/PT06_Seq_2_xor_notnested.png Graphic file (type png)
+<use figures/algorithm/PT06_Seq_2_xor_notnested.png>
+Package pdftex.def Info: figures/algorithm/PT06_Seq_2_xor_notnested.png  used o
+n input line 184.
+(pdftex.def)             Requested size: 204.85802pt x 69.49898pt.
+<figures/algorithm/LT_Seq_01_Original.png, id=832, 404.51125pt x 121.45375pt>
+File: figures/algorithm/LT_Seq_01_Original.png Graphic file (type png)
+<use figures/algorithm/LT_Seq_01_Original.png>
+Package pdftex.def Info: figures/algorithm/LT_Seq_01_Original.png  used on inpu
+t line 191.
+(pdftex.def)             Requested size: 204.85802pt x 61.50877pt.
+
+Overfull \hbox (22.22955pt too wide) in paragraph at lines 179--201
+[]\T1/lmr/m/n/10.95 Following the ex-am-ple above, the cor-re-la-tions of their
+ xor branches are $\OML/lmm/m/it/10.95 d\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95
+ A; D\OT1/lmr/m/n/10.95 ) = 0\OML/lmm/m/it/10.95 :\OT1/lmr/m/n/10.95 2\OML/lmm/
+m/it/10.95 ; d\OT1/lmr/m/n/10.95 (\OML/lmm/m/it/10.95 A; E\OT1/lmr/m/n/10.95 ) 
+=
+ []
+
+[25] [26 <./figures/algorithm/PT06_Seq_2_xor_notnested.png> <./figures/algorith
+m/LT_Seq_01_Original.png>]
+<figures/algorithm/LT_Seq_01_Silent_01.png, id=858, 404.51125pt x 161.60374pt>
+File: figures/algorithm/LT_Seq_01_Silent_01.png Graphic file (type png)
+<use figures/algorithm/LT_Seq_01_Silent_01.png>
+Package pdftex.def Info: figures/algorithm/LT_Seq_01_Silent_01.png  used on inp
+ut line 281.
+(pdftex.def)             Requested size: 426.79135pt x 170.5076pt.
+ [27]
+Underfull \hbox (badness 10000) in paragraph at lines 295--302
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 295--302
+
+ []
+
+[28] [29 <./figures/algorithm/LT_Seq_01_Silent_01.png>]
+<figures/algorithm/dfg-IM-pn-with-lt.png, id=917, 747.79375pt x 206.7725pt>
+File: figures/algorithm/dfg-IM-pn-with-lt.png Graphic file (type png)
+<use figures/algorithm/dfg-IM-pn-with-lt.png>
+Package pdftex.def Info: figures/algorithm/dfg-IM-pn-with-lt.png  used on input
+ line 339.
+(pdftex.def)             Requested size: 426.79135pt x 118.01299pt.
+<figures/algorithm/dfg-IM-pn-with-lt-reduced.png, id=918, 1050.92625pt x 197.73
+875pt>
+File: figures/algorithm/dfg-IM-pn-with-lt-reduced.png Graphic file (type png)
+<use figures/algorithm/dfg-IM-pn-with-lt-reduced.png>
+Package pdftex.def Info: figures/algorithm/dfg-IM-pn-with-lt-reduced.png  used 
+on input line 347.
+(pdftex.def)             Requested size: 426.79135pt x 80.304pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<figures/algorithm/FD_architeccture_details.pdf, id=920, 505.89pt x 704.6325pt>
+
+File: figures/algorithm/FD_architeccture_details.pdf Graphic file (type pdf)
+<use figures/algorithm/FD_architeccture_details.pdf>
+Package pdftex.def Info: figures/algorithm/FD_architeccture_details.pdf  used o
+n input line 356.
+(pdftex.def)             Requested size: 421.00787pt x 586.40732pt.
+) [30] [31 <./figures/algorithm/dfg-IM-pn-with-lt.png> <./figures/algorithm/dfg
+-IM-pn-with-lt-reduced.png>] [32 <./figures/algorithm/FD_architeccture_details.
+pdf
+
+pdfTeX warning: pdflatex.exe (file ./figures/algorithm/FD_architeccture_details
+.pdf): PDF inclusion: invalid other resource which is no dict (key 'ProcSets', 
+type <array>); ignored.
+>]
+Chapter 5.
+(chapters/implementation.tex
+<figures/implementation/dfg-IM-setting.png, id=971, 400.49625pt x 143.53625pt>
+File: figures/implementation/dfg-IM-setting.png Graphic file (type png)
+<use figures/implementation/dfg-IM-setting.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-setting.png  used on inp
+ut line 25.
+(pdftex.def)             Requested size: 300.37144pt x 107.65192pt.
+<figures/implementation/dfg-IM-pn-without-lt.png, id=973, 1308.89pt x 744.7825p
+t>
+File: figures/implementation/dfg-IM-pn-without-lt.png Graphic file (type png)
+<use figures/implementation/dfg-IM-pn-without-lt.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-without-lt.png  used 
+on input line 32.
+(pdftex.def)             Requested size: 426.79135pt x 242.84695pt.
+ [33
+
+]
+<figures/implementation/dfg-IM-pn-with-lt.png, id=983, 811.03pt x 548.0475pt>
+File: figures/implementation/dfg-IM-pn-with-lt.png Graphic file (type png)
+<use figures/implementation/dfg-IM-pn-with-lt.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt.png  used on 
+input line 44.
+(pdftex.def)             Requested size: 426.79135pt x 288.4066pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [34 <./figures/implementation/dfg-IM-setting.png> <./figures/implementation/df
+g-IM-pn-without-lt.png>]
+<figures/implementation/dfg-IM-pn-with-lt-manual.png, id=990, 1381.16pt x 855.1
+95pt>
+File: figures/implementation/dfg-IM-pn-with-lt-manual.png Graphic file (type pn
+g)
+<use figures/implementation/dfg-IM-pn-with-lt-manual.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-manual.png  u
+sed on input line 52.
+(pdftex.def)             Requested size: 426.79135pt x 264.25952pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/implementation/dfg-IM-pn-with-lt-reduced.png, id=993, 1374.13374pt x 6
+62.475pt>
+File: figures/implementation/dfg-IM-pn-with-lt-reduced.png Graphic file (type p
+ng)
+<use figures/implementation/dfg-IM-pn-with-lt-reduced.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-pn-with-lt-reduced.png  
+used on input line 61.
+(pdftex.def)             Requested size: 426.79135pt x 205.74925pt.
+[35 <./figures/implementation/dfg-IM-pn-with-lt.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<figures/implementation/dfg-IM-confusionmatrix.png, id=999, 959.585pt x 213.798
+75pt>
+File: figures/implementation/dfg-IM-confusionmatrix.png Graphic file (type png)
+
+<use figures/implementation/dfg-IM-confusionmatrix.png>
+Package pdftex.def Info: figures/implementation/dfg-IM-confusionmatrix.png  use
+d on input line 72.
+(pdftex.def)             Requested size: 426.79135pt x 95.08957pt.
+[36 <./figures/implementation/dfg-IM-pn-with-lt-manual.png>]
+<figures/implementation/implementation-KNIME.png, id=1005, 862.22125pt x 436.63
+126pt>
+File: figures/implementation/implementation-KNIME.png Graphic file (type png)
+<use figures/implementation/implementation-KNIME.png>
+Package pdftex.def Info: figures/implementation/implementation-KNIME.png  used 
+on input line 92.
+(pdftex.def)             Requested size: 426.79135pt x 216.12314pt.
+) [37 <./figures/implementation/dfg-IM-pn-with-lt-reduced.png> <./figures/imple
+mentation/dfg-IM-confusionmatrix.png>] [38 <./figures/implementation/implementa
+tion-KNIME.png>]
+Chapter 6.
+(chapters/evaluation.tex [39
 
 ]
 
@@ -1478,50 +1889,34 @@ Overfull \hbox (18.63646pt too wide) in paragraph at lines 63--65
  the fol-low-ing mech-a-nisms. 
  []
 
-
-Package Fancyhdr Warning: \headheight is too small (12.0pt): 
-Make it at least 13.59999pt.
-We now make it that large for the rest of the document.
-This may cause the page layout to be inconsistent, however.
-
-[2] [3]
-<figures/evaluation/PN-result-demo-s1-dfg.pdf, id=187, 341.275pt x 2706.11pt>
+[40] [41]
+<figures/evaluation/PN-result-demo-s1-dfg.pdf, id=1039, 341.275pt x 2706.11pt>
 File: figures/evaluation/PN-result-demo-s1-dfg.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-demo-s1-dfg.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-demo-s1-dfg.pdf  used on 
 input line 96.
 (pdftex.def)             Requested size: 99.22758pt x 521.22716pt.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 97.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 97.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 97.
-<figures/evaluation/PN-result-demo-s2-dfg.pdf, id=188, 179.34001pt x 1418.62994
-pt>
+<figures/evaluation/PN-result-demo-s2-dfg.pdf, id=1040, 179.34001pt x 1418.6299
+4pt>
 File: figures/evaluation/PN-result-demo-s2-dfg.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-demo-s2-dfg.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-demo-s2-dfg.pdf  used on 
 input line 103.
 (pdftex.def)             Requested size: 99.22838pt x 521.24826pt.
-<figures/evaluation/PN-result-demo-s3-dfg.pdf, id=189, 323.2075pt x 2417.03pt>
+<figures/evaluation/PN-result-demo-s3-dfg.pdf, id=1041, 323.2075pt x 2417.03pt>
+
 File: figures/evaluation/PN-result-demo-s3-dfg.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-demo-s3-dfg.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-demo-s3-dfg.pdf  used on 
 input line 110.
 (pdftex.def)             Requested size: 102.4323pt x 521.2372pt.
 
-
-LaTeX Warning: Reference `fig:demo_s3_expected' on page 4 undefined on input li
-ne 126.
-
-
 Overfull \vbox (6.0pt too high) detected at line 158
  []
 
-[4] [5 <./figures/evaluation/PN-result-demo-s1-dfg.pdf> <./figures/evaluation/P
-N-result-demo-s2-dfg.pdf> <./figures/evaluation/PN-result-demo-s3-dfg.pdf>]
-[6]
+[42] [43 <./figures/evaluation/PN-result-demo-s1-dfg.pdf> <./figures/evaluation
+/PN-result-demo-s2-dfg.pdf> <./figures/evaluation/PN-result-demo-s3-dfg.pdf>]
+[44]
 Overfull \vbox (6.0pt too high) detected at line 226
  []
 
@@ -1536,93 +1931,96 @@ Overfull \vbox (6.0pt too high) detected at line 226
 
 Underfull \vbox (badness 1783) has occurred while \output is active []
 
- [7]
-[8]
-<figures/evaluation/BPI_1_40_M3_figure.pdf, id=240, 343.95503pt x 2201.55507pt>
-
+ [45]
+<figures/evaluation/BPI_1_40_M3_figure.pdf, id=1082, 343.95503pt x 2201.55507pt
+>
 File: figures/evaluation/BPI_1_40_M3_figure.pdf Graphic file (type pdf)
 <use figures/evaluation/BPI_1_40_M3_figure.pdf>
 Package pdftex.def Info: figures/evaluation/BPI_1_40_M3_figure.pdf  used on inp
-ut line 254.
+ut line 251.
 (pdftex.def)             Requested size: 134.43582pt x 586.39911pt.
-<figures/evaluation/PN-result-D4-1-IM20-pos.pdf, id=241, 653.11pt x 4128.75507p
-t>
+<figures/evaluation/PN-result-D4-1-IM20-pos.pdf, id=1083, 653.11pt x 4128.75507
+pt>
 File: figures/evaluation/PN-result-D4-1-IM20-pos.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-D4-1-IM20-pos.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-D4-1-IM20-pos.pdf  used o
-n input line 261.
+n input line 258.
 (pdftex.def)             Requested size: 192.05788pt x 586.40073pt.
-<figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf, id=242, 3153.11006pt x 3
-046.04993pt>
+<figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf, id=1084, 3153.11006pt x 
+3046.04993pt>
 File: figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf Graphic file (type p
 df)
 <use figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf  
-used on input line 272.
+used on input line 269.
 (pdftex.def)             Requested size: 234.69289pt x 586.37805pt.
-<figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf, id=243, 947.54pt x 8198.
-63pt>
+<figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf, id=1085, 947.54pt x 8198
+.63pt>
 File: figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf Graphic file (type p
 df)
 <use figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf  
-used on input line 278.
+used on input line 275.
 (pdftex.def)             Requested size: 165.15689pt x 586.34773pt.
 
 
-LaTeX Warning: Float too large for page by 17.20995pt on input line 283.
+LaTeX Warning: Float too large for page by 17.20995pt on input line 280.
 
 
-Overfull \vbox (6.0pt too high) detected at line 342
+Overfull \vbox (6.0pt too high) detected at line 339
  []
 
 
-Overfull \vbox (6.0pt too high) detected at line 342
+Overfull \vbox (6.0pt too high) detected at line 339
  []
 
-[9] [10 <./figures/evaluation/BPI_1_40_M3_figure.pdf> <./figures/evaluation/PN-
-result-D4-1-IM20-pos.pdf>] [11 <./figures/evaluation/PN-result-D4-3-M3-fahland-
-new.pdf> <./figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf>]
-<figures/evaluation/M3-D43-ext-weight-plot.pdf, id=269, 803.0pt x 602.25pt>
+[46] [47 <./figures/evaluation/BPI_1_40_M3_figure.pdf> <./figures/evaluation/PN
+-result-D4-1-IM20-pos.pdf>] [48 <./figures/evaluation/PN-result-D4-3-M3-fahland
+-new.pdf> <./figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf>]
+Underfull \vbox (badness 4673) has occurred while \output is active []
+
+ [49]
+<figures/evaluation/M3-D43-ext-weight-plot.pdf, id=1116, 803.0pt x 602.25pt>
 File: figures/evaluation/M3-D43-ext-weight-plot.pdf Graphic file (type pdf)
 <use figures/evaluation/M3-D43-ext-weight-plot.pdf>
 Package pdftex.def Info: figures/evaluation/M3-D43-ext-weight-plot.pdf  used on
- input line 358.
+ input line 354.
 (pdftex.def)             Requested size: 426.79135pt x 320.10074pt.
- [12 <./figures/evaluation/M3-D43-ext-weight-plot.pdf>]
-<figures/evaluation/M3-D43-neg-weight-plot.pdf, id=289, 803.0pt x 602.25pt>
-File: figures/evaluation/M3-D43-neg-weight-plot.pdf Graphic file (type pdf)
-<use figures/evaluation/M3-D43-neg-weight-plot.pdf>
-Package pdftex.def Info: figures/evaluation/M3-D43-neg-weight-plot.pdf  used on
- input line 366.
-(pdftex.def)             Requested size: 426.79135pt x 320.10074pt.
-<figures/evaluation/M3-D43-pos-weight-plot.pdf, id=291, 803.0pt x 602.25pt>
+<figures/evaluation/M3-D43-pos-weight-plot.pdf, id=1118, 803.0pt x 602.25pt>
 File: figures/evaluation/M3-D43-pos-weight-plot.pdf Graphic file (type pdf)
 <use figures/evaluation/M3-D43-pos-weight-plot.pdf>
 Package pdftex.def Info: figures/evaluation/M3-D43-pos-weight-plot.pdf  used on
- input line 374.
+ input line 361.
 (pdftex.def)             Requested size: 426.79135pt x 320.10074pt.
-) [13 <./figures/evaluation/M3-D43-neg-weight-plot.pdf>] [14 <./figures/evaluat
-ion/M3-D43-pos-weight-plot.pdf>]
-Chapter 2.
-(chapters/conclusion.tex) (main.bbl [15
 
-] [16
+[50 <./figures/evaluation/M3-D43-ext-weight-plot.pdf>]
+<figures/evaluation/M3-D43-neg-weight-plot.pdf, id=1138, 803.0pt x 602.25pt>
+File: figures/evaluation/M3-D43-neg-weight-plot.pdf Graphic file (type pdf)
+<use figures/evaluation/M3-D43-neg-weight-plot.pdf>
+Package pdftex.def Info: figures/evaluation/M3-D43-neg-weight-plot.pdf  used on
+ input line 368.
+(pdftex.def)             Requested size: 426.79135pt x 320.10074pt.
+) [51 <./figures/evaluation/M3-D43-pos-weight-plot.pdf>] [52 <./figures/evaluat
+ion/M3-D43-neg-weight-plot.pdf>]
+Chapter 7.
+(chapters/conclusion.tex) (main.bbl [53
 
-] [17]
+] [54
+
+] [55]
 LaTeX Font Info:    Try loading font information for T1+lmtt on input line 164.
 
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex/latex/lm\t1lmtt.fd"
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)) [18]
+)) [56]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 71.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 71.
  (main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 71.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 71.
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: AFBC477C929BA130104961543285C81C;732.
+(rerunfilecheck)             Checksum: 044F0DC243F87D25029102D0FF255A43;3626.
 
 
 LaTeX Warning: There were undefined references.
@@ -1630,34 +2028,42 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 71.
  ) 
 Here is how much of TeX's memory you used:
- 37392 strings out of 492946
- 868724 string characters out of 3132884
- 1097561 words of memory out of 3000000
- 40510 multiletter control sequences out of 15000+200000
- 91634 words of font info for 75 fonts, out of 3000000 for 9000
+ 37892 strings out of 492946
+ 881256 string characters out of 3132884
+ 1108562 words of memory out of 3000000
+ 40794 multiletter control sequences out of 15000+200000
+ 110777 words of font info for 86 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 76i,20n,121p,1203b,609s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 76i,20n,121p,1182b,609s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.enc}{C:/Program F
-iles (x86)/MiKTeX 2.9/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files (x86)/
-MiKTeX 2.9/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program Files (x86)/MiKTeX 2.9/font
+iles (x86)/MiKTeX 2.9/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program Files (x86)/MiKT
+eX 2.9/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files (x86)/MiKTeX 2.9/font
 s/enc/dvips/lm/lm-mathsy.enc}{C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips
-/lm/lm-ts1.enc}<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmbx10.
-pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmbx12.pfb><C:/Pro
-gram Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmbxi10.pfb><C:/Program Files
- (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmmi10.pfb><C:/Program Files (x86)/MiKT
-eX 2.9/fonts/type1/public/lm/lmmi7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
-/type1/public/lm/lmmi8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publi
-c/lm/lmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmr7.pf
-b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmr8.pfb><C:/Program
- Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmri10.pfb><C:/Program Files (x86
-)/MiKTeX 2.9/fonts/type1/public/lm/lmss10.pfb><C:/Program Files (x86)/MiKTeX 2.
-9/fonts/type1/public/lm/lmssbx10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
-ype1/public/lm/lmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public
-/lm/lmtt10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/s
-ymbols/msam10.pfb>
-Output written on main.pdf (30 pages, 1528288 bytes).
+/lm/lm-mathex.enc}{C:/Program Files (x86)/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ts1.
+enc}<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmbx10.pfb><C:/Pro
+gram Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmbx12.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/lm/lmbx8.pfb><C:/Program Files (x86)/MiKTeX
+ 2.9/fonts/type1/public/lm/lmbxi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts
+/type1/public/lm/lmex10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/publ
+ic/lm/lmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmmi1
+2.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmmi6.pfb><C:/Pr
+ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmmi7.pfb><C:/Program Files 
+(x86)/MiKTeX 2.9/fonts/type1/public/lm/lmmi8.pfb><C:/Program Files (x86)/MiKTeX
+ 2.9/fonts/type1/public/lm/lmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/t
+ype1/public/lm/lmr6.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/l
+m/lmr7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmr8.pfb><C
+:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmri10.pfb><C:/Program F
+iles (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmss10.pfb><C:/Program Files (x86)/
+MiKTeX 2.9/fonts/type1/public/lm/lmssbx10.pfb><C:/Program Files (x86)/MiKTeX 2.
+9/fonts/type1/public/lm/lmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/typ
+e1/public/lm/lmsy6.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm
+/lmsy8.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb>
+<C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msam10.p
+fb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/symbols/msbm1
+0.pfb>
+Output written on main.pdf (68 pages, 2840821 bytes).
 PDF statistics:
- 448 PDF objects out of 1000 (max. 8388607)
- 88 named destinations out of 1000 (max. 500000)
- 164 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1334 PDF objects out of 1440 (max. 8388607)
+ 253 named destinations out of 1000 (max. 500000)
+ 614 words of extra memory for PDF output out of 10000 (max. 10000000)
 
