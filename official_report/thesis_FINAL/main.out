@@ -1,4 +1,4 @@
-\BOOKMARK [0][-]{chapter*.1}{Aknowledgement}{}% 1
+\BOOKMARK [0][-]{chapter*.1}{Acknowledgement}{}% 1
 \BOOKMARK [0][-]{chapter*.2}{Abstract}{}% 2
 \BOOKMARK [0][-]{chapter.1}{Introduction}{}% 3
 \BOOKMARK [1][-]{section.1.1}{Motivating Examples}{chapter.1}% 4
@@ -26,7 +26,7 @@
 \BOOKMARK [2][-]{subsection.4.2.4}{Convert Reference Model into Unified Directly-follows Graph}{section.4.2}% 26
 \BOOKMARK [2][-]{subsection.4.2.5}{Incorporate Unified Directly-follows Graphs}{section.4.2}% 27
 \BOOKMARK [2][-]{subsection.4.2.6}{Generate Process Models from Dn}{section.4.2}% 28
-\BOOKMARK [2][-]{subsection.4.2.7}{Post Procedure on the Process Model}{section.4.2}% 29
+\BOOKMARK [2][-]{subsection.4.2.7}{Post Process on the Process Model}{section.4.2}% 29
 \BOOKMARK [2][-]{subsection.4.2.8}{Reduce Silent Transitions}{section.4.2}% 30
 \BOOKMARK [2][-]{subsection.4.2.9}{Concrete Architecture}{section.4.2}% 31
 \BOOKMARK [0][-]{chapter.5}{Implementation}{}% 32
@@ -34,7 +34,7 @@
 \BOOKMARK [2][-]{subsection.5.1.1}{Process Mining Platform \205 ProM}{section.5.1}% 34
 \BOOKMARK [2][-]{subsection.5.1.2}{KNIME}{section.5.1}% 35
 \BOOKMARK [1][-]{section.5.2}{Generate a Petri net}{chapter.5}% 36
-\BOOKMARK [1][-]{section.5.3}{Post Process to Add Long-term Dependency }{chapter.5}% 37
+\BOOKMARK [1][-]{section.5.3}{Post Process to Add Long-term Dependencies }{chapter.5}% 37
 \BOOKMARK [1][-]{section.5.4}{Post Process to Reduce Redundant Silent Transitions and Places}{chapter.5}% 38
 \BOOKMARK [1][-]{section.5.5}{Additional Feature to Show Evaluation Result}{chapter.5}% 39
 \BOOKMARK [1][-]{section.5.6}{Integration into KNIME}{chapter.5}% 40

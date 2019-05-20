@@ -18,7 +18,7 @@ A trace also has a set of attributes, like its unique identifier, the cost. In t
 \section{Process Models}
 After gathering an event log from information systems, process mining can discover a process model based on the event log. With this process model, the understanding of the business process can be improved. To describe the process, multiple process modeling languages are proposed in the past years, e.g, Petri net, BPMN models, etc. 
 
-Among those model languages, Petri nets have been best studied thoroughly. Petri nets are capable to capture concurrent systems in a compact manner. Process trees are based on a tree structure to organize the event relation and simple to understand in comparison with other models, like BPMN models. In this thesis, Petri nets and process trees are used to represent our process.
+Among those model languages, Petri nets have been studied thoroughly. Petri nets are capable to capture concurrent systems in a compact manner. Process trees are based on a tree structure to organize the event relation. They are simple to understand in comparison to other models, like BPMN models. In this thesis, Petri nets and process trees are used to represent our process.
 \subsection{Petri Net}
 A Petri net is a bipartite graph which consists of \textbf{\emph{transitions}} represented by a square and \textbf{\emph{place}} by a circle. \textbf{\emph{Tokens}} in black dots are put in places to express the dynamic states of a Petri net. An Petri net example is shown in Figure \ref{fig:pn-seq-2}. This Petri net is a workflow net with a token at the source place and satisfy the soundness conditions.  
 \begin{figure}[!h]
@@ -70,7 +70,7 @@ In real life, a subclass of Petri nets known as Workflow nets is often used to m
 		\item When connecting the sink place to source place by an arc, this net seen as a graph becomes strongly connected.
 	\end{itemize}
 \end{definition}   
-However, not every Workflow net represents a correct process. To perform the business on an enterprise level, we define a minimum correctness criterion, known as soudness \cite{van2006structural}. 
+However, not every Workflow net represents a correct process. To perform the business on an enterprise level, we define a minimum correctness criterion, known as soundness \cite{van2006structural}. 
 \begin{definition}[Soundness]
 	A Petri net is sound if and only if it satisfies the following conditions.
 	\begin{itemize}
@@ -81,19 +81,17 @@ However, not every Workflow net represents a correct process. To perform the bus
 		\item No dead parts. For any transition, there exists a path from source to sink place through it. 
 	\end{itemize}
 \end{definition}
-
 % should we give definitions about the redundant silent transitions and places here?? 
 % When a Petri net with silent transitions, the model becomes complex to understand. The reduction of silent transitions and places should preserve the  behavior of the Petri net and keep the model sound. 
-
 \subsection{Transition System}
 %% Here add the definition for transitions system in Process mining
 A transition system is a basic process model. As displayed in Figure \ref{fig:ts-model}, it is composed of \emph{states} and \emph{transitions}. \emph{States} are represented by black circles and include an initial and a final state. The initial state \textbf{s1} in Figure \ref{fig:ts-model} is denoted with an input arc without any label and the final state \textbf{s4} is with an output arc without label. \emph{Transitions}, also called actions, correspond to activities in the processes. They connect states by an arc.  
 \begin{definition}[Transition System]
 	A transition system is a triple $TS=(S,A,T)$ where S is the set of states, A is the set of activities, $T \subseteq S\times A\times S $ is the set of transitions, $(s_i, a, s_j) \in T$ is represented as $s_i \xrightarrow{a} s_j$.  
 \end{definition}
-Transition systems are eligible to describe the dynamic behavior and can easily be translated to Petri nets. The example models in Figure \ref{fig:ts-model} are mapped to each other. There are 5 transitions and four states in the transition system, which correspond to the transitions and places in Petri net. %Transition systems are simple but have difficulty to express concurrency in business process. So in our thesis, we use more expressive models like Petri nets to represent our process mining result.
+The example models in Figure \ref{fig:ts-model} are mapped to each other. There are 5 transitions and four states in the transition system, which correspond to the transitions and places in Petri net. Transition systems are able to describe the dynamic behavior and can easily be translated to Petri nets. Yet, they have difficulty to express concurrency of transitions.  %Transition systems are simple but have difficulty to express concurrency in business process. So in our thesis, we use more expressive models like Petri nets to represent our process mining result.
 \subsection{Process Tree}
-Process tree is a tree and is suitable to represent a sound WF-net  by construction according to \cite{van2016data}. Moreover, as block-structured in a tree, process tree is easy to understand and use. Therefore, we introduce it in our thesis.
+Process tree is a tree and is suitable to represent a sound WF-net by construction according to \cite{van2016data}. Moreover, process tree is easy to understand. Therefore, we use it in this thesis.
 \begin{definition}[Process Tree]
 Let $ A \subseteq \mathbb{A} $ be a finite set of activities with silent transition $\tau \notin \mathbb{A}$, $\bigoplus \subseteq \{\rightarrow, \times, \land, \circlearrowright\}$ be the set of process tree operators. 
 \begin{itemize}
@@ -101,7 +99,7 @@ Let $ A \subseteq \mathbb{A} $ be a finite set of activities with silent transit
 \item $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ is a process tree with $\oplus \in \bigoplus$, and $Q_i$ is also a process tree, $ 1 \leq i \leq n$. 
 \end{itemize}
 \end{definition}
-For convenience, given a process tree $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$, we denote Q the parent for $Q_1 , Q_2 ,.. Q_n$, $Q_i$ as one child of Q. For a node in a tree without children, we call it a \textbf{\emph{leave node}}; Else, we call them \textbf{\emph{blocks}}.
+For convenience, given a process tree $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$, we denote Q the parent for $Q_1 , Q_2 ,.. Q_n$, $Q_i$ as one child of Q. For a node in a tree without children, we call it a \textbf{\emph{leaf}}; Else, we call them \textbf{\emph{blocks}}.
 
 
 Process tree operators represent different block relations of each subtree. Their semantics are standardized in  \cite{vanderAalst:2016:PMD:2948762, Buijs2012OnTR} and compared with Petri net in Figure \ref{fig:pn_pt_correspondings} \cite{Buijs2012OnTR}. We provide an informal description in the following.
@@ -149,7 +147,7 @@ Process tree operators represent different block relations of each subtree. Thei
 \end{definition}
 According to the corresponding semantic relations,  a process tree can be easily transformed into Petri net. In Figure \ref{fig:IM-split}, it is the process model in process tree which describes the same process as in Figure \ref{fig:pn-seq-2}. 
 
-To describe the execution of  a process tree Q, we need concepts called \textbf{\emph{start nodes}} and \textbf{\emph{end nodes}}. The start nodes represent the firstly executed leaves nodes in Q; Similarly, the end nodes represent the last executed leaves node set in Q. 
+To describe the execution of  a process tree Q, we need concepts called \textbf{\emph{start nodes}} and \textbf{\emph{end nodes}}. The start nodes represent the firstly executed leaf set in Q; Similarly, the end nodes represent the last executed leaf set in Q. 
 \begin{definition}[Start node and end node set]
 Given a process tree Q, its start node $S(Q)$ and end node set $E(Q)$ is defined as following. 
 \begin{itemize}
@@ -178,7 +176,7 @@ Given a sub process tree $Q= \oplus (Q_1 , Q_2 ,.. Q_n)$ and a trace $\sigma \in
 \fi
 %% here to describe the inductive miner 
 \section{Inductive Miner}
-Among multiple discovery techniques to mine a process model from an event log, Inductive Miner suits well our needs, because it guarantees the construction of a sound models, and is flexible and scalable w.r.t. event log. In this section, we explain its algorithms in details.
+Among multiple discovery techniques to mine a process model from an event log. On one hand, it guarantees the construction of a sound models. On the other hand, it is flexible and scalable w.r.t. an event log. In this section, we explain its algorithm in detail.
 \subsection{Construct a Directly-Follows Graph}
 At the start, an event log $L$ is scanned to extract the \emph{directly-follows relation} of events which describes the execution order of pair activities. We denote directly-follows relation in an event log by $>_L$. 
   
@@ -221,7 +219,7 @@ According to definitions above, we obtain a directly-follows graph from event lo
 	\label{fig:IM-demo}
 \end{figure}
 \subsection{Split The Event Log Into Sublogs}
-Based on the directly-follows graph, the Inductive Miner finds the most prominent cut which is applied afterwards to split the event log into smaller sublogs. Corresponding to process tree operators $ \{\rightarrow, \times, \land, \circlearrowright \}$, cuts consist of \emph{exclusive-choice cut, sequence cut, parallel cut and redo-loop cut}. They are selected in the following order. A maximal exclusive-choice cut is firstly tried to split the directly-follows graph; if it is not available, then a maximal sequence cut, a  maximal parallel cut and a redo-loop cut are applied in sequence. As a result, sublogs are generated based on those cuts. Meanwhile, the operators which corresponds to those cuts are used to build the process tree. The same procedure is applied again on the sublogs until single activity set.  
+Based on the directly-follows graph, the Inductive Miner finds the most prominent cut which is applied afterwards to split the event log into smaller sublogs. Corresponding to process tree operators $ \{\rightarrow, \times, \land, \circlearrowright \}$, cuts consist of \emph{exclusive-choice cut, sequence cut, parallel cut and redo-loop cut}. They are selected in the following order. Firstly, a maximal exclusive-choice cut is  tried to split the directly-follows graph; if it is not available, then a maximal sequence cut, a  maximal parallel cut and a redo-loop cut are applied in sequence. As a result, sublogs are generated based on those cuts. Meanwhile, the operators which correspond to those cuts are used to build the process tree. The same procedure is applied again on the sublogs until single activity sets.  
 
 As an example, we apply the splitting on event log $L_{IM}$ and $G(L_{IM})$ illustrated in Figure \ref{fig:IM-split}. Firstly, the $\rightarrow$ cut is applied and divides the whole event log into three sublogs $L_{IM1},L_{IM2},L_{IM3}$. Since $L_{IM1}$ includes only one single activity, so we stop splitting and build a corresponding node in the process tree. Next, $L_{IM2},L_{IM3}$ are split by exclusive choice cuts separately until meeting single set in $L_{IM4},L_{IM5},L_{IM6},L_{IM7}$.
 

@@ -7,13 +7,13 @@
 %   ==> synthetic data
 %   ==> Real life data
 %   ++ Data to test the property
-In this chapter, we evaluate the proposed repair techniques based on the quality of repaired models. At first, we define the evaluation criteria. Next, we briefly introduce the test platforms KNIME and relevant ProM plugins tools. Then, we conduct two kinds of tests. One is based one the demo example proposed in the Section \ref{sec:demo} part, and the other is on the real life data. 
+In this chapter, we evaluate the proposed repair techniques based on the quality of repaired models. At first, we define the evaluation criteria. Next, we briefly introduce the test platforms KNIME and relevant ProM plugins tools. Then, we conduct two kinds of tests. One is based one the demo example proposed in the Section \ref{sec:demo} part, and the other is based on real life data. 
 \section{Evaluation Criteria}
 % First talk about our data and our model, then choose the confusion matrix as one measurements. But we should review the traditional measuremtns on process mining before introducing the confusion matrix. but we should also focus on the accuracy part and f-score.
 We evaluate the repair techniques based on the quality of repaired models with respect to the given event logs. In process mining, there are four quality dimensions generally used to compare the process models with event logs. 
 \begin{itemize}
 	\item Fitness. It quantifies the extent how well the model reproduces traces in the event log which is used to build the model.   
-	\item Precision. It quantifies the extent how the discovered model limits the comletely unrelated behaviors that do not show in the event log. 
+	\item Precision. It quantifies the extent how the discovered model limits the comletely unrelated behaviors that maybe show up in the event log. 
 	\item Generalization. It addresses the over-fitting problem when a model strictly matches to only seen behaviors but is unable to generalize the behaviors which are not seen in the event log. 
 	\item Simplicity. It captures the model complexity. According to Occam's razor principle, the model should be as simple as possible.
 \end{itemize}
@@ -50,28 +50,28 @@ Various measurements can be derived from confusion matrix. According to our appl
 	\[Precision = \frac{TP}{TP + FP }\]
 	%\item specificity. In opposite with recall, it measures the true negative rate.
 	%\[Specificity = \frac{TN}{TN + FP}\]
-	\item Accuracy. It is the proportion of true result among the total number. In our case, it measures how well a model correctly allows the positive instances or blocks the negative instances.
+	\item Accuracy. It is the proportion of true positive and false results to the total results. In our case, it measures how well a model correctly allows the positive instances or blocks the negative instances.
 	\[Accuracy = \frac{TP+TN}{TP+TN+FP+FN}\]
 	\item F-score is is the harmonic mean of precision and recall.
 	\[F_1 = \frac{2*Recall*Precision}{Precision + Recall}\]
 \end{itemize}
 
 \section{Experiment Platforms}
-KNIME, as a scientific workflow analytic platform, supports automation of test workflow, which helps us repeat experiments efficiently. Yet, the integration of traditional process mining plugins into KNIME is out of our capability due to the time limit. Therefore, partial experiments with current repair techniques are still conducted in ProM. 
+KNIME, as a scientific workflow analytic platform, supports automating the workflow testing, which helps us repeat experiments efficiently. Yet, the integration of traditional process mining plugins into KNIME is out of our capability due to the time limit. Therefore, partial experiments with current repair techniques are still conducted in ProM. 
 \subsection{KNIME}
 % this section describes how KNIME supports automatic test, FlowVariable and optimization parts of it.
-KNIME supports automation of test workflow mainly through the following mechanisms. 
+KNIME supports automating workflow for testing mainly through the following mechanisms. 
 \begin{itemize}
 	\item Loop control structure. KNIME provides a bunch of control nodes which support re-executing workflow.  Two nodes \emph{Loop Start} and \emph{Loop End} explicitly express the beginning and end of a loop structure, where the workflow between those two nodes is the loop body and is executed recursively in a fixed number, or until certain conditions are met. In our test, we repeat our repair techniques for different parameter settings by applying loop structure into KNIME workflow.
-	\item Flow variables. Flow variables are used inside a KNIME workflow to parameterize node settings dynamically. When it combines with loop control structure, tests with different settings is able to conduct automatically.
+	\item Flow variables. Flow variables are used inside a KNIME workflow to parameterize node settings dynamically. By introducing flow variables into loop body, tests with different settings are able to conduct automatically.
 \end{itemize}
 Furthermore, there are nodes provided by KNIME to optimize the value of some parameters with respect to a cost function. As long as the cost function is provided, KNIME is able to automatically optimize the corresponding parameters. 
 
 \subsection{ Experiments with ProM Plugins}
 Due to the frequent exceptions on the plugin for repair techniques in \cite{dees2017enhancing}, we exclude tests with this repair method  and conduct experiments with the following types. 
 \begin{itemize}
-	\item \textbf{Type 1} \textbf{Inductive Miner} bases only on the positive event log to discover a model. The default setting with infrequent variant and noise threshold as 20 is chosen. Later, the mined model is checked on the labeled event with positive and negative instances. This method is abbreviated as IM.
-	\item \textbf{Type 2} \textbf{Repair Model} from \cite{fahland2015model} is applied on the positive event log to discover a model. The default setting of this plugin is chosen. Later, the mined model is checked on the labeled event with positive and negative instances. This method is abbreviated as Fahland, named after the name of main author.
+	\item \textbf{Type 1} \textbf{Inductive Miner} bases only on the positive event log to discover a model. The default setting with infrequent variant and noise threshold 20\% is chosen. Later, the mined model is checked on the labeled event logs with positive and negative instances. This method is abbreviated as IM.
+	\item \textbf{Type 2} \textbf{Repair Model} from \cite{fahland2015model} is applied on the positive event log to discover a model. The default setting of this plugin is chosen. Later, the mined model is checked on the labeled event with positive and negative instances. This method is abbreviated as Fahland, named after the name of the main author.
 	\item \textbf{Type 3} \textbf{Dfg-Repair from our thesis} is applied on the labeled event log with positive and negative instances. Default setting  for the control parameters is 1.0 while the parameters to generate Petri nets from the directly-follows graph are set as the same as experiment Type 1.  Later, the repaired model is evaluated on the labeled data. 
 \end{itemize}
 
@@ -85,9 +85,10 @@ In this part, experiments are performed on the motivating examples which are lis
 \emph{Situation 1} shows the drawbacks of current repair methods \cite{fahland2015model} that unexpected behaviors are introduced into the model by adding subprocesses in the form of loops. Moreover, rediscover strategy with IM does not take the original model into account and generates a new model that deviates from the original model. 
 
 
-Given the process model $M_0$ and the event log $L_1$, additional activities \textbf{x1} and \textbf{x2} in $L_1$ lead to good performance and need to be added into the model $M_0$. Applying proposed repair techniques Dfg-repair, we obtain the  repaired model listed in Figure \ref{fig:demo_dfg_s1}. The parameters for our method are set in the following : weight for the existing model is 0.45, weight for positive examples is 1.0, the Inductive Miner for Infrequent is chosen and has a noise threshold of 20, which is the same setting as the rediscovery method by Inductive Miner in Section \ref{sec:demo}. 
+Given the process model $M_0$ and the event log $L_1$, additional activities \textbf{x1} and \textbf{x2} in $L_1$ 
+good performance and need to be added into the model $M_0$. Applying proposed repair techniques Dfg-repair, we obtain the  repaired model listed in Figure \ref{fig:demo_dfg_s1}. The parameters for our method are set in the following : weight for the existing model is 0.45, weight for positive examples is 1.0, the Inductive Miner for Infrequent is chosen and has a noise threshold of 20\%, which is the same setting as the rediscovery method by Inductive Miner in Section \ref{sec:demo}. 
 
-As seen in Figure \ref{fig:demo_dfg_s1}, the subprocesses for \textbf{x1} and \textbf{x2} are added in a sequence with others. In this way, $M_{1.3}$ is able to reflect the deviations in positive instances while keeping similar to the reference model $M_0$. Compared to techniques in \cite{fahland2015model}, it increases the precision without loops.
+As seen in Figure \ref{fig:demo_dfg_s1}, the subprocesses for \textbf{x1} and \textbf{x2} are added in a sequence with others. In this way, $M_{1.3}$ is able to reflect the deviations in positive instances while staying similar to the reference model $M_0$. Compared to techniques in \cite{fahland2015model}, it increases the precision without loops.
 % we should give our confusion matrix result
 \begin{figure}[htp]
 	\centering
@@ -111,13 +112,13 @@ As seen in Figure \ref{fig:demo_dfg_s1}, the subprocesses for \textbf{x1} and \t
 	\caption{ $M_{3.3}$ for situation 3}
 	\label{fig:demo_dfg_s3}
 \end{subfigure}
-	\caption[Repaired models with Dfg-repair based on motivating examples]{repaired models with our techniques for situations 1,2 and 3 in Section \ref{sec:demo} part. The green place is the initial marking of the Petri net and the doubled place is the final marking.}
+	\caption[Repaired models with Dfg-repair based on motivating examples]{repaired models with our techniques for situations 1, 2 and 3 in Section \ref{sec:demo} part. The green place is the initial marking of the Petri net and the doubled place is the final marking.}
 	\label{fig:demo_dfg}
 \end{figure}
 \subsubsection{Answer to Situation 2}
 Situation 2 describes the inability of current repair methods, i.e., fitting traces with negative performance outcomes cannot be used to repair a model. 
 % some explaination about the situation.
-The execution order of \textbf{e1, e2} affects the performance outcomes and \textbf{e1} is expected to be placed before \textbf{e2}. Without negative information, the repaired models have the same structure as the reference ones, because the execution of \textbf{e2} before \textbf{e1} brings also the positive outcomes. 
+The execution order of \textbf{e1, e2} affects the performance outcomes and \textbf{e1} is expected to be placed before \textbf{e2}. Without negative information, the repaired models have the same structure as the reference ones, because the execution of \textbf{e2} before \textbf{e1} also brings  the positive outcomes. 
 
 If we apply our repair methods on the model $M_0$ and event log $L_2$, with 1.0 for all control weights, and the same Inductive Miner-Infrequent with noise 20, the repaired model $M_{2.3}$ is obtained. In $M_{2.3}$, \textbf{e1} is executed before \textbf{e2}. It shows that our method is able to incorporate the negative information and balance the forces from the existing model, positive and negative instances. 
 
@@ -125,7 +126,7 @@ If we apply our repair methods on the model $M_0$ and event log $L_2$, with 1.0 
 % Conclusion part
 Situation 3 concerns long-term dependencies in Petri nets, which is not handled in current repair and rediscovery techniques. As observed in the event log, there exists long-term dependencies set, $LT=\{ a1\rightsquigarrow d1, a2\rightsquigarrow d2\}$.  By adding long-term dependencies as expected in Figure \ref{fig:demo_s3_expected}, precision and accuracy increase, as the model limits activity selection and blocks the negative behaviors due to free execution of xor branches. Yet none of the current repair and rediscovery techniques are able to detect and add long-term dependencies in the Petri net. 
 
-In our repair techniques, long-term dependencies is taken into account. With the Petri net $M_0$ and event log $L_3$, our methods produces the repaired model $M_{3.3}$ with long-term dependencies. Two silent transitions that are used to explicitly represent long-term dependencies can be deleted with post procedure to reduce the redundant silent transitions and places. After reduction, our repaired model is simplified as the model $M_{3}$. 
+In our repair techniques, long-term dependencies is taken into account. With the Petri net $M_0$ and event log $L_3$, our methods produces the repaired model $M_{3.3}$ with long-term dependencies. Two silent transitions that are used to explicitly represent long-term dependencies can be deleted with post process to reduce the redundant silent transitions and places. After reduction, our repaired model is simplified as the model $M_{3}$. 
 \subsubsection{Comparison with Confusion Matrix}
 In this section, we list the evaluation results of the repaired models based on confusion matrix. In Table \ref{tab:demo-result}, for Situation 1 with only positive instances, the repair techniques give the same confusion matrix result. However,  $M_{1.2}$  with loops implicates a lower precision. In Situation 2, with current techniques or rediscovery methods in IM, the model stays the same as the reference  model $M_0$. Since no negative instance is rejected, the recall is 1 but precision is below 0.6.  In comparison, Dfg-repair uses the negative instances and adjusts the model correspondingly. Therefore, the repaired model $M_{2.3}$ has  higher precision, accuracy and F1 score. In Situation 3 with long-term dependencies, our method succeeds to detect and add the  long-term dependencies in the model. In this way, no false positive or false negative instances are in the confusion matrix, and the repaired model holds the highest values for all listed measurements.
 \begin{table}[h]
@@ -158,17 +159,17 @@ In this section, we list the evaluation results of the repaired models based on 
 	\end{tabular}}
 \end{table}
 
-In conclusion, our proposed method is able to overcome shortcomings of current techniques mentioned in the Section \ref{sec:demo}. It avoids the loops for additional activities as the work in \cite{fahland2015model}. By incorporating the negative information, it is able to output the repaired model which blocks the negative behavior. Additionally, it detects and adds long-term dependencies into model. In this way, the repaired model has better recall, and accuracy.
+In conclusion, our proposed method is able to conquer shortcomings of current techniques mentioned in the Section \ref{sec:demo}. It avoids the loops for additional activities as the work in \cite{fahland2015model}. By incorporating the negative information, it is able to output the repaired model which blocks the negative behavior. Additionally, it detects and adds long-term dependencies into model. In this way, the repaired model has better recall, and accuracy.
 
 \subsection{Test on Real Life Data}
 % here we will list all the data here but before describe the test data
-We choose publicly available event logs from BPI challenge 2015 and build a data set from them to test the feasibility of proposed repair techniques.
+We choose publicly available event logs from the BPI challenge 2015 and build a data set from them to test the feasibility of proposed repair techniques.
 \subsubsection{Data Description}
-The data set for BPI Challenge 2015 contain 5 event logs which are provided by five Dutch municipalities respectively. Those event logs describe the building permit application around four years. We choose them as our user cases due to the following reasons.
+The data set for BPI Challenge 2015 contain 5 event logs which are provided by five Dutch municipalities respectively. Those event logs describe the building permit application around four years. We choose them as the basis to build our test data due to the following reasons.
 \begin{itemize}
 	\item The event logs hold attributes as potential KPIs to classify traces. Attribute \textbf{SUMleges} which records the cost of the application is a candidate to label traces as positive or negative if its value  is over the threshold. Furthermore, we take the throughput time of the application as another potential KPI. 
 	In a word, this data set provides us information to reasonably label traces.
-	\item The five event logs describe an identical process, but includes deviations caused by the different procedures, regulations in those municipalities. Also, the underlying processes have changes over four years.
+	\item The five event logs describe an identical process, but include deviations caused by the different procedures, regulations in those municipalities. Also, the underlying processes have changes over four years.
 	This data set gives us a basic process but also allows deviations of the actual event logs and predefined process. This builds the experiments environment for repair techniques.
 \end{itemize}
 We conduct our experiments on those event logs. However, due to the time limits, we only managed to get the results on experiments with the event log \textbf{BPIC15\_1.xes.xml}. This event log includes 1199 cases and 52217 events in 398 classes. We preprocess the event log and get a proper subset of data as our user case.  
@@ -180,8 +181,8 @@ We conduct our experiments on those event logs. However, due to the time limits,
 		Data ID & Data Description                                & Traces Num & Events Num & Event Classes \\ \hline
 		D1      & \makecell{heuristic filter  \\ with 40 }                     & 495        & 9565       & 20             \\ \hline
 		D2      & \makecell{apply heuristic filter \\ on D1 with 60      }     & 378        & 4566       & 12            \\ \hline
-		D3.1    & \makecell{classify on SumLedges;  \\ values below 0.7 as positive} & 349        & 6744       & 20             \\ \hline
-		D3.2    & \makecell{classify on SumLedges;  \\ values above 0.7 as negative }& 146        & 2811       & 20             \\  \hline
+		D3.1    & \makecell{classify on SUMleges;  \\ values below 0.7 as positive} & 349        & 6744       & 20             \\ \hline
+		D3.2    & \makecell{classify on SUMleges;  \\ values above 0.7 as negative }& 146        & 2811       & 20             \\  \hline
 		D3.3    & union of D3.1 and D3.2                             & 495        & 9596       & 20             \\ \hline
 		D4.1    & \makecell{ classify on throughput time;  \\ values below 0.7 as positive} & 349        & 6744       & 20             \\ \hline
 		D4.2    & \makecell{classify on throughput time;  \\ values above 0.7 as negative} & 146        & 2811       & 20            \\ \hline
@@ -230,12 +231,12 @@ Based on the filtered data, we derive corresponding Petri nets as reference proc
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
 
-As seen in Table \ref{tab:ref-models}, the reference models do not apply well to the corresponding event logs. M3 and M4 reject all positive instances while M1 and M2 have lower recall and F1 score.   So changes on the models are in demand to reflect the reality better, and also to enforce the positive instances and avoid negative instances. 
+As seen in Table \ref{tab:ref-models}, the reference models do not apply well to the corresponding event logs. M3 and M4 reject all positive instances while M1 and M2 have lower recall and F1 score.  The models are in demand to reflect the reality better, and also to enforce the positive instances and avoid negative instances. 
 \subsubsection{Test Result}
 % we don't need to transfer page to landscape view, because we have many rows too.
 Three types of repair techniques which are \textbf{IM}, \textbf{Fahland} and \textbf{Dfg-repair}, are applied on preprocessed event log set in Table \ref{tab:event-log} and models from Table \ref{tab:ref-models}. The repaired model is evaluated on the alignment-based conformance checking with cost function 1 for all deviations. The experiment results are listed in the Table \ref{tab:rl-result}. For better understanding, we give the details of one experiment set which is conducted with the reference model M3 and event log D3.1 and D3.3.  
 
-Figure \ref{fig:rl_ref} displays the reference model M3, which has 0 TP and 0 FP compared to D3.3. It implies that M3 leads to no positive performance outcomes. Firstly, the rediscovery techniques -- Inductive Miner for infrequent traces with noise threshold 0.2 is used on the positive event log D3.1 to rediscover a model. The generated model is shown in Figure \ref{fig:rl_IM}, which has changed a lot compared to the original model M3 as shown in the Figure \ref{fig:rl_ref}. After getting the generated model, we compare it with labeled event log D3.3 and compute the confusion matrix criteria as a baseline for our comparison. 
+Figure \ref{fig:rl_ref} displays the reference model M3, which has 0 TP and 0 FP compared to D3.3. It implies that M3 leads to no positive performance outcomes. Firstly, the rediscovery techniques -- Inductive Miner for infrequent traces with noise threshold 20\% is used on the positive event log D3.1 to rediscover a model. The generated model is shown in Figure \ref{fig:rl_IM}, which has changed a lot compared to the original model M3 as shown in the Figure \ref{fig:rl_ref}. After getting the generated model, we compare it with labeled event log D3.3 and compute the confusion matrix criteria as a baseline for our comparison. 
 
 After applying the Fahland's repair techniques from \cite{fahland2015model}, the reference model M3 is repaired as Figure \ref{fig:rl_fahland}. With duplicated transitions, loops and silent transitions, the repaired model is more complicated than the reference model M3. When evaluating the repaired model with confusion matrix, we get 349 TP, 145 FP, 1 TN, and 0 FN, which leads to high recall. However, the principle of Fahland repair techniques is to add subprocesses for deviations in the model. Without consideration of eliminating negative behaviors, the repaired model is likely to damage the model precision and accuracy.
 
@@ -259,7 +260,7 @@ As a comparison, we change the control parameter setting to 0.5 for the existing
 \caption{repaired model with IM}
 \label{fig:rl_IM}
 \end{subfigure}%
-\caption[Reference model M3 and the rediscovered model for it with IM]{The left model is the reference model M3. The rediscovery algorithm IM generates a new model based on the positive instances which is shown in the right side.}
+\caption[Reference model M3 and the rediscovered model for it with IM]{The left model is the reference model M3. The rediscovery algorithm IM generates a new model based on the positive instances which is shown on the right side.}
 \end{figure}
 
 %two figures to show the reference models and IM generated model
@@ -347,7 +348,7 @@ With overview of results in Table \ref{tab:rl-result}, Inductive Miner rediscove
 Fahland's repair techniques from \cite{fahland2015model} tend to have high recall but low values for true and false negative on the M1 and M2. The possible reasons are that  (1) M1 and M2 benefit already the positive outcomes;  (2) after repairing those models  by adding subprocesses, more behaviors  are introduced into the model, which also allows the negative instances.   In contrast, on M3 and M4 which block all the positive instances, it has low recall, but high values for TN and FN. The structures of original models dominates the performance outcomes. Since M3 and M4 blocks all positive instances, if the repaired models retains the main structure, it  blocks the positive instances as well. 
 
 
-Dfg-repair techniques uses control parameters to balance the forces from the existing model, positive and negative instances. Therefore, with different setting, Dfg-repair techniques repair the model in different ways. To address this phenomenon, besides the default setting with value 1 for all parameters, another setting with 0.5 for the existing model, 1 for the positive instances, 0.5 for the negative instances is used to conduct experiments.  Compared to the default setting, the setting with values 0.5, 1 and 0.5 results in models with higher recall, accuracy, and F1 score. The reasons behind might be that the force from negative instances affects model a lot, with the weight 1.0. It possibly blocks the behaviors which contribute to positive performance.  With lower value on it, the forces from the existing model, positive and negative are balanced better and the quality of the repaired model is improved. As an example, the experiments on D3.3 and M3, or D.3. and M4, which show the quality changes due to different setting.
+Dfg-repair techniques uses control parameters to balance the forces from the existing model, positive and negative instances. Therefore, with different setting, Dfg-repair techniques repair the model in different ways. To address this phenomenon, besides the default setting with value 1 for all parameters, another setting with 0.5 for the existing model, 1 for the positive instances, 0.5 for the negative instances is used to conduct experiments.  Compared to the default setting, the setting with values 0.5, 1 and 0.5 results in models with higher recall, accuracy, and F1 score. The reasons behind might be that the force from negative instances affects model a lot, with the weight 1.0. It possibly blocks the behaviors which contribute to positive performance.  With lower value on it, the forces from the existing model, positive and negative are balanced better and the quality of the repaired model is improved. As an example, the experiments on D3.3 and M3, or D.3. and M4, which show the quality changes due to different settings.
 
 Except for the weight for negative instances, the weights for the existing model and positive instances also affect the quality of repaired model. To investigate the effect of those weights on the repaired model, we conducts our experiments with the following settings.
 
