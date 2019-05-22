@@ -76,9 +76,9 @@ This situation describes the existing problem in the current methods that fittin
 \begin{align*}
 L_2:=\{ & { < a1, b, c, d2, \textbf{e1, e2}, f>}^{30, pos} , \\   
 &{< a2, b, c, d1, \textbf{e1, e2}, f>}^{20, pos};   \\
-&{< a2, b, c, d2, \textbf{e2, e1}, f>}^{10, pos}; 
+&{< a2, b, c, d2, \textbf{e2, e1}, f>}^{10, pos}; \\
 & {< a1, b, c, d2, \textbf{e2, e1}, f>}^{20, neg} , \\
-&{< a1, b, c, d1, \textbf{e2, e1}, f>}^{20, pos}; 
+&{< a1, b, c, d1, \textbf{e2, e1}, f>}^{20, neg}; \\
 & {<a2, b, c, d1, \textbf{e1, e2}, f>}^{5, neg}  \}
 \end{align*}
 Compared to $M_0$, the event log $L_2$ contains no deviation. When we apply the techniques in  \cite{fahland2015model} and  \cite{dees2017enhancing} to repair the model, the model remains unchanged. Also, IM mines the same model as the original one. Apparently, the fact that those two methods can not incorporate the negative information in fitting traces causes this shortcoming. A model as $M_2$ is expected because it enforces the positive instances and avoids the negative instance. Unfortunately, the current methods do not allow us to obtain such results. 
