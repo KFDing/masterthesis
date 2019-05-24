@@ -136,7 +136,7 @@ In this section, we list the evaluation results of the repaired models based on 
 	\resizebox{\textwidth}{!}{
 		\begin{tabular}{lll|llllllll|}
 			\hline
-			\multirow{2}{*}{\thead{Situation}} & \multirow{2}{*}{\thead{method} }                &    \multirow{2}{*}{\thead{Generated \\ model}}       & \multicolumn{8}{l|}{ \thead{confusion matrix metrics}}                                \\
+			\multirow{2}{*}{\thead{Situation}} & \multirow{2}{*}{\thead{Method} }                &    \multirow{2}{*}{\thead{Generated \\ model}}       & \multicolumn{8}{l|}{ \thead{confusion matrix metrics}}                                \\
 			\cline{4-11}
 			&  &     &
 			\thead{TP}  & \thead{FP} & \thead{TN}  & \thead{FN}  & \thead{recall} & \thead{precision} & \thead{accuracy} & \thead{F1}             \\
@@ -184,8 +184,8 @@ We conduct our experiments on those event logs. However, due to the time limits,
 		D3.1    & \makecell{classify on SUMleges;  \\ values below 0.7 as positive} & 349        & 6744       & 20             \\ \hline
 		D3.2    & \makecell{classify on SUMleges;  \\ values above 0.7 as negative }& 146        & 2811       & 20             \\  \hline
 		D3.3    & union of D3.1 and D3.2                             & 495        & 9596       & 20             \\ \hline
-		D4.1    & \makecell{ classify on throughput time;  \\ values below 0.7 as positive} & 349        & 6744       & 20             \\ \hline
-		D4.2    & \makecell{classify on throughput time;  \\ values above 0.7 as negative} & 146        & 2811       & 20            \\ \hline
+		D4.1    & \makecell{ classify on throughput time;  \\ values below 0.7 as positive} & 346        & 6719       & 20             \\ \hline
+		D4.2    & \makecell{classify on throughput time;  \\ values above 0.7 as negative} & 149        & 2846       & 20            \\ \hline
 		D4.3    & union of D4.1 and D4.2                             & 495        & 9596       & 20           \\ \hline
 	\end{tabular}
 \end{table}
@@ -226,7 +226,8 @@ Then we classify traces according to  \textbf{SUMleges} and  \textbf{throughput 
 	\end{tabular}
  }
 \end{table}
-Based on the filtered data, we derive corresponding Petri nets as reference process models. The Table \ref{tab:ref-models} lists the models with different settings. \textbf{IM-infrequent} is one variant of Inductive Miner working on event logs with infrequent traces. \textbf{Noise} is set as the threshold to filter out infrequent traces. After mining reference models, we compare them with  corresponding event logs to get the basis lines for later evaluation.
+Based on D1, we apply \textbf{\emph{Filter Log By Simple Heuristic}} with setting 60\% for all options, and get the event log D2. Compared to D1, D2 contains only 12 event classes and is available to build simplified Petri nets. 
+From D1 and D2, we derive corresponding Petri nets as reference process models. The Table \ref{tab:ref-models} lists the models with different settings. \textbf{IM-infrequent} is one variant of Inductive Miner working on event logs with infrequent traces. \textbf{Noise} is set as the threshold to filter out infrequent traces. After mining reference models, we compare them with  corresponding event logs to get the basis lines for later evaluation.
 % should we explain the data and the model, they are different with old files!!
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}

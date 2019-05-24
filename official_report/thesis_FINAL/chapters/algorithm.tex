@@ -306,10 +306,10 @@ If $ LT_S = S, LT_T=T$, adding the long-term dependency in this situation does n
 	\item Safeness. Places cannot hold multiple tokens at the same time.\\
 	For all extra places $p_{X_i}$ and $p_{Y_j}$, 
 	\[\forall p_{X_i} \in P_S, \sum M(p_{X_i})=1\]
-	Because $ LT_S = S, X_i \in S$, so $X_i \in LT_S$, there exists one $Y_j$ with $X_i \rightarrow Y_j$ and one $\epsilon, p_{X_i} \rightarrow \epsilon
+	Because $ LT_S = S, X_i \in S$, so $X_i \in LT_S$, there exists one $Y_j$ with $X_i \rightsquigarrow Y_j$ and one $\epsilon, p_{X_i} \rightarrow \epsilon
 	\rightarrow p_{Y_{j}} $.  After firing $X_i$, the transition $\epsilon$ becomes enabled. After executing $\epsilon$, the marking distribution turns to 
 	\[ M(p_{Y_j}) = 1;\quad 
-	\forall p_{Y_j^\prime} \in P_T, j^\prime \neq j,  M(p_{Y_i})=0 \]
+	\forall p_{Y_{j^\prime}} \in P_T, j^\prime \neq j,  M(p_{Y_i})=0 \]
 	the marking distribution in the extra places are always
 	\[\sum M(p_{X_i}) \leq 1,  \sum M(p_{Y_j}) \leq 1 \] 
 	\item Proper completion. If the sink place is marked, all other places are empty. \\

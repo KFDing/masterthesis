@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  22 MAY 2019 12:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.11.12)  23 MAY 2019 17:47
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -2203,14 +2203,14 @@ Overfull \vbox (6.0pt too high) detected at line 227
 File: figures/evaluation/BPI_1_40_M3_figure.pdf Graphic file (type pdf)
 <use figures/evaluation/BPI_1_40_M3_figure.pdf>
 Package pdftex.def Info: figures/evaluation/BPI_1_40_M3_figure.pdf  used on inp
-ut line 252.
+ut line 253.
 (pdftex.def)             Requested size: 134.43582pt x 586.39911pt.
 <figures/evaluation/PN-result-D4-1-IM20-pos.pdf, id=1102, 653.11pt x 4128.75507
 pt>
 File: figures/evaluation/PN-result-D4-1-IM20-pos.pdf Graphic file (type pdf)
 <use figures/evaluation/PN-result-D4-1-IM20-pos.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-D4-1-IM20-pos.pdf  used o
-n input line 259.
+n input line 260.
 (pdftex.def)             Requested size: 192.05788pt x 586.40073pt.
 <figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf, id=1103, 3153.11006pt x 
 3046.04993pt>
@@ -2218,7 +2218,7 @@ File: figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf Graphic file (type p
 df)
 <use figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-D4-3-M3-fahland-new.pdf  
-used on input line 271.
+used on input line 272.
 (pdftex.def)             Requested size: 234.69289pt x 586.37805pt.
 <figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf, id=1104, 947.54pt x 8198
 .63pt>
@@ -2226,18 +2226,18 @@ File: figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf Graphic file (type p
 df)
 <use figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf>
 Package pdftex.def Info: figures/evaluation/PN-result-D4-3-M3-dfg-05-1-05.pdf  
-used on input line 277.
+used on input line 278.
 (pdftex.def)             Requested size: 165.15689pt x 586.34773pt.
 
 
-LaTeX Warning: Float too large for page by 17.20995pt on input line 282.
+LaTeX Warning: Float too large for page by 17.20995pt on input line 283.
 
 
-Overfull \vbox (6.0pt too high) detected at line 341
+Overfull \vbox (6.0pt too high) detected at line 342
  []
 
 
-Overfull \vbox (6.0pt too high) detected at line 341
+Overfull \vbox (6.0pt too high) detected at line 342
  []
 
 [47] [48 <./figures/evaluation/BPI_1_40_M3_figure.pdf> <./figures/evaluation/PN
@@ -2248,14 +2248,14 @@ Overfull \vbox (6.0pt too high) detected at line 341
 File: figures/evaluation/M3-D43-ext-weight-plot.pdf Graphic file (type pdf)
 <use figures/evaluation/M3-D43-ext-weight-plot.pdf>
 Package pdftex.def Info: figures/evaluation/M3-D43-ext-weight-plot.pdf  used on
- input line 360.
+ input line 361.
 (pdftex.def)             Requested size: 426.79135pt x 320.10764pt.
 <figures/evaluation/M3-D43-pos-weight-plot.pdf, id=1130, 602.25pt x 451.6875pt>
 
 File: figures/evaluation/M3-D43-pos-weight-plot.pdf Graphic file (type pdf)
 <use figures/evaluation/M3-D43-pos-weight-plot.pdf>
 Package pdftex.def Info: figures/evaluation/M3-D43-pos-weight-plot.pdf  used on
- input line 367.
+ input line 368.
 (pdftex.def)             Requested size: 426.79135pt x 320.10764pt.
  [50]
 <figures/evaluation/M3-D43-neg-weight-plot.pdf, id=1136, 602.25pt x 451.6875pt>
@@ -2263,12 +2263,15 @@ Package pdftex.def Info: figures/evaluation/M3-D43-pos-weight-plot.pdf  used on
 File: figures/evaluation/M3-D43-neg-weight-plot.pdf Graphic file (type pdf)
 <use figures/evaluation/M3-D43-neg-weight-plot.pdf>
 Package pdftex.def Info: figures/evaluation/M3-D43-neg-weight-plot.pdf  used on
- input line 374.
+ input line 375.
 (pdftex.def)             Requested size: 426.79135pt x 320.10764pt.
-)
-[51 <./figures/evaluation/M3-D43-ext-weight-plot.pdf>] [52 <./figures/evaluatio
-n/M3-D43-pos-weight-plot.pdf>] [53 <./figures/evaluation/M3-D43-neg-weight-plot
-.pdf>] [54
+
+Underfull \vbox (badness 2903) has occurred while \output is active []
+
+ [51 <./figures/evaluation/M3-D43-ext-weight-plot.pdf>]) [52 <./figures/evaluat
+ion/M3-D43-pos-weight-plot.pdf>] [53 <./figures/evaluation/M3-D43-neg-weight-pl
+ot.pdf>]
+[54
 
 ]
 Chapter 7.
@@ -2318,7 +2321,7 @@ hare/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public
 /lm/lmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbo
 ls/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbol
 s/msbm10.pfb>
-Output written on main.pdf (70 pages, 2702684 bytes).
+Output written on main.pdf (70 pages, 2702949 bytes).
 PDF statistics:
  1367 PDF objects out of 1440 (max. 8388607)
  1131 compressed objects within 12 object streams
