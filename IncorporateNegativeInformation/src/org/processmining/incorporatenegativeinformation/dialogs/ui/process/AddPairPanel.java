@@ -245,9 +245,10 @@ public class AddPairPanel extends JPanel {
 		return rmTargetComboBox.getSelectedIndex();
 	}
 
+	// here update the available xor clusters as sources
 	public void updateAddSource(List<XORCluster<ProcessTreeElement>> sources) {
-		// add the target to combox
-		// System.out.println("before remove all items in add of source");
+		
+		System.out.println("before remove all items in add of source");
 		addSourceComboBox.removeAllItems();
 		for (XORCluster<ProcessTreeElement> source : sources) {
 			// we should add the name of it on add TargetCombox 
@@ -255,32 +256,32 @@ public class AddPairPanel extends JPanel {
 			addSourceComboBox.addItem(sourceName);
 
 		}
-		// System.out.println("size of items in JCombox " +addSourceComboBox.getItemCount());
-		// we need to remove all the choices before we update it 
+		System.out.println("size of items in Source JCombox " +addSourceComboBox.getItemCount());
 	}
-
+	// here update the available xor clusters as targets to remove
 	public void updateRMSource(List<XORCluster<ProcessTreeElement>> sources) {
 		// add the target to combox
-		// System.out.println("before remove all items in rm of source");
+		System.out.println("before remove all items in rm of source");
 		rmSourceComboBox.removeAllItems();
 		for (XORCluster<ProcessTreeElement> source : sources) {
 			// we should add the name of it on add TargetCombox 
 			String sourceName = source.getLabel();
 			rmSourceComboBox.addItem(sourceName);
 		}
-		// System.out.println("Size of items in JCombox " + rmSourceComboBox.getItemCount());
+		System.out.println("Size of items in JCombox " + rmSourceComboBox.getItemCount());
 	}
-
+	// here update display combox for the available xor clusters as target to add 
 	public void updateAddTarget(List<XORCluster<ProcessTreeElement>> targets) {
-		// add the target to combox
+		
 		addTargetComboBox.removeAllItems();
 		for (XORCluster<ProcessTreeElement> target : targets) {
 			// we should add the name of it on add TargetCombox 
 			String targetName = target.getLabel();
 			addTargetComboBox.addItem(targetName);
 		}
+		System.out.println("size of items in Target JCombox " +rmTargetComboBox.getItemCount());
 	}
-
+	// here update the display combox for the available xor clusters as target to remove 
 	public void updateRMTarget(List<XORCluster<ProcessTreeElement>> targets) {
 		// add the target to combox
 		rmTargetComboBox.removeAllItems();
@@ -289,6 +290,7 @@ public class AddPairPanel extends JPanel {
 			String targetName = target.getLabel();
 			rmTargetComboBox.addItem(targetName);
 		}
+		System.out.println("size of items in Target JCombox " +rmTargetComboBox.getItemCount());
 	}
 
 }

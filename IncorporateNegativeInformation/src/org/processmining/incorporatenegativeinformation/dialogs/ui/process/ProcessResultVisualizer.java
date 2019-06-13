@@ -170,7 +170,8 @@ class ResultMainView extends JPanel {
 					// addPairPanel.choosePanel.setVisible(true);
 					// at same time, we need to reset the petri net into original
 					// we need to update the source of add and remove, but one thing is to reset them again
-
+					System.out.println("press choose panel...");
+					// here we need to reset all the pairs and make them not showing in the graph
 					resetPNWithLT();
 					addPairPanel.updateAddSource(generator.getAddAvailableSources());
 					addPairPanel.updateRMSource(generator.getRMAvailableSources());
@@ -189,12 +190,13 @@ class ResultMainView extends JPanel {
 
 					//					System.out.println("Size of items in change add target -- " + addPairPanel.addSourceComboBox.getItemCount());
 					int sourceIdx = addPairPanel.addSourceComboBox.getSelectedIndex();
-					//					System.out.println("Exception Add: source Idx" + sourceIdx);
-					//					System.out.println(generator);
-					//					System.out.println(generator.getAddAvailableSources().size());
+										System.out.println("Exception Add: source Idx " + sourceIdx);
+										System.out.println(generator);
+										System.out.println(generator.getAddAvailableSources().size());
 
 					XORCluster<ProcessTreeElement> source = generator.getAddAvailableSources().get(sourceIdx);
-
+					System.out.println("get the source for add lt pair");
+					System.out.println(source.getLabel());
 					updateAddTargetClusterList(source);
 				}
 			}
@@ -226,7 +228,7 @@ class ResultMainView extends JPanel {
 
 				int sourceIdx = addPairPanel.getAddSourceIndex();
 				int targetIdx = addPairPanel.getAddTargetIndex();
-				// System.out.println("Index to add the values on it :" + sourceIdx + "target Idx : "+ targetIdx );
+				System.out.println("Index to add the values on it :" + sourceIdx + "target Idx : "+ targetIdx );
 				XORCluster<ProcessTreeElement> source = generator.getAddAvailableSources().get(sourceIdx);
 				XORCluster<ProcessTreeElement> target = generator.getAddAvailableTargets(source).get(targetIdx);
 
@@ -486,11 +488,10 @@ class ResultMainView extends JPanel {
 		// we go from adding all lt dependency to single one, the detector should be reset, but 
 		// the maps and variants built before should not change! if the parameter keeps the same
 		// so after reset, we should leep 
-		if(detector ==null) {
-			detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
-		}
 		
-		detector.reset(generator.getClusterPair());
+		detector = new NewLTDetector(pTree, log, parameters, dfMatrix.getStandardCardinality());
+		
+		// detector.reset(generator.getClusterPair());
 		manet = detector.getAcceptionPN();
 
 		leftView.drawResult(context, manet);
