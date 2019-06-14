@@ -29,7 +29,7 @@ import org.processmining.plugins.InductiveMiner.dfgOnly.plugins.XLog2Dfg;
  * @author dkf
  *
  */
-@Plugin(name = "Repair Model by Kefang", returnLabels = { "DfgProcess Result" }, returnTypes = {
+@Plugin(name = "Repair Model by Dfg", returnLabels = { "DfgProcess Result" }, returnTypes = {
 		DfgProcessResult.class }, parameterLabels = { "XLog", "Existing Petri Net", "Initial Marking" })
 public class DfgRepairPlugin {
 	/*
